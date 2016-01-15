@@ -14,6 +14,7 @@ import com.opensymphony.xwork2.ActionSupport;
 public class AgendaAction extends ActionSupport {
 
 	private static final long serialVersionUID = 1L;
+	
 
 	private MessageStore messageStore = new MessageStore();
 	public MessageStore getMessageStore() {
