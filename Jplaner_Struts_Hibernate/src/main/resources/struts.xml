@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.action.excludePattern" value=".*/static/.*" />
+	<package name="test" extends="struts-default">
+
+	<action name="" class="org.apache.struts.demoapp_struts.action.SimpleInitAction" method="simple_init_01">
+			<result name="success">/article.jsp</result>
+		</action>
+
+		<action name="01_simple_init" class="org.apache.struts.demoapp_struts.action.SimpleInitAction" method="simple_init_01">
+			<result name="success">/article.jsp</result>
+		</action>
+
+
+		<action name="02_loading" class="org.apache.struts.demoapp_struts.action.LoadingAction" method="loading_02">
+			<result name="success">/article.jsp</result>
+		</action>
+		<action name="02_events" class="org.apache.struts.demoapp_struts.action.LoadingAction" method="events_02">
+			<result name="success">/data.jsp</result>
+		</action>
+
+
+		<action name="03_saving" class="org.apache.struts.demoapp_struts.action.SavingAction" method="saving_03">
+			<result name="success">/article.jsp</result>
+		</action>
+		<action name="03_events" class="org.apache.struts.demoapp_struts.action.SavingAction" method="events_03">
+			<result name="success">/data.jsp</result>
+		</action>
+
+
+		<action name="04_recurring" class="org.apache.struts.demoapp_struts.action.RecurringAction" method="recurring_04">
+			<result name="success">/article.jsp</result>
+		</action>
+		<action name="04_events" class="org.apache.struts.demoapp_struts.action.RecurringAction" method="events_04">
+			<result name="success">/data.jsp</result>
+		</action>
+
+
+		<action name="05_agenda" class="org.apache.struts.demoapp_struts.action.AgendaAction" method="agenda_05">
+			<result name="success">/article.jsp</result>
+		</action>
+		<action name="05_events" class="org.apache.struts.demoapp_struts.action.AgendaAction" method="events_05">
+			<result name="success">/data.jsp</result>
+		</action>
+
+
+		<action name="06_map" class="org.apache.struts.demoapp_struts.action.MapAction" method="map_06">
+			<result name="success">/article.jsp</result>
+		</action>
+		<action name="06_events" class="org.apache.struts.demoapp_struts.action.MapAction" method="events_06">
+			<result name="success">/data.jsp</result>
+		</action>
+
+
+		<action name="07_grid_view" class="org.apache.struts.demoapp_struts.action.GridViewAction" method="grid_07">
+			<result name="success">/article.jsp</result>
+		</action>
+		<action name="07_events" class="org.apache.struts.demoapp_struts.action.GridViewAction" method="events_07">
+			<result name="success">/data.jsp</result>
+		</action>
+
+
+		<action name="08_units_view" class="org.apache.struts.demoapp_struts.action.UnitsViewAction" method="units_08">
+			<result name="success">/article.jsp</result>
+		</action>
+		<action name="08_events" class="org.apache.struts.demoapp_struts.action.UnitsViewAction" method="events_08">
+			<result name="success">/data.jsp</result>
+		</action>
+
+
+		<action name="09_timeline_view" class="org.apache.struts.demoapp_struts.action.TimelineAction" method="timeline_09">
+			<result name="success">/article.jsp</result>
+		</action>
+		<action name="09_events" class="org.apache.struts.demoapp_struts.action.TimelineAction" method="events_09">
+			<result name="success">/data.jsp</result>
+		</action>
+
+
+		<action name="10_lightbox" class="org.apache.struts.demoapp_struts.action.LightboxAction" method="lightbox_10">
+			<result name="success">/article.jsp</result>
+		</action>
+		<action name="10_events" class="org.apache.struts.demoapp_struts.action.LightboxAction" method="events_10">
+			<result name="success">/data.jsp</result>
+		</action>
+
+
+		<action name="11_custom_lightbox" class="org.apache.struts.demoapp_struts.action.CustomLightboxAction" method="custom_lightbox_11">
+			<result name="success">/article.jsp</result>
+		</action>
+		<action name="11_custom_editor" class="org.apache.struts.demoapp_struts.action.CustomLightboxAction" method="editor_11">
+			<result name="success">/custom_editor.jsp</result>
+		</action>
+		<action name="11_events" class="org.apache.struts.demoapp_struts.action.CustomLightboxAction" method="events_11">
+			<result name="success">/data.jsp</result>
+		</action>
+
+
+		<action name="12_mini_calendars" class="org.apache.struts.demoapp_struts.action.MiniCalendarsAction" method="minicalendars_12">
+			<result name="success">/article.jsp</result>
+		</action>
+		<action name="12_events" class="org.apache.struts.demoapp_struts.action.MiniCalendarsAction" method="events_12">
+			<result name="success">/data.jsp</result>
+		</action>
+
+
+		<action name="13_highlights" class="org.apache.struts.demoapp_struts.action.HighlightsAction" method="highlights_13">
+			<result name="success">/article.jsp</result>
+		</action>
+		<action name="13_events" class="org.apache.struts.demoapp_struts.action.HighlightsAction" method="events_13">
+			<result name="success">/data.jsp</result>
+		</action>
+
+		<action name="14_filtering" class="org.apache.struts.demoapp_struts.action.FilteringAction" method="filtering_14">
+			<result name="success">/article.jsp</result>
+		</action>
+		<action name="14_events" class="org.apache.struts.demoapp_struts.action.FilteringAction" method="events_14">
+			<result name="success">/data.jsp</result>
+		</action>
+
+		<action name="15_security" class="org.apache.struts.demoapp_struts.action.SecurityAction" method="security_15">
+			<result name="success">/article.jsp</result>
+		</action>
+		<action name="15_events" class="org.apache.struts.demoapp_struts.action.SecurityAction" method="events_15">
+			<result name="success">/data.jsp</result>
+		</action>
+
+		<action name="16_export" class="org.apache.struts.demoapp_struts.action.ExportAction" method="export_16">
+			<result name="success">/article.jsp</result>
+		</action>
+		<action name="16_events" class="org.apache.struts.demoapp_struts.action.ExportAction" method="events_16">
+			<result name="success">/data.jsp</result>
+		</action>
+		<action name="16_ical" class="org.apache.struts.demoapp_struts.action.ExportAction" method="ical_16">
+			<result name="success" type="stream">
+				<param name="contentType">calendar/ical</param>
+				<param name="inputName">ical</param>
+				<param name="contentDisposition">attachment;filename="calendar.ics"</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+	</package>
+</struts>
