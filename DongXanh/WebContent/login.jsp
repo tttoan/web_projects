@@ -50,25 +50,25 @@
 			<div id="login" class="animate form">
 				<section class="login_content">
 					<s:form action="login" theme="bootstrap">
-						<h1>Login Form</h1>
+						<h1>ĐỒNG XANH</h1>
 						<div>
 							<s:textfield name="userName" class="form-control"
-								placeholder="Username" />
+								placeholder="Tên tài khoản" />
 						</div>
 						<div>
-							<s:password name="password" class="form-control"
+							<s:password name="Mật khẩu" class="form-control"
 								placeholder="Password" />
 						</div>
 						<div>
-							<s:submit class="btn btn-default submit" value="Log in" />
-							<a class="reset_pass" href="#">Lost your password?</a>
+							<s:submit class="btn btn-default submit" value="Đăng nhập" />
+							<a class="reset_pass" href="#">Quên mật khẩu?</a>
 						</div>
 						<div class="clearfix"></div>
 						<div class="separator">
 
 							<p class="change_link">
-								New to site? <a href="#toregister" class="to_register">
-									Create Account </a>
+								New to site? <a href="#toregister" class="to_register"> Tạo
+									tài khoản </a>
 							</p>
 							<div class="clearfix"></div>
 						</div>
@@ -79,27 +79,28 @@
 			</div>
 			<div id="register" class="animate form">
 				<section class="login_content">
-					<s:form action="reg" theme="bootstrap" >
-						<h1>Create Account</h1>
+					<s:form action="signup" theme="bootstrap">
+						<h1>ĐỒNG XANH</h1>
 						<div>
-							<s:textfield class="form-control" placeholder="Username" />
+							<s:textfield name="userName" class="form-control"
+								placeholder="Tên tài khoản" required="required" />
 						</div>
 						<div>
-							<s:textfield type="email" class="form-control" placeholder="Email" />
+							<s:textfield name="email" type="email" class="form-control"
+								placeholder="Email" required="required" />
 						</div>
 						<div>
-							<s:password class="form-control"
-								placeholder="Password" />
+							<s:textfield name="password" type="password" class="form-control"
+								placeholder="Mật khẩu" required="required" />
 						</div>
 						<div>
-							<s:submit class="btn btn-default submit" value="Submit" />
+							<s:submit class="btn btn-default submit" value="Đăng ký" />
 						</div>
 						<div class="clearfix"></div>
 						<div class="separator">
-
 							<p class="change_link">
-								Already a member ? <a href="#tologin" class="to_register">
-									Log in </a>
+								Đã đăng ký tài khoản ? <a href="#tologin" class="to_register">
+									Đăng nhập </a>
 							</p>
 							<div class="clearfix"></div>
 						</div>

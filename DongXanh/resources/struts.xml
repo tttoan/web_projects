@@ -12,7 +12,7 @@
 			<result name="success">/index.jsp</result>
 			<result name="error">/error.jsp</result>
 		</action>
-		<action name="reg" method="addUser" class="com.home.action.LoginAction">
+		<action name="signup" method="addUser" class="com.home.action.LoginAction">
 			<result name="success">/index.jsp</result>
 			<result name="error">/error.jsp</result>
 		</action>
