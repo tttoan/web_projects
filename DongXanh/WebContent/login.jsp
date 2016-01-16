@@ -56,8 +56,8 @@
 								placeholder="Tên tài khoản" />
 						</div>
 						<div>
-							<s:password name="Mật khẩu" class="form-control"
-								placeholder="Password" />
+							<s:password name="password" class="form-control"
+								placeholder="Mật khẩu" />
 						</div>
 						<div>
 							<s:submit class="btn btn-default submit" value="Đăng nhập" />
