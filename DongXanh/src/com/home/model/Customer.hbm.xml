@@ -1,0 +1,198 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 12, 2016 11:20:59 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="com.home.model.Customer" table="customer" catalog="db_promotion">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="customerCode" type="string">
+            <column name="customer_code" length="40" />
+        </property>
+        <property name="customerName" type="string">
+            <column name="customer_name" length="200" />
+        </property>
+        <property name="adviser" type="string">
+            <column name="adviser" length="50" />
+        </property>
+        <property name="createTime" type="string">
+            <column name="create_time" length="50" />
+        </property>
+        <property name="certificateNumber" type="string">
+            <column name="certificate_number" length="30" />
+        </property>
+        <property name="certificateDate" type="string">
+            <column name="certificate_date" length="30" />
+        </property>
+        <property name="certificateAddress" type="string">
+            <column name="certificate_address" length="500" />
+        </property>
+        <property name="taxNumber" type="string">
+            <column name="tax_number" length="20" />
+        </property>
+        <property name="budgetRegister" type="java.lang.Integer">
+            <column name="budget_register" />
+        </property>
+        <property name="telefone" type="string">
+            <column name="telefone" length="20" />
+        </property>
+        <property name="fax" type="string">
+            <column name="fax" length="20" />
+        </property>
+        <property name="email" type="string">
+            <column name="email" length="50" />
+        </property>
+        <property name="socialAddress" type="string">
+            <column name="social_address" length="50" />
+        </property>
+        <property name="companyAddress" type="string">
+            <column name="company_address" length="500" />
+        </property>
+        <property name="lawyer" type="string">
+            <column name="lawyer" length="200" />
+        </property>
+        <property name="director" type="string">
+            <column name="director" length="500" />
+        </property>
+        <property name="directorMobile" type="string">
+            <column name="director_mobile" length="20" />
+        </property>
+        <property name="directorBirthday" type="string">
+            <column name="director_birthday" length="20" />
+        </property>
+        <property name="directorDomicile" type="string">
+            <column name="director_domicile" length="500" />
+        </property>
+        <property name="sellMan" type="string">
+            <column name="sell_man" length="500" />
+        </property>
+        <property name="sellManMobile" type="string">
+            <column name="sell_man_mobile" length="50" />
+        </property>
+        <property name="budgetOriginal" type="java.lang.Integer">
+            <column name="budget_original" />
+        </property>
+        <property name="otherBusiness" type="string">
+            <column name="other_business" length="500" />
+        </property>
+        <property name="customer1Level1" type="string">
+            <column name="customer1_level1" length="500" />
+        </property>
+        <property name="customer1Phone" type="string">
+            <column name="customer1_phone" length="50" />
+        </property>
+        <property name="customer1Percent" type="string">
+            <column name="customer1_percent" length="50" />
+        </property>
+        <property name="customer2Level1" type="string">
+            <column name="customer2_level1" length="500" />
+        </property>
+        <property name="customer2Phone" type="string">
+            <column name="customer2_phone" length="50" />
+        </property>
+        <property name="customer2Percent" type="string">
+            <column name="customer2_percent" length="50" />
+        </property>
+        <property name="customer3Level1" type="string">
+            <column name="customer3_level1" length="500" />
+        </property>
+        <property name="customer3Phone" type="string">
+            <column name="customer3_phone" length="50" />
+        </property>
+        <property name="customer3Percent" type="string">
+            <column name="customer3_percent" length="50" />
+        </property>
+        <property name="customer4Level1" type="string">
+            <column name="customer4_level1" length="500" />
+        </property>
+        <property name="customer4Phone" type="string">
+            <column name="customer4_phone" length="50" />
+        </property>
+        <property name="customer4Percent" type="string">
+            <column name="customer4_percent" length="50" />
+        </property>
+        <property name="customer5Level1" type="string">
+            <column name="customer5_level1" length="500" />
+        </property>
+        <property name="customer5Phone" type="string">
+            <column name="customer5_phone" length="50" />
+        </property>
+        <property name="customer5Percent" type="string">
+            <column name="customer5_percent" length="50" />
+        </property>
+        <property name="revenue1" type="string">
+            <column name="revenue1" length="50" />
+        </property>
+        <property name="revenue2" type="string">
+            <column name="revenue2" length="50" />
+        </property>
+        <property name="percentProvide1" type="string">
+            <column name="percent_provide1" length="50" />
+        </property>
+        <property name="percentProvide2" type="string">
+            <column name="percent_provide2" length="50" />
+        </property>
+        <property name="percentProvide3" type="string">
+            <column name="percent_provide3" length="50" />
+        </property>
+        <property name="percentProvide4" type="string">
+            <column name="percent_provide4" length="50" />
+        </property>
+        <property name="productSell" type="string">
+            <column name="product_sell" length="500" />
+        </property>
+        <property name="product1Hot" type="string">
+            <column name="product1_hot" length="50" />
+        </property>
+        <property name="product2Hot" type="string">
+            <column name="product2_hot" length="50" />
+        </property>
+        <property name="product3Hot" type="string">
+            <column name="product3_hot" length="50" />
+        </property>
+        <property name="product4Hot" type="string">
+            <column name="product4_hot" length="50" />
+        </property>
+        <property name="product5Hot" type="string">
+            <column name="product5_hot" length="50" />
+        </property>
+        <property name="product6Hot" type="string">
+            <column name="product6_hot" length="50" />
+        </property>
+        <property name="farmProduct1" type="string">
+            <column name="farm_product1" length="50" />
+        </property>
+        <property name="farmProduct1Session" type="string">
+            <column name="farm_product1_session" length="100" />
+        </property>
+        <property name="farmProduct2" type="string">
+            <column name="farm_product2" length="50" />
+        </property>
+        <property name="farmProduct2Session" type="string">
+            <column name="farm_product2_session" length="100" />
+        </property>
+        <property name="farmProduct3" type="string">
+            <column name="farm_product3" length="50" />
+        </property>
+        <property name="farmProduct3Session" type="string">
+            <column name="farm_product3_session" length="100" />
+        </property>
+        <property name="farmProduct4" type="string">
+            <column name="farm_product4" length="50" />
+        </property>
+        <property name="farmProduct4Session" type="string">
+            <column name="farm_product4_session" length="100" />
+        </property>
+        <property name="totalVipCustomer" type="java.lang.Integer">
+            <column name="total_vip_customer" />
+        </property>
+        <set name="promotionCustomers" table="promotion_customer" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="customer_id" not-null="true" />
+            </key>
+            <one-to-many class="com.home.model.PromotionCustomer" />
+        </set>
+    </class>
+</hibernate-mapping>

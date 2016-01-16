@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.password">root</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/db_promotion</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.search.autoregister_listeners">false</property>
+        <property name="hibernate.validator.apply_to_ddl">false</property>
+        <mapping resource="com/home/model/Promotion.hbm.xml" />
+        <mapping resource="com/home/model/Category.hbm.xml" />
+        <mapping resource="com/home/model/PromotionCustomerProduct.hbm.xml" />
+        <mapping resource="com/home/model/WorkingPlan.hbm.xml" />
+        <mapping resource="com/home/model/Statistic.hbm.xml" />
+        <mapping resource="com/home/model/PromotionProduct.hbm.xml" />
+        <mapping resource="com/home/model/Product.hbm.xml" />
+        <mapping resource="com/home/model/Gift.hbm.xml" />
+        <mapping resource="com/home/model/User.hbm.xml" />
+        <mapping resource="com/home/model/PromotionCustomer.hbm.xml" />
+        <mapping resource="com/home/model/Role.hbm.xml" />
+        <mapping resource="com/home/model/Customer.hbm.xml" />
+    </session-factory>
+</hibernate-configuration>

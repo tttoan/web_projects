@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 12, 2016 11:20:59 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="com.home.model.Statistic" table="statistic" catalog="db_promotion">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="user" class="com.home.model.User" fetch="select">
+            <column name="user_id" />
+        </many-to-one>
+        <property name="dateReceived" type="timestamp">
+            <column name="date_received" length="0" />
+        </property>
+        <property name="customerCodeLevel1" type="string">
+            <column name="customer_code_level1" length="40" />
+        </property>
+        <property name="customerNameLevel1" type="string">
+            <column name="customer_name_level1" length="200" />
+        </property>
+        <property name="customerCodeLevel2" type="string">
+            <column name="customer_code_level2" length="40" />
+        </property>
+        <property name="customerNameLevel2" type="string">
+            <column name="customer_name_level2" length="200" />
+        </property>
+        <property name="productCode" type="string">
+            <column name="product_code" length="50" />
+        </property>
+        <property name="categoryName" type="string">
+            <column name="category_name" length="50" />
+        </property>
+        <property name="productName" type="string">
+            <column name="product_name" length="200" />
+        </property>
+        <property name="totalBox" type="java.lang.Integer">
+            <column name="total_box" />
+        </property>
+        <property name="quantiy" type="java.lang.Integer">
+            <column name="quantiy" />
+        </property>
+        <property name="unitPrice" type="big_decimal">
+            <column name="unit_price" precision="10" />
+        </property>
+        <property name="total" type="big_decimal">
+            <column name="total" precision="10" />
+        </property>
+    </class>
+</hibernate-mapping>

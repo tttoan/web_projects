@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 12, 2016 11:20:59 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="com.home.model.Product" table="product" catalog="db_promotion">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="category" class="com.home.model.Category" fetch="select">
+            <column name="category_id" />
+        </many-to-one>
+        <property name="productCode" type="string">
+            <column name="product_code" length="50" />
+        </property>
+        <property name="productType" type="string">
+            <column name="product_type" length="50" />
+        </property>
+        <property name="productName" type="string">
+            <column name="product_name" length="200" />
+        </property>
+        <property name="description" type="string">
+            <column name="description" length="500" />
+        </property>
+        <property name="unitPrice" type="big_decimal">
+            <column name="unit_price" precision="10" />
+        </property>
+        <property name="minQuantity" type="java.lang.Integer">
+            <column name="min_quantity" />
+        </property>
+        <property name="maxQuantity" type="java.lang.Integer">
+            <column name="max_quantity" />
+        </property>
+        <property name="exportDate" type="timestamp">
+            <column name="export_date" length="0" />
+        </property>
+        <property name="launchDate" type="timestamp">
+            <column name="launch_date" length="0" />
+        </property>
+        <set name="promotionProducts" table="promotion_product" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="product_id" not-null="true" />
+            </key>
+            <one-to-many class="com.home.model.PromotionProduct" />
+        </set>
+    </class>
+</hibernate-mapping>

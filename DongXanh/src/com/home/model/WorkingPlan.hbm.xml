@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 12, 2016 11:20:59 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="com.home.model.WorkingPlan" table="working_plan" catalog="db_promotion">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="user" class="com.home.model.User" fetch="select">
+            <column name="user_id" not-null="true" />
+        </many-to-one>
+        <property name="planName" type="string">
+            <column name="plan_name" length="200" />
+        </property>
+        <property name="planDescription" type="string">
+            <column name="plan_description" length="500" />
+        </property>
+        <property name="workingType" type="string">
+            <column name="working_type" length="30" />
+        </property>
+        <property name="location" type="string">
+            <column name="location" length="300" />
+        </property>
+        <property name="planStart" type="timestamp">
+            <column name="plan_start" length="0" />
+        </property>
+        <property name="planEnd" type="timestamp">
+            <column name="plan_end" length="0" />
+        </property>
+        <property name="createTime" type="timestamp">
+            <column name="create_time" length="0" />
+        </property>
+        <property name="updateTime" type="timestamp">
+            <column name="update_time" length="0" />
+        </property>
+        <property name="planDone" type="short">
+            <column name="plan_done" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 12, 2016 11:20:59 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="com.home.model.User" table="user" catalog="db_promotion">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="role" class="com.home.model.Role" fetch="select">
+            <column name="role_id" />
+        </many-to-one>
+        <property name="userName" type="string">
+            <column name="user_name" length="200" />
+        </property>
+        <property name="password" type="string">
+            <column name="password" length="200" />
+        </property>
+        <property name="email" type="string">
+            <column name="email" length="100" />
+        </property>
+        <property name="firstName" type="string">
+            <column name="first_name" length="45" />
+        </property>
+        <property name="middleName" type="string">
+            <column name="middle_name" length="45" />
+        </property>
+        <property name="lastName" type="string">
+            <column name="last_name" length="45" />
+        </property>
+        <property name="picture" type="binary">
+            <column name="picture" />
+        </property>
+        <property name="birthDate" type="date">
+            <column name="birth_date" length="0" />
+        </property>
+        <property name="gender" type="string">
+            <column name="gender" length="45" />
+        </property>
+        <property name="mobilePhone" type="string">
+            <column name="mobile_phone" length="45" />
+        </property>
+        <property name="homePhone" type="string">
+            <column name="home_phone" length="45" />
+        </property>
+        <property name="address" type="string">
+            <column name="address" length="45" />
+        </property>
+        <property name="passwordQuestion" type="string">
+            <column name="password_question" length="200" />
+        </property>
+        <property name="passwordAnswer" type="string">
+            <column name="password_answer" length="200" />
+        </property>
+        <property name="isAccountNonExpired" type="java.lang.Short">
+            <column name="is_account_non_expired" />
+        </property>
+        <property name="isAccountNonLocked" type="java.lang.Short">
+            <column name="is_account_non_locked" />
+        </property>
+        <property name="createdDate" type="timestamp">
+            <column name="created_date" length="0" />
+        </property>
+        <property name="lastLoginDate" type="timestamp">
+            <column name="last_login_date" length="0" />
+        </property>
+        <property name="lastLogoutDate" type="timestamp">
+            <column name="last_logout_date" length="0" />
+        </property>
+        <property name="lastPasswordChangedDate" type="timestamp">
+            <column name="last_password_changed_date" length="0" />
+        </property>
+        <property name="failedPasswordCount" type="java.lang.Integer">
+            <column name="failed_password_count" />
+        </property>
+        <property name="remarks" type="string">
+            <column name="remarks" length="500" />
+        </property>
+        <property name="isEnabled" type="java.lang.Short">
+            <column name="is_enabled" />
+        </property>
+        <set name="statistics" table="statistic" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="user_id" />
+            </key>
+            <one-to-many class="com.home.model.Statistic" />
+        </set>
+        <set name="workingPlans" table="working_plan" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="user_id" not-null="true" />
+            </key>
+            <one-to-many class="com.home.model.WorkingPlan" />
+        </set>
+    </class>
+</hibernate-mapping>
