@@ -294,5 +294,8 @@ public class User implements java.io.Serializable {
 	public void setWorkingPlans(Set<WorkingPlan> workingPlans) {
 		this.workingPlans = workingPlans;
 	}
+	public String getFullName(){
+		return firstName + " "+lastName;
+	}
 
 }

@@ -1,12 +1,15 @@
+<!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ taglib uri="/struts-bootstrap-tags" prefix="sb"%>
+<%@ taglib prefix="sx" uri="/struts-dojo-tags"%>
 <html>
 <head>
+<sx:head/>
 <!-- Meta, title, CSS, favicons, etc. -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <title>Promotion Management! |</title>
 
 <!-- Bootstrap core CSS -->
@@ -35,17 +38,12 @@
               <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
               <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
             <![endif]-->
-
 </head>
 
 
 <body class="nav-md">
-
 	<div class="container body">
-
-
 		<div class="main_container">
-
 			<div class="col-md-3 left_col">
 				<div class="left_col scroll-view">
 

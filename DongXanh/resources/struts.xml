@@ -6,7 +6,8 @@
 <struts>
 	<constant name="struts.devMode" value="true"></constant>
 	<constant name="struts.convention.result.path" value="/"></constant>
-	
+	<constant name="struts.custom.i18n.resources" value="struts" ></constant>
+
 	<package name="default" namespace="/" extends="struts-default">
 		<action name="login" class="com.home.action.LoginAction">
 			<result name="success">/index.jsp</result>
@@ -16,15 +17,18 @@
 			<result name="success">/index.jsp</result>
 			<result name="error">/error.jsp</result>
 		</action>
-		<action name="add_customer" method="addCustomer" class="com.home.action.CustomerAction">
+		<action name="add_customer" method="addCustomer"
+			class="com.home.action.CustomerAction">
 			<result name="success" type="redirect">list_customer</result>
 			<result name="error">/error.jsp</result>
 		</action>
-		<action name="list_customer" method="listCustomer" class="com.home.action.CustomerAction">
+		<action name="list_customer" method="listCustomer"
+			class="com.home.action.CustomerAction">
 			<result name="success">/customers.jsp</result>
 			<result name="error">/error.jsp</result>
 		</action>
-		<action name="delete_customer" method="deleteCustomerById" class="com.home.action.CustomerAction">
+		<action name="delete_customer" method="deleteCustomerById"
+			class="com.home.action.CustomerAction">
 			<result name="success" type="chain">list_customer</result>
 			<result name="error">/error.jsp</result>
 		</action>
