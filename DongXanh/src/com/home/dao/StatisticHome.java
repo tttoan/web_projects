@@ -11,12 +11,16 @@ import javax.naming.InitialContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
+import com.home.model.Customer;
 import com.home.model.Statistic;
 
 /**
  * Home object for domain model class Statistic.
+ * 
  * @see com.home.dao.Statistic
  * @author Hibernate Tools
  */
@@ -24,16 +28,18 @@ public class StatisticHome {
 
 	private static final Log log = LogFactory.getLog(StatisticHome.class);
 
-	private final SessionFactory sessionFactory = getSessionFactory();
+	private SessionFactory sessionFactory;
+
+	public StatisticHome(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
 
 	protected SessionFactory getSessionFactory() {
 		try {
-			return (SessionFactory) new InitialContext()
-					.lookup("SessionFactory");
+			return sessionFactory;
 		} catch (Exception e) {
 			log.error("Could not locate SessionFactory in JNDI", e);
-			throw new IllegalStateException(
-					"Could not locate SessionFactory in JNDI");
+			throw new IllegalStateException("Could not locate SessionFactory in JNDI");
 		}
 	}
 
@@ -50,8 +56,13 @@ public class StatisticHome {
 
 	public void attachDirty(Statistic instance) {
 		log.debug("attaching dirty Statistic instance");
+		Transaction tx = null;
 		try {
-			sessionFactory.getCurrentSession().saveOrUpdate(instance);
+			Session session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			session.saveOrUpdate(instance);
+			tx.commit();
+			session.close();
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -84,8 +95,7 @@ public class StatisticHome {
 	public Statistic merge(Statistic detachedInstance) {
 		log.debug("merging Statistic instance");
 		try {
-			Statistic result = (Statistic) sessionFactory.getCurrentSession()
-					.merge(detachedInstance);
+			Statistic result = (Statistic) sessionFactory.getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -97,8 +107,7 @@ public class StatisticHome {
 	public Statistic findById(java.lang.Integer id) {
 		log.debug("getting Statistic instance with id: " + id);
 		try {
-			Statistic instance = (Statistic) sessionFactory.getCurrentSession()
-					.get("com.home.dao.Statistic", id);
+			Statistic instance = (Statistic) sessionFactory.getCurrentSession().get("com.home.dao.Statistic", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -114,15 +123,29 @@ public class StatisticHome {
 	public List<Statistic> findByExample(Statistic instance) {
 		log.debug("finding Statistic instance by example");
 		try {
-			List<Statistic> results = (List<Statistic>) sessionFactory
-					.getCurrentSession()
-					.createCriteria("com.home.dao.Statistic")
-					.add(create(instance)).list();
-			log.debug("find by example successful, result size: "
-					+ results.size());
+			List<Statistic> results = (List<Statistic>) sessionFactory.getCurrentSession().createCriteria("com.home.dao.Statistic").add(create(instance)).list();
+			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
+			throw re;
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Statistic> getListInvoice() {
+		log.debug("retrieve list Statistic");
+		Transaction tx = null;
+		try {
+			Session session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			List<Statistic> results = session.createCriteria(Statistic.class).list();
+			tx.commit();
+			session.close();
+			log.debug("retrieve list Statistic successful, result size: " + results.size());
+			return results;
+		} catch (RuntimeException re) {
+			log.error("retrieve list Statistic failed", re);
 			throw re;
 		}
 	}

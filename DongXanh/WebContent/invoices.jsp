@@ -37,11 +37,11 @@
 
 							<tbody>
 
-								<s:iterator value="invoices">
+								<s:iterator value="statistics">
 									<tr class="even pointer">
 										<td class="a-center "><input type="checkbox" class="tableflat"></td>
 										<td class=" "><s:property value="" /></td>
-										<td class=" "><s:property value="dateReceived" /></td>
+										<td class=" "><s:property value="%{getText('format.date',{dateReceived})}" /></td>
 										<td class=" "><s:property value="customerCodeLevel2" /></td>
 										<td class=" "><s:property value="customerNameLevel2" /></td>
 										<td class=" "><s:property value="customerCodeLevel1" /></td>
@@ -53,7 +53,7 @@
 										<td class=" "><s:property value="quantiy" /></td>
 										<td class=" "><s:property value="unitPrice" /></td>
 										<td class=" "><s:property value="total" /></td>
-										<td class=" "><s:property value="user.id" /></td>
+										<td class=" "><s:property value="" /></td>
 										<td class=" last"> 
 											<a href="#">View</a> 
 											<a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i>Edit </a> 
