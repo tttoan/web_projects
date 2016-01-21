@@ -11,8 +11,11 @@ import javax.naming.InitialContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
+import com.home.model.Customer;
 import com.home.model.Promotion;
 
 /**
@@ -123,6 +126,23 @@ public class PromotionHome {
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
+			throw re;
+		}
+	}
+	
+	public List<Promotion> getListPromotion() {
+		log.debug("retrieve list Promotion");
+		Transaction tx = null;
+		try {
+			Session session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			List<Promotion> results = session.createCriteria(Promotion.class).list();
+			tx.commit();
+			session.close();
+			log.debug("retrieve list Promotion successful, result size: " + results.size());
+			return results;
+		} catch (RuntimeException re) {
+			log.error("retrieve list Promotion failed", re);
 			throw re;
 		}
 	}
