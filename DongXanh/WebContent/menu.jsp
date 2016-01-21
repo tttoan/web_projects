@@ -2,14 +2,15 @@
 <!-- sidebar menu -->
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="/struts-tags" prefix="s" %>
-	
+<%@ taglib uri="/struts-tags" prefix="s"%>
+
 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
 
 	<div class="menu_section">
 		<h3>General</h3>
-		<ul class="nav side-menu" >
-			<li><a href="index.jsp"><i class="fa fa-home"></i> Trang Chủ </a></li>
+		<ul class="nav side-menu">
+			<li><a href="index.jsp"><i class="fa fa-home"></i> Trang Chủ
+			</a></li>
 			<li><a><i class="fa fa-desktop"></i> Khuyến Mãi <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
@@ -19,21 +20,28 @@
 				</ul></li>
 			<li><a><i class="fa fa-edit"></i> Khách Hàng <span
 					class="fa fa-chevron-down"></span></a>
-				<ul class="nav child_menu" style="display: none" >
-					<li>
-					<s:url action="list_customer.action" var="lcURL" />
-					<s:a href="%{lcURL}" theme="bootstrap" > Danh Sách </s:a>
-					</li>
-						<li><a href="new_customer.jsp"> Tạo Mới </a></li>
+				<ul class="nav child_menu" style="display: none">
+					<li><s:url action="list_customer.action" var="lcURL" /> <s:a
+							href="%{lcURL}" theme="bootstrap"> Danh Sách </s:a></li>
+					<li><a href="new_customer.jsp"> Tạo Mới </a></li>
 					<li><a href="import_customer.html">Import Excel</a></li>
 				</ul></li>
 
 			<li><a><i class="fa fa-table"></i> Bảng Kê <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
-					<li><a href="list_invoice.html" theme="bootstrap" > Danh Sách </a></li>
+					<li><a href="list_invoice.html" theme="bootstrap"> Danh
+							Sách </a></li>
 					<li><a href="create_invoice.html"> Tạo Mới </a></li>
 					<li><a href="import_invoice.html">Import Excel</a></li>
+
+				</ul></li>
+
+			<li><a><i class="fa fa-windows"></i> Lịch công tác <span
+					class="fa fa-chevron-down"></span></a>
+				<ul class="nav child_menu" style="display: none">
+					<li><a href="working_schedule.html">Xem lịch của tôi</a></li>
+					<li><a href="create_working_schedule.html">Tạo mới</a></li>
 
 				</ul></li>
 
@@ -80,6 +88,46 @@
 
 						<li><a href="login.jsp"><i
 								class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+					</ul></li>
+
+				<!-- /customer notice -->
+				
+				<li role="presentation" class="dropdown"><a href="javascript:;"
+					class="dropdown-toggle info-number" data-toggle="dropdown"
+					aria-expanded="false"> <i class="fa fa-envelope-o"></i> <span
+						class="badge bg-green">6</span>
+				</a>
+					<ul id="menu1"
+						class="dropdown-menu list-unstyled msg_list animated fadeInDown"
+						role="menu">
+						<li><a> <span class="image"> <img
+									src="images/img.jpg" alt="Profile Image" />
+							</span> <span> <span>Khách hàng A</span> <span class="time">hôm
+										nay</span>
+							</span> <span class="message"> Hôm nay là sinh nhật của khách
+									hàng A, hãy gửi lời chúc mừng tới họ nhé. </span>
+						</a></li>
+						<li><a> <span class="image"> <img
+									src="images/img.jpg" alt="Profile Image" />
+							</span> <span> <span>Khách hàng B</span> <span class="time">cách
+										1 ngày</span>
+							</span> <span class="message"> Ngày mai là sinh nhật của khách
+									hàng B, hãy gửi lời chúc mừng tới họ nhé. </span>
+						</a></li>
+						<li><a> <span class="image"> <img
+									src="images/img.jpg" alt="Profile Image" />
+							</span> <span> <span>Khách hàng XYZ</span> <span class="time">còn
+										1 tuần</span>
+							</span> <span class="message"> Còn 1 tuần là sinh sinh nhật khách
+									hàng XYZ, hãy gửi lời chúc mừng tới họ nhé. </span>
+						</a></li>
+						<li>
+							<div class="text-center">
+								<a> <strong>Xem tất cả các thông báo</strong> <i
+									class="fa fa-angle-right"></i>
+								</a>
+							</div>
+						</li>
 					</ul></li>
 
 			</ul>
