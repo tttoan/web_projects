@@ -1,6 +1,7 @@
 package com.home.action;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -8,13 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.util.ServletContextAware;
-import org.hibernate.SessionFactory;
+import org.hibernate.Session;
 
-import com.home.conts.MyConts;
-import com.home.dao.CustomerHome;
 import com.home.dao.PromotionHome;
-import com.home.model.Customer;
 import com.home.model.Promotion;
+import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ModelDriven;
@@ -28,6 +27,29 @@ public class PromotionAction implements Action, ModelDriven<Promotion>, ServletC
 	private ServletContext ctx;
 	private Promotion promotion = new Promotion();
 	public List<Promotion> listPromotions = new ArrayList<Promotion>();
+	
+	public static void main(String[] args) {
+		try {
+			PromotionAction promotion = new PromotionAction();
+			promotion.addPromotion();
+//			 System.out.println("Maven + Hibernate + MySQL");
+//		        Session session = HibernateUtil.getSessionFactory().openSession();
+//		        session.beginTransaction();
+//		        
+//		        Promotion promotion = new Promotion();
+//		    	promotion.setPromotionName("Sale Off 2016");
+//				promotion.setStatus(true);
+//				promotion.setStartDate(new Date());
+//				promotion.setEndDate(new Date());
+//				promotion.setRemarks("Remart");
+//				
+//		        session.save(promotion);
+//		        session.getTransaction().commit();
+//		        session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	@Override
 	public String execute() throws Exception {
@@ -72,10 +94,15 @@ public class PromotionAction implements Action, ModelDriven<Promotion>, ServletC
 		}
 	}
 	
-	public String addCustomer() throws Exception {
+	public String addPromotion() throws Exception {
 		try {
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute("SessionFactory");
-			PromotionHome promotionHome = new PromotionHome();
+			PromotionHome promotionHome = new PromotionHome(HibernateUtil.getSessionFactory());
+			promotion.setPromotionName("Sale Off 2017");
+			promotion.setStatus(true);
+			promotion.setStartDate(new Date());
+			promotion.setEndDate(new Date());
+			promotion.setRemarks("Remart");
 			promotionHome.attachDirty(promotion);
 			return SUCCESS;
 		} catch (Exception e) {

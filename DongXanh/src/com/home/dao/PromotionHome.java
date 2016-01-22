@@ -27,8 +27,16 @@ public class PromotionHome {
 
 	private static final Log log = LogFactory.getLog(PromotionHome.class);
 
-	private final SessionFactory sessionFactory = getSessionFactory();
+	private SessionFactory sessionFactory ;//= getSessionFactory();
 
+	public PromotionHome(){
+		sessionFactory = getSessionFactory();
+	};
+			
+	public PromotionHome(SessionFactory sessionFactory){
+		this.sessionFactory = sessionFactory;
+	}
+	
 	protected SessionFactory getSessionFactory() {
 		try {
 			return (SessionFactory) new InitialContext()
@@ -53,8 +61,13 @@ public class PromotionHome {
 
 	public void attachDirty(Promotion instance) {
 		log.debug("attaching dirty Promotion instance");
+		Transaction tx = null;
 		try {
-			sessionFactory.getCurrentSession().saveOrUpdate(instance);
+			Session session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			session.save(instance);
+			tx.commit();
+			session.close();
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -75,8 +88,13 @@ public class PromotionHome {
 
 	public void delete(Promotion persistentInstance) {
 		log.debug("deleting Promotion instance");
+		Transaction tx = null;
 		try {
-			sessionFactory.getCurrentSession().delete(persistentInstance);
+			Session session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			session.delete(persistentInstance);
+			tx.commit();
+			session.close();
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);

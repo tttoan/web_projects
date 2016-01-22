@@ -98,7 +98,6 @@ public class CustomerHome {
 			throw re;
 		}
 	}
-
 	
 
 	public void delete(Customer persistentInstance) {
