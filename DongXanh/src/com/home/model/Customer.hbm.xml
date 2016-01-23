@@ -8,6 +8,9 @@
             <column name="id" />
             <generator class="identity" />
         </id>
+        <many-to-one name="user" class="com.home.model.User" fetch="select">
+            <column name="user_id" />
+        </many-to-one>
         <property name="customerCode" type="string">
             <column name="customer_code" length="40" />
         </property>
@@ -47,8 +50,8 @@
         <property name="socialAddress" type="string">
             <column name="social_address" length="50" />
         </property>
-        <property name="companyAddress" type="string">
-            <column name="company_address" length="500" />
+        <property name="businessAddress" type="string">
+            <column name="businessAddress" length="500" />
         </property>
         <property name="lawyer" type="string">
             <column name="lawyer" length="200" />
