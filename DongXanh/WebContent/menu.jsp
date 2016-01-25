@@ -32,8 +32,8 @@
 				<ul class="nav child_menu" style="display: none">
 					<li><a href="list_invoice.html" theme="bootstrap"> Danh
 							Sách </a></li>
-					<li><a href="create_invoice.html"> Tạo Mới </a></li>
-					<li><a href="import_invoice.html">Import Excel</a></li>
+					<li><a href="new_invoice.jsp"> Tạo Mới </a></li>
+					<li><a href="import_invoice.jsp">Import Excel</a></li>
 
 				</ul></li>
 

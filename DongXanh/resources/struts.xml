@@ -6,7 +6,7 @@
 <struts>
 	<constant name="struts.devMode" value="true"></constant>
 	<constant name="struts.convention.result.path" value="/"></constant>
-	<constant name="struts.custom.i18n.resources" value="struts" ></constant>
+	<constant name="struts.custom.i18n.resources" value="struts"></constant>
 
 	<package name="default" namespace="/" extends="struts-default">
 		<action name="login" class="com.home.action.LoginAction">
@@ -32,16 +32,26 @@
 			<result name="success" type="chain">list_customer</result>
 			<result name="error">/error.jsp</result>
 		</action>
-		
+
 		<action name="list_invoice" method="listInvoice"
 			class="com.home.action.StatisticAction">
 			<result name="success">/invoices.jsp</result>
 			<result name="error">/error.jsp</result>
 		</action>
-		
+
 		<action name="add_invoice" method="addInvoice"
 			class="com.home.action.StatisticAction">
 			<result name="success" type="redirect">list_invoice</result>
+			<result name="error">/error.jsp</result>
+		</action>
+
+		<action name="import_invoice" method="importInvoice" class="com.home.action.StatisticAction">
+			<interceptor-ref name="defaultStack"/>   
+           <interceptor-ref name="fileUpload">   
+               <param name="allowedTypes">application/ms-excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>   
+           </interceptor-ref>
+			<result name="input">/index.jsp</result>
+			<result name="success">/invoices.jsp</result>
 			<result name="error">/error.jsp</result>
 		</action>
 	</package>
