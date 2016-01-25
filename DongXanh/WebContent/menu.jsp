@@ -24,7 +24,7 @@
 					<li><s:url action="list_customer.action" var="lcURL" /> <s:a
 							href="%{lcURL}" theme="bootstrap"> Danh Sách </s:a></li>
 					<li><a href="new_customer.jsp"> Tạo Mới </a></li>
-					<li><a href="import_customer.html">Import Excel</a></li>
+					<li><a href="import_customer.jsp">Import Excel</a></li>
 				</ul></li>
 
 			<li><a><i class="fa fa-table"></i> Bảng Kê <span
