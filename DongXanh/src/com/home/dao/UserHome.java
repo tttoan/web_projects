@@ -119,7 +119,7 @@ public class UserHome {
 		log.debug("getting User instance with id: " + id);
 		try {
 			User instance = (User) sessionFactory.openSession().get(
-					"com.home.model.User", id);
+					User.class, id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -137,7 +137,7 @@ public class UserHome {
 		log.debug("finding User instance by example");
 		try {
 			List<User> results = (List<User>) sessionFactory
-					.openSession().createCriteria("com.home.model.User")
+					.openSession().createCriteria(User.class)
 					.add(create(instance)).list();
 			log.debug("find by example successful, result size: "
 					+ results.size());
@@ -163,6 +163,24 @@ public class UserHome {
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by credentials failed", re);
+			throw re;
+		}
+
+	}
+	public User getUserByFullName(String fullName) {
+		log.debug("finding User instance by full name");
+		try {
+			Session session = sessionFactory.openSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session
+					.createQuery("from User where full_name=:fullName");
+			query.setString("fullName", fullName);
+			User results = (User) query.uniqueResult();
+			tx.commit();
+			session.close();
+			return results;
+		} catch (RuntimeException re) {
+			log.error("find by full name failed", re);
 			throw re;
 		}
 

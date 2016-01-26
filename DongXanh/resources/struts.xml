@@ -9,11 +9,11 @@
 	<constant name="struts.custom.i18n.resources" value="struts"></constant>
 
 	<package name="default" namespace="/" extends="struts-default">
-		<action name="login" class="com.home.action.LoginAction">
+		<action name="login" class="com.home.action.UserAction">
 			<result name="success">/index.jsp</result>
 			<result name="error">/error.jsp</result>
 		</action>
-		<action name="signup" method="addUser" class="com.home.action.LoginAction">
+		<action name="signup" method="addUser" class="com.home.action.UserAction">
 			<result name="success">/index.jsp</result>
 			<result name="error">/error.jsp</result>
 		</action>
@@ -52,6 +52,15 @@
            </interceptor-ref>
 			<result name="input">/index.jsp</result>
 			<result name="success">/invoices.jsp</result>
+			<result name="error">/error.jsp</result>
+		</action>
+		<action name="import_customer" method="importCustomer" class="com.home.action.CustomerAction">
+			<interceptor-ref name="defaultStack"/>   
+           <interceptor-ref name="fileUpload">   
+               <param name="allowedTypes">application/ms-excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>   
+           </interceptor-ref>
+			<result name="input">/index.jsp</result>
+			<result name="success">/customers.jsp</result>
 			<result name="error">/error.jsp</result>
 		</action>
 	</package>

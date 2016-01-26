@@ -49,14 +49,11 @@
 						<div class="clearfix"></div>
 					</div>
 					<div class="x_content">
-
-						<p>Drag multiple files to the box below for multi upload or
-							click to select files. This is for demonstration purposes only,
-							the files are not uploaded to any server.</p>
-						<form action="choices/form_upload.html" class="dropzone"
-							style="border: 1px solid #e5e5e5; height: 300px;"></form>
-
-						<br /> <br /> <br /> <br />
+							<s:form action="import_customer" method="post"
+							enctype="multipart/form-data">
+							<s:file name="upload" label="select a file"></s:file>
+							<s:submit label="Import"></s:submit>
+						</s:form>
 					</div>
 				</div>
 			</div>

@@ -2,6 +2,7 @@ package com.home.model;
 
 // Generated Jan 12, 2016 11:20:58 PM by Hibernate Tools 4.0.0
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,13 +12,11 @@ import java.util.Set;
 public class Customer implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
-	private User user;
 	private String customerCode;
 	private String customerName;
-	
-	private String createTime;
+	private Date createTime;
 	private String certificateNumber;
-	private String certificateDate;
+	private Date certificateDate;
 	private String certificateAddress;
 	private String taxNumber;
 	private Integer budgetRegister;
@@ -26,11 +25,10 @@ public class Customer implements java.io.Serializable {
 	private String email;
 	private String socialAddress;
 	private String businessAddress;
-	private String lawyer;
 	private String adviser;
 	private String director;
 	private String directorMobile;
-	private String directorBirthday;
+	private Date directorBirthday;
 	private String directorDomicile;
 	private String sellMan;
 	private String sellManMobile;
@@ -73,19 +71,20 @@ public class Customer implements java.io.Serializable {
 	private String farmProduct4;
 	private String farmProduct4Session;
 	private Integer totalVipCustomer;
-	private Set<PromotionCustomer> promotionCustomers = new HashSet<PromotionCustomer>(
-			0);
+	private User user;
+	private String lawyer;
+	private Set<PromotionCustomer> promotionCustomers = new HashSet<PromotionCustomer>(0);
 
 	public Customer() {
 	}
 
 	public Customer(String customerCode, String customerName, String adviser,
-			String createTime, String certificateNumber,
-			String certificateDate, String certificateAddress,
+			Date createTime, String certificateNumber,
+			Date certificateDate, String certificateAddress,
 			String taxNumber, Integer budgetRegister, String telefone,
 			String fax, String email, String socialAddress,
 			String businessAddress, String lawyer, String director,
-			String directorMobile, String directorBirthday,
+			String directorMobile, Date directorBirthday,
 			String directorDomicile, String sellMan, String sellManMobile,
 			Integer budgetOriginal, String otherBusiness,
 			String customer1Level1, String customer1Phone,
@@ -200,11 +199,11 @@ public class Customer implements java.io.Serializable {
 		this.adviser = adviser;
 	}
 
-	public String getCreateTime() {
+	public Date getCreateTime() {
 		return this.createTime;
 	}
 
-	public void setCreateTime(String createTime) {
+	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
 
@@ -216,11 +215,11 @@ public class Customer implements java.io.Serializable {
 		this.certificateNumber = certificateNumber;
 	}
 
-	public String getCertificateDate() {
+	public Date getCertificateDate() {
 		return this.certificateDate;
 	}
 
-	public void setCertificateDate(String certificateDate) {
+	public void setCertificateDate(Date certificateDate) {
 		this.certificateDate = certificateDate;
 	}
 
@@ -312,11 +311,11 @@ public class Customer implements java.io.Serializable {
 		this.directorMobile = directorMobile;
 	}
 
-	public String getDirectorBirthday() {
+	public Date getDirectorBirthday() {
 		return this.directorBirthday;
 	}
 
-	public void setDirectorBirthday(String directorBirthday) {
+	public void setDirectorBirthday(Date directorBirthday) {
 		this.directorBirthday = directorBirthday;
 	}
 

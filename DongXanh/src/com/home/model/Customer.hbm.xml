@@ -20,14 +20,14 @@
         <property name="adviser" type="string">
             <column name="adviser" length="50" />
         </property>
-        <property name="createTime" type="string">
-            <column name="create_time" length="50" />
+        <property name="createTime" type="timestamp">
+            <column name="create_time" length="0" />
         </property>
         <property name="certificateNumber" type="string">
             <column name="certificate_number" length="30" />
         </property>
-        <property name="certificateDate" type="string">
-            <column name="certificate_date" length="30" />
+        <property name="certificateDate" type="timestamp">
+            <column name="certificate_date" length="0" />
         </property>
         <property name="certificateAddress" type="string">
             <column name="certificate_address" length="500" />
@@ -62,8 +62,8 @@
         <property name="directorMobile" type="string">
             <column name="director_mobile" length="20" />
         </property>
-        <property name="directorBirthday" type="string">
-            <column name="director_birthday" length="20" />
+        <property name="directorBirthday" type="timestamp">
+            <column name="director_birthday" length="0" />
         </property>
         <property name="directorDomicile" type="string">
             <column name="director_domicile" length="500" />

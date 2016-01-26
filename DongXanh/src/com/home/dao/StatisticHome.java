@@ -3,19 +3,13 @@ package com.home.dao;
 // Generated Jan 12, 2016 11:21:58 PM by Hibernate Tools 4.0.0
 
 import static org.hibernate.criterion.Example.create;
-
 import java.util.List;
-
-import javax.naming.InitialContext;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-
-import com.home.model.Customer;
 import com.home.model.Statistic;
 
 /**
@@ -123,7 +117,7 @@ public class StatisticHome {
 	public List<Statistic> findByExample(Statistic instance) {
 		log.debug("finding Statistic instance by example");
 		try {
-			List<Statistic> results = (List<Statistic>) sessionFactory.getCurrentSession().createCriteria("com.home.dao.Statistic").add(create(instance)).list();
+			List<Statistic> results = (List<Statistic>) sessionFactory.getCurrentSession().createCriteria(Statistic.class).add(create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
