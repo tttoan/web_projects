@@ -1,6 +1,6 @@
 package com.home.model;
 
-// Generated Jan 12, 2016 11:20:58 PM by Hibernate Tools 4.0.0
+// Generated Jan 27, 2016 10:24:28 PM by Hibernate Tools 4.3.1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,29 +12,26 @@ public class PromotionCustomer implements java.io.Serializable {
 
 	private Integer id;
 	private Customer customer;
-	private Promotion promotion;
 	private Gift gift;
+	private Promotion promotion;
 	private Integer minQuantity;
 	private Integer maxQuantity;
 	private String note;
-	private Set<PromotionCustomerProduct> promotionCustomerProducts = new HashSet<PromotionCustomerProduct>(
-			0);
+	private Set<PromotionCustomerProduct> promotionCustomerProducts = new HashSet<PromotionCustomerProduct>(0);
 
 	public PromotionCustomer() {
 	}
 
-	public PromotionCustomer(Customer customer, Promotion promotion, Gift gift) {
+	public PromotionCustomer(Customer customer, Gift gift, Promotion promotion) {
 		this.customer = customer;
-		this.promotion = promotion;
 		this.gift = gift;
+		this.promotion = promotion;
 	}
 
-	public PromotionCustomer(Customer customer, Promotion promotion, Gift gift,
-			Integer minQuantity, Integer maxQuantity, String note,
-			Set<PromotionCustomerProduct> promotionCustomerProducts) {
+	public PromotionCustomer(Customer customer, Gift gift, Promotion promotion, Integer minQuantity, Integer maxQuantity, String note, Set<PromotionCustomerProduct> promotionCustomerProducts) {
 		this.customer = customer;
-		this.promotion = promotion;
 		this.gift = gift;
+		this.promotion = promotion;
 		this.minQuantity = minQuantity;
 		this.maxQuantity = maxQuantity;
 		this.note = note;
@@ -57,20 +54,20 @@ public class PromotionCustomer implements java.io.Serializable {
 		this.customer = customer;
 	}
 
-	public Promotion getPromotion() {
-		return this.promotion;
-	}
-
-	public void setPromotion(Promotion promotion) {
-		this.promotion = promotion;
-	}
-
 	public Gift getGift() {
 		return this.gift;
 	}
 
 	public void setGift(Gift gift) {
 		this.gift = gift;
+	}
+
+	public Promotion getPromotion() {
+		return this.promotion;
+	}
+
+	public void setPromotion(Promotion promotion) {
+		this.promotion = promotion;
 	}
 
 	public Integer getMinQuantity() {
@@ -101,8 +98,7 @@ public class PromotionCustomer implements java.io.Serializable {
 		return this.promotionCustomerProducts;
 	}
 
-	public void setPromotionCustomerProducts(
-			Set<PromotionCustomerProduct> promotionCustomerProducts) {
+	public void setPromotionCustomerProducts(Set<PromotionCustomerProduct> promotionCustomerProducts) {
 		this.promotionCustomerProducts = promotionCustomerProducts;
 	}
 

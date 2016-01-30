@@ -1,6 +1,6 @@
 package com.home.model;
 
-// Generated Jan 12, 2016 11:20:58 PM by Hibernate Tools 4.0.0
+// Generated Jan 27, 2016 10:24:28 PM by Hibernate Tools 4.3.1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,8 +23,7 @@ public class Category implements java.io.Serializable {
 		this.categoryName = categoryName;
 	}
 
-	public Category(String categoryName, String description, byte[] picture,
-			Set<Product> products) {
+	public Category(String categoryName, String description, byte[] picture, Set<Product> products) {
 		this.categoryName = categoryName;
 		this.description = description;
 		this.picture = picture;

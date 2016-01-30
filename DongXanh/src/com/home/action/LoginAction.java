@@ -7,17 +7,15 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
 
-import com.home.conts.RoleTable;
-import com.home.dao.RoleHome;
 import com.home.dao.UserHome;
 import com.home.model.User;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
-public class UserAction implements Action, ModelDriven<User>, ServletContextAware, ServletRequestAware {
+public class LoginAction extends ActionSupport implements Action, ModelDriven<User>, ServletContextAware, ServletRequestAware {
 	private static final long serialVersionUID = 1L;
-	private User user = new User();
+	public User user = new User();
 	private HttpServletRequest request;
 	private ServletContext ctx;
 
@@ -30,6 +28,7 @@ public class UserAction implements Action, ModelDriven<User>, ServletContextAwar
 	public void setServletRequest(HttpServletRequest request) {
 		this.setRequest(request);
 	}
+
 	public HttpServletRequest getRequest() {
 		return request;
 	}
@@ -37,30 +36,31 @@ public class UserAction implements Action, ModelDriven<User>, ServletContextAwar
 	public void setRequest(HttpServletRequest request) {
 		this.request = request;
 	}
+
 	@Override
 	public void setServletContext(ServletContext sc) {
 		this.ctx = sc;
 	}
-	public SessionFactory getSessionFactory(){
+
+	public SessionFactory getSessionFactory() {
 		return (SessionFactory) ctx.getAttribute("SessionFactory");
 	}
+
 	@Override
 	public String execute() throws Exception {
 		return SUCCESS;
+
 	}
 
-	public String addUser() throws Exception {
-		try {
-			UserHome userHome = new UserHome(getSessionFactory());
-			RoleHome roleHome = new RoleHome(getSessionFactory());
-			user.setRole(roleHome.findRoleByName(RoleTable.Member.toString()));
-			userHome.attachDirty(user);
-			return SUCCESS;
-		} catch (Exception e) {
-			return ERROR;
+	@Override
+	public void validate() {
+		UserHome userHome = new UserHome(getSessionFactory());
+		User userDB = userHome.getUserByCredentials(user.getUserName(), user.getPassword());
+		if (userDB == null) {
+			addActionError("Username or password is not valid");
+		} else {
+			user = userDB;
 		}
-	}
-
-	
+	};
 
 }

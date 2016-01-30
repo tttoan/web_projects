@@ -5,14 +5,13 @@ package com.home.dao;
 import static org.hibernate.criterion.Example.create;
 
 import java.util.List;
-
-import javax.naming.InitialContext;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-
+import org.hibernate.Transaction;
 import com.home.model.Role;
 
 /**
@@ -24,12 +23,15 @@ public class RoleHome {
 
 	private static final Log log = LogFactory.getLog(RoleHome.class);
 
-	private final SessionFactory sessionFactory = getSessionFactory();
+	private SessionFactory sessionFactory;
+
+	public RoleHome(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
 
 	protected SessionFactory getSessionFactory() {
 		try {
-			return (SessionFactory) new InitialContext()
-					.lookup("SessionFactory");
+			return sessionFactory;
 		} catch (Exception e) {
 			log.error("Could not locate SessionFactory in JNDI", e);
 			throw new IllegalStateException(
@@ -94,6 +96,28 @@ public class RoleHome {
 		}
 	}
 
+	public Role findRoleByName(String name) {
+		log.debug("getting Role instance with role name: " + name);
+		try {
+			Session session = sessionFactory.openSession();
+			Transaction tx = session.beginTransaction();
+			Query query = session.createQuery("from Role where role_name =:roleName");
+			query.setString("roleName", name);
+			Role instance = (Role) query.uniqueResult();
+			tx.commit();
+			session.close();
+			if (instance == null) {
+				log.debug("get successful, no instance found");
+			} else {
+				log.debug("get successful, instance found");
+			}
+			return instance;
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+	}
+	
 	public Role findById(java.lang.Integer id) {
 		log.debug("getting Role instance with id: " + id);
 		try {

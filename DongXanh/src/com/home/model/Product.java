@@ -1,6 +1,6 @@
 package com.home.model;
 
-// Generated Jan 12, 2016 11:20:58 PM by Hibernate Tools 4.0.0
+// Generated Jan 27, 2016 10:24:28 PM by Hibernate Tools 4.3.1
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -23,15 +23,12 @@ public class Product implements java.io.Serializable {
 	private Integer maxQuantity;
 	private Date exportDate;
 	private Date launchDate;
-	private Set<PromotionProduct> promotionProducts = new HashSet<PromotionProduct>(
-			0);
+	private Set<PromotionProduct> promotionProducts = new HashSet<PromotionProduct>(0);
 
 	public Product() {
 	}
 
-	public Product(Category category, String productCode, String productType,
-			String productName, String description, BigDecimal unitPrice,
-			Integer minQuantity, Integer maxQuantity, Date exportDate,
+	public Product(Category category, String productCode, String productType, String productName, String description, BigDecimal unitPrice, Integer minQuantity, Integer maxQuantity, Date exportDate,
 			Date launchDate, Set<PromotionProduct> promotionProducts) {
 		this.category = category;
 		this.productCode = productCode;

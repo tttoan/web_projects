@@ -7,15 +7,13 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
 
-import com.home.conts.RoleTable;
-import com.home.dao.RoleHome;
 import com.home.dao.UserHome;
 import com.home.model.User;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
-public class UserAction implements Action, ModelDriven<User>, ServletContextAware, ServletRequestAware {
+public class RoleAction implements Action, ModelDriven<User>, ServletContextAware, ServletRequestAware {
 	private static final long serialVersionUID = 1L;
 	private User user = new User();
 	private HttpServletRequest request;
@@ -52,8 +50,6 @@ public class UserAction implements Action, ModelDriven<User>, ServletContextAwar
 	public String addUser() throws Exception {
 		try {
 			UserHome userHome = new UserHome(getSessionFactory());
-			RoleHome roleHome = new RoleHome(getSessionFactory());
-			user.setRole(roleHome.findRoleByName(RoleTable.Member.toString()));
 			userHome.attachDirty(user);
 			return SUCCESS;
 		} catch (Exception e) {

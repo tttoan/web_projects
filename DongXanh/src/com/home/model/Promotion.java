@@ -1,6 +1,6 @@
 package com.home.model;
 
-// Generated Jan 12, 2016 11:20:58 PM by Hibernate Tools 4.0.0
+// Generated Jan 27, 2016 10:24:28 PM by Hibernate Tools 4.3.1
 
 import java.util.Date;
 import java.util.HashSet;
@@ -17,18 +17,13 @@ public class Promotion implements java.io.Serializable {
 	private Date endDate;
 	private String remarks;
 	private Boolean status;
-	private Set<PromotionCustomer> promotionCustomers = new HashSet<PromotionCustomer>(
-			0);
-	private Set<PromotionProduct> promotionProducts = new HashSet<PromotionProduct>(
-			0);
+	private Set<PromotionCustomer> promotionCustomers = new HashSet<PromotionCustomer>(0);
+	private Set<PromotionProduct> promotionProducts = new HashSet<PromotionProduct>(0);
 
 	public Promotion() {
 	}
 
-	public Promotion(String promotionName, Date startDate, Date endDate,
-			String remarks, Boolean status,
-			Set<PromotionCustomer> promotionCustomers,
-			Set<PromotionProduct> promotionProducts) {
+	public Promotion(String promotionName, Date startDate, Date endDate, String remarks, Boolean status, Set<PromotionCustomer> promotionCustomers, Set<PromotionProduct> promotionProducts) {
 		this.promotionName = promotionName;
 		this.startDate = startDate;
 		this.endDate = endDate;

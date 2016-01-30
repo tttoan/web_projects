@@ -17,7 +17,12 @@
 					<li><a href="result_promotion.html"> Khái Quát </a></li>
 					<li><a href="list_promotion.html"> Danh Sách </a></li>
 					<li><a href="create_promotion.html"> Tạo Mới </a></li>
-				</ul></li>
+				</ul>
+			</li>
+			<s:include value="set_user.jsp">
+            	<s:param name="role_id"><s:property value="%{user.role.id}"/></s:param>
+        	</s:include>
+			
 			<li><a><i class="fa fa-edit"></i> Khách Hàng <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
@@ -91,7 +96,7 @@
 					</ul></li>
 
 				<!-- /customer notice -->
-				
+
 				<li role="presentation" class="dropdown"><a href="javascript:;"
 					class="dropdown-toggle info-number" data-toggle="dropdown"
 					aria-expanded="false"> <i class="fa fa-envelope-o"></i> <span

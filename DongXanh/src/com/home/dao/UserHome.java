@@ -154,9 +154,9 @@ public class UserHome {
 			Session session = sessionFactory.openSession();
 			Transaction tx = session.beginTransaction();
 			Query query = session
-					.createQuery("from User where user_name=:id and password=:pwd");
-			query.setString("id", userName);
-			query.setString("pwd", password);
+					.createQuery("from User where user_name=:userName and password=:password");
+			query.setString("userName", userName);
+			query.setString("password", password);
 			User results = (User) query.uniqueResult();
 			tx.commit();
 			session.close();

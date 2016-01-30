@@ -1,6 +1,6 @@
 package com.home.model;
 
-// Generated Jan 12, 2016 11:20:58 PM by Hibernate Tools 4.0.0
+// Generated Jan 27, 2016 10:24:28 PM by Hibernate Tools 4.3.1
 
 import java.util.Date;
 
@@ -29,9 +29,7 @@ public class WorkingPlan implements java.io.Serializable {
 		this.planDone = planDone;
 	}
 
-	public WorkingPlan(User user, String planName, String planDescription,
-			String workingType, String location, Date planStart, Date planEnd,
-			Date createTime, Date updateTime, short planDone) {
+	public WorkingPlan(User user, String planName, String planDescription, String workingType, String location, Date planStart, Date planEnd, Date createTime, Date updateTime, short planDone) {
 		this.user = user;
 		this.planName = planName;
 		this.planDescription = planDescription;

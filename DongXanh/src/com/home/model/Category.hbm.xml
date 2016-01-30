@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Jan 12, 2016 11:20:59 PM by Hibernate Tools 4.0.0 -->
+<!-- Generated Jan 27, 2016 10:24:29 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="com.home.model.Category" table="category" catalog="db_promotion">
+    <class name="com.home.model.Category" table="category" catalog="db_promotion" optimistic-lock="version">
         <id name="id" type="java.lang.Integer">
             <column name="id" />
             <generator class="identity" />

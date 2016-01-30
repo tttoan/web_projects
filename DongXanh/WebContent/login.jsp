@@ -51,21 +51,26 @@
 				<section class="login_content">
 					<s:form action="login" theme="bootstrap">
 						<h1>ĐỒNG XANH</h1>
+						<s:if test="hasActionErrors()">
+							<div>
+								<s:actionerror />
+							</div>
+						</s:if>
 						<div>
-							<s:textfield name="userName" class="form-control"
+							<s:textfield name="userName" cssClass="form-control"
 								placeholder="Tên tài khoản" />
 						</div>
 						<div>
-							<s:password name="password" class="form-control"
+							<s:password name="password" cssClass="form-control"
 								placeholder="Mật khẩu" />
 						</div>
+
 						<div>
 							<s:submit class="btn btn-default submit" value="Đăng nhập" />
 							<a class="reset_pass" href="#">Quên mật khẩu?</a>
 						</div>
 						<div class="clearfix"></div>
 						<div class="separator">
-
 							<p class="change_link">
 								New to site? <a href="#toregister" class="to_register"> Tạo
 									tài khoản </a>
