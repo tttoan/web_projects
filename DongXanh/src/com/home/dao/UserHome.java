@@ -5,6 +5,7 @@ package com.home.dao;
 import static org.hibernate.criterion.Example.create;
 
 import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
@@ -13,6 +14,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import com.home.model.Statistic;
 import com.home.model.User;
 
 /**
@@ -184,5 +186,22 @@ public class UserHome {
 			throw re;
 		}
 
+	}
+	@SuppressWarnings("unchecked")
+	public List<User> getListUser() {
+		log.debug("retrieve list Users");
+		Transaction tx = null;
+		try {
+			Session session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			List<User> results = session.createCriteria(User.class).list();
+			tx.commit();
+			session.close();
+			log.debug("retrieve list Users successful, result size: " + results.size());
+			return results;
+		} catch (RuntimeException re) {
+			log.error("retrieve list Users failed", re);
+			throw re;
+		}
 	}
 }

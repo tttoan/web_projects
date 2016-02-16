@@ -17,6 +17,11 @@
 			<result name="success">/login.jsp</result>
 			<result name="input" type="redirect">/login.jsp</result>
 		</action>
+		<action name="list_user" method="listUser"
+			class="com.home.action.UserAction">
+			<result name="success">/users.jsp</result>
+		</action>
+		
 		<action name="add_customer" method="addCustomer"
 			class="com.home.action.CustomerAction">
 			<result name="success" type="redirect">list_customer</result>
