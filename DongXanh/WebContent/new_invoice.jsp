@@ -19,6 +19,14 @@ function change(){
 <!-- page content -->
 <div class="right_col" role="main">
 	<div class="">
+	<div class="page-title">
+                        <div class="title_left">
+                            <h3>
+								Thêm Hóa Đơn
+							</h3>
+                        </div>
+
+                    </div>
 		<div class="clearfix"></div>
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
@@ -102,17 +110,16 @@ function change(){
 									<s:textfield id="total" name="total" required="required" value="%{getText('format.money',{0})}" />
 								</div>
 							</div>
-<!-- 							<div class="item form-group"> -->
+							<div class="item form-group">
 
-<!-- 								<label class="control-label col-md-3 col-sm-3 col-xs-12" -->
-<%-- 									for="user">NVTT <span class="required">*</span> --%>
-<!-- 								</label> -->
-<!-- 								<div class="col-md-6 col-sm-6 col-xs-12"> -->
-<%-- 									<sd:autocompleter name="user" cssClass="form-control col-md-7 col-xs-12" showDownArrow="false" autoComplete="true" --%>
-<%-- 										list="{'Arsenal','Leicester City','Man City','Tottenham','Man United','West Ham', --%>
-<%-- 										'Stoke City','Crystal Palace','Liverpool','Southampton','Everton','Watford','West Bromwich','Chelsea','Bournemouth'}" /> --%>
-<!-- 								</div> -->
-<!-- 							</div> -->
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="user">NVTT <span class="required">*</span>
+								</label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<sd:autocompleter name="employeeName" cssClass="form-control col-md-7 col-xs-12" showDownArrow="false" autoComplete="true"
+ 										list="listEmployeeName" /> 
+								</div>
+							</div>
 							<div class="ln_solid"></div>
 							<div class="form-group">
 								<div class="col-md-6 col-md-offset-3">

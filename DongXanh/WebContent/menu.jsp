@@ -5,7 +5,6 @@
 <%@ taglib uri="/struts-tags" prefix="s"%>
 
 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-
 	<div class="menu_section">
 		<h3>General</h3>
 		<ul class="nav side-menu">
@@ -19,7 +18,7 @@
 					<li><a href="create_promotion.html"> Tạo Mới </a></li>
 				</ul>
 			</li>
-			<s:include value="set_user.jsp">
+			<s:include value="menu_user.jsp">
             	<s:param name="role_id"><s:property value="%{user.role.id}"/></s:param>
         	</s:include>
 			
@@ -28,18 +27,17 @@
 				<ul class="nav child_menu" style="display: none">
 					<li><s:url action="list_customer.action" var="lcURL" /> <s:a
 							href="%{lcURL}" theme="bootstrap"> Danh Sách </s:a></li>
-					<li><a href="new_customer.jsp"> Tạo Mới </a></li>
+					<li><s:url action="move_to_add_customer" var="macURL" ></s:url><s:a href="%{macURL}"> Tạo Và Chỉnh Sửa </s:a></li>
 					<li><a href="import_customer.jsp">Import Excel</a></li>
 				</ul></li>
 
 			<li><a><i class="fa fa-table"></i> Bảng Kê <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
-					<li><a href="list_invoice.html" theme="bootstrap"> Danh
-							Sách </a></li>
-					<li><a href="new_invoice.jsp"> Tạo Mới </a></li>
+					<li><s:url action="list_invoice.action" var="liURL" /> <s:a
+							href="%{liURL}" theme="bootstrap"> Danh Sách </s:a></li>
+					<li><s:url action="move_to_add_invoice.action" var="maiURL" > </s:url><s:a href="%{maiURL}"> Thêm Và Chỉnh Sửa </s:a></li>
 					<li><a href="import_invoice.jsp">Import Excel</a></li>
-
 				</ul></li>
 
 			<li><a><i class="fa fa-windows"></i> Lịch công tác <span

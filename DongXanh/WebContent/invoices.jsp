@@ -16,7 +16,6 @@
 						<table  id="example" class="table table-striped responsive-utilities jambo_table">
 							<thead>
 								<tr class="headings">
-									<th><input type="checkbox" class="tableflat"></th>
 									<th>Tháng</th>
 									<th>Ngày nhận</th>
 									<th>Mã Cấp 2</th>
@@ -39,7 +38,6 @@
 
 								<s:iterator value="statistics">
 									<tr class="even pointer">
-										<td class="a-center "><input type="checkbox" class="tableflat"></td>
 										<td class=" "><s:property value="" /></td>
 										<td class=" "><s:property value="%{getText('format.date',{dateReceived})}" /></td>
 										<td class=" "><s:property value="customerCodeLevel2" /></td>

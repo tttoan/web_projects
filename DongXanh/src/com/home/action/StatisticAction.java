@@ -39,6 +39,8 @@ public class StatisticAction implements Action, ModelDriven<Statistic>, ServletC
 	private File upload;
 	private String uploadContentType;
 	private String uploadFileName;
+	private String employeeName;
+	public List<String> listEmployeeName = new ArrayList<>();
 	public File getUpload() {
 		return upload;
 	}
@@ -101,8 +103,24 @@ public class StatisticAction implements Action, ModelDriven<Statistic>, ServletC
 		}
 	}
 
+	public String listEmployeeName() throws Exception{
+		try {
+			UserHome userHome = new UserHome(getSessionFactory());
+			List<User> users = userHome.getListUser();
+			for (User user : users) {
+				listEmployeeName.add(user.getFullName());
+			}
+			return SUCCESS;
+		} catch (Exception e) {
+			return ERROR;
+		}
+	}
+	
 	public String addInvoice() throws Exception {
 		try {
+			UserHome userHome = new UserHome(getSessionFactory());
+			User user = userHome.getUserByFullName(getEmployeeName());
+			statistic.setUser(user);
 			StatisticHome sttHome = new StatisticHome(getSessionFactory());
 			sttHome.attachDirty(statistic);
 			return SUCCESS;
@@ -145,5 +163,13 @@ public class StatisticAction implements Action, ModelDriven<Statistic>, ServletC
 		}
 		FileUtils.deleteQuietly(theFile);
 		return SUCCESS;
+	}
+
+	public String getEmployeeName() {
+		return employeeName;
+	}
+
+	public void setEmployeeName(String employeeName) {
+		this.employeeName = employeeName;
 	}
 }

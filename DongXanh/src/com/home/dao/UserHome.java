@@ -26,7 +26,7 @@ import com.home.model.User;
 public class UserHome {
 
 	private static final Log log = LogFactory.getLog(UserHome.class);
-	
+
 	private SessionFactory sessionFactory;
 
 	public UserHome(SessionFactory sessionFactory) {
@@ -38,8 +38,7 @@ public class UserHome {
 			return sessionFactory;
 		} catch (Exception e) {
 			log.error("Could not locate SessionFactory in JNDI", e);
-			throw new IllegalStateException(
-					"Could not locate SessionFactory in JNDI");
+			throw new IllegalStateException("Could not locate SessionFactory in JNDI");
 		}
 	}
 
@@ -107,8 +106,7 @@ public class UserHome {
 	public User merge(User detachedInstance) {
 		log.debug("merging User instance");
 		try {
-			User result = (User) sessionFactory.openSession().merge(
-					detachedInstance);
+			User result = (User) sessionFactory.openSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -119,9 +117,13 @@ public class UserHome {
 
 	public User findById(java.lang.Integer id) {
 		log.debug("getting User instance with id: " + id);
+		Transaction tx = null;
 		try {
-			User instance = (User) sessionFactory.openSession().get(
-					User.class, id);
+			Session session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			User instance = (User) session.get(User.class, id);
+			tx.commit();
+			session.close();
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -138,11 +140,8 @@ public class UserHome {
 	public List<User> findByExample(User instance) {
 		log.debug("finding User instance by example");
 		try {
-			List<User> results = (List<User>) sessionFactory
-					.openSession().createCriteria(User.class)
-					.add(create(instance)).list();
-			log.debug("find by example successful, result size: "
-					+ results.size());
+			List<User> results = (List<User>) sessionFactory.openSession().createCriteria(User.class).add(create(instance)).list();
+			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
@@ -155,8 +154,7 @@ public class UserHome {
 		try {
 			Session session = sessionFactory.openSession();
 			Transaction tx = session.beginTransaction();
-			Query query = session
-					.createQuery("from User where user_name=:userName and password=:password");
+			Query query = session.createQuery("from User where user_name=:userName and password=:password");
 			query.setString("userName", userName);
 			query.setString("password", password);
 			User results = (User) query.uniqueResult();
@@ -169,13 +167,13 @@ public class UserHome {
 		}
 
 	}
+
 	public User getUserByFullName(String fullName) {
 		log.debug("finding User instance by full name");
 		try {
 			Session session = sessionFactory.openSession();
 			Transaction tx = session.beginTransaction();
-			Query query = session
-					.createQuery("from User where full_name=:fullName");
+			Query query = session.createQuery("from User where full_name=:fullName");
 			query.setString("fullName", fullName);
 			User results = (User) query.uniqueResult();
 			tx.commit();
@@ -187,6 +185,7 @@ public class UserHome {
 		}
 
 	}
+
 	@SuppressWarnings("unchecked")
 	public List<User> getListUser() {
 		log.debug("retrieve list Users");

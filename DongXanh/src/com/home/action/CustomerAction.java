@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.Row;
@@ -15,10 +17,12 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
+
 import com.home.conts.CustomerTable;
 import com.home.dao.CustomerHome;
 import com.home.dao.UserHome;
 import com.home.model.Customer;
+import com.home.model.User;
 import com.home.util.ExcelUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ModelDriven;
@@ -27,6 +31,8 @@ public class CustomerAction implements Action, ModelDriven<Customer>, ServletCon
 	private String customerId;
 	private Customer customer = new Customer();
 	public List<Customer> customers = new ArrayList<Customer>();
+	private String lookupEmployeeForCus;
+	public List<String> listLookupEmployeeForCus = new ArrayList<>();
 	private ServletContext ctx;
 	private HttpServletRequest request;
 	private Workbook workbook;
@@ -81,9 +87,7 @@ public class CustomerAction implements Action, ModelDriven<Customer>, ServletCon
 
 	public String listCustomer() throws Exception {
 		try {
-
-			SessionFactory sf = (SessionFactory) ctx.getAttribute("SessionFactory");
-			CustomerHome cusHome = new CustomerHome(sf);
+			CustomerHome cusHome = new CustomerHome(getSessionFactory());
 			customers = cusHome.getListCustomer();
 			return SUCCESS;
 		} catch (Exception e) {
@@ -94,8 +98,7 @@ public class CustomerAction implements Action, ModelDriven<Customer>, ServletCon
 	public String deleteCustomerById() throws Exception {
 		try {
 			Integer id = Integer.parseInt(getCustomerId());
-			SessionFactory sf = (SessionFactory) ctx.getAttribute("SessionFactory");
-			CustomerHome cusHome = new CustomerHome(sf);
+			CustomerHome cusHome = new CustomerHome(getSessionFactory());
 			Customer customer = cusHome.findById(id);
 			cusHome.delete(customer);
 			return SUCCESS;
@@ -104,12 +107,24 @@ public class CustomerAction implements Action, ModelDriven<Customer>, ServletCon
 			return ERROR;
 		}
 	}
-
+	public String listLookupEmployeeForCus() throws Exception{
+		try {
+			UserHome userHome = new UserHome(getSessionFactory());
+			List<User> users = userHome.getListUser();
+			for (User user : users) {
+				listLookupEmployeeForCus.add(user.getFullName());
+			}
+			return SUCCESS;
+		} catch (Exception e) {
+			return ERROR;
+		}
+	}
 	public String addCustomer() throws Exception {
 		try {
-
-			SessionFactory sf = (SessionFactory) ctx.getAttribute("SessionFactory");
-			CustomerHome cusHome = new CustomerHome(sf);
+			UserHome userHome = new UserHome(getSessionFactory());
+			User user = userHome.getUserByFullName(getLookupEmployeeForCus());
+			customer.setUser(user);
+			CustomerHome cusHome = new CustomerHome(getSessionFactory());
 			cusHome.attachDirty(customer);
 			return SUCCESS;
 		} catch (Exception e) {
@@ -224,5 +239,13 @@ public class CustomerAction implements Action, ModelDriven<Customer>, ServletCon
 
 	public void setRequest(HttpServletRequest request) {
 		this.request = request;
+	}
+
+	public String getLookupEmployeeForCus() {
+		return lookupEmployeeForCus;
+	}
+
+	public void setLookupEmployeeForCus(String lookupEmployeeForCus) {
+		this.lookupEmployeeForCus = lookupEmployeeForCus;
 	}
 }
