@@ -18,6 +18,7 @@ public class Promotion implements java.io.Serializable {
 	private Date endDate;
 	private String remarks;
 	private Boolean status;
+	private Integer group_customer_id;
 	private Set<PromotionGift> promotionGifts = new HashSet<PromotionGift>(0);
 	private Set<PromotionProduct> promotionProducts = new HashSet<PromotionProduct>(0);
 
@@ -106,6 +107,14 @@ public class Promotion implements java.io.Serializable {
 
 	public void setPromotionProducts(Set<PromotionProduct> promotionProducts) {
 		this.promotionProducts = promotionProducts;
+	}
+	
+	public Integer getGroup_customer_id() {
+		return group_customer_id;
+	}
+
+	public void setGroup_customer_id(Integer group_customer_id) {
+		this.group_customer_id = group_customer_id;
 	}
 
 }

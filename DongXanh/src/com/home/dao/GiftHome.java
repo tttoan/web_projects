@@ -3,12 +3,24 @@ package com.home.dao;
 // Generated Jan 12, 2016 11:21:58 PM by Hibernate Tools 4.0.0
 
 import static org.hibernate.criterion.Example.create;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.internal.SessionImpl;
+
+import com.home.model.Category;
 import com.home.model.Gift;
+import com.home.model.Product;
 
 /**
  * Home object for domain model class Gift.
@@ -19,8 +31,8 @@ public class GiftHome {
 
 	private static final Log log = LogFactory.getLog(GiftHome.class);
 
-
 	private SessionFactory sessionFactory;
+	
 	public GiftHome(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
@@ -46,14 +58,53 @@ public class GiftHome {
 		}
 	}
 
-	public void attachDirty(Gift instance) {
+	public void attachDirty(Gift instance) throws Exception{
 		log.debug("attaching dirty Gift instance");
+		Transaction tx = null;
+		Session session = null;
 		try {
-			sessionFactory.openSession().saveOrUpdate(instance);
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			session.save(instance);
+			tx.commit();
 			log.debug("attach successful");
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
+			if (tx!=null) tx.rollback();
+			re.printStackTrace();
 			log.error("attach failed", re);
 			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public void update(Gift instance) throws Exception{
+		log.debug("attaching dirty Gift instance");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			session.update(instance);
+			tx.commit();
+			log.debug("attach successful");
+		} catch (Exception re) {
+			if (tx!=null) tx.rollback();
+			re.printStackTrace();
+			log.error("attach failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
 		}
 	}
 
@@ -69,14 +120,27 @@ public class GiftHome {
 		}
 	}
 
-	public void delete(Gift persistentInstance) {
+	public void delete(Gift persistentInstance) throws Exception{
 		log.debug("deleting Gift instance");
+		Transaction tx = null;
+		Session session = null;
 		try {
-			sessionFactory.openSession().delete(persistentInstance);
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			session.delete(persistentInstance);
+			tx.commit();
 			log.debug("delete successful");
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
+			if (tx!=null) tx.rollback();
 			log.error("delete failed", re);
 			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
 		}
 	}
 
@@ -93,20 +157,32 @@ public class GiftHome {
 		}
 	}
 
-	public Gift findById(java.lang.Integer id) {
+	public Gift findById(java.lang.Integer id) throws Exception{
 		log.debug("getting Gift instance with id: " + id);
+		Transaction tx = null;
+		Session session = null;
 		try {
-			Gift instance = (Gift) sessionFactory.openSession().get(
-					"com.home.dao.Gift", id);
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Gift instance = (Gift)session.get(Gift.class, id);
+			tx.commit();
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
 				log.debug("get successful, instance found");
 			}
 			return instance;
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
+			if (tx!=null) tx.rollback();
 			log.error("get failed", re);
 			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
 		}
 	}
 
@@ -123,6 +199,72 @@ public class GiftHome {
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
 			throw re;
+		}
+	}
+	
+	
+	public List<Gift> getListGifts(int startPageIndex, int recordsPerPage) throws Exception{
+		log.debug("retrieve list Product");
+		Transaction tx = null;
+		Session session = null;
+		List<Gift> results = new ArrayList<Gift>();
+		try {
+			session = sessionFactory.openSession();
+//			tx = session.beginTransaction();
+//			Query query = session.createQuery("FROM Gift");
+//			query.setFirstResult(startPageIndex);
+//			query.setMaxResults(recordsPerPage);
+//			List<Gift> results = query.list();
+//			tx.commit();
+			
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			int range = startPageIndex+recordsPerPage;
+			ResultSet rs = conn.createStatement().executeQuery(
+					"SELECT * FROM (SELECT @i:=@i+1 AS iterator, t.* FROM gift t,(SELECT @i:=0) foo Order By id) AS XX WHERE iterator > "+startPageIndex+" AND iterator <= " + range);
+			while(rs.next()){
+				Gift g = new Gift();
+				g.setId(rs.getInt("id"));
+				g.setGiftName(rs.getString("gift_name"));
+				results.add(g);
+			}
+			rs.close();
+			log.debug("retrieve list Gift successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public int getTotalRecords() throws Exception{
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			String sql = "SELECT COUNT(*) AS COUNT FROM Gift";
+			Query query = session.createQuery(sql);
+			List results = query.list();
+			return Integer.parseInt(results.get(0).toString());
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
 		}
 	}
 }

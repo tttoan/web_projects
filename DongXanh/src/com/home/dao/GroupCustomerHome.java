@@ -6,35 +6,29 @@ import static org.hibernate.criterion.Example.create;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import javax.naming.InitialContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.internal.SessionImpl;
 
-import com.home.model.Category;
-import com.home.model.Customer;
-import com.home.model.Product;
+import com.home.model.GroupCustomer;
 
 /**
- * Home object for domain model class Category.
- * @see com.home.dao.Category
+ * Home object for domain model class GroupCustomer.
+ * @see com.home.dao.GroupCustomer
  * @author Hibernate Tools
  */
-public class CategoryHome {
+public class GroupCustomerHome {
 
-	private static final Log log = LogFactory.getLog(CategoryHome.class);
+	private static final Log log = LogFactory.getLog(GroupCustomerHome.class);
 
 	private SessionFactory sessionFactory;
-	public CategoryHome(SessionFactory sessionFactory) {
+	public GroupCustomerHome(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
 	protected SessionFactory getSessionFactory() {
@@ -47,8 +41,8 @@ public class CategoryHome {
 		}
 	}
 
-	public void persist(Category transientInstance) {
-		log.debug("persisting Category instance");
+	public void persist(GroupCustomer transientInstance) {
+		log.debug("persisting GroupCustomer instance");
 		try {
 			sessionFactory.openSession().persist(transientInstance);
 			log.debug("persist successful");
@@ -58,8 +52,8 @@ public class CategoryHome {
 		}
 	}
 
-	public void attachDirty(Category instance) {
-		log.debug("attaching dirty Category instance");
+	public void attachDirty(GroupCustomer instance) {
+		log.debug("attaching dirty GroupCustomer instance");
 		try {
 			sessionFactory.openSession().saveOrUpdate(instance);
 			log.debug("attach successful");
@@ -69,8 +63,8 @@ public class CategoryHome {
 		}
 	}
 
-	public void attachClean(Category instance) {
-		log.debug("attaching clean Category instance");
+	public void attachClean(GroupCustomer instance) {
+		log.debug("attaching clean GroupCustomer instance");
 		try {
 			sessionFactory.openSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
@@ -80,8 +74,8 @@ public class CategoryHome {
 		}
 	}
 
-	public void delete(Category persistentInstance) {
-		log.debug("deleting Category instance");
+	public void delete(GroupCustomer persistentInstance) {
+		log.debug("deleting GroupCustomer instance");
 		try {
 			sessionFactory.openSession().delete(persistentInstance);
 			log.debug("delete successful");
@@ -91,10 +85,10 @@ public class CategoryHome {
 		}
 	}
 
-	public Category merge(Category detachedInstance) {
-		log.debug("merging Category instance");
+	public GroupCustomer merge(GroupCustomer detachedInstance) {
+		log.debug("merging GroupCustomer instance");
 		try {
-			Category result = (Category) sessionFactory.openSession()
+			GroupCustomer result = (GroupCustomer) sessionFactory.openSession()
 					.merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
@@ -104,11 +98,11 @@ public class CategoryHome {
 		}
 	}
 
-	public Category findById(java.lang.Integer id) {
-		log.debug("getting Category instance with id: " + id);
+	public GroupCustomer findById(java.lang.Integer id) {
+		log.debug("getting GroupCustomer instance with id: " + id);
 		try {
-			Category instance = (Category) sessionFactory.openSession()
-					.get("com.home.dao.Category", id);
+			GroupCustomer instance = (GroupCustomer) sessionFactory.openSession()
+					.get("com.home.dao.GroupCustomer", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -122,12 +116,12 @@ public class CategoryHome {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Category> findByExample(Category instance) {
-		log.debug("finding Category instance by example");
+	public List<GroupCustomer> findByExample(GroupCustomer instance) {
+		log.debug("finding GroupCustomer instance by example");
 		try {
-			List<Category> results = (List<Category>) sessionFactory
+			List<GroupCustomer> results = (List<GroupCustomer>) sessionFactory
 					.openSession()
-					.createCriteria("com.home.dao.Category")
+					.createCriteria("com.home.dao.GroupCustomer")
 					.add(create(instance)).list();
 			log.debug("find by example successful, result size: "
 					+ results.size());
@@ -138,14 +132,14 @@ public class CategoryHome {
 		}
 	}
 	
-//	public List<Category> getListCategory() {
-//		log.debug("retrieve list Category");
+//	public List<GroupCustomer> getListGroupCustomer() {
+//		log.debug("retrieve list GroupCustomer");
 //		Transaction tx = null;
 //		Session session = null;
 //		try {
 //			session = sessionFactory.openSession();
 //			tx = session.beginTransaction();
-//			List<Category> results = session.createCriteria(Category.class).list();
+//			List<GroupCustomer> results = session.createCriteria(GroupCustomer.class).list();
 //			tx.commit();
 //			session.close();
 //			log.debug("retrieve list Customer successful, result size: " + results.size());
@@ -164,8 +158,8 @@ public class CategoryHome {
 //		}
 //	}
 	
-	public HashMap<Integer, String> getListCategory() throws Exception{
-		log.debug("retrieve list Category");
+	public HashMap<Integer, String> getListGroupCustomer() throws Exception{
+		log.debug("retrieve list GroupCustomer");
 		Session session = null;
 		HashMap<Integer, String> results = new HashMap<Integer, String>();
 		try {
@@ -173,16 +167,16 @@ public class CategoryHome {
 			SessionImpl sessionImpl = (SessionImpl) session;
 			Connection conn = sessionImpl.connection();
 
-			ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM `category`");
+			ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM `group_customer`");
 			while(rs.next()){
-				results.put(rs.getInt("id"), rs.getString("category_name"));
+				results.put(rs.getInt("id"), rs.getString("group_name"));
 			}
 			rs.close();
-			log.debug("retrieve list Category successful, result size: " + results.size());
+			log.debug("retrieve list GroupCustomer successful, result size: " + results.size());
 			return results;
 		} catch (Exception re) {
 			re.printStackTrace();
-			log.error("retrieve list Category failed", re);
+			log.error("retrieve list GroupCustomer failed", re);
 			throw re;
 		} finally{
 			try {

@@ -4,6 +4,9 @@ package com.home.dao;
 
 import static org.hibernate.criterion.Example.create;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.naming.InitialContext;
@@ -11,8 +14,13 @@ import javax.naming.InitialContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.internal.SessionImpl;
 
+import com.home.model.Category;
 import com.home.model.Product;
 
 /**
@@ -24,12 +32,20 @@ public class ProductHome {
 
 	private static final Log log = LogFactory.getLog(ProductHome.class);
 
-	private final SessionFactory sessionFactory = getSessionFactory();
+	private SessionFactory sessionFactory ;//= getSessionFactory();
+
+	public ProductHome(){
+		sessionFactory = getSessionFactory();
+	};
+
+	public ProductHome(SessionFactory sessionFactory){
+		this.sessionFactory = sessionFactory;
+	}
 
 	protected SessionFactory getSessionFactory() {
 		try {
 			return (SessionFactory) new InitialContext()
-					.lookup("SessionFactory");
+			.lookup("SessionFactory");
 		} catch (Exception e) {
 			log.error("Could not locate SessionFactory in JNDI", e);
 			throw new IllegalStateException(
@@ -48,14 +64,53 @@ public class ProductHome {
 		}
 	}
 
-	public void attachDirty(Product instance) {
+	public void attachDirty(Product instance) throws Exception{
 		log.debug("attaching dirty Product instance");
+		Transaction tx = null;
+		Session session = null;
 		try {
-			sessionFactory.getCurrentSession().saveOrUpdate(instance);
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			session.save(instance);
+			tx.commit();
 			log.debug("attach successful");
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
+			if (tx!=null) tx.rollback();
+			re.printStackTrace();
 			log.error("attach failed", re);
 			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+
+	public void update(Product instance) throws Exception{
+		log.debug("attaching dirty Product instance");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			session.update(instance);
+			tx.commit();
+			log.debug("attach successful");
+		} catch (Exception re) {
+			if (tx!=null) tx.rollback();
+			re.printStackTrace();
+			log.error("attach failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
 		}
 	}
 
@@ -70,14 +125,27 @@ public class ProductHome {
 		}
 	}
 
-	public void delete(Product persistentInstance) {
+	public void delete(Product persistentInstance) throws Exception{
 		log.debug("deleting Product instance");
+		Transaction tx = null;
+		Session session = null;
 		try {
-			sessionFactory.getCurrentSession().delete(persistentInstance);
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			session.delete(persistentInstance);
+			tx.commit();
 			log.debug("delete successful");
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
+			if (tx!=null) tx.rollback();
 			log.error("delete failed", re);
 			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
 		}
 	}
 
@@ -94,20 +162,32 @@ public class ProductHome {
 		}
 	}
 
-	public Product findById(java.lang.Integer id) {
+	public Product findById(java.lang.Integer id) throws Exception{
 		log.debug("getting Product instance with id: " + id);
+		Transaction tx = null;
+		Session session = null;
 		try {
-			Product instance = (Product) sessionFactory.getCurrentSession()
-					.get("com.home.dao.Product", id);
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Product instance = (Product)session.get(Product.class, id);
+			tx.commit();
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
 				log.debug("get successful, instance found");
 			}
 			return instance;
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
+			if (tx!=null) tx.rollback();
 			log.error("get failed", re);
 			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
 		}
 	}
 
@@ -123,6 +203,80 @@ public class ProductHome {
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
 			throw re;
+		}
+	}
+
+	public List<Product> getListProducts(int startPageIndex, int recordsPerPage) throws Exception{
+		log.debug("retrieve list Product");
+		//Transaction tx = null;
+		Session session = null;
+		List<Product> results = new ArrayList<Product>();
+		try {
+			session = sessionFactory.openSession();
+			//			tx = session.beginTransaction();
+			//			List<Product> results = session.createQuery("FROM Product").list();
+			//			tx.commit();
+
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			int range = startPageIndex+recordsPerPage;
+			ResultSet rs = conn.createStatement().executeQuery(
+					"SELECT * FROM (SELECT @i:=@i+1 AS iterator, t.* FROM product t,(SELECT @i:=0) foo Order By id) AS XX WHERE iterator > "+startPageIndex+" AND iterator <= " + range);
+			while(rs.next()){
+				Product p = new Product();
+				p.setId(rs.getInt("id"));
+				p.setProductCode(rs.getString("product_code"));
+				p.setProductType(rs.getString("product_type"));
+				p.setProductName(rs.getString("product_name"));
+				p.setDescription(rs.getString("description"));
+				Category category = new Category();
+				category.setId(rs.getInt("category_id"));
+				p.setCategory(category);
+				p.setCategory_id(category.getId());
+				p.setUnitPrice(rs.getBigDecimal("unit_price"));
+				p.setMinQuantity(rs.getInt("min_quantity"));
+				p.setMaxQuantity(rs.getInt("max_quantity"));
+				p.setExportDate(rs.getDate("export_date"));
+				p.setLaunchDate(rs.getDate("launch_date"));
+				results.add(p);
+			}
+			rs.close();
+			log.debug("retrieve list Product successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+
+	public int getTotalRecords() throws Exception{
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			String sql = "SELECT COUNT(*) AS COUNT FROM Product";
+			Query query = session.createQuery(sql);
+			List results = query.list();
+			return Integer.parseInt(results.get(0).toString());
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
 		}
 	}
 }

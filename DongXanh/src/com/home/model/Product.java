@@ -23,6 +23,7 @@ public class Product implements java.io.Serializable {
 	private Integer maxQuantity;
 	private Date exportDate;
 	private Date launchDate;
+	private Integer category_id;
 	private Set<PromotionProduct> promotionProducts = new HashSet<PromotionProduct>(0);
 
 	public Product() {
@@ -139,4 +140,11 @@ public class Product implements java.io.Serializable {
 		this.promotionProducts = promotionProducts;
 	}
 
+	public Integer getCategory_id() {
+		return category_id;
+	}
+
+	public void setCategory_id(Integer category_id) {
+		this.category_id = category_id;
+	}
 }
