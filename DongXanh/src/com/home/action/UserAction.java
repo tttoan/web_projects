@@ -5,16 +5,12 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
-
 import com.home.conts.RoleTable;
-import com.home.dao.CustomerHome;
 import com.home.dao.RoleHome;
 import com.home.dao.UserHome;
-import com.home.model.Customer;
 import com.home.model.User;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ModelDriven;

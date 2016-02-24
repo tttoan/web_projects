@@ -9,6 +9,7 @@ import org.hibernate.SessionFactory;
 
 import com.home.dao.UserHome;
 import com.home.model.User;
+import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
@@ -54,7 +55,7 @@ public class LoginAction extends ActionSupport implements Action, ModelDriven<Us
 
 	@Override
 	public void validate() {
-		UserHome userHome = new UserHome(getSessionFactory());
+		UserHome userHome = new UserHome(HibernateUtil.getSessionFactory());
 		User userDB = userHome.getUserByCredentials(user.getUserName(), user.getPassword());
 		if (userDB == null) {
 			addActionError("Username or password is not valid");
