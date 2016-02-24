@@ -130,6 +130,10 @@ public class StatisticAction implements Action, ModelDriven<Statistic>, ServletC
 		}
 	}
 
+	public String importCustomer() throws Exception {
+		return SUCCESS;
+	}
+	
 	public String importInvoice() throws Exception {
 		File theFile = new File(this.getUploadFileName());
 		FileUtils.copyFile(upload, theFile);
