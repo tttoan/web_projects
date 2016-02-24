@@ -9,6 +9,7 @@ import org.hibernate.SessionFactory;
 
 import com.home.dao.UserHome;
 import com.home.model.User;
+import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
@@ -40,7 +41,7 @@ public class RoleAction implements Action, ModelDriven<User>, ServletContextAwar
 		this.ctx = sc;
 	}
 	public SessionFactory getSessionFactory(){
-		return (SessionFactory) ctx.getAttribute("SessionFactory");
+		return HibernateUtil.getSessionFactory();
 	}
 	@Override
 	public String execute() throws Exception {

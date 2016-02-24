@@ -1,6 +1,6 @@
 package com.home.model;
 
-// Generated Jan 27, 2016 10:24:28 PM by Hibernate Tools 4.3.1
+// Generated Feb 24, 2016 9:17:27 PM by Hibernate Tools 4.3.1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,14 +12,14 @@ public class Gift implements java.io.Serializable {
 
 	private Integer id;
 	private String giftName;
-	private Set<PromotionCustomer> promotionCustomers = new HashSet<PromotionCustomer>(0);
+	private Set<PromotionGift> promotionGifts = new HashSet<PromotionGift>(0);
 
 	public Gift() {
 	}
 
-	public Gift(String giftName, Set<PromotionCustomer> promotionCustomers) {
+	public Gift(String giftName, Set<PromotionGift> promotionGifts) {
 		this.giftName = giftName;
-		this.promotionCustomers = promotionCustomers;
+		this.promotionGifts = promotionGifts;
 	}
 
 	public Integer getId() {
@@ -38,12 +38,12 @@ public class Gift implements java.io.Serializable {
 		this.giftName = giftName;
 	}
 
-	public Set<PromotionCustomer> getPromotionCustomers() {
-		return this.promotionCustomers;
+	public Set<PromotionGift> getPromotionGifts() {
+		return this.promotionGifts;
 	}
 
-	public void setPromotionCustomers(Set<PromotionCustomer> promotionCustomers) {
-		this.promotionCustomers = promotionCustomers;
+	public void setPromotionGifts(Set<PromotionGift> promotionGifts) {
+		this.promotionGifts = promotionGifts;
 	}
 
 }

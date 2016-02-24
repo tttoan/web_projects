@@ -44,7 +44,7 @@ public class LoginAction extends ActionSupport implements Action, ModelDriven<Us
 	}
 
 	public SessionFactory getSessionFactory() {
-		return (SessionFactory) ctx.getAttribute("SessionFactory");
+		return HibernateUtil.getSessionFactory();
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class LoginAction extends ActionSupport implements Action, ModelDriven<Us
 
 	@Override
 	public void validate() {
-		UserHome userHome = new UserHome(HibernateUtil.getSessionFactory());
+		UserHome userHome = new UserHome(getSessionFactory());
 		User userDB = userHome.getUserByCredentials(user.getUserName(), user.getPassword());
 		if (userDB == null) {
 			addActionError("Username or password is not valid");

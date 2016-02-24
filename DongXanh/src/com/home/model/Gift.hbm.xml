@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Jan 27, 2016 10:24:29 PM by Hibernate Tools 4.3.1 -->
+<!-- Generated Feb 24, 2016 9:17:28 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="com.home.model.Gift" table="gift" catalog="db_promotion" optimistic-lock="version">
         <id name="id" type="java.lang.Integer">
@@ -11,11 +11,11 @@
         <property name="giftName" type="string">
             <column name="gift_name" length="300" />
         </property>
-        <set name="promotionCustomers" table="promotion_customer" inverse="true" lazy="true" fetch="select">
+        <set name="promotionGifts" table="promotion_gift" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="gift_id" not-null="true" />
             </key>
-            <one-to-many class="com.home.model.PromotionCustomer" />
+            <one-to-many class="com.home.model.PromotionGift" />
         </set>
     </class>
 </hibernate-mapping>

@@ -1,6 +1,6 @@
 package com.home.model;
 
-// Generated Jan 27, 2016 10:24:28 PM by Hibernate Tools 4.3.1
+// Generated Feb 24, 2016 9:17:27 PM by Hibernate Tools 4.3.1
 
 import java.util.Date;
 import java.util.HashSet;
@@ -12,24 +12,27 @@ import java.util.Set;
 public class Promotion implements java.io.Serializable {
 
 	private Integer id;
+	private GroupCustomer groupCustomer;
 	private String promotionName;
 	private Date startDate;
 	private Date endDate;
 	private String remarks;
 	private Boolean status;
-	private Set<PromotionCustomer> promotionCustomers = new HashSet<PromotionCustomer>(0);
+	private Set<PromotionGift> promotionGifts = new HashSet<PromotionGift>(0);
 	private Set<PromotionProduct> promotionProducts = new HashSet<PromotionProduct>(0);
 
 	public Promotion() {
 	}
 
-	public Promotion(String promotionName, Date startDate, Date endDate, String remarks, Boolean status, Set<PromotionCustomer> promotionCustomers, Set<PromotionProduct> promotionProducts) {
+	public Promotion(GroupCustomer groupCustomer, String promotionName, Date startDate, Date endDate, String remarks, Boolean status, Set<PromotionGift> promotionGifts,
+			Set<PromotionProduct> promotionProducts) {
+		this.groupCustomer = groupCustomer;
 		this.promotionName = promotionName;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.remarks = remarks;
 		this.status = status;
-		this.promotionCustomers = promotionCustomers;
+		this.promotionGifts = promotionGifts;
 		this.promotionProducts = promotionProducts;
 	}
 
@@ -39,6 +42,14 @@ public class Promotion implements java.io.Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public GroupCustomer getGroupCustomer() {
+		return this.groupCustomer;
+	}
+
+	public void setGroupCustomer(GroupCustomer groupCustomer) {
+		this.groupCustomer = groupCustomer;
 	}
 
 	public String getPromotionName() {
@@ -81,12 +92,12 @@ public class Promotion implements java.io.Serializable {
 		this.status = status;
 	}
 
-	public Set<PromotionCustomer> getPromotionCustomers() {
-		return this.promotionCustomers;
+	public Set<PromotionGift> getPromotionGifts() {
+		return this.promotionGifts;
 	}
 
-	public void setPromotionCustomers(Set<PromotionCustomer> promotionCustomers) {
-		this.promotionCustomers = promotionCustomers;
+	public void setPromotionGifts(Set<PromotionGift> promotionGifts) {
+		this.promotionGifts = promotionGifts;
 	}
 
 	public Set<PromotionProduct> getPromotionProducts() {

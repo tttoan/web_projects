@@ -25,6 +25,7 @@ import com.home.dao.UserHome;
 import com.home.model.Customer;
 import com.home.model.User;
 import com.home.util.ExcelUtil;
+import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ModelDriven;
 
@@ -80,7 +81,7 @@ public class CustomerAction implements Action, ModelDriven<Customer>, ServletCon
 
 	}
 	public SessionFactory getSessionFactory(){
-		return (SessionFactory) ctx.getAttribute("SessionFactory");
+		return HibernateUtil.getSessionFactory();
 	}
 	@Override
 	public String execute() throws Exception {

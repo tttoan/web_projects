@@ -1,13 +1,16 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Jan 27, 2016 10:24:29 PM by Hibernate Tools 4.3.1 -->
+<!-- Generated Feb 24, 2016 9:17:28 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="com.home.model.Promotion" table="promotion" catalog="db_promotion" optimistic-lock="version">
         <id name="id" type="java.lang.Integer">
             <column name="id" />
             <generator class="identity" />
         </id>
+        <many-to-one name="groupCustomer" class="com.home.model.GroupCustomer" fetch="select">
+            <column name="group_customer_id" />
+        </many-to-one>
         <property name="promotionName" type="string">
             <column name="promotion_name" length="200" />
         </property>
@@ -18,16 +21,16 @@
             <column name="end_date" length="0" />
         </property>
         <property name="remarks" type="string">
-            <column name="remarks" length="200" />
+            <column name="remarks" length="500" />
         </property>
         <property name="status" type="java.lang.Boolean">
             <column name="status" />
         </property>
-        <set name="promotionCustomers" table="promotion_customer" inverse="true" lazy="true" fetch="select">
+        <set name="promotionGifts" table="promotion_gift" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="promotion_id" not-null="true" />
             </key>
-            <one-to-many class="com.home.model.PromotionCustomer" />
+            <one-to-many class="com.home.model.PromotionGift" />
         </set>
         <set name="promotionProducts" table="promotion_product" inverse="true" lazy="true" fetch="select">
             <key>

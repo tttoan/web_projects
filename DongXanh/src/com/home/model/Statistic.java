@@ -1,6 +1,6 @@
 package com.home.model;
 
-// Generated Jan 27, 2016 10:24:28 PM by Hibernate Tools 4.3.1
+// Generated Feb 24, 2016 9:17:27 PM by Hibernate Tools 4.3.1
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -10,12 +10,9 @@ import java.util.Date;
  */
 public class Statistic implements java.io.Serializable {
 
-	private Integer id;
-	private User user;
+	private StatisticId id;
 	private Date dateReceived;
-	private String customerCodeLevel1;
 	private String customerNameLevel1;
-	private String customerCodeLevel2;
 	private String customerNameLevel2;
 	private String productCode;
 	private String categoryName;
@@ -24,17 +21,21 @@ public class Statistic implements java.io.Serializable {
 	private Integer quantiy;
 	private BigDecimal unitPrice;
 	private BigDecimal total;
+	private int userId;
 
 	public Statistic() {
 	}
 
-	public Statistic(User user, Date dateReceived, String customerCodeLevel1, String customerNameLevel1, String customerCodeLevel2, String customerNameLevel2, String productCode, String categoryName,
-			String productName, Integer totalBox, Integer quantiy, BigDecimal unitPrice, BigDecimal total) {
-		this.user = user;
+	public Statistic(StatisticId id, int userId) {
+		this.id = id;
+		this.userId = userId;
+	}
+
+	public Statistic(StatisticId id, Date dateReceived, String customerNameLevel1, String customerNameLevel2, String productCode, String categoryName, String productName, Integer totalBox,
+			Integer quantiy, BigDecimal unitPrice, BigDecimal total, int userId) {
+		this.id = id;
 		this.dateReceived = dateReceived;
-		this.customerCodeLevel1 = customerCodeLevel1;
 		this.customerNameLevel1 = customerNameLevel1;
-		this.customerCodeLevel2 = customerCodeLevel2;
 		this.customerNameLevel2 = customerNameLevel2;
 		this.productCode = productCode;
 		this.categoryName = categoryName;
@@ -43,22 +44,15 @@ public class Statistic implements java.io.Serializable {
 		this.quantiy = quantiy;
 		this.unitPrice = unitPrice;
 		this.total = total;
+		this.userId = userId;
 	}
 
-	public Integer getId() {
+	public StatisticId getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(StatisticId id) {
 		this.id = id;
-	}
-
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 	public Date getDateReceived() {
@@ -69,28 +63,12 @@ public class Statistic implements java.io.Serializable {
 		this.dateReceived = dateReceived;
 	}
 
-	public String getCustomerCodeLevel1() {
-		return this.customerCodeLevel1;
-	}
-
-	public void setCustomerCodeLevel1(String customerCodeLevel1) {
-		this.customerCodeLevel1 = customerCodeLevel1;
-	}
-
 	public String getCustomerNameLevel1() {
 		return this.customerNameLevel1;
 	}
 
 	public void setCustomerNameLevel1(String customerNameLevel1) {
 		this.customerNameLevel1 = customerNameLevel1;
-	}
-
-	public String getCustomerCodeLevel2() {
-		return this.customerCodeLevel2;
-	}
-
-	public void setCustomerCodeLevel2(String customerCodeLevel2) {
-		this.customerCodeLevel2 = customerCodeLevel2;
 	}
 
 	public String getCustomerNameLevel2() {
@@ -155,6 +133,14 @@ public class Statistic implements java.io.Serializable {
 
 	public void setTotal(BigDecimal total) {
 		this.total = total;
+	}
+
+	public int getUserId() {
+		return this.userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
 }

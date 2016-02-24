@@ -1,6 +1,6 @@
 package com.home.model;
 
-// Generated Jan 27, 2016 10:24:28 PM by Hibernate Tools 4.3.1
+// Generated Feb 24, 2016 9:17:27 PM by Hibernate Tools 4.3.1
 
 import java.util.Date;
 import java.util.HashSet;
@@ -11,10 +11,6 @@ import java.util.Set;
  */
 public class User implements java.io.Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private Role role;
 	private String userName;
@@ -39,7 +35,6 @@ public class User implements java.io.Serializable {
 	private String remarks;
 	private Short isEnabled;
 	private Set<Customer> customers = new HashSet<Customer>(0);
-	private Set<Statistic> statistics = new HashSet<Statistic>(0);
 	private Set<WorkingPlan> workingPlans = new HashSet<WorkingPlan>(0);
 
 	public User() {
@@ -47,7 +42,7 @@ public class User implements java.io.Serializable {
 
 	public User(Role role, String userName, String password, String email, String fullName, byte[] picture, Date birthDate, String gender, String mobilePhone, String homePhone, String address,
 			String passwordQuestion, String passwordAnswer, Short isAccountNonExpired, Short isAccountNonLocked, Date createdDate, Date lastLoginDate, Date lastLogoutDate,
-			Date lastPasswordChangedDate, Integer failedPasswordCount, String remarks, Short isEnabled, Set<Customer> customers, Set<Statistic> statistics, Set<WorkingPlan> workingPlans) {
+			Date lastPasswordChangedDate, Integer failedPasswordCount, String remarks, Short isEnabled, Set<Customer> customers, Set<WorkingPlan> workingPlans) {
 		this.role = role;
 		this.userName = userName;
 		this.password = password;
@@ -71,7 +66,6 @@ public class User implements java.io.Serializable {
 		this.remarks = remarks;
 		this.isEnabled = isEnabled;
 		this.customers = customers;
-		this.statistics = statistics;
 		this.workingPlans = workingPlans;
 	}
 
@@ -265,14 +259,6 @@ public class User implements java.io.Serializable {
 
 	public void setCustomers(Set<Customer> customers) {
 		this.customers = customers;
-	}
-
-	public Set<Statistic> getStatistics() {
-		return this.statistics;
-	}
-
-	public void setStatistics(Set<Statistic> statistics) {
-		this.statistics = statistics;
 	}
 
 	public Set<WorkingPlan> getWorkingPlans() {

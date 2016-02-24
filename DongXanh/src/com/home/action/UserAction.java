@@ -5,13 +5,16 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
+
 import com.home.conts.RoleTable;
 import com.home.dao.RoleHome;
 import com.home.dao.UserHome;
 import com.home.model.User;
+import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ModelDriven;
 
@@ -47,7 +50,7 @@ public class UserAction implements Action, ModelDriven<User>, ServletContextAwar
 	}
 
 	public SessionFactory getSessionFactory() {
-		return (SessionFactory) ctx.getAttribute("SessionFactory");
+		return HibernateUtil.getSessionFactory();
 	}
 
 	@Override

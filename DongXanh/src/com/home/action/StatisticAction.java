@@ -31,6 +31,7 @@ import com.home.dao.UserHome;
 import com.home.model.Statistic;
 import com.home.model.User;
 import com.home.util.ExcelUtil;
+import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ModelDriven;
 
@@ -91,7 +92,7 @@ public class StatisticAction implements Action, ModelDriven<Statistic>, ServletC
 	}
 
 	public SessionFactory getSessionFactory(){
-		return (SessionFactory) ctx.getAttribute("SessionFactory");
+		return HibernateUtil.getSessionFactory();
 	}
 	public String listInvoice() throws Exception {
 		try {
@@ -120,7 +121,7 @@ public class StatisticAction implements Action, ModelDriven<Statistic>, ServletC
 		try {
 			UserHome userHome = new UserHome(getSessionFactory());
 			User user = userHome.getUserByFullName(getEmployeeName());
-			statistic.setUser(user);
+			//statistic.setUser(user);
 			StatisticHome sttHome = new StatisticHome(getSessionFactory());
 			sttHome.attachDirty(statistic);
 			return SUCCESS;
@@ -143,9 +144,9 @@ public class StatisticAction implements Action, ModelDriven<Statistic>, ServletC
 				Row row = rowIterator.next();
 				statistic = new Statistic();
 				statistic.setDateReceived((Date)xls.getValue(row.getCell(InvoiceTable.dateReceived.value())));
-				statistic.setCustomerCodeLevel2((String) xls.getValue(row.getCell(InvoiceTable.customerCodeLevel2.value())));
+				//statistic.setCustomerCodeLevel2((String) xls.getValue(row.getCell(InvoiceTable.customerCodeLevel2.value())));
 				statistic.setCustomerNameLevel2((String) xls.getValue(row.getCell(InvoiceTable.customerNameLevel2.value())));
-				statistic.setCustomerCodeLevel1((String) xls.getValue(row.getCell(InvoiceTable.customerCodeLevel1.value())));
+				//statistic.setCustomerCodeLevel1((String) xls.getValue(row.getCell(InvoiceTable.customerCodeLevel1.value())));
 				statistic.setCustomerNameLevel1((String) xls.getValue(row.getCell(InvoiceTable.customerNameLevel1.value())));
 				statistic.setProductCode((String) xls.getValue(row.getCell(InvoiceTable.productCode.value())));
 				statistic.setCategoryName((String) xls.getValue(row.getCell(InvoiceTable.categoryName.value())));
@@ -154,7 +155,7 @@ public class StatisticAction implements Action, ModelDriven<Statistic>, ServletC
 				statistic.setQuantiy(((Double) xls.getValue(row.getCell(InvoiceTable.quantiy.value()))).intValue());
 				statistic.setUnitPrice(BigDecimal.valueOf((Double)xls.getValue(row.getCell(InvoiceTable.unitPrice.value()))));
 				statistic.setTotal(BigDecimal.valueOf((Double) xls.getValue(row.getCell(InvoiceTable.total.value()))));
-				statistic.setUser(userHome.getUserByFullName((String)xls.getValue(row.getCell(InvoiceTable.userFullName.value()))));
+				//statistic.setUser(userHome.getUserByFullName((String)xls.getValue(row.getCell(InvoiceTable.userFullName.value()))));
 				addInvoice();
 				statistic = null;
 			}

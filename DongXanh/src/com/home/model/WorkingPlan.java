@@ -1,6 +1,6 @@
 package com.home.model;
 
-// Generated Jan 27, 2016 10:24:28 PM by Hibernate Tools 4.3.1
+// Generated Feb 24, 2016 9:17:27 PM by Hibernate Tools 4.3.1
 
 import java.util.Date;
 

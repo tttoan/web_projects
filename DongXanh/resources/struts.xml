@@ -7,7 +7,7 @@
 	<constant name="struts.devMode" value="true"></constant>
 	<constant name="struts.convention.result.path" value="/"></constant>
 	<constant name="struts.custom.i18n.resources" value="struts"></constant>
-    
+
 	<package name="default" namespace="/" extends="struts-default">
 		<action name="login" class="com.home.action.LoginAction">
 			<result name="success">/index.jsp</result>
@@ -17,12 +17,10 @@
 			<result name="success">/login.jsp</result>
 			<result name="input" type="redirect">/login.jsp</result>
 		</action>
-		<action name="list_user" method="listUser"
-			class="com.home.action.UserAction">
+		<action name="list_user" method="listUser" class="com.home.action.UserAction">
 			<result name="success">/users.jsp</result>
 		</action>
-		<action name="delete_user" method="deleteUserById"
-			class="com.home.action.UserAction">
+		<action name="delete_user" method="deleteUserById" class="com.home.action.UserAction">
 			<result name="success" type="chain">list_user</result>
 		</action>
 		<action name="move_to_add_customer" method="listLookupEmployeeForCus"
@@ -54,31 +52,112 @@
 			class="com.home.action.StatisticAction">
 			<result name="success">/new_invoice.jsp</result>
 		</action>
-		
+
 		<action name="add_invoice" method="addInvoice"
 			class="com.home.action.StatisticAction">
 			<result name="success" type="redirect">list_invoice</result>
 			<result name="error">/error.jsp</result>
 		</action>
 
-		<action name="import_invoice" method="importInvoice" class="com.home.action.StatisticAction">
-			<interceptor-ref name="defaultStack"/>   
-           <interceptor-ref name="fileUpload">   
-               <param name="allowedTypes">application/ms-excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>   
-           </interceptor-ref>
+		<action name="import_invoice" method="importInvoice"
+			class="com.home.action.StatisticAction">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="fileUpload">
+				<param name="allowedTypes">application/ms-excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
+			</interceptor-ref>
 			<result name="input">/index.jsp</result>
 			<result name="success">/invoices.jsp</result>
 			<result name="error">/error.jsp</result>
 		</action>
-		<action name="import_customer" method="importCustomer" class="com.home.action.CustomerAction">
-			<interceptor-ref name="defaultStack"/>   
-           <interceptor-ref name="fileUpload">   
-               <param name="allowedTypes">application/ms-excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>   
-           </interceptor-ref>
+		<action name="import_customer" method="importCustomer"
+			class="com.home.action.CustomerAction">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="fileUpload">
+				<param name="allowedTypes">application/ms-excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
+			</interceptor-ref>
 			<result name="input">/index.jsp</result>
 			<result name="success">/customers.jsp</result>
 			<result name="error">/error.jsp</result>
 		</action>
 	</package>
+
+	<package name="product" namespace="/" extends="json-default">
+		<action name="*Action" class="com.home.action.ProductAction"
+			method="{1}">
+			<result type="json">/product.jsp</result>
+		</action>
+		<action name="getProducts" class="com.home.action.ProductAction"
+			method="list">
+			<result type="json" />
+		</action>
+		<action name="addProduct" class="com.home.action.ProductAction"
+			method="create">
+			<result type="json" />
+		</action>
+		<action name="editProduct" class="com.home.action.ProductAction"
+			method="update">
+			<result type="json" />
+		</action>
+		<action name="deleteProduct" class="com.home.action.ProductAction"
+			method="delete">
+			<result type="json" />
+		</action>
+		<action name="getAllCategoriesAction" class="com.home.action.ProductAction"
+			method="getAllCategories">
+			<result type="json" />
+		</action>
+	</package>
+
+	<package name="gift" namespace="/" extends="json-default">
+		<action name="*GiftAction" class="com.home.action.GiftAction"
+			method="{1}">
+			<result type="json">/gift.jsp</result>
+		</action>
+		<action name="listGiftAction" class="com.home.action.GiftAction"
+			method="list">
+			<result type="json">/gift.jsp</result>
+		</action>
+		<action name="createGiftAction" class="com.home.action.GiftAction"
+			method="create">
+			<result type="json">/gift.jsp</result>
+		</action>
+		<action name="updateGiftAction" class="com.home.action.GiftAction"
+			method="update">
+			<result type="json">/gift.jsp</result>
+		</action>
+		<action name="deleteGiftAction" class="com.home.action.GiftAction"
+			method="delete">
+			<result type="json">/gift.jsp</result>
+		</action>
+	</package>
+
+	<package name="promotion" namespace="/" extends="json-default">
+		<action name="*PromotionAction" class="com.home.action.PromotionAction"
+			method="{1}">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="listPromotionAction" class="com.home.action.PromotionAction"
+			method="list">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="createPromotionAction" class="com.home.action.PromotionAction"
+			method="create">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="updatePromotionAction" class="com.home.action.PromotionAction"
+			method="update">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="deletePromotionAction" class="com.home.action.PromotionAction"
+			method="delete">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="getAllGroupCustomerAction" class="com.home.action.PromotionAction"
+			method="getAllGroupCustomer">
+			<result type="json" />
+		</action>
+	</package>
+
+
 
 </struts>
