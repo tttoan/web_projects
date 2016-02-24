@@ -7,7 +7,7 @@
 	<constant name="struts.devMode" value="true"></constant>
 	<constant name="struts.convention.result.path" value="/"></constant>
 	<constant name="struts.custom.i18n.resources" value="struts"></constant>
-
+    
 	<package name="default" namespace="/" extends="struts-default">
 		<action name="login" class="com.home.action.LoginAction">
 			<result name="success">/index.jsp</result>

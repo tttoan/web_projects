@@ -4,15 +4,12 @@
 	form {
 		margin:0;
 		padding:0;
-		background-color: #7d7;
-		border: 1px black solid;
 	}
 	form table {
 		width: 100%;
 	}
 	form td {
-		background-color: #9f9;
-		padding: 2px;
+		padding: 4px;
 	}
 	form div,
 	form p {

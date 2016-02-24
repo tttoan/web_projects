@@ -2,6 +2,7 @@ package com.home.action;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -39,6 +40,7 @@ public class CustomerAction implements Action, ModelDriven<Customer>, ServletCon
 	private File upload;
 	private String uploadContentType;
 	private String uploadFileName;
+	public 	int yearNow = (Calendar.getInstance()).get(Calendar.YEAR);
 	public File getUpload() {
 		return upload;
 	}

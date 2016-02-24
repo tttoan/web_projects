@@ -9,89 +9,103 @@
 <%@ include file="menu.jsp"%>
 <%@ taglib uri="/struts-dojo-tags" prefix="sd"%>
 <script>
-function change(){
-    var el1 = document.getElementById("quantiy");
-    var el2 = document.getElementById("price");
-    var el3 = document.getElementById("total");
-	 el3.value = el1.value*el2.value;
+	function change() {
+		var el1 = document.getElementById("quantiy");
+		var el2 = document.getElementById("price");
+		var el3 = document.getElementById("total");
+		el3.value = el1.value * el2.value;
 	}
 </script>
 <!-- page content -->
 <div class="right_col" role="main">
 	<div class="">
-	<div class="page-title">
-                        <div class="title_left">
-                            <h3>
-								Thêm Hóa Đơn
-							</h3>
-                        </div>
+		<div class="page-title">
+			<div class="title_left">
+				<h3>Thêm Hóa Đơn</h3>
+			</div>
 
-                    </div>
+		</div>
 		<div class="clearfix"></div>
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
 						<s:form action="add_invoice" theme="bootstrap"
-							class="form-horizontal form-label-left">
-							<span class="section"></span>
+							cssClass="form-horizontal form-label-left">
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="name">Ngày nhận <span class="required">*</span>
+									for="dateReceived">Ngày nhận <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<sd:datetimepicker cssClass="form-control col-md-7 col-xs-12" 
-										name="dateReceived" displayFormat="dd-MM-yyyy" />
-								</div>
-							</div>
-							<div class="item form-group">
-								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="customerCodeLevel2">Mã cấp 2 <span class="required">*</span>
-								</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
-									<sd:autocompleter name="customerCodeLevel2" cssClass="form-control col-md-7 col-xs-12" showDownArrow="false" autoComplete="true"
-										list="{'Arsenal','Leicester City','Man City','Tottenham','Man United','West Ham',
-										'Stoke City','Crystal Palace','Liverpool','Southampton','Everton','Watford','West Bromwich','Chelsea','Bournemouth'}" />
-								</div>
-							</div>
-							<div class="item form-group">
-								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="customerNameLevel2">Tên cấp 2 <span class="required">*</span>
-								</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
-									<sd:autocompleter name="customerNameLevel2" cssClass="form-control col-md-7 col-xs-12" showDownArrow="false" autoComplete="true"
-										list="{'Arsenal','Leicester City','Man City','Tottenham','Man United','West Ham',
-										'Stoke City','Crystal Palace','Liverpool','Southampton','Everton','Watford','West Bromwich','Chelsea','Bournemouth'}" />
-								</div>
-							</div>
-							<div class="item form-group">
-								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="customerCodeLevel1">Mã cấp 1 <span class="required">*</span>
-								</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
-									<sd:autocompleter name="customerCodeLevel1" cssClass="form-control col-md-7 col-xs-12" showDownArrow="false" autoComplete="true"
-										list="{'Arsenal','Leicester City','Man City','Tottenham','Man United','West Ham',
-										'Stoke City','Crystal Palace','Liverpool','Southampton','Everton','Watford','West Bromwich','Chelsea','Bournemouth'}" />
-								</div>
-							</div>
-							<div class="item form-group">
-								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="customerNameLevel1">Tên cấp 1 <span class="required">*</span>
-								</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
-									<sd:autocompleter name="customerNameLevel1" cssClass="form-control col-md-7 col-xs-12" showDownArrow="false" autoComplete="true" 
-										list="{'Arsenal','Leicester City','Man City','Tottenham','Man United','West Ham',
-										'Stoke City','Crystal Palace','Liverpool','Southampton','Everton','Watford','West Bromwich','Chelsea','Bournemouth'}" />
-								</div>
-							</div>
-							<div class="item form-group">
-								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="quantiy">Số lượng <span class="required">*</span>
-								</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
-									<s:textfield id="quantiy"  name="quantiy" onchange="change()"
+									<sd:datetimepicker id="dateReceived" name="dateReceived"
 										cssClass="form-control col-md-7 col-xs-12"
-										value="0" required="required" type="number" />
+										displayFormat="dd-MM-yyyy" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="customerCodeLevel2">Mã cấp 2 <span
+									class="required">*</span>
+								</label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<sd:autocompleter id="customerCodeLevel2"
+										name="customerCodeLevel2"
+										cssClass="form-control col-md-7 col-xs-12"
+										showDownArrow="false" autoComplete="true"
+										list="{'Arsenal','Leicester City','Man City','Tottenham','Man United','West Ham',
+										'Stoke City','Crystal Palace','Liverpool','Southampton','Everton','Watford','West Bromwich','Chelsea','Bournemouth'}" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="customerNameLevel2">Tên cấp 2 <span
+									class="required">*</span>
+								</label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<sd:autocompleter id="customerNameLevel2"
+										name="customerNameLevel2"
+										cssClass="form-control col-md-7 col-xs-12"
+										showDownArrow="false" autoComplete="true"
+										list="{'Arsenal','Leicester City','Man City','Tottenham','Man United','West Ham',
+										'Stoke City','Crystal Palace','Liverpool','Southampton','Everton','Watford','West Bromwich','Chelsea','Bournemouth'}" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="customerCodeLevel1">Mã cấp 1 <span
+									class="required">*</span>
+								</label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<sd:autocompleter id="customerCodeLevel1"
+										name="customerCodeLevel1"
+										cssClass="form-control col-md-7 col-xs-12"
+										showDownArrow="false" autoComplete="true"
+										list="{'Arsenal','Leicester City','Man City','Tottenham','Man United','West Ham',
+										'Stoke City','Crystal Palace','Liverpool','Southampton','Everton','Watford','West Bromwich','Chelsea','Bournemouth'}" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="customerNameLevel1">Tên cấp 1 <span
+									class="required">*</span>
+								</label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<sd:autocompleter id="customerNameLevel1"
+										name="customerNameLevel1"
+										cssClass="form-control col-md-7 col-xs-12"
+										showDownArrow="false" autoComplete="true"
+										list="{'Arsenal','Leicester City','Man City','Tottenham','Man United','West Ham',
+										'Stoke City','Crystal Palace','Liverpool','Southampton','Everton','Watford','West Bromwich','Chelsea','Bournemouth'}" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="quantity">Số lượng <span class="required">*</span>
+								</label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<s:textfield id="quantity" name="quantity" onchange="change()"
+										cssClass="form-control col-md-7 col-xs-12" value="0"
+										required="required" type="number" />
 								</div>
 							</div>
 							<div class="item form-group">
@@ -99,7 +113,9 @@ function change(){
 									for="unitPrice">Giá <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<s:textfield id="price" name="unitPrice" required="required" value="%{getText('format.money',{0})}" />
+									<s:textfield id="unitPrice" name="unitPrice"
+										required="required" value="%{getText('format.money',{0})}"
+										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
 							<div class="item form-group">
@@ -107,20 +123,22 @@ function change(){
 									for="total">Thành tiền <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<s:textfield id="total" name="total" required="required" value="%{getText('format.money',{0})}" />
+									<s:textfield id="total" name="total" required="required"
+										value="%{getText('format.money',{0})}"
+										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
 							<div class="item form-group">
-
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="user">NVTT <span class="required">*</span>
+									for="employeeName">NVTT <span class="required">*</span>
 								</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
-									<sd:autocompleter name="employeeName" cssClass="form-control col-md-7 col-xs-12" showDownArrow="false" autoComplete="true"
- 										list="listEmployeeName" /> 
+								<div class="col-md-4 col-sm-6 col-xs-12">
+									<sd:autocompleter id="employeeName" name="employeeName"
+										cssClass="form-control col-md-7 col-xs-12"
+										showDownArrow="false" autoComplete="true"
+										list="listEmployeeName" />
 								</div>
 							</div>
-							<div class="ln_solid"></div>
 							<div class="form-group">
 								<div class="col-md-6 col-md-offset-3">
 									<s:reset class="btn btn-primary" value="Reset" />

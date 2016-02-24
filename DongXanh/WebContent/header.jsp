@@ -6,9 +6,8 @@
 <%@ taglib prefix="sx" uri="/struts-dojo-tags"%>
 <html>
 <head>
-
-<sx:head/>
-<s:head/>
+<sx:head />
+<s:head />
 <!-- Meta, title, CSS, favicons, etc. -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,6 +28,8 @@
 <link href="css/calendar/fullcalendar.print.css" rel="stylesheet" media="print">
 <script src="js/jquery.min.js"></script>
 <link href="css/calendar/fullcalendar.css" rel="stylesheet">
+<link href="styles/styles.css" rel="stylesheet">
+<link href="styles/forms.css" rel="stylesheet">
 <!--[if lt IE 9]>
             <script src="../assets/js/ie8-responsive-file-warning.js"></script>
             <![endif]-->

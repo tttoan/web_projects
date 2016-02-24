@@ -28,7 +28,6 @@
 					<li><s:url action="list_customer.action" var="lcURL" /> <s:a
 							href="%{lcURL}" theme="bootstrap"> Danh Sách </s:a></li>
 					<li><s:url action="move_to_add_customer" var="macURL" ></s:url><s:a href="%{macURL}"> Tạo Và Chỉnh Sửa </s:a></li>
-					<li><a href="import_customer.jsp">Import Excel</a></li>
 				</ul></li>
 
 			<li><a><i class="fa fa-table"></i> Bảng Kê <span

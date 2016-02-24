@@ -1,8 +1,8 @@
 .wwFormTable {}
-.label {font-style:italic; color: black; }
+.label {font-style:normal; font-size:10pt; color: black; }
 .errorLabel {font-style:italic; color:red; }
 .errorMessage {font-weight:bold; text-align: center; color:red; }
 .checkboxLabel {}
 .checkboxErrorLabel {color:red; }
 .required {color:red;}
-.tdLabel {text-align:right; vertical-align:top; } 
+.tdLabel {text-align:right; vertical-align:middle; } 
