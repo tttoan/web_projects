@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.internal.SessionImpl;
 
 import com.home.model.GroupCustomer;
@@ -132,31 +133,31 @@ public class GroupCustomerHome {
 		}
 	}
 	
-//	public List<GroupCustomer> getListGroupCustomer() {
-//		log.debug("retrieve list GroupCustomer");
-//		Transaction tx = null;
-//		Session session = null;
-//		try {
-//			session = sessionFactory.openSession();
-//			tx = session.beginTransaction();
-//			List<GroupCustomer> results = session.createCriteria(GroupCustomer.class).list();
-//			tx.commit();
-//			session.close();
-//			log.debug("retrieve list Customer successful, result size: " + results.size());
-//			return results;
-//		} catch (Exception re) {
-//			re.printStackTrace();
-//			log.error("retrieve list Product failed", re);
-//			throw re;
-//		} finally{
-//			try {
-//				if(session != null){
-//					session.close();
-//				}
-//			} catch (Exception e) {
-//			}
-//		}
-//	}
+	@SuppressWarnings("unchecked")
+	public List<GroupCustomer> getListGrpCustomer() {
+		log.debug("retrieve list GroupCustomer");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			List<GroupCustomer> results = session.createCriteria(GroupCustomer.class).list();
+			tx.commit();
+			log.debug("retrieve list Customer successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
 	
 	public HashMap<Integer, String> getListGroupCustomer() throws Exception{
 		log.debug("retrieve list GroupCustomer");

@@ -13,16 +13,21 @@ import org.hibernate.SessionFactory;
 import com.home.conts.RoleTable;
 import com.home.dao.RoleHome;
 import com.home.dao.UserHome;
+import com.home.model.Role;
 import com.home.model.User;
 import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
+import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
-public class UserAction implements Action, ModelDriven<User>, ServletContextAware, ServletRequestAware {
+public class UserAction extends ActionSupport implements Action, ModelDriven<User>, ServletContextAware, ServletRequestAware {
 	
 	private String userId;
+	private String roleId;
 	public User user = new User();
-	public List<User> users = new ArrayList<>();
+	public List<User> listEmployee = new ArrayList<>();
+	private List<Role> listRole = new ArrayList<>();
+	public Role role = new Role();
 	private HttpServletRequest request;
 	private ServletContext ctx;
 
@@ -57,22 +62,40 @@ public class UserAction implements Action, ModelDriven<User>, ServletContextAwar
 	public String execute() throws Exception {
 		return SUCCESS;
 	}
-
-	public String listUser() throws Exception {
+	@Override
+	public void validate() {
+		
+	}	
+	
+	public String findAllRole() throws Exception {
+		try {
+			RoleHome roleHome = new RoleHome(getSessionFactory());
+			setListRole(roleHome.findAllRole());
+		} catch (Exception e) {
+			throw e;
+		}
+		return SUCCESS;
+	}
+	
+	public String listEmployee() throws Exception {
 		try {
 			UserHome userHome = new UserHome(getSessionFactory());
-			users = userHome.getListUser();
+			listEmployee = userHome.getListUser();
+			for (User user : listEmployee) {
+				System.out.println(user.getFullName());
+			}
 		} catch (Exception e) {
 			throw e;
 		}
 		return SUCCESS;
 	}
 
-	public String addUser() throws Exception {
+	public String addEmployee() throws Exception {
 		try {
 			UserHome userHome = new UserHome(getSessionFactory());
-			RoleHome roleHome = new RoleHome(getSessionFactory());
-			user.setRole(roleHome.findRoleByName(RoleTable.Member.toString()));
+			Role r = new Role();
+			r.setId(Integer.parseInt(getRoleId()));
+			user.setRole(r);
 			userHome.attachDirty(user);
 			return SUCCESS;
 		} catch (Exception e) {
@@ -99,5 +122,29 @@ public class UserAction implements Action, ModelDriven<User>, ServletContextAwar
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public List<Role> getListRole() {
+		return listRole;
+	}
+
+	public void setListRole(List<Role> listRole) {
+		this.listRole = listRole;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public String getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(String roleId) {
+		this.roleId = roleId;
 	}
 }

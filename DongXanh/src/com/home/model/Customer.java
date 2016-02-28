@@ -1,6 +1,6 @@
 package com.home.model;
 
-// Generated Feb 24, 2016 9:17:27 PM by Hibernate Tools 4.3.1
+// Generated Feb 25, 2016 11:43:13 PM by Hibernate Tools 4.3.1
 
 import java.util.Date;
 
@@ -9,16 +9,21 @@ import java.util.Date;
  */
 public class Customer implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private GroupCustomer groupCustomer;
 	private User user;
 	private String customerCode;
-	private String customerName;
+	
 	private Date createTime;
 	private String certificateNumber;
 	private Date certificateDate;
 	private String certificateAddress;
 	private String taxNumber;
+	private String businessName;
 	private Integer budgetRegister;
 	private String telefone;
 	private String fax;
@@ -52,6 +57,9 @@ public class Customer implements java.io.Serializable {
 	private String customer5Percent;
 	private String revenue1;
 	private String revenue2;
+	private String revenueExpect1;
+	private String revenueExpect2;
+	private String revenueExpect3;
 	private String percentProvide1;
 	private String percentProvide2;
 	private String percentProvide3;
@@ -76,18 +84,19 @@ public class Customer implements java.io.Serializable {
 	public Customer() {
 	}
 
-	public Customer(GroupCustomer groupCustomer, User user, String customerCode, String customerName, Date createTime, String certificateNumber, Date certificateDate, String certificateAddress,
-			String taxNumber, Integer budgetRegister, String telefone, String fax, String email, String socialAddress, String businessAddress, String lawyer, String adviser, String director,
+	public Customer(GroupCustomer groupCustomer, User user, String customerCode,  Date createTime, String certificateNumber, Date certificateDate, String certificateAddress,
+			String taxNumber,String businessName, Integer budgetRegister, String telefone, String fax, String email, String socialAddress, String businessAddress, String lawyer, String adviser, String director,
 			String directorMobile, Date directorBirthday, String directorDomicile, String sellMan, String sellManMobile, Integer budgetOriginal, String otherBusiness, String customer1Level1,
 			String customer1Phone, String customer1Percent, String customer2Level1, String customer2Phone, String customer2Percent, String customer3Level1, String customer3Phone,
 			String customer3Percent, String customer4Level1, String customer4Phone, String customer4Percent, String customer5Level1, String customer5Phone, String customer5Percent, String revenue1,
-			String revenue2, String percentProvide1, String percentProvide2, String percentProvide3, String percentProvide4, String productSell, String product1Hot, String product2Hot,
-			String product3Hot, String product4Hot, String product5Hot, String product6Hot, String farmProduct1, String farmProduct1Session, String farmProduct2, String farmProduct2Session,
-			String farmProduct3, String farmProduct3Session, String farmProduct4, String farmProduct4Session, Integer totalVipCustomer) {
+			String revenue2, String revenueExpect1, String revenueExpect2, String revenueExpect3, String percentProvide1, String percentProvide2, String percentProvide3, String percentProvide4,
+			String productSell, String product1Hot, String product2Hot, String product3Hot, String product4Hot, String product5Hot, String product6Hot, String farmProduct1,
+			String farmProduct1Session, String farmProduct2, String farmProduct2Session, String farmProduct3, String farmProduct3Session, String farmProduct4, String farmProduct4Session,
+			Integer totalVipCustomer) {
 		this.groupCustomer = groupCustomer;
 		this.user = user;
 		this.customerCode = customerCode;
-		this.customerName = customerName;
+		this.businessName = businessName;
 		this.createTime = createTime;
 		this.certificateNumber = certificateNumber;
 		this.certificateDate = certificateDate;
@@ -126,6 +135,9 @@ public class Customer implements java.io.Serializable {
 		this.customer5Percent = customer5Percent;
 		this.revenue1 = revenue1;
 		this.revenue2 = revenue2;
+		this.revenueExpect1 = revenueExpect1;
+		this.revenueExpect2 = revenueExpect2;
+		this.revenueExpect3 = revenueExpect3;
 		this.percentProvide1 = percentProvide1;
 		this.percentProvide2 = percentProvide2;
 		this.percentProvide3 = percentProvide3;
@@ -180,12 +192,12 @@ public class Customer implements java.io.Serializable {
 		this.customerCode = customerCode;
 	}
 
-	public String getCustomerName() {
-		return this.customerName;
+	public String getBusinessName() {
+		return this.businessName;
 	}
 
-	public void setCustomerName(String customerName) {
-		this.customerName = customerName;
+	public void setBusinessName(String businessName) {
+		this.businessName = businessName;
 	}
 
 	public Date getCreateTime() {
@@ -490,6 +502,30 @@ public class Customer implements java.io.Serializable {
 
 	public void setRevenue2(String revenue2) {
 		this.revenue2 = revenue2;
+	}
+
+	public String getRevenueExpect1() {
+		return this.revenueExpect1;
+	}
+
+	public void setRevenueExpect1(String revenueExpect1) {
+		this.revenueExpect1 = revenueExpect1;
+	}
+
+	public String getRevenueExpect2() {
+		return this.revenueExpect2;
+	}
+
+	public void setRevenueExpect2(String revenueExpect2) {
+		this.revenueExpect2 = revenueExpect2;
+	}
+
+	public String getRevenueExpect3() {
+		return this.revenueExpect3;
+	}
+
+	public void setRevenueExpect3(String revenueExpect3) {
+		this.revenueExpect3 = revenueExpect3;
 	}
 
 	public String getPercentProvide1() {

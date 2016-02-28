@@ -4,38 +4,50 @@
 	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
 	"http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
-	<constant name="struts.devMode" value="true"></constant>
+	<constant name="struts.devMode" value="false"></constant>
 	<constant name="struts.convention.result.path" value="/"></constant>
 	<constant name="struts.custom.i18n.resources" value="struts"></constant>
 
 	<package name="default" namespace="/" extends="struts-default">
-		<action name="login" class="com.home.action.LoginAction">
+		<action name="login" method="getListCustomerByBirthday" class="com.home.action.LoginAction">
 			<result name="success">/index.jsp</result>
 			<result name="input">/login.jsp</result>
 		</action>
-		<action name="signup" method="addUser" class="com.home.action.UserAction">
-			<result name="success">/login.jsp</result>
-			<result name="input" type="redirect">/login.jsp</result>
+		<action name="add_employee" method="addEmployee" class="com.home.action.UserAction">
+			<result name="success" type="redirectAction">list_employee</result>
+			<result name="input">/new_employee.jsp</result>
 		</action>
-		<action name="list_user" method="listUser" class="com.home.action.UserAction">
-			<result name="success">/users.jsp</result>
+		<action name="list_employee" method="listEmployee" class="com.home.action.UserAction">
+			<result name="success">/employees.jsp</result>
+			<result name="input">/new_employee.jsp</result>
 		</action>
 		<action name="delete_user" method="deleteUserById" class="com.home.action.UserAction">
-			<result name="success" type="chain">list_user</result>
+			<result name="success" type="redirectAction">list_employee</result>
+		</action>
+		<action name="move_to_add_employee" method="findAllRole"
+			class="com.home.action.UserAction">
+			<result name="success">/new_employee.jsp</result>
 		</action>
 		<action name="move_to_add_customer" method="listLookupEmployeeForCus"
 			class="com.home.action.CustomerAction">
 			<result name="success">/new_customer.jsp</result>
 		</action>
+		<action name="notify_list_customer" method="notifyListCutomer"
+			class="com.home.action.CustomerAction">
+			<result name="success">/index.jsp</result>
+			<result name="error">/login.jsp</result>
+		</action>
 		<action name="add_customer" method="addCustomer"
 			class="com.home.action.CustomerAction">
-			<result name="success" type="redirect">list_customer</result>
-			<result name="error">/error.jsp</result>
+			<result name="success" type="redirectAction">list_customer</result>
+		</action>
+		<action name="find_customer" method="findCustomer"
+			class="com.home.action.CustomerAction">
+			<result name="success">/new_customer.jsp</result>
 		</action>
 		<action name="list_customer" method="listCustomer"
 			class="com.home.action.CustomerAction">
 			<result name="success">/customers.jsp</result>
-			<result name="error">/error.jsp</result>
 		</action>
 		<action name="delete_customer" method="deleteCustomerById"
 			class="com.home.action.CustomerAction">
@@ -53,10 +65,9 @@
 			<result name="success">/new_invoice.jsp</result>
 		</action>
 
-		<action name="add_invoice" method="addInvoice"
+		<action name="add_statictis" method="addStatistic"
 			class="com.home.action.StatisticAction">
 			<result name="success" type="redirect">list_invoice</result>
-			<result name="error">/error.jsp</result>
 		</action>
 
 		<action name="import_invoice" method="importInvoice"
@@ -67,7 +78,6 @@
 			</interceptor-ref>
 			<result name="input">/index.jsp</result>
 			<result name="success">/invoices.jsp</result>
-			<result name="error">/error.jsp</result>
 		</action>
 		<action name="import_customer" method="importCustomer"
 			class="com.home.action.CustomerAction">
@@ -77,7 +87,6 @@
 			</interceptor-ref>
 			<result name="input">/index.jsp</result>
 			<result name="success">/customers.jsp</result>
-			<result name="error">/error.jsp</result>
 		</action>
 	</package>
 
@@ -157,7 +166,4 @@
 			<result type="json" />
 		</action>
 	</package>
-
-
-
 </struts>

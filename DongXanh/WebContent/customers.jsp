@@ -13,13 +13,13 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
-						<table  id="example" class="table table-striped responsive-utilities jambo_table">
+						<table id="example" class="table table-striped responsive-utilities jambo_table">
 							<thead>
 								<tr class="headings">
-									<th><input type="checkbox" class="tableflat"></th>
 									<th>Mã khách hàng</th>
-									<th>Tên khách hàng</th>
+									<th>Tên cửa hàng</th>
 									<th>Số điện thoại</th>
+									<th>Nhóm</th>
 									<th>Email</th>
 									<th class=" no-link last"><span class="nobr"></span></th>
 								</tr>
@@ -29,18 +29,19 @@
 
 								<s:iterator value="customers">
 									<tr class="even pointer">
-										<td class="a-center "><input type="checkbox" class="tableflat"></td>
-										<td class=" "><s:property value="customerCode" /></td>
-										<td class=" "><s:property value="customerName" /></td>
-										<td class=" "><s:property value="telefone" /></td>
-										<td class=" "><s:property value="email" /></td>
-										<td class=" last"> 
-											<a href="#">View</a> 
-											<a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i>Edit </a> 
+										<td class=""><s:property value="customerCode" /></td>
+										<td class=""><s:property value="businessName" /></td>
+										<td class=""><s:property value="directorMobile" /></td>
+										<td class=""> 
+											<a class="btn btn-success btn-xs"><i class="fa"></i> VIP </a> 
+										</td>
+										<td class=""><s:property value="email" /></td>
+										<td class="last"> 
+											<a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa </a> 
 											<s:url action="delete_customer" var="deleteURL">
 												<s:param name="customerId" value="%{id}" ></s:param>
 											</s:url>
-											<s:a href="%{deleteURL}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>Delete </s:a>
+											<s:a href="%{deleteURL}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Xóa </s:a>
 										</td>
 									</tr>
 								</s:iterator>
@@ -53,16 +54,7 @@
 		</div>
 	</div>
 	<!-- footer content -->
-	<footer>
-		<div class="">
-			<p class="pull-right">
-				@Copyright by <a>ThienTran</a>. | <span class="lead"> <i
-					class="fa fa-paw"></i> VNFamily Tech!
-				</span>
-			</p>
-		</div>
-		<div class="clearfix"></div>
-	</footer>
+	<s:include value="footer.jsp" />
 	<!-- /footer content -->
 
 </div>

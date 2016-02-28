@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Feb 24, 2016 9:17:28 PM by Hibernate Tools 4.3.1 -->
+<!-- Generated Feb 25, 2016 11:43:14 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="com.home.model.Customer" table="customer" catalog="db_promotion" optimistic-lock="version">
         <id name="id" type="java.lang.Integer">
@@ -17,9 +17,7 @@
         <property name="customerCode" type="string">
             <column name="customer_code" length="40" />
         </property>
-        <property name="customerName" type="string">
-            <column name="customer_name" length="200" />
-        </property>
+       
         <property name="createTime" type="timestamp">
             <column name="create_time" length="0" />
         </property>
@@ -34,6 +32,9 @@
         </property>
         <property name="taxNumber" type="string">
             <column name="tax_number" length="20" />
+        </property>
+         <property name="businessName" type="string">
+            <column name="business_name" length="200" />
         </property>
         <property name="budgetRegister" type="java.lang.Integer">
             <column name="budget_register" />
@@ -133,6 +134,15 @@
         </property>
         <property name="revenue2" type="string">
             <column name="revenue2" length="50" />
+        </property>
+        <property name="revenueExpect1" type="string">
+            <column name="revenue_expect1" length="50" />
+        </property>
+        <property name="revenueExpect2" type="string">
+            <column name="revenue_expect2" length="50" />
+        </property>
+        <property name="revenueExpect3" type="string">
+            <column name="revenue_expect3" length="50" />
         </property>
         <property name="percentProvide1" type="string">
             <column name="percent_provide1" length="50" />

@@ -3,11 +3,10 @@
 	pageEncoding="UTF-8"%>
 <%-- Using Struts2 Tags in JSP --%>
 <%@ taglib uri="/struts-tags" prefix="s"%>
-
+<%@ taglib uri="/struts-dojo-tags" prefix="sd"%>
 <%@ include file="header.jsp"%>
 <%@ include file="user_profile.jsp"%>
 <%@ include file="menu.jsp"%>
-<%@ taglib uri="/struts-dojo-tags" prefix="sd"%>
 <script>
 	function change() {
 		var el1 = document.getElementById("quantiy");
@@ -38,7 +37,7 @@
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<sd:datetimepicker id="dateReceived" name="dateReceived"
-										cssClass="form-control col-md-7 col-xs-12"
+										cssClass="form-control col-md-7 col-xs-12" value="%{'today'}"
 										displayFormat="dd-MM-yyyy" />
 								</div>
 							</div>
@@ -103,9 +102,8 @@
 									for="quantity">Số lượng <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<s:textfield id="quantity" name="quantity" onchange="change()"
-										cssClass="form-control col-md-7 col-xs-12" value="0"
-										required="required" type="number" />
+									<s:textfield id="quantity" name="quantity" onchange="" value="%{1}" type="number"
+										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
 							<div class="item form-group">
@@ -136,13 +134,14 @@
 									<sd:autocompleter id="employeeName" name="employeeName"
 										cssClass="form-control col-md-7 col-xs-12"
 										showDownArrow="false" autoComplete="true"
-										list="listEmployeeName" />
+										list="%{'11'}" />
 								</div>
 							</div>
+							<div class="ln_solid"></div>
 							<div class="form-group">
 								<div class="col-md-6 col-md-offset-3">
 									<s:reset class="btn btn-primary" value="Reset" />
-									<s:submit id="send" value="Submit" class="btn btn-success" />
+									<s:submit id="sends" value="Submit" class="btn btn-success" />
 								</div>
 							</div>
 						</s:form>
@@ -153,16 +152,7 @@
 	</div>
 
 	<!-- footer content -->
-	<footer>
-		<div class="">
-			<p class="pull-right">
-				@Copyright by <a>ThienTran</a>. | <span class="lead"> <i
-					class="fa fa-paw"></i> VNFamily Tech!
-				</span>
-			</p>
-		</div>
-		<div class="clearfix"></div>
-	</footer>
+	<s:include value="footer.jsp" />
 	<!-- /footer content -->
 
 </div>
