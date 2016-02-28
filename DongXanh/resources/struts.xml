@@ -15,7 +15,7 @@
 		</action>
 		<action name="add_employee" method="addEmployee" class="com.home.action.UserAction">
 			<result name="success" type="redirectAction">list_employee</result>
-			<result name="input">/new_employee.jsp</result>
+			<result name="input">move_to_add_employee</result>
 		</action>
 		<action name="list_employee" method="listEmployee" class="com.home.action.UserAction">
 			<result name="success">/employees.jsp</result>

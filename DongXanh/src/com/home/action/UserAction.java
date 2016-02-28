@@ -82,6 +82,11 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 			UserHome userHome = new UserHome(getSessionFactory());
 			listEmployee = userHome.getListUser();
 			for (User user : listEmployee) {
+				//System.out.println("asdasdasd: "+user.getRole().getRoleName());
+				//System.out.println("asdasdasd: "+user.getRole().getRoleName());
+//				if(user.getRole().getRoleName() != null){
+//					System.out.println("asdjsadkjaskjdakjsd");
+//				}
 				System.out.println(user.getFullName());
 			}
 		} catch (Exception e) {
@@ -94,7 +99,7 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 		try {
 			UserHome userHome = new UserHome(getSessionFactory());
 			Role r = new Role();
-			r.setId(Integer.parseInt(getRoleId()));
+			r.setRoleId(Integer.parseInt(getRoleId()));
 			user.setRole(r);
 			userHome.attachDirty(user);
 			return SUCCESS;

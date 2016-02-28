@@ -190,10 +190,12 @@ public class UserHome {
 	public List<User> getListUser() {
 		log.debug("retrieve list Users");
 		Transaction tx = null;
+		Session session = null;
 		try {
-			Session session = sessionFactory.openSession();
+			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
 			List<User> results = session.createCriteria(User.class).list();
+			//List<User> results = session.createQuery("FROM User").list();
 			tx.commit();
 			session.close();
 			log.debug("retrieve list Users successful, result size: " + results.size());
@@ -201,6 +203,14 @@ public class UserHome {
 		} catch (RuntimeException re) {
 			log.error("retrieve list Users failed", re);
 			throw re;
+		}finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

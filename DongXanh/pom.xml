@@ -9,12 +9,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>5.0.6.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>com.jgeppert.struts2.jquery</groupId>
-			<artifactId>struts2-jquery-plugin</artifactId>
-			<version>3.7.1</version>
+			<version>4.3.2.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.struts</groupId>

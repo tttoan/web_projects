@@ -1,6 +1,6 @@
 package com.home.model;
 
-// Generated Feb 24, 2016 9:17:27 PM by Hibernate Tools 4.3.1
+// Generated Feb 28, 2016 1:29:03 PM by Hibernate Tools 4.3.1
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,7 +10,7 @@ import java.util.Set;
  */
 public class Role implements java.io.Serializable {
 
-	private Integer id;
+	private Integer roleId;
 	private String roleName;
 	private String roleDesc;
 	private Integer isEnabled;
@@ -26,12 +26,12 @@ public class Role implements java.io.Serializable {
 		this.users = users;
 	}
 
-	public Integer getId() {
-		return this.id;
+	public Integer getRoleId() {
+		return this.roleId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
 	}
 
 	public String getRoleName() {
