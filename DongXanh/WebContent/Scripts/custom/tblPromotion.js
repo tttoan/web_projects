@@ -1,6 +1,10 @@
 $(document).ready(function() {
-	var RowNumber = 0;  
+	var RowNumber = 0;
+	var ProductNumber = 0;
+	var GiftNumber = 0;
 	var groupCusOptions = null;
+	var productOptions = null;
+	var giftOptions = null;
 	$('#PromotionTableContainer').jtable({
 		title : 'Danh sách các chương trình khuyến mãi',
 		paging: true, //Enable paging
@@ -43,57 +47,95 @@ $(document).ready(function() {
 					return RowNumber;
 				}
 			},
+			promotion_id : {
+				type: 'hidden',
+			},
 			//CHILD TABLE DEFINITION FOR "PHONE NUMBERS"
-            Phones: {
+            Gift: {
                 title: '',
-                width: '5%',
+                width: '3%',
                 sorting: false,
                 edit: false,
                 create: false,
-                display: function (studentData) {
+                listClass: 'child-opener-image-column',
+                display: function (promotionGift) {
                     //Create an image that will be used to open child table
-                    var $img = $('<img src="/Content/images/Misc/phone.png" title="Edit phone numbers" />');
+                    var $img = $('<img class="child-opener-image" src="images/gift.png" title="Quà tặng" />');
                     //Open child table when user clicks the image
                     $img.click(function () {
-                        $('#StudentTableContainer').jtable('openChildTable',
+                        $('#PromotionTableContainer').jtable('openChildTable',
                                 $img.closest('tr'),
                                 {
-                                    title: studentData.record.Name + ' - Phone numbers',
-                                    actions: {
-                                        listAction: '/Demo/PhoneList?StudentId=' + studentData.record.StudentId,
-                                        deleteAction: '/Demo/DeletePhone',
-                                        updateAction: '/Demo/UpdatePhone',
-                                        createAction: '/Demo/CreatePhone'
-                                    },
+		                        	title: '[' + promotionGift.record.promotionName + '] - Quà tặng',
+									paging: true, //Enable paging
+									pageSize: 10, //Set page size (default: 10) 
+									actions: {
+										listAction : 'listPromotionGiftAction?promotion_id='+promotionGift.record.promotion_id,
+										createAction : 'createPromotionGiftAction?promotion_id='+promotionGift.record.promotion_id,
+										updateAction : 'updatePromotionGiftAction?promotion_id='+promotionGift.record.promotion_id,
+										deleteAction : 'deletePromotionGiftAction?promotion_id='+promotionGift.record.promotion_id,
+									},
                                     fields: {
-                                        StudentId: {
-                                            type: 'hidden',
-                                            defaultValue: studentData.record.StudentId
-                                        },
-                                        PhoneId: {
-                                            key: true,
-                                            create: false,
-                                            edit: false,
-                                            list: false
-                                        },
-                                        PhoneType: {
-                                            title: 'Phone type',
-                                            width: '30%',
-                                            options: { '1': 'Home phone', '2': 'Office phone', '3': 'Cell phone' }
-                                        },
-                                        Number: {
-                                            title: 'Phone Number',
-                                            width: '30%'
-                                        },
-                                        RecordDate: {
-                                            title: 'Record date',
-                                            width: '20%',
-                                            type: 'date',
-                                            displayFormat: 'yy-mm-dd',
-                                            create: false,
-                                            edit: false
-                                        }
-                                    }
+                                    	GiftNumber : {
+                            				title: 'No',
+                            				width : '1%',
+                            				sorting: false,
+                            				edit: false,
+                            				create: false,
+                            				display: function () {
+                            					GiftNumber++;
+                            					return GiftNumber;
+                            				}
+                            			},
+                                    	id: {
+        									key: true,
+        									create: false,
+        									edit: false,
+        									list: false
+        								},
+        								gift_id: {
+        									title: 'Quà tặng',
+        									width: '50%',
+        									edit : true,
+        									options: function () {
+
+        										if (giftOptions) { //Check for cache
+        											return giftOptions;
+        										}
+
+        										var options = [];
+
+        										$.ajax({ //Not found in cache, get from server
+        											url: 'getAllGiftsAction',
+        											type: 'POST',
+        											dataType: 'json',
+        											async: false,
+        											success: function (data) {
+        												//alert("hiiiii  " + JSON.stringify(data)); 
+        												if (data.result != 'OK') {
+        													alert(data.message);
+        													return;
+        												}
+        												options = data.gifts;
+        												//alert("333  " + JSON.stringify(options));
+        											}
+        										});
+        										//alert("gifts  " + data.gifts);
+        										return giftOptions = options; //Cache results and return options
+        									}
+        								},
+        								maxQuantity: {
+        									title: 'Số thùng đạt',
+        									width: '20%',
+        								},
+        								maxPoint: {
+        									title: 'Số điểm đạt',
+        									width: '20%',
+        								}
+                                    },
+                                    loadingRecords: function (event, data) {
+                            			GiftNumber = 0;
+                            		},
                                 }, function (data) { //opened handler
                                     data.childTable.jtable('load');
                                 });
@@ -103,54 +145,96 @@ $(document).ready(function() {
                 }
             },
             //CHILD TABLE DEFINITION FOR "EXAMS"
-            Exams: {
+            Product: {
                 title: '',
-                width: '5%',
+                width: '3%',
                 sorting: false,
                 edit: false,
                 create: false,
-                display: function (studentData) {
+                listClass: 'child-opener-image-column',
+                display: function (promotionProduct) {
                     //Create an image that will be used to open child table
-                    var $img = $('<img src="/Content/images/Misc/note.png" title="Edit exam results" />');
+                    var $img = $('<img class="child-opener-image" src="images/product.png" title="Sản phẩm áp dụng"   />');
                     //Open child table when user clicks the image
                     $img.click(function () {
-                        $('#StudentTableContainer').jtable('openChildTable',
+                    	
+                    	//alert(promotionProduct.record.promotion_id);
+                    	//document.getElementById("promotion_id").value=promotionProduct.record.promotion_id;
+                    	//document.forms["setPromotionId"].submit();
+                    	
+                        $('#PromotionTableContainer').jtable('openChildTable',
                                 $img.closest('tr'), //Parent row
                                 {
-                                title: studentData.record.Name + ' - Exam Results',
+                                title: '[' + promotionProduct.record.promotionName + '] - Sản phẩm áp dụng',
+                                paging: true, //Enable paging
+                        		pageSize: 10, //Set page size (default: 10) 
                                 actions: {
-                                    listAction: '/Demo/ExamList?StudentId=' + studentData.record.StudentId,
-                                    deleteAction: '/Demo/DeleteExam',
-                                    updateAction: '/Demo/UpdateExam',
-                                    createAction: '/Demo/CreateExam'
+                                	listAction : 'listPromotionProductAction?promotion_id='+promotionProduct.record.promotion_id,
+                        			createAction : 'createPromotionProductAction?promotion_id='+promotionProduct.record.promotion_id,
+                        			updateAction : 'updatePromotionProductAction?promotion_id='+promotionProduct.record.promotion_id,
+                        			deleteAction : 'deletePromotionProductAction?promotion_id='+promotionProduct.record.promotion_id,
                                 },
                                 fields: {
-                                    StudentId: {
-                                        type: 'hidden',
-                                        defaultValue: studentData.record.StudentId
-                                    },
-                                    StudentExamId: {
+                                	ProductNumber : {
+                        				title: 'No',
+                        				width : '1%',
+                        				sorting: false,
+                        				edit: false,
+                        				create: false,
+                        				display: function () {
+                        					ProductNumber++;
+                        					return ProductNumber;
+                        				}
+                        			},
+                                    id: {
                                         key: true,
                                         create: false,
                                         edit: false,
                                         list: false
                                     },
-                                    CourseName: {
-                                        title: 'Course name',
-                                        width: '40%'
+                                    product_id: {
+                                        title: 'Sản phẩm',
+                                        width: '50%',
+                                        edit : true,
+                                        options: function () {
+                                                
+                                                if (productOptions) { //Check for cache
+                                                    return productOptions;
+                                                }
+
+                                                var options = [];
+
+                                                $.ajax({ //Not found in cache, get from server
+                                                    url: 'getAllProductsAction',
+                                                    type: 'POST',
+                                                    dataType: 'json',
+                                                    async: false,
+                                                    success: function (data) {
+                                                   	 //alert("hiiiii  " + JSON.stringify(data)); 
+                                                        if (data.result != 'OK') {
+                                                            alert(data.message);
+                                                            return;
+                                                        }
+                                                        options = data.products;
+                                                        //alert("333  " + JSON.stringify(options));
+                                                    }
+                                                });
+                                               // alert("products  " + (options));
+                                                return productOptions = (options); //Cache results and return options
+                                            }
                                     },
-                                    ExamDate: {
-                                        title: 'Exam date',
-                                        width: '30%',
-                                        type: 'date',
-                                        displayFormat: 'yy-mm-dd'
+                                    maxQuantity: {
+                                        title: 'Số thùng đạt',
+                                        width: '20%',
                                     },
-                                    Degree: {
-                                        title: 'Degree',
-                                        width: '10%',
-                                        options: ["AA", "BA", "BB", "CB", "CC", "DC", "DD", "FF"]
+                                    maxPoint: {
+                                        title: 'Số điểm đạt',
+                                        width: '20%',
                                     }
-                                }
+                                },
+                                loadingRecords: function (event, data) {
+                        			ProductNumber = 0;
+                        		},
                             }, function (data) { //opened handler
                                 data.childTable.jtable('load');
                             });
@@ -168,7 +252,7 @@ $(document).ready(function() {
 			},
 			group_customer_id : {
 				title : 'Nhóm khách hàng',
-				width : '20%',
+				width : '15%',
 				edit : true,
 				 options: function () {
                      
@@ -198,13 +282,13 @@ $(document).ready(function() {
                  }
 			},
 			promotionName : {
-				title : 'Tên chương trình khuyến mãi',
+				title : 'Tên khuyến mãi',
 				width : '20%',
 				edit : true,
 				inputClass: 'validate[required]'
 			},
 			startDate : {
-				title : 'Ngày bắt đầu',
+				title : 'Bắt đầu',
 				width : '10%',
 				edit : true,
 				type: 'date',
@@ -212,7 +296,7 @@ $(document).ready(function() {
 				inputClass: 'validate[required]'
 			},
 			endDate : {
-				title : 'Ngày kết thúc',
+				title : 'Kết thúc',
 				width : '10%',
 				edit : true,
 				type: 'date',
@@ -221,18 +305,19 @@ $(document).ready(function() {
 			},
 			remarks : {
 				title : 'Đặc tả',
-				width : '30%',
+				width : '25%',
 				edit : true,
 				type: 'textarea',
 			},
 			status: {
                  title: 'Tình trạng',
-                 width: '12%',
+                 width: '15%',
                  type: 'checkbox',
-                 values: { 'false': 'Kết thúc', 'true': 'Áp dụng khuyến mãi' },
+                 values: { 'false': 'Kết thúc', 'true': 'Áp dụng' },
                  defaultValue: 'true',
                  create: false,
  				 edit: true,
+ 				 listClass: 'promotion-status',
              },
 			
 		},
@@ -267,3 +352,20 @@ $(document).ready(function() {
 	$('#PromotionTableContainer').jtable('load');
 });
 
+
+function sortObject(obj) {
+    var arr = [];
+    var prop;
+    for (prop in obj) {
+        if (obj.hasOwnProperty(prop)) {
+            arr.push({
+                'key': prop,
+                'value': obj[prop]
+            });
+        }
+    }
+    arr.sort(function(a, b) {
+        return a.value - b.value;
+    });
+    return arr; // returns array
+}

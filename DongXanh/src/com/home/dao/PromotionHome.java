@@ -245,10 +245,11 @@ public class PromotionHome {
 
 			int range = startPageIndex+recordsPerPage;
 			ResultSet rs = conn.createStatement().executeQuery(
-					"SELECT * FROM (SELECT @i:=@i+1 AS iterator, t.* FROM promotion t,(SELECT @i:=0) foo Order By id Desc) AS XX WHERE iterator > "+startPageIndex+" AND iterator <= " + range);
+					"SELECT * FROM (SELECT @i:=@i+1 AS iterator, t.* FROM promotion t,(SELECT @i:=0) foo Order By status Desc, id Desc) AS XX WHERE iterator > "+startPageIndex+" AND iterator <= " + range);
 			while(rs.next()){
 				Promotion p = new Promotion();
 				p.setId(rs.getInt("id"));
+				p.setPromotion_id(rs.getInt("id"));
 				p.setPromotionName(rs.getString("promotion_name"));
 				p.setStartDate(rs.getDate("start_date"));
 				p.setEndDate(rs.getDate("end_date"));

@@ -18,6 +18,7 @@
 						<div id="PromotionTableContainer"></div>
 
 					</div>
+						
 				</div>
 			</div>
 		</div>
@@ -95,6 +96,37 @@
 
 <!-- User defined Jtable js file -->
 <script src="Scripts/custom/tblPromotion.js" type="text/javascript"></script>
+
+<style>
+        .child-opener-image
+        {
+            cursor: pointer;
+        }
+        .child-opener-image
+        {
+            opacity: 0.6;
+        }
+        .child-opener-image:hover
+        {
+            opacity: 1.0;
+        }
+        .child-opener-image-column
+        {
+            text-align: center;
+        }
+        .jtable-dialog-form
+        {
+            min-width: 220px;
+        }
+        .jtable-dialog-form input[type="text"]
+        {
+            min-width: 200px;
+        }
+        .promotion-status
+        {
+            font-weight: bold;
+        }
+</style>
 
 </body>
 </html>

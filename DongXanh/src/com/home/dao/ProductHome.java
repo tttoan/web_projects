@@ -7,6 +7,8 @@ import static org.hibernate.criterion.Example.create;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.naming.InitialContext;
@@ -266,6 +268,36 @@ public class ProductHome {
 			Query query = session.createQuery(sql);
 			List results = query.list();
 			return Integer.parseInt(results.get(0).toString());
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public LinkedHashMap<Integer, String> getListProducts() throws Exception{
+		log.debug("retrieve list Product");
+		Session session = null;
+		LinkedHashMap<Integer, String> results = new LinkedHashMap<Integer, String>();
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM `product` Order by product_name");
+			while(rs.next()){
+				results.put(rs.getInt("id"), rs.getString("product_name"));
+			}
+			rs.close();
+			log.debug("retrieve list Product successful, result size: " + results.size());
+			return results;
 		} catch (Exception re) {
 			re.printStackTrace();
 			log.error("retrieve list Product failed", re);

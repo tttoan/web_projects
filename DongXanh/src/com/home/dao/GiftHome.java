@@ -7,6 +7,7 @@ import static org.hibernate.criterion.Example.create;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -257,6 +258,36 @@ public class GiftHome {
 		} catch (Exception re) {
 			re.printStackTrace();
 			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public LinkedHashMap<Integer, String> getListGifts() throws Exception{
+		log.debug("retrieve list Gift");
+		Session session = null;
+		LinkedHashMap<Integer, String> results = new LinkedHashMap<Integer, String>();
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM `gift` Order by gift_name");
+			while(rs.next()){
+				results.put(rs.getInt("id"), rs.getString("gift_name"));
+			}
+			rs.close();
+			log.debug("retrieve list Gift successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Gift failed", re);
 			throw re;
 		} finally{
 			try {

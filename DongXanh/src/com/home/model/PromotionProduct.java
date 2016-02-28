@@ -12,6 +12,8 @@ public class PromotionProduct implements java.io.Serializable {
 	private Promotion promotion;
 	private Integer maxQuantity;
 	private Integer maxPoint;
+	private Integer product_id;
+	private Integer promotion_id;
 
 	public PromotionProduct() {
 	}
@@ -66,6 +68,22 @@ public class PromotionProduct implements java.io.Serializable {
 
 	public void setMaxPoint(Integer maxPoint) {
 		this.maxPoint = maxPoint;
+	}
+	
+	public Integer getProduct_id() {
+		return product_id;
+	}
+
+	public void setProduct_id(Integer product_id) {
+		this.product_id = product_id;
+	}
+
+	public Integer getPromotion_id() {
+		return promotion_id;
+	}
+
+	public void setPromotion_id(Integer promotion_id) {
+		this.promotion_id = promotion_id;
 	}
 
 }

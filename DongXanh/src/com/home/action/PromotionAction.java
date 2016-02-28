@@ -112,7 +112,7 @@ public class PromotionAction implements ServletContextAware{
 			record.setStartDate(startDate);
 			record.setEndDate(endDate);
 			record.setRemarks(remarks);
-			record.setStatus(true);
+			record.setStatus(status);
 			GroupCustomer group = new GroupCustomer();
 			group.setId(group_customer_id);
 			record.setGroupCustomer(group);
