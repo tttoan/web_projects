@@ -2,7 +2,7 @@ package com.home.conts;
 
 public enum CustomerTable {
 	customerCode(0), 
-	customerName(1), 
+	businessName(1), 
 	createTime(2), 
 	certificateNumber(3), 
 	certificateDate(4),

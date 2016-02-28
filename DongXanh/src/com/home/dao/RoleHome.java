@@ -5,6 +5,7 @@ package com.home.dao;
 import static org.hibernate.criterion.Example.create;
 
 import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
@@ -12,6 +13,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+
 import com.home.model.Role;
 
 /**
@@ -135,6 +137,34 @@ public class RoleHome {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Role> findAllRole() {
+		log.debug("finding Role instance by example");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			List<Role> results = session.createCriteria(Role.class).list();
+			tx.commit();
+			log.debug("find by example successful, result size: "
+					+ results.size());
+			return results;
+		} catch (RuntimeException re) {
+			log.error("find by example failed", re);
+			throw re;
+		}finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<Role> findByExample(Role instance) {
 		log.debug("finding Role instance by example");
 		try {

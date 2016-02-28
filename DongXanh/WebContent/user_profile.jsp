@@ -1,13 +1,14 @@
 <!-- menu prile quick info -->
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	<%@ taglib uri="/struts-tags" prefix="s"%>
 <div class="profile">
 	<div class="profile_pic">
-		<img src="images/img.jpg" alt="..." class="img-circle profile_img">
+		<img src="images/user.png" alt="..." class="img-circle profile_img">
 	</div>
 	<div class="profile_info">
-		<span>Xsdsdsdin chào,</span>
-		<h2>tttoan</h2>
+		<span>Xin chào,</span>
+		<h2><s:property value="%{user.fullName}" /> </h2>
 	</div>
 </div>
 <!-- /menu prile quick info -->

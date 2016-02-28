@@ -1,5 +1,11 @@
 package com.home.action;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -7,8 +13,10 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
 
+import com.home.dao.CustomerHome;
 import com.home.dao.UserHome;
 import com.home.model.User;
+import com.home.model.Customer;
 import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
@@ -17,6 +25,8 @@ import com.opensymphony.xwork2.ModelDriven;
 public class LoginAction extends ActionSupport implements Action, ModelDriven<User>, ServletContextAware, ServletRequestAware {
 	private static final long serialVersionUID = 1L;
 	public User user = new User();
+	public List<Customer> listCustomer = new ArrayList<>();
+	public List<Customer> listBirthCus = new ArrayList<>();
 	private HttpServletRequest request;
 	private ServletContext ctx;
 
@@ -62,6 +72,34 @@ public class LoginAction extends ActionSupport implements Action, ModelDriven<Us
 		} else {
 			user = userDB;
 		}
-	};
+	}
 
+	public String getListCustomerByBirthday(){
+		try {
+			listBirthCus.clear();
+			CustomerHome cusHome = new CustomerHome(getSessionFactory());
+			listCustomer = cusHome.findAll();
+			for (Customer customer : listCustomer) {
+				Calendar birthday = Calendar.getInstance();
+				birthday.set(Calendar.HOUR_OF_DAY, 0);
+				birthday.set(Calendar.MINUTE, 0);
+				birthday.set(Calendar.SECOND, 0);
+				birthday.set(Calendar.MILLISECOND, 0);
+				
+				Calendar today = (Calendar) birthday.clone();
+				Calendar furture = (Calendar) birthday.clone();
+				furture.add(Calendar.DATE, 7);
+				birthday.setTime(customer.getDirectorBirthday());
+				birthday.set(Calendar.YEAR, furture.get(Calendar.YEAR));
+				if(birthday.getTimeInMillis() >= today.getTimeInMillis() && birthday.getTimeInMillis() <= furture.getTimeInMillis()){
+					listBirthCus.add(customer);
+				}
+				
+			}
+			return SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+	}
 }

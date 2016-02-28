@@ -16,38 +16,35 @@
 						<table  id="example" class="table table-striped responsive-utilities jambo_table">
 							<thead>
 								<tr class="headings">
-									<th><input type="checkbox" class="tableflat"></th>
 									<th>Họ và tên</th>
 									<th>Email</th>
 									<th>Ngày sinh</th>
 									<th>giới tính</th>
 									<th>Điện thoại</th>
 									<th>Địa chỉ</th>
-									<th>Giới hạn</th>
+									<th>Nhóm</th>
 									<th>Trạng thái</th>
 									<th class=" no-link last"><span class="nobr"></span></th>
 								</tr>
 							</thead>
 
 							<tbody>
-								<s:iterator value="users">
+								<s:iterator value="listEmployee">
 									<tr class="even pointer">
-										<td class="a-center "><input type="checkbox" class="tableflat"></td>
 										<td class=" "><s:property value="fullName" /></td>
 										<td class=" "><s:property value="email" /></td>
 										<td class=" "><s:property value="birthDate" /></td>
 										<td class=" "><s:property value="gender" /></td>
 										<td class=" "><s:property value="mobilePhone" /></td>
 										<td class=" "><s:property value="address" /></td>
-										<td class=" "><s:property value="role.roleName" /></td>
+										<td class=" "><a class="btn btn-info btn-xs"><i class="fa fa-group"></i><s:property value="%{role.roleName}" /> </a> </td>
 										<td class=" "><s:property value="isEnabled" /></td>
-										<td class=" last"> 
-											<a href="#">View</a> 
-											<a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i>Edit </a> 
-											<s:url action="delete_user" var="deleteURL">
+										<td class="last"> 
+											<a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa </a> 
+											<s:url action="delete_employee" var="deleteURL">
 												<s:param name="userId" value="%{id}" ></s:param>
 											</s:url>
-											<s:a href="%{deleteURL}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>Delete </s:a>
+											<s:a href="%{deleteURL}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Xóa </s:a>
 										</td>
 									</tr>
 								</s:iterator>

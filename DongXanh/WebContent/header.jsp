@@ -3,20 +3,21 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib uri="/struts-bootstrap-tags" prefix="sb"%>
-<%@ taglib prefix="sx" uri="/struts-dojo-tags"%>
+<%@ taglib prefix="sd" uri="/struts-dojo-tags"%>
+<%@ taglib uri="/struts-jquery-tags" prefix="sj" %>
 <html>
 <head>
-<sx:head />
 <s:head />
+<sd:head />
+<sj:head />
 <!-- Meta, title, CSS, favicons, etc. -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Customer Management! |</title>
+<title>Promotion Management</title>
 
 <!-- Bootstrap core CSS -->
 
 <link href="css/bootstrap.min.css" rel="stylesheet">
-
 <link href="fonts/css/font-awesome.min.css" rel="stylesheet">
 <link href="css/animate.min.css" rel="stylesheet">
 
@@ -25,11 +26,10 @@
 <link href="css/icheck/flat/green.css" rel="stylesheet">
 
 <link href="css/calendar/fullcalendar.css" rel="stylesheet">
-<link href="css/calendar/fullcalendar.print.css" rel="stylesheet" media="print">
+<link href="css/calendar/fullcalendar.print.css" rel="stylesheet"
+	media="print">
 <script src="js/jquery.min.js"></script>
 <link href="css/calendar/fullcalendar.css" rel="stylesheet">
-<link href="styles/styles.css" rel="stylesheet">
-<link href="styles/forms.css" rel="stylesheet">
 <!--[if lt IE 9]>
             <script src="../assets/js/ie8-responsive-file-warning.js"></script>
             <![endif]-->
@@ -47,9 +47,8 @@
 		<div class="main_container">
 			<div class="col-md-3 left_col">
 				<div class="left_col scroll-view">
-
 					<div class="navbar nav_title" style="border: 0;">
-						<a href="index.html" class="site_title"><i class="fa fa-paw"></i>
+						<a href="index.jsp" class="site_title"><i class="fa fa-empire"></i>
 							<span>ĐỒNG XANH</span></a>
 					</div>
 					<div class="clearfix"></div>

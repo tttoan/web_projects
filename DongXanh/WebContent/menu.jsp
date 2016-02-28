@@ -6,7 +6,7 @@
 
 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
 	<div class="menu_section">
-		<h3>General</h3>
+		<h3>Admin</h3>
 		<ul class="nav side-menu">
 			<li><a href="index.jsp"><i class="fa fa-home"></i> Trang Chủ
 			</a></li>
@@ -16,37 +16,36 @@
 					<li><a href="result_promotion.html"> Khái Quát </a></li>
 					<li><a href="list_promotion.html"> Danh Sách </a></li>
 					<li><a href="create_promotion.html"> Tạo Mới </a></li>
-				</ul>
-			</li>
-			<s:include value="menu_user.jsp">
-            	<s:param name="role_id"><s:property value="%{user.role.id}"/></s:param>
-        	</s:include>
-			
+				</ul></li>
+			<s:include value="menu_employee.jsp">
+				<s:param name="role_id">
+					<s:property value="%{user.role.id}" />
+				</s:param>
+			</s:include>
 			<li><a><i class="fa fa-edit"></i> Khách Hàng <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
 					<li><s:url action="list_customer.action" var="lcURL" /> <s:a
 							href="%{lcURL}" theme="bootstrap"> Danh Sách </s:a></li>
-					<li><s:url action="move_to_add_customer" var="macURL" ></s:url><s:a href="%{macURL}"> Tạo Và Chỉnh Sửa </s:a></li>
+					<li><s:url action="move_to_add_customer" var="macURL"></s:url>
+						<s:a href="%{macURL}"> Tạo Và Chỉnh Sửa </s:a></li>
 				</ul></li>
-
 			<li><a><i class="fa fa-table"></i> Bảng Kê <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
 					<li><s:url action="list_invoice.action" var="liURL" /> <s:a
 							href="%{liURL}" theme="bootstrap"> Danh Sách </s:a></li>
-					<li><s:url action="move_to_add_invoice.action" var="maiURL" > </s:url><s:a href="%{maiURL}"> Thêm Và Chỉnh Sửa </s:a></li>
-					<li><a href="import_invoice.jsp">Import Excel</a></li>
+					<li><s:url action="move_to_add_invoice.action" var="maiURL">
+						</s:url> <s:a href="%{maiURL}"> Thêm Và Chỉnh Sửa </s:a></li>
+					<li><a href="import_invoice.jsp">Thao tác Excel</a></li>
 				</ul></li>
-
-			<li><a><i class="fa fa-windows"></i> Lịch công tác <span
+			<li><a><i class="fa fa-calendar"></i> Lịch công tác <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
 					<li><a href="working_schedule.html">Xem lịch của tôi</a></li>
 					<li><a href="create_working_schedule.html">Tạo mới</a></li>
 
 				</ul></li>
-
 		</ul>
 	</div>
 
@@ -71,25 +70,22 @@
 
 <!-- top navigation -->
 <div class="top_nav">
-
 	<div class="nav_menu">
 		<nav class="" role="navigation">
 			<div class="nav toggle">
 				<a id="menu_toggle"><i class="fa fa-bars"></i></a>
 			</div>
-
 			<ul class="nav navbar-nav navbar-right">
 				<li class=""><a href="javascript:;"
 					class="user-profile dropdown-toggle" data-toggle="dropdown"
-					aria-expanded="false"> <img src="images/img.jpg" alt="">tttoan
+					aria-expanded="false"> <img src="images/user.png" alt=""><s:property value="%{user.userName}" />
 						<span class=" fa fa-angle-down"></span>
 				</a>
 					<ul
 						class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">
-						<li><a href="profile.html"> Profile</a></li>
-
+						<li><a href="profile.html"> Thông tin cá nhân</a></li>
 						<li><a href="login.jsp"><i
-								class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+								class="fa fa-sign-out pull-right"></i> Đăng xuất</a></li>
 					</ul></li>
 
 				<!-- /customer notice -->
@@ -97,41 +93,29 @@
 				<li role="presentation" class="dropdown"><a href="javascript:;"
 					class="dropdown-toggle info-number" data-toggle="dropdown"
 					aria-expanded="false"> <i class="fa fa-envelope-o"></i> <span
-						class="badge bg-green">6</span>
+						class="badge bg-green"> <s:property
+								value="listBirthCus.size" />
+
+					</span>
 				</a>
 					<ul id="menu1"
 						class="dropdown-menu list-unstyled msg_list animated fadeInDown"
 						role="menu">
-						<li><a> <span class="image"> <img
-									src="images/img.jpg" alt="Profile Image" />
-							</span> <span> <span>Khách hàng A</span> <span class="time">hôm
-										nay</span>
-							</span> <span class="message"> Hôm nay là sinh nhật của khách
-									hàng A, hãy gửi lời chúc mừng tới họ nhé. </span>
-						</a></li>
-						<li><a> <span class="image"> <img
-									src="images/img.jpg" alt="Profile Image" />
-							</span> <span> <span>Khách hàng B</span> <span class="time">cách
-										1 ngày</span>
-							</span> <span class="message"> Ngày mai là sinh nhật của khách
-									hàng B, hãy gửi lời chúc mừng tới họ nhé. </span>
-						</a></li>
-						<li><a> <span class="image"> <img
-									src="images/img.jpg" alt="Profile Image" />
-							</span> <span> <span>Khách hàng XYZ</span> <span class="time">còn
-										1 tuần</span>
-							</span> <span class="message"> Còn 1 tuần là sinh sinh nhật khách
-									hàng XYZ, hãy gửi lời chúc mừng tới họ nhé. </span>
-						</a></li>
-						<li>
-							<div class="text-center">
-								<a> <strong>Xem tất cả các thông báo</strong> <i
-									class="fa fa-angle-right"></i>
-								</a>
-							</div>
-						</li>
+						<s:iterator value="listBirthCus">
+							<li><s:url action="find_customer" var="findURL">
+									<s:param name="customerId" value="%{id}"></s:param>
+								</s:url> <s:a href="%{findURL}">
+									<span class="image"> <img src="images/img.jpg"
+										alt="Profile Image" />
+									</span>
+									<span> <span><s:property value="%{director}" /></span> <span
+										class="time">hôm nay</span>
+									</span>
+									<span class="message"> Hôm nay là sinh nhật của <s:property value="%{director}" />, hãy
+										gửi lời chúc mừng tới họ nhé. </span>
+								</s:a></li>
+						</s:iterator>
 					</ul></li>
-
 			</ul>
 		</nav>
 	</div>

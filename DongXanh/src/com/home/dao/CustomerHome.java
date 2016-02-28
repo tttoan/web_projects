@@ -11,11 +11,13 @@ import javax.naming.InitialContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import com.home.model.Customer;
+import com.home.model.User;
 
 /**
  * Home object for domain model class Customer.
@@ -57,36 +59,79 @@ public class CustomerHome {
 	public List<Customer> getListCustomer() {
 		log.debug("retrieve list Customer");
 		Transaction tx = null;
+		Session session = null;
 		try {
-			Session session = sessionFactory.openSession();
+			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
 			List<Customer> results = session.createCriteria(Customer.class).list();
 			tx.commit();
-			session.close();
 			log.debug("retrieve list Customer successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("retrieve list Customer failed", re);
 			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Customer> findAll() {
+		log.debug("retrieve list Customer");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			List<Customer> results = session.createCriteria(Customer.class).list();
+			tx.commit();
+			log.debug("retrieve list Customer successful, result size: " + results.size());
+			return results;
+		} catch (RuntimeException re) {
+			log.error("retrieve list Customer failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public void attachDirty(Customer transientInstance) {
 		log.debug("attaching dirty Customer instance");
 		Transaction tx = null;
+		Session session = null;
 		try {
-			Session session = sessionFactory.openSession();
+			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
 			session.save(transientInstance);
 			tx.commit();
-			session.close();
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public void attachClean(Customer instance) {
 		log.debug("attaching clean Customer instance");
 		try {
@@ -98,7 +143,6 @@ public class CustomerHome {
 			throw re;
 		}
 	}
-	
 
 	public void delete(Customer persistentInstance) {
 		log.debug("deleting Customer instance");
@@ -131,12 +175,12 @@ public class CustomerHome {
 	public Customer findById(java.lang.Integer id) {
 		log.debug("getting Customer instance with id: " + id);
 		Transaction tx = null;
+		Session session=null;
 		try {
-			Session session = sessionFactory.openSession();
+			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			Customer instance = (Customer)session.get(Customer.class, id);
+			Customer instance = (Customer) session.get(Customer.class, id);
 			tx.commit();
-			session.close();
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -146,6 +190,14 @@ public class CustomerHome {
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
 			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

@@ -5,6 +5,7 @@
 <%@page import="java.util.Date"%>
 <%@ taglib uri="/struts-tags" prefix="s"%>
 <%@ taglib uri="/struts-dojo-tags" prefix="sd"%>
+
 <%@ include file="header.jsp"%>
 <%@ include file="user_profile.jsp"%>
 <%@ include file="menu.jsp"%>
@@ -26,7 +27,7 @@
 							Calendar d = Calendar.getInstance();
 							int yearNow = d.get(Calendar.YEAR);
 						%>
-						<s:form action="add_invoice" method="post"
+						<s:form action="add_customer" method="post"
 							cssClass="form-horizontal form-label-left" theme="bootstrap">
 							<div class="item">
 								<label class="control-label col-md-2 col-sm-3 col-xs-12"
@@ -35,40 +36,48 @@
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<s:textfield id="customerCode" name="customerCode"
-										cssClass="form-control col-md-7 col-xs-12"
-										required="true" />
+										cssClass="form-control col-md-7 col-xs-12" value="%{customer.customerCode}" />
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-2 col-sm-1 col-xs-12"
-									for="email">NVTT <span class="required">*</span>
+									for="email">NVTT <span class="required">+</span>
 								</label>
-								<div class="col-md-2 col-sm-6 col-xs-12">
+								<div class="col-md-3 col-sm-6 col-xs-12">
 									<sd:autocompleter id="employeeName" name="employeeName"
-										list="{1}" showDownArrow="false" autoComplete="true"
-										cssClass="form-control" />
+										list="{1}" showDownArrow="false" emptyOption="true"
+										autoComplete="false" cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
-
+							<div class="item">
+								<s:hidden name="groupCustomerId" value="" />
+								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+									for="groupCustomerName">Nhóm <span
+									class="required">*</span>
+								</label>	
+								<div class="col-md-3 col-sm-6 col-xs-12">
+									<s:select id="groupCustomerName" name="groupCustomerName"
+										cssClass="form-control col-md-7 col-xs-12" list="{'1','2'}" />
+								</div>
+							</div>
 							<div class="item form-group">
-								<label class="control-label col-md-7 col-sm-3 col-xs-12"
+								<label class="control-label col-md-2 col-sm-3 col-xs-12"
 									for="createTime">Ngày Lập <span class="required">*</span>
 								</label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<sd:datetimepicker id="createTime" name="createTime"
-										displayFormat="dd-MM-yyyy"
+										displayFormat="dd-MM-yyyy" value="%{'today'}"
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
 							<span class="section">Phần I: Thông tin khách hàng</span>
 							<div class="item">
 								<label class="control-label col-md-2 col-sm-3 col-xs-12"
-									for="customerName">Tên doanh nghiệp (cửa hàng) <span
-									class="required">*</span>
+									for="businessName">Tên doanh nghiệp (cửa hàng) <span
+									class="required">+</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
-									<sd:autocompleter id="customerName" name="customerName"
-										showDownArrow="false" autoComplete="true" list="{}"
+									<s:textfield id="businessName" name="businessName"
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
@@ -79,7 +88,7 @@
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<s:textfield id="certificateNumber" name="certificateNumber"
-										required="required" class="form-control col-md-7 col-xs-12" />
+										class="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
 
@@ -89,7 +98,7 @@
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<sd:datetimepicker id="certificateDate" name="certificateDate"
-										displayFormat="dd-MM-yyyy"
+										displayFormat="dd-MM-yyyy" value="%{'today'}"
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
@@ -144,8 +153,9 @@
 								<label class="control-label col-md-2 col-sm-3 col-xs-12"
 									for="email">Email <span class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
+								<div class="col-md-4 col-sm-6 col-xs-12">
 									<s:textfield id="email" name="email" type="email"
+										value="%{'thanhhqq@gmail.com'}"
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
@@ -195,7 +205,8 @@
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<s:textfield id="directorMobile" name="directorMobile"
-										type="number" cssClass="form-control col-md-7 col-xs-12" />
+										value="%{'0935441344'}"
+										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
 							<div class="item">
@@ -204,8 +215,9 @@
 									class="required">*</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
-									<sd:datetimepicker id="directorBirthday"
-										name="directorBirthday" displayFormat="dd-MM-yyyy" cssClass="form-control col-md-7 col-xs-12" />
+									<sd:datetimepicker id="directorBirthday" value="%{'today'}"
+										name="directorBirthday" displayFormat="dd-MM-yyyy"
+										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
 							<div class="item form-group">
@@ -234,7 +246,8 @@
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<s:textfield id="sellManMobile" name="sellManMobile"
-										type="number" cssClass="form-control col-md-7 col-xs-12" />
+										value="%{'0935441344'}"
+										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
 
@@ -245,7 +258,7 @@
 								</label>
 								<div class="col-md-4 col-sm-6 col-xs-12">
 									<s:textfield id="budgetOriginal" name="budgetOriginal"
-										type="number" cssClass="form-control col-md-7 col-xs-12" />
+										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
 
@@ -263,16 +276,17 @@
 								</div>
 							</div>
 							<div class="item form-group">
-								<label class="col-md-3 col-sm-3 col-xs-12">Các
-									cấp I đang nhận hàng chính </label>
+								<label class="col-md-3 col-sm-3 col-xs-12">Các cấp I
+									đang nhận hàng chính </label>
 							</div>
 							<div class="item">
 								<label class="control-label col-md-1 col-sm-3 col-xs-12"
-									for="customer1Level1">Tên: <span class="required">*</span>
+									for="customer1Level1">Tên: <span class="required">+</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="customer1Level1" name="customer1Level1"
-										cssClass="form-control col-md-7 col-xs-12" />
+									<sd:autocompleter id="customer1Level1" name="customer1Level1"
+										cssClass="form-control col-md-7 col-xs-12"
+										showDownArrow="false" autoComplete="true" list="{1}" />
 								</div>
 							</div>
 							<div class="item">
@@ -281,6 +295,7 @@
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<s:textfield id="customer1Phone" name="customer1Phone"
+										value="%{'0935441344'}"
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
@@ -291,17 +306,19 @@
 								</label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<s:textfield id="customer1Percent" name="customer1Percent"
-										cssClass="form-control col-md-7 col-xs-12" />
+										type="number" cssClass="form-control col-md-7 col-xs-12"
+										value="%{0}" />
 								</div>
 							</div>
 
 							<div class="item">
 								<label class="control-label col-md-1 col-sm-3 col-xs-12"
-									for="customer2Level1">Tên: <span class="required">*</span>
+									for="customer2Level1">Tên: <span class="required">+</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="customer2Level1" name="customer2Level1"
-										cssClass="form-control col-md-7 col-xs-12" />
+									<sd:autocompleter id="customer2Level1" name="customer2Level1"
+										cssClass="form-control col-md-7 col-xs-12"
+										showDownArrow="false" autoComplete="true" list="{1}" />
 								</div>
 							</div>
 							<div class="item">
@@ -310,6 +327,7 @@
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<s:textfield id="customer2Phone" name="customer2Phone"
+										value="%{'0935441344'}"
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
@@ -320,17 +338,19 @@
 								</label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<s:textfield id="customer2Percent" name="customer2Percent"
-										cssClass="form-control col-md-7 col-xs-12" />
+										type="number" cssClass="form-control col-md-7 col-xs-12"
+										value="%{0}" />
 								</div>
 							</div>
 
 							<div class="item">
 								<label class="control-label col-md-1 col-sm-3 col-xs-12"
-									for="customer3Level1">Tên: <span class="required">*</span>
+									for="customer3Level1">Tên: <span class="required">+</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="customer3Level1" name="customer3Level1"
-										cssClass="form-control col-md-7 col-xs-12" />
+									<sd:autocompleter id="customer3Level1" name="customer3Level1"
+										cssClass="form-control col-md-7 col-xs-12"
+										showDownArrow="false" autoComplete="true" list="{1}" />
 								</div>
 							</div>
 							<div class="item">
@@ -339,6 +359,7 @@
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<s:textfield id="customer3Phone" name="customer3Phone"
+										value="%{'0935441344'}"
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
@@ -349,7 +370,8 @@
 								</label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<s:textfield id="customer3Percent" name="customer3Percent"
-										cssClass="form-control col-md-7 col-xs-12" />
+										type="number" cssClass="form-control col-md-7 col-xs-12"
+										value="%{0}" />
 								</div>
 							</div>
 
@@ -358,8 +380,9 @@
 									for="customer4Level1">Tên: <span class="required">*</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="customer4Level1" name="customer4Level1"
-										cssClass="form-control col-md-7 col-xs-12" />
+									<sd:autocompleter id="customer4Level1" name="customer4Level1"
+										cssClass="form-control col-md-7 col-xs-12"
+										showDownArrow="false" autoComplete="true" list="{1}" />
 								</div>
 							</div>
 							<div class="item">
@@ -368,6 +391,7 @@
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<s:textfield id="customer4Phone" name="customer4Phone"
+										value="%{'0935441344'}"
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
@@ -378,17 +402,19 @@
 								</label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<s:textfield id="customer4Percent" name="customer4Percent"
-										cssClass="form-control col-md-7 col-xs-12" />
+										type="number" cssClass="form-control col-md-7 col-xs-12"
+										value="%{0}" />
 								</div>
 							</div>
 
 							<div class="item">
 								<label class="control-label col-md-1 col-sm-3 col-xs-12"
-									for="customer5Level1">Tên: <span class="required">*</span>
+									for="customer5Level1">Tên: <span class="required">+</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="customer5Level1" name="customer5Level1"
-										cssClass="form-control col-md-7 col-xs-12" />
+									<sd:autocompleter id="customer5Level1" name="customer5Level1"
+										cssClass="form-control col-md-7 col-xs-12"
+										showDownArrow="false" autoComplete="true" list="{1}" />
 								</div>
 							</div>
 							<div class="item">
@@ -397,6 +423,7 @@
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<s:textfield id="customer5Phone" name="customer5Phone"
+										value="%{'0935441344'}"
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
@@ -407,13 +434,14 @@
 								</label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<s:textfield id="customer5Percent" name="customer5Percent"
-										cssClass="form-control col-md-7 col-xs-12" />
+										type="number" cssClass="form-control col-md-7 col-xs-12"
+										value="%{0}" />
 								</div>
 							</div>
 
 							<div class="item form-group">
-								<label class="col-md-5 col-sm-3 col-xs-12">Doanh
-									số bán thuốc BVTV 2 niên vụ vừa qua </label>
+								<label class="col-md-5 col-sm-3 col-xs-12">Doanh số bán
+									thuốc BVTV 2 niên vụ vừa qua </label>
 							</div>
 
 							<div class="item form-group">
@@ -422,7 +450,7 @@
 									(Triệu đồng): <span class="required">*</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="revenue1" name="revenue1"
+									<s:textfield id="revenue1" name="revenue1" value="%{0}"
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
@@ -432,14 +460,48 @@
 									(Triệu đồng): <span class="required">*</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="revenue2" name="revenue2"
+									<s:textfield id="revenue2" name="revenue2" value="%{0}"
+										cssClass="form-control col-md-7 col-xs-12" />
+								</div>
+							</div>
+
+							<div class="item form-group">
+								<label class="col-md-5 col-sm-3 col-xs-12">Doanh số dự
+									kiến trong 3 năm tới </label>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="revenueExpect1"> <%=(yearNow)%> - <%=(yearNow + 1)%>
+									(Triệu đồng): <span class="required">*</span>
+								</label>
+								<div class="col-md-3 col-sm-6 col-xs-12">
+									<s:textfield id="revenueExpect1" name="revenueExpect1" value="%{0}"
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
 							<div class="item form-group">
-								<label class="col-md-8 col-sm-3 col-xs-12">Tỉ
-									lệ doanh số phân phối của các Cty kinh doanh thuốc BVTV cung
-									ứng </label>
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="revenueExpect2"> <%=(yearNow + 1)%> - <%=(yearNow + 2)%>
+									(Triệu đồng): <span class="required">*</span>
+								</label>
+								<div class="col-md-3 col-sm-6 col-xs-12">
+									<s:textfield id="revenueExpect2" name="revenueExpect2"  value="%{0}"
+										cssClass="form-control col-md-7 col-xs-12" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="revenueExpect3"> <%=(yearNow + 2)%> - <%=(yearNow + 3)%>
+									(Triệu đồng): <span class="required">*</span>
+								</label>
+								<div class="col-md-3 col-sm-6 col-xs-12">
+									<s:textfield id="revenueExpect3" name="revenueExpect3" value="%{0}"
+										cssClass="form-control col-md-7 col-xs-12" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="col-md-8 col-sm-3 col-xs-12">Tỉ lệ doanh
+									số phân phối của các Cty kinh doanh thuốc BVTV cung ứng </label>
 							</div>
 
 							<div class="item">
@@ -488,15 +550,17 @@
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
+
+
 							<div class="item form-group">
-								<label class="col-md-8 col-sm-3 col-xs-12">Danh
-									mục các mặt hàng (tên thương mại) đang tiêu thụ mạnh </label>
+								<label class="col-md-8 col-sm-3 col-xs-12">Danh mục các
+									mặt hàng (tên thương mại) đang tiêu thụ mạnh </label>
 							</div>
 
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="product1Hot">3 Sản phẩm thuốc trừ cỏ </label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
+								<div class="col-md-9 col-sm-6 col-xs-12">
 									<s:textfield id="product1Hot" name="product1Hot"
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
@@ -504,7 +568,7 @@
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="product2Hot">5 Sản phẩm thuốc trừ sâu </label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
+								<div class="col-md-9 col-sm-6 col-xs-12">
 									<s:textfield id="product2Hot" name="product2Hot"
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
@@ -512,7 +576,7 @@
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="product3Hot">3 Sản phẩm thuốc trừ rầy </label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
+								<div class="col-md-9 col-sm-6 col-xs-12">
 									<s:textfield id="product3Hot" name="product3Hot"
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
@@ -520,7 +584,7 @@
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="product4Hot">5 Sản phẩm thuốc trừ bệnh </label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
+								<div class="col-md-9 col-sm-6 col-xs-12">
 									<s:textfield id="product4Hot" name="product4Hot"
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
@@ -528,7 +592,7 @@
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="product5Hot">3 Sản phẩm kích thích sinh trưởng </label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
+								<div class="col-md-9 col-sm-6 col-xs-12">
 									<s:textfield id="product5Hot" name="product5Hot"
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
@@ -536,12 +600,233 @@
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="product6Hot">3 Sản phẩm thuốc trừ ốc </label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
+								<div class="col-md-9 col-sm-6 col-xs-12">
 									<s:textfield id="product6Hot" name="product6Hot"
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
-							
+							<div class="item form-group">
+								<label class="col-md-8 col-sm-3 col-xs-12">Cây trồng
+									trong khu vực (chọn cây trồng chính) </label>
+							</div>
+
+							<div class="item form-group">
+								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+									for="farmProduct1">+ Lúa (%) </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct1" name="farmProduct1"
+										type="number" cssClass="form-control col-md-7 col-xs-12"
+										value="%{0}" />
+
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
+									vụ 1: Từ tháng </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct1Session"
+										name="farmProduct1Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct1Session"
+										name="farmProduct1Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
+									vụ 2 : Từ tháng </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct1Session"
+										name="farmProduct1Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct1Session"
+										name="farmProduct1Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
+									vụ 3: Từ tháng </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct1Session"
+										name="farmProduct1Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct1Session"
+										name="farmProduct1Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+									for="product2Hot">+ Rau màu (%) </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct2" name="farmProduct2"
+										type="number" cssClass="form-control col-md-7 col-xs-12"
+										value="%{0}" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
+									vụ 1: Từ tháng </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct2Session"
+										name="farmProduct2Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct2Session"
+										name="farmProduct2Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
+									vụ 2 : Từ tháng </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct2Session"
+										name="farmProduct2Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct2Session"
+										name="farmProduct2Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
+									vụ 3: Từ tháng </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct2Session"
+										name="farmProduct2Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct2Session"
+										name="farmProduct2Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+									for="product3Hot">+ Cây ăn trái (%) </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct3" name="farmProduct3"
+										type="number" cssClass="form-control col-md-7 col-xs-12"
+										value="%{0}" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
+									vụ 1: Từ tháng </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct3Session"
+										name="farmProduct3Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct3Session"
+										name="farmProduct3Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
+									vụ 2 : Từ tháng </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct3Session"
+										name="farmProduct3Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct3Session"
+										name="farmProduct3Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
+									vụ 3: Từ tháng </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct3Session"
+										name="farmProduct3Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct3Session"
+										name="farmProduct3Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+									for="product4Hot">+ Khác (%) </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct4" name="farmProduct4"
+										type="number" cssClass="form-control col-md-7 col-xs-12"
+										value="%{0}" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
+									vụ 1: Từ tháng </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct4Session"
+										name="farmProduct4Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct4Session"
+										name="farmProduct4Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
+									vụ 2 : Từ tháng </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct4Session"
+										name="farmProduct4Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct4Session"
+										name="farmProduct4Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
+									vụ 3: Từ tháng </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct4Session"
+										name="farmProduct4Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<s:textfield id="farmProduct4Session"
+										name="farmProduct4Session" type="number"
+										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+								</div>
+							</div>
 							<div class="ln_solid"></div>
 							<div class="form-group">
 								<div class="col-md-6 col-md-offset-3">
@@ -557,16 +842,7 @@
 	</div>
 
 	<!-- footer content -->
-	<footer>
-		<div class="">
-			<p class="pull-right">
-				@Copyright by <a>ThienTran</a>. | <span class="lead"> <i
-					class="fa fa-paw"></i> VNFamily Tech!
-				</span>
-			</p>
-		</div>
-		<div class="clearfix"></div>
-	</footer>
+	<s:include value="footer.jsp" />
 	<!-- /footer content -->
 
 </div>

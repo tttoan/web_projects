@@ -49,7 +49,7 @@
 		<div id="wrapper">
 			<div id="login" class="animate form">
 				<section class="login_content">
-					<s:form action="login" theme="bootstrap">
+					<s:form action="login" method="post" theme="bootstrap">
 						<h1>ĐỒNG XANH</h1>
 						<s:if test="hasActionErrors()">
 							<div>
@@ -67,16 +67,16 @@
 
 						<div>
 							<s:submit class="btn btn-default submit" value="Đăng nhập" />
-							<a class="reset_pass" href="#">Quên mật khẩu?</a>
+<!-- 							<a class="reset_pass" href="#">Quên mật khẩu?</a> -->
 						</div>
 						<div class="clearfix"></div>
-						<div class="separator">
-							<p class="change_link">
-								New to site? <a href="#toregister" class="to_register"> Tạo
-									tài khoản </a>
-							</p>
-							<div class="clearfix"></div>
-						</div>
+<!-- 						<div class="separator"> -->
+<!-- 							<p class="change_link"> -->
+<!-- 								New to site? <a href="#toregister" class="to_register"> Tạo -->
+<!-- 									tài khoản </a> -->
+<!-- 							</p> -->
+<!-- 							<div class="clearfix"></div> -->
+<!-- 						</div> -->
 					</s:form>
 					<!-- form -->
 				</section>
@@ -84,7 +84,7 @@
 			</div>
 			<div id="register" class="animate form">
 				<section class="login_content">
-					<s:form action="signup" theme="bootstrap">
+					<s:form theme="bootstrap">
 						<h1>ĐỒNG XANH</h1>
 						<div>
 							<s:textfield name="userName" class="form-control"

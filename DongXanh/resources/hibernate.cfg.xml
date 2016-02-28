@@ -23,7 +23,6 @@
         <property name="hibernate.connection.characterEncoding">utf8</property>
         <property name="hibernate.connection.useUnicode">true</property>
         
-        
         <mapping resource="com/home/model/Promotion.hbm.xml" />
         <mapping resource="com/home/model/GroupCustomer.hbm.xml" />
         <mapping resource="com/home/model/Customer.hbm.xml" />
