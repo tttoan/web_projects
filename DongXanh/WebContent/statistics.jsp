@@ -34,17 +34,17 @@
 
 								<s:iterator value="statistics">
 									<tr class="even pointer">
-										<td class=" "><s:property value="%{getText('format.date',{dateReceived})}" /></td>
-										<td class=" "><s:property value="customerNameLevel2" /></td>
-										<td class=" "><s:property value="customerNameLevel1" /></td>
-										<td class=" "><s:property value="categoryName" /></td>
-										<td class=" "><s:property value="productName" /></td>
-										<td class=" "><s:property value="totalBox" /></td>
-										<td class=" "><s:property value="quantiy" /></td>
-										<td class=" "><s:property value="unitPrice" /></td>
-										<td class=" "><s:property value="total" /></td>
-										<td class=" "><s:property value="" /></td>
-										<td class=" last"> 
+										<td class=""><s:property value="%{getText('format.date',{dateReceived})}" /></td>
+										<td class=""><s:property value="customerByCustomerCodeLevel1.director" /></td>
+										<td class=""><s:property value="customerByCustomerCodeLevel2.director" /></td>
+										<td class=""><s:property value="categoryName" /></td>
+										<td class=""><s:property value="productName" /></td>
+										<td class=""><s:property value="totalBox" /></td>
+										<td class=""><s:property value="quantiy" /></td>
+										<td class=""><s:property value="unitPrice" /></td>
+										<td class=""><s:property value="total" /></td>
+										<td class=""><s:property value="user.fullName" /></td>
+										<td class="last"> 
 											<a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i>Edit </a> 
 											<s:url action="delete_statistic" var="deleteURL">
 												<s:param name="id" value="%{id}" ></s:param>
