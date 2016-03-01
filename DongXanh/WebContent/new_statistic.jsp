@@ -69,12 +69,14 @@
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="quantity">Số lượng <span class="required">*</span>
+									for="productName">Sản phẩm <span
+									class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<s:textfield id="quantity" name="quantity" onchange=""
-										value="%{1}" type="number"
-										cssClass="form-control col-md-7 col-xs-12" />
+									<sd:autocompleter id="productName"
+										name="productName" showDownArrow="false"
+										autoComplete="true" cssClass="form-control col-md-7 col-xs-12"
+										list="listProduct" listKey="id" listValue="productName +' - '+ productCode"/>
 								</div>
 							</div>
 							<div class="item form-group">
@@ -84,6 +86,26 @@
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<s:textfield id="unitPrice" name="unitPrice"
 										required="required" value="%{getText('format.money',{0})}"
+										cssClass="form-control col-md-7 col-xs-12" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="totalBox">Số Thùng <span class="required">*</span>
+								</label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<s:textfield id="totalBox" name="totalBox" onchange=""
+										value="%{1}" type="number"
+										cssClass="form-control col-md-7 col-xs-12" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="quantity">Số lượng <span class="required">*</span>
+								</label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<s:textfield id="quantity" name="quantity" onchange=""
+										value="%{1}" type="number"
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>

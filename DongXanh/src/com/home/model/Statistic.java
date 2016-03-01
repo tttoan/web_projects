@@ -1,6 +1,6 @@
 package com.home.model;
 
-// Generated Feb 29, 2016 9:07:10 PM by Hibernate Tools 4.3.1
+// Generated Mar 1, 2016 9:43:24 PM by Hibernate Tools 4.3.1
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -10,51 +10,38 @@ import java.util.Date;
  */
 public class Statistic implements java.io.Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private int id;
+	private Integer id;
 	private Customer customerByCustomerCodeLevel1;
 	private Customer customerByCustomerCodeLevel2;
+	private Product product;
 	private User user;
 	private Date dateReceived;
-	private String productCode;
-	private String categoryName;
-	private String productName;
 	private Integer totalBox;
-	private Integer quantiy;
+	private Integer quantity;
 	private BigDecimal unitPrice;
 	private BigDecimal total;
 
 	public Statistic() {
 	}
 
-	public Statistic(int id) {
-		this.id = id;
-	}
-
-	public Statistic(int id, Customer customerByCustomerCodeLevel1, Customer customerByCustomerCodeLevel2, User user, Date dateReceived, String productCode, String categoryName, String productName,
-			Integer totalBox, Integer quantiy, BigDecimal unitPrice, BigDecimal total) {
-		this.id = id;
+	public Statistic(Customer customerByCustomerCodeLevel1, Customer customerByCustomerCodeLevel2, Product product, User user, Date dateReceived, Integer totalBox, Integer quantity,
+			BigDecimal unitPrice, BigDecimal total) {
 		this.customerByCustomerCodeLevel1 = customerByCustomerCodeLevel1;
 		this.customerByCustomerCodeLevel2 = customerByCustomerCodeLevel2;
+		this.product = product;
 		this.user = user;
 		this.dateReceived = dateReceived;
-		this.productCode = productCode;
-		this.categoryName = categoryName;
-		this.productName = productName;
 		this.totalBox = totalBox;
-		this.quantiy = quantiy;
+		this.quantity = quantity;
 		this.unitPrice = unitPrice;
 		this.total = total;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -74,6 +61,14 @@ public class Statistic implements java.io.Serializable {
 		this.customerByCustomerCodeLevel2 = customerByCustomerCodeLevel2;
 	}
 
+	public Product getProduct() {
+		return this.product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
 	public User getUser() {
 		return this.user;
 	}
@@ -90,30 +85,6 @@ public class Statistic implements java.io.Serializable {
 		this.dateReceived = dateReceived;
 	}
 
-	public String getProductCode() {
-		return this.productCode;
-	}
-
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
-	}
-
-	public String getCategoryName() {
-		return this.categoryName;
-	}
-
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
-	}
-
-	public String getProductName() {
-		return this.productName;
-	}
-
-	public void setProductName(String productName) {
-		this.productName = productName;
-	}
-
 	public Integer getTotalBox() {
 		return this.totalBox;
 	}
@@ -122,12 +93,12 @@ public class Statistic implements java.io.Serializable {
 		this.totalBox = totalBox;
 	}
 
-	public Integer getQuantiy() {
-		return this.quantiy;
+	public Integer getQuantity() {
+		return this.quantity;
 	}
 
-	public void setQuantiy(Integer quantiy) {
-		this.quantiy = quantiy;
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
 	}
 
 	public BigDecimal getUnitPrice() {

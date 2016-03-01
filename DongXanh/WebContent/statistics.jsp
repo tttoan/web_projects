@@ -19,8 +19,7 @@
 									<th>Ngày nhận</th>
 									<th>Tên cấp 2</th>
 									<th>Tên Cấp 1</th>
-									<th>Mặt Hàng</th>
-									<th>Tên Hàng</th>
+									<th>Sản Phẩm</th>
 									<th>Số Thùng</th>
 									<th>Số Lượng</th>
 									<th>Giá có điểm+Ko điểm</th>
@@ -37,10 +36,9 @@
 										<td class=""><s:property value="%{getText('format.date',{dateReceived})}" /></td>
 										<td class=""><s:property value="customerByCustomerCodeLevel1.director" /></td>
 										<td class=""><s:property value="customerByCustomerCodeLevel2.director" /></td>
-										<td class=""><s:property value="categoryName" /></td>
-										<td class=""><s:property value="productName" /></td>
+										<td class=""><s:property value="product.productName" /></td>
 										<td class=""><s:property value="totalBox" /></td>
-										<td class=""><s:property value="quantiy" /></td>
+										<td class=""><s:property value="quantity" /></td>
 										<td class=""><s:property value="unitPrice" /></td>
 										<td class=""><s:property value="total" /></td>
 										<td class=""><s:property value="user.fullName" /></td>

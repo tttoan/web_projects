@@ -97,7 +97,6 @@ public class ProductAction implements ServletContextAware{
 		return Action.SUCCESS;
 	}
 
-
 	public String create() throws Exception {
 		try {
 			Category category = new Category();

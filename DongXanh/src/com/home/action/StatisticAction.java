@@ -29,9 +29,11 @@ import org.hibernate.SessionFactory;
 
 import com.home.conts.InvoiceTable;
 import com.home.dao.CustomerHome;
+import com.home.dao.ProductHome;
 import com.home.dao.StatisticHome;
 import com.home.dao.UserHome;
 import com.home.model.Customer;
+import com.home.model.Product;
 import com.home.model.Statistic;
 import com.home.model.User;
 import com.home.util.ExcelUtil;
@@ -51,9 +53,12 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	private Workbook workbook;
 	private List<User> listEmployee = new ArrayList<>();
 	private List<Customer> listCustomer = new ArrayList<>();
+	private List<Product> listProduct = new ArrayList<>();
 	private Map<String, Customer> lookupCustomer = new HashMap<>();
 	private Map<String, User> lookupEmployee = new HashMap<>();
+	private Map<String, Product> lookupProduct = new HashMap<>();
 	private String employeeName;
+	private String productName;
 	private String customerNameLevel1;
 	private String customerNameLevel2;
 
@@ -107,6 +112,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	public void validate(){
 		loadLookupEmployee();
 		loadLookupCustomer();
+		loadLookupProduct();
 	}
 	
 	public SessionFactory getSessionFactory() {
@@ -124,19 +130,24 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		}
 	}
 
+	public void loadLookupProduct() {
+		ProductHome proHome = new ProductHome(getSessionFactory());
+		listProduct = proHome.getListProduct();
+		for (Product pro : listProduct)
+			lookupProduct.put(pro.getProductName() + " - " + pro.getProductCode() , pro);
+	}
+	
 	public void loadLookupCustomer() {
 		CustomerHome cusHome = new CustomerHome(getSessionFactory());
 		listCustomer = cusHome.getListCustomer();
 		for (Customer customer : listCustomer)
 			lookupCustomer.put(customer.getDirector() + " - " + customer.getCustomerCode(), customer);
-
 	}
 
 	public void loadLookupEmployee() {
 		UserHome userHome = new UserHome(getSessionFactory());
 		listEmployee = userHome.getListUser();
 		for (User user : listEmployee){
-			System.out.println(user.getFullName() + " - " + user.getUserName());
 			lookupEmployee.put(user.getFullName() + " - " + user.getUserName(), user);
 		}
 	}
@@ -145,9 +156,11 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 			User user = lookupEmployee.get(employeeName);
 			Customer cusLevel1 = lookupCustomer.get(customerNameLevel1);
 			Customer cusLevel2 = lookupCustomer.get(customerNameLevel2);
+			Product product = lookupProduct.get(productName);
 			getStatistic().setUser(user);
 			getStatistic().setCustomerByCustomerCodeLevel1(cusLevel1);
 			getStatistic().setCustomerByCustomerCodeLevel2(cusLevel2);
+			getStatistic().setProduct(product);
 			StatisticHome sttHome = new StatisticHome(HibernateUtil.getSessionFactory());
 			sttHome.attachDirty(getStatistic());
 			return SUCCESS;
@@ -175,11 +188,11 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 				// xls.getValue(row.getCell(InvoiceTable.customerCodeLevel2.value())));
 				// statistic.setCustomerCodeLevel1((String)
 				// xls.getValue(row.getCell(InvoiceTable.customerCodeLevel1.value())));
-				getStatistic().setProductCode((String) xls.getValue(row.getCell(InvoiceTable.productCode.value())));
-				getStatistic().setCategoryName((String) xls.getValue(row.getCell(InvoiceTable.categoryName.value())));
-				getStatistic().setProductName((String) xls.getValue(row.getCell(InvoiceTable.productName.value())));
+//				getStatistic().setProductCode((String) xls.getValue(row.getCell(InvoiceTable.productCode.value())));
+//				getStatistic().setCategoryName((String) xls.getValue(row.getCell(InvoiceTable.categoryName.value())));
+//				getStatistic().setProductName((String) xls.getValue(row.getCell(InvoiceTable.productName.value())));
 				getStatistic().setTotalBox(((Double) xls.getValue(row.getCell(InvoiceTable.totalBox.value()))).intValue());
-				getStatistic().setQuantiy(((Double) xls.getValue(row.getCell(InvoiceTable.quantiy.value()))).intValue());
+				getStatistic().setQuantity(((Double) xls.getValue(row.getCell(InvoiceTable.quantiy.value()))).intValue());
 				getStatistic().setUnitPrice(BigDecimal.valueOf((Double) xls.getValue(row.getCell(InvoiceTable.unitPrice.value()))));
 				getStatistic().setTotal(BigDecimal.valueOf((Double) xls.getValue(row.getCell(InvoiceTable.total.value()))));
 				// statistic.setUser(userHome.getUserByFullName((String)xls.getValue(row.getCell(InvoiceTable.userFullName.value()))));
@@ -263,5 +276,29 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	public void setCustomerNameLevel2(String customerNameLevel2) {
 		this.customerNameLevel2 = customerNameLevel2;
+	}
+
+	public List<Product> getListProduct() {
+		return listProduct;
+	}
+
+	public void setListProduct(List<Product> listProduct) {
+		this.listProduct = listProduct;
+	}
+
+	public Map<String, Product> getLookupProduct() {
+		return lookupProduct;
+	}
+
+	public void setLookupProduct(Map<String, Product> lookupProduct) {
+		this.lookupProduct = lookupProduct;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 }

@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Feb 29, 2016 9:07:11 PM by Hibernate Tools 4.3.1 -->
+<!-- Generated Mar 1, 2016 9:43:25 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="com.home.model.Statistic" table="statistic" catalog="db_promotion" optimistic-lock="version">
-        <id name="id" type="int">
+        <id name="id" type="java.lang.Integer">
             <column name="id" />
             <generator class="identity" />
         </id>
@@ -14,26 +14,20 @@
         <many-to-one name="customerByCustomerCodeLevel2" class="com.home.model.Customer" fetch="join">
             <column name="customer_code_level2" />
         </many-to-one>
+        <many-to-one name="product" class="com.home.model.Product" fetch="join">
+            <column name="product_id" />
+        </many-to-one>
         <many-to-one name="user" class="com.home.model.User" fetch="join">
             <column name="user_id" />
         </many-to-one>
         <property name="dateReceived" type="timestamp">
             <column name="date_received" length="0" />
         </property>
-        <property name="productCode" type="string">
-            <column name="product_code" length="50" />
-        </property>
-        <property name="categoryName" type="string">
-            <column name="category_name" length="50" />
-        </property>
-        <property name="productName" type="string">
-            <column name="product_name" length="200" />
-        </property>
         <property name="totalBox" type="java.lang.Integer">
             <column name="total_box" />
         </property>
-        <property name="quantiy" type="java.lang.Integer">
-            <column name="quantiy" />
+        <property name="quantity" type="java.lang.Integer">
+            <column name="quantity" />
         </property>
         <property name="unitPrice" type="big_decimal">
             <column name="unit_price" precision="10" />
