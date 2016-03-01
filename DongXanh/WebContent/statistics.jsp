@@ -43,11 +43,11 @@
 										<td class=""><s:property value="total" /></td>
 										<td class=""><s:property value="user.fullName" /></td>
 										<td class="last"> 
-											<a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i>Edit </a> 
+											<a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa </a> 
 											<s:url action="delete_statistic" var="deleteURL">
 												<s:param name="id" value="%{id}" ></s:param>
 											</s:url>
-											<s:a href="%{deleteURL}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>Delete </s:a>
+											<s:a href="%{deleteURL}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Xóa </s:a>
 										</td>
 									</tr>
 								</s:iterator>
