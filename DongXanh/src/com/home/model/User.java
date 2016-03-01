@@ -1,6 +1,6 @@
 package com.home.model;
 
-// Generated Feb 28, 2016 1:29:03 PM by Hibernate Tools 4.3.1
+// Generated Feb 29, 2016 9:07:10 PM by Hibernate Tools 4.3.1
 
 import java.util.Date;
 import java.util.HashSet;
@@ -33,16 +33,21 @@ public class User implements java.io.Serializable {
 	private Date lastPasswordChangedDate;
 	private Integer failedPasswordCount;
 	private String remarks;
-	private Short isEnabled;
+	private short isEnabled;
 	private Set<Customer> customers = new HashSet<Customer>(0);
+	private Set<Statistic> statistics = new HashSet<Statistic>(0);
 	private Set<WorkingPlan> workingPlans = new HashSet<WorkingPlan>(0);
 
 	public User() {
 	}
 
+	public User(short isEnabled) {
+		this.isEnabled = isEnabled;
+	}
+
 	public User(Role role, String userName, String password, String email, String fullName, byte[] picture, Date birthDate, String gender, String mobilePhone, String homePhone, String address,
 			String passwordQuestion, String passwordAnswer, Short isAccountNonExpired, Short isAccountNonLocked, Date createdDate, Date lastLoginDate, Date lastLogoutDate,
-			Date lastPasswordChangedDate, Integer failedPasswordCount, String remarks, Short isEnabled, Set<Customer> customers, Set<WorkingPlan> workingPlans) {
+			Date lastPasswordChangedDate, Integer failedPasswordCount, String remarks, short isEnabled, Set<Customer> customers, Set<Statistic> statistics, Set<WorkingPlan> workingPlans) {
 		this.role = role;
 		this.userName = userName;
 		this.password = password;
@@ -66,6 +71,7 @@ public class User implements java.io.Serializable {
 		this.remarks = remarks;
 		this.isEnabled = isEnabled;
 		this.customers = customers;
+		this.statistics = statistics;
 		this.workingPlans = workingPlans;
 	}
 
@@ -245,11 +251,11 @@ public class User implements java.io.Serializable {
 		this.remarks = remarks;
 	}
 
-	public Short getIsEnabled() {
+	public short getIsEnabled() {
 		return this.isEnabled;
 	}
 
-	public void setIsEnabled(Short isEnabled) {
+	public void setIsEnabled(short isEnabled) {
 		this.isEnabled = isEnabled;
 	}
 
@@ -259,6 +265,14 @@ public class User implements java.io.Serializable {
 
 	public void setCustomers(Set<Customer> customers) {
 		this.customers = customers;
+	}
+
+	public Set<Statistic> getStatistics() {
+		return this.statistics;
+	}
+
+	public void setStatistics(Set<Statistic> statistics) {
+		this.statistics = statistics;
 	}
 
 	public Set<WorkingPlan> getWorkingPlans() {

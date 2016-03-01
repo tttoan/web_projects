@@ -4,6 +4,7 @@
 <%-- Using Struts2 Tags in JSP --%>
 <%@ taglib uri="/struts-tags" prefix="s"%>
 <%@ taglib uri="/struts-dojo-tags" prefix="sd"%>
+<%@ taglib uri="/struts-jquery-tags" prefix="sj"%>
 <%@ include file="header.jsp"%>
 <%@ include file="user_profile.jsp"%>
 <%@ include file="menu.jsp"%>
@@ -29,7 +30,7 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
-						<s:form action="add_invoice" theme="bootstrap"
+						<s:form action="add_statistic" theme="bootstrap" method="post"
 							cssClass="form-horizontal form-label-left">
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
@@ -43,20 +44,6 @@
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="customerCodeLevel2">Mã cấp 2 <span
-									class="required">*</span>
-								</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
-									<sd:autocompleter id="customerCodeLevel2"
-										name="customerCodeLevel2"
-										cssClass="form-control col-md-7 col-xs-12"
-										showDownArrow="false" autoComplete="true"
-										list="{'Arsenal','Leicester City','Man City','Tottenham','Man United','West Ham',
-										'Stoke City','Crystal Palace','Liverpool','Southampton','Everton','Watford','West Bromwich','Chelsea','Bournemouth'}" />
-								</div>
-							</div>
-							<div class="item form-group">
-								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="customerNameLevel2">Tên cấp 2 <span
 									class="required">*</span>
 								</label>
@@ -64,23 +51,8 @@
 									<sd:autocompleter id="customerNameLevel2"
 										name="customerNameLevel2"
 										cssClass="form-control col-md-7 col-xs-12"
-										showDownArrow="false" autoComplete="true"
-										list="{'Arsenal','Leicester City','Man City','Tottenham','Man United','West Ham',
-										'Stoke City','Crystal Palace','Liverpool','Southampton','Everton','Watford','West Bromwich','Chelsea','Bournemouth'}" />
-								</div>
-							</div>
-							<div class="item form-group">
-								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="customerCodeLevel1">Mã cấp 1 <span
-									class="required">*</span>
-								</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
-									<sd:autocompleter id="customerCodeLevel1"
-										name="customerCodeLevel1"
-										cssClass="form-control col-md-7 col-xs-12"
-										showDownArrow="false" autoComplete="true"
-										list="{'Arsenal','Leicester City','Man City','Tottenham','Man United','West Ham',
-										'Stoke City','Crystal Palace','Liverpool','Southampton','Everton','Watford','West Bromwich','Chelsea','Bournemouth'}" />
+										showDownArrow="false" autoComplete="true" list="listCustomer"
+										listKey="id" listValue="director +' - '+ customerCode" />
 								</div>
 							</div>
 							<div class="item form-group">
@@ -90,11 +62,9 @@
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<sd:autocompleter id="customerNameLevel1"
-										name="customerNameLevel1"
-										cssClass="form-control col-md-7 col-xs-12"
-										showDownArrow="false" autoComplete="true"
-										list="{'Arsenal','Leicester City','Man City','Tottenham','Man United','West Ham',
-										'Stoke City','Crystal Palace','Liverpool','Southampton','Everton','Watford','West Bromwich','Chelsea','Bournemouth'}" />
+										name="customerNameLevel1" showDownArrow="false"
+										autoComplete="true" cssClass="form-control col-md-7 col-xs-12"
+										list="listCustomer" listKey="id" listValue="director +' - '+ customerCode"/>
 								</div>
 							</div>
 							<div class="item form-group">
@@ -102,7 +72,8 @@
 									for="quantity">Số lượng <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<s:textfield id="quantity" name="quantity" onchange="" value="%{1}" type="number"
+									<s:textfield id="quantity" name="quantity" onchange=""
+										value="%{1}" type="number"
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
@@ -133,8 +104,8 @@
 								<div class="col-md-4 col-sm-6 col-xs-12">
 									<sd:autocompleter id="employeeName" name="employeeName"
 										cssClass="form-control col-md-7 col-xs-12"
-										showDownArrow="false" autoComplete="true"
-										list="%{'11'}" />
+										showDownArrow="false" autoComplete="true" list="listEmployee"
+										listKey="id" listValue="fullName +' - '+ userName" />
 								</div>
 							</div>
 							<div class="ln_solid"></div>

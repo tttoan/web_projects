@@ -22,8 +22,8 @@ import com.opensymphony.xwork2.ModelDriven;
 
 public class UserAction extends ActionSupport implements Action, ModelDriven<User>, ServletContextAware, ServletRequestAware {
 	
-	private String userId;
-	private String roleId;
+	public int userId;
+	public int roleId;
 	public User user = new User();
 	public List<User> listEmployee = new ArrayList<>();
 	private List<Role> listRole = new ArrayList<>();
@@ -70,7 +70,7 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 	public String findAllRole() throws Exception {
 		try {
 			RoleHome roleHome = new RoleHome(getSessionFactory());
-			setListRole(roleHome.findAllRole());
+			listRole = roleHome.findAllRole();
 		} catch (Exception e) {
 			throw e;
 		}
@@ -81,14 +81,6 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 		try {
 			UserHome userHome = new UserHome(getSessionFactory());
 			listEmployee = userHome.getListUser();
-			for (User user : listEmployee) {
-				//System.out.println("asdasdasd: "+user.getRole().getRoleName());
-				//System.out.println("asdasdasd: "+user.getRole().getRoleName());
-//				if(user.getRole().getRoleName() != null){
-//					System.out.println("asdjsadkjaskjdakjsd");
-//				}
-				System.out.println(user.getFullName());
-			}
 		} catch (Exception e) {
 			throw e;
 		}
@@ -98,21 +90,19 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 	public String addEmployee() throws Exception {
 		try {
 			UserHome userHome = new UserHome(getSessionFactory());
-			Role r = new Role();
-			r.setRoleId(Integer.parseInt(getRoleId()));
-			user.setRole(r);
+			Role rl = new Role();
+			rl.setRoleId(getRoleId());
+			user.setRole(rl);
 			userHome.attachDirty(user);
 			return SUCCESS;
 		} catch (Exception e) {
-			return ERROR;
+			return INPUT;
 		}
 	}
-	public String deleteUserById() throws Exception {
+	public String deleteEmployeeById() throws Exception {
 		try {
-			Integer id = Integer.parseInt(getUserId());
-			SessionFactory sf = (SessionFactory) ctx.getAttribute("SessionFactory");
-			UserHome userHome = new UserHome(sf);
-			User user = userHome.findById(id);
+			UserHome userHome = new UserHome(getSessionFactory());
+			User user = userHome.findById(getUserId());
 			userHome.delete(user);
 			return SUCCESS;
 		} catch (Exception e) {
@@ -121,35 +111,19 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 		}
 	}
 
-	public String getUserId() {
+	public int getUserId() {
 		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
 	}
 
 	public List<Role> getListRole() {
 		return listRole;
 	}
 
-	public void setListRole(List<Role> listRole) {
-		this.listRole = listRole;
-	}
-
 	public Role getRole() {
 		return role;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
-	public String getRoleId() {
+	public int getRoleId() {
 		return roleId;
-	}
-
-	public void setRoleId(String roleId) {
-		this.roleId = roleId;
 	}
 }

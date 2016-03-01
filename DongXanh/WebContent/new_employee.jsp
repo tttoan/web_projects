@@ -22,22 +22,25 @@
 			<!-- 					</div> -->
 			<!-- 				</div> -->
 			<!-- edit form column -->
-			<div class="col-md-8 col-sm-6 col-xs-12 personal-info">
+			<div class="col-md-9 col-sm-6 col-xs-12 personal-info">
 				<!-- 				<div class="alert alert-info alert-dismissable"> -->
 				<!-- 					<a class="panel-close close" data-dismiss="alert"></a> <i -->
 				<!-- 						class="fa fa-coffee"></i> -->
 				<!-- 				</div> -->
-				<s:form action="add_employee" method="post" cssClass="form-horizontal" theme="bootstrap">
+				<s:form action="add_employee" method="post"
+					cssClass="form-horizontal" theme="bootstrap">
 					<div class="form-group">
 						<label class="col-lg-3 control-label">Họ và tên:</label>
 						<div class="col-lg-8">
-							<s:textfield id="fullName" name="fullName" cssClass="form-control" />
+							<s:textfield id="fullName" name="fullName"
+								cssClass="form-control" />
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-lg-3 control-label">Tên tài khoản:</label>
 						<div class="col-lg-8">
-							<s:textfield id="userName" name="userName" cssClass="form-control" />
+							<s:textfield id="userName" name="userName"
+								cssClass="form-control" />
 						</div>
 					</div>
 					<div class="form-group">
@@ -47,9 +50,44 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label class="col-lg-3 control-label">Email:</label>
+						<div class="col-lg-8">
+							<s:textfield id="email" name="email" type="email"
+								cssClass="form-control" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Ngày sinh:</label>
+						<div class="col-lg-8">
+							<sd:datetimepicker id="birthDate" name="birthDate" displayFormat="dd-MM-yyyy"
+								value="%{'today'}" cssClass="form-control" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Giới tính:</label>
+						<div class="col-lg-8">
+							<s:select id="gender" name="gender" list="{'Nam','Nữ'}"
+								cssClass="form-control" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Điện thoại:</label>
+						<div class="col-lg-8">
+							<s:textfield id="mobilePhone" name="mobilePhone"
+								cssClass="form-control" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Địa chỉ:</label>
+						<div class="col-lg-8">
+							<s:textarea id="address" name="address" cssClass="form-control" />
+						</div>
+					</div>
+					<div class="form-group">
 						<label class="col-lg-3 control-label">Nhóm: </label>
 						<div class="col-lg-8">
-							<s:select id="roleId" name="roleId" cssClass="form-control" list="listRole" listKey="id" listValue="roleName" />
+							<s:select id="roleId" name="roleId" cssClass="form-control"
+								list="listRole" listKey="roleId" listValue="roleName" />
 						</div>
 					</div>
 					<div class="form-group">
@@ -134,8 +172,6 @@
 		if (this.checked)
 			$('form .alert').remove();
 	}).prop('checked', false);
-
-	
 </script>
 
 </body>

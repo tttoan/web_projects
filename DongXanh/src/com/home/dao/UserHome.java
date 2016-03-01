@@ -197,7 +197,6 @@ public class UserHome {
 			List<User> results = session.createCriteria(User.class).list();
 			//List<User> results = session.createQuery("FROM User").list();
 			tx.commit();
-			session.close();
 			log.debug("retrieve list Users successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {

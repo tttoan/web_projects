@@ -86,7 +86,7 @@
 
 <!-- Datatables -->
 <script src="js/datatables/js/jquery.dataTables.js"></script>
-<script src="js/datatables/tools/js/dataTables.tableTools.js"></script>
+<%-- <script src="js/datatables/tools/js/dataTables.tableTools.js"></script> --%>
 <script>
 	$(document).ready(function() {
 		$('input.tableflat').iCheck({
@@ -103,7 +103,7 @@
 								.dataTable(
 										{
 											"oLanguage" : {
-												"sSearch" : "Search all columns:"
+												"sSearch" : "Tìm kiếm:"
 											},
 											"aoColumnDefs" : [ {
 												'bSortable' : false,

@@ -33,11 +33,11 @@
 			<li><a><i class="fa fa-table"></i> Bảng Kê <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
-					<li><s:url action="list_invoice.action" var="liURL" /> <s:a
+					<li><s:url action="list_statistic" var="liURL" /> <s:a
 							href="%{liURL}" theme="bootstrap"> Danh Sách </s:a></li>
-					<li><s:url action="move_to_add_invoice.action" var="maiURL">
+					<li><s:url action="move_to_add_statistic.action" var="maiURL">
 						</s:url> <s:a href="%{maiURL}"> Thêm Và Chỉnh Sửa </s:a></li>
-					<li><a href="import_invoice.jsp">Thao tác Excel</a></li>
+					<li><a href="import_statistic.jsp">Thao tác Excel</a></li>
 				</ul></li>
 			<li><a><i class="fa fa-calendar"></i> Lịch công tác <span
 					class="fa fa-chevron-down"></span></a>

@@ -16,13 +16,9 @@
 						<table  id="example" class="table table-striped responsive-utilities jambo_table">
 							<thead>
 								<tr class="headings">
-									<th>Tháng</th>
 									<th>Ngày nhận</th>
-									<th>Mã Cấp 2</th>
 									<th>Tên cấp 2</th>
-									<th>Mã Cấp 1</th>
 									<th>Tên Cấp 1</th>
-									<th>Mã Hàng</th>
 									<th>Mặt Hàng</th>
 									<th>Tên Hàng</th>
 									<th>Số Thùng</th>
@@ -38,13 +34,9 @@
 
 								<s:iterator value="statistics">
 									<tr class="even pointer">
-										<td class=" "><s:property value="" /></td>
 										<td class=" "><s:property value="%{getText('format.date',{dateReceived})}" /></td>
-										<td class=" "><s:property value="customerCodeLevel2" /></td>
 										<td class=" "><s:property value="customerNameLevel2" /></td>
-										<td class=" "><s:property value="customerCodeLevel1" /></td>
 										<td class=" "><s:property value="customerNameLevel1" /></td>
-										<td class=" "><s:property value="productCode" /></td>
 										<td class=" "><s:property value="categoryName" /></td>
 										<td class=" "><s:property value="productName" /></td>
 										<td class=" "><s:property value="totalBox" /></td>
@@ -53,9 +45,8 @@
 										<td class=" "><s:property value="total" /></td>
 										<td class=" "><s:property value="" /></td>
 										<td class=" last"> 
-											<a href="#">View</a> 
 											<a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i>Edit </a> 
-											<s:url action="delete_invoice" var="deleteURL">
+											<s:url action="delete_statistic" var="deleteURL">
 												<s:param name="id" value="%{id}" ></s:param>
 											</s:url>
 											<s:a href="%{deleteURL}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>Delete </s:a>
@@ -103,7 +94,7 @@
 
 <!-- Datatables -->
 <script src="js/datatables/js/jquery.dataTables.js"></script>
-<script src="js/datatables/tools/js/dataTables.tableTools.js"></script>
+<%-- <script src="js/datatables/tools/js/dataTables.tableTools.js"></script> --%>
 <script>
 	$(document).ready(function() {
 		$('input.tableflat').iCheck({
@@ -120,7 +111,7 @@
 								.dataTable(
 										{
 											"oLanguage" : {
-												"sSearch" : "Search all columns:"
+												"sSearch" : "Tìm kiếm:"
 											},
 											"aoColumnDefs" : [ {
 												'bSortable' : false,

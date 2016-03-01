@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Feb 25, 2016 11:43:14 PM by Hibernate Tools 4.3.1 -->
+<!-- Generated Feb 29, 2016 9:07:11 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="com.home.model.Customer" table="customer" catalog="db_promotion" optimistic-lock="version">
         <id name="id" type="java.lang.Integer">
@@ -14,10 +14,6 @@
         <many-to-one name="user" class="com.home.model.User" fetch="select">
             <column name="user_id" />
         </many-to-one>
-        <property name="customerCode" type="string">
-            <column name="customer_code" length="40" />
-        </property>
-       
         <property name="createTime" type="timestamp">
             <column name="create_time" length="0" />
         </property>
@@ -33,7 +29,7 @@
         <property name="taxNumber" type="string">
             <column name="tax_number" length="20" />
         </property>
-         <property name="businessName" type="string">
+        <property name="businessName" type="string">
             <column name="business_name" length="200" />
         </property>
         <property name="budgetRegister" type="java.lang.Integer">
@@ -68,6 +64,12 @@
         </property>
         <property name="directorBirthday" type="timestamp">
             <column name="director_birthday" length="0" />
+        </property>
+        <property name="directorBirthdayNotify" type="java.lang.Boolean">
+            <column name="director_birthday_notify" />
+        </property>
+        <property name="customerCode" type="string">
+            <column name="customer_code" length="40" />
         </property>
         <property name="directorDomicile" type="string">
             <column name="director_domicile" length="500" />
@@ -204,5 +206,17 @@
         <property name="totalVipCustomer" type="java.lang.Integer">
             <column name="total_vip_customer" />
         </property>
+        <set name="statisticsForCustomerCodeLevel1" table="statistic" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="customer_code_level1" />
+            </key>
+            <one-to-many class="com.home.model.Statistic" />
+        </set>
+        <set name="statisticsForCustomerCodeLevel2" table="statistic" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="customer_code_level2" />
+            </key>
+            <one-to-many class="com.home.model.Statistic" />
+        </set>
     </class>
 </hibernate-mapping>

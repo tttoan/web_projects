@@ -13,7 +13,7 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
-						<table  id="example" class="table table-striped responsive-utilities jambo_table">
+						<table id="example" class="table table-striped responsive-utilities jambo_table">
 							<thead>
 								<tr class="headings">
 									<th>Họ và tên</th>
@@ -31,14 +31,14 @@
 							<tbody>
 								<s:iterator value="listEmployee">
 									<tr class="even pointer">
-										<td class=" "><s:property value="fullName" /></td>
-										<td class=" "><s:property value="email" /></td>
-										<td class=" "><s:property value="birthDate" /></td>
-										<td class=" "><s:property value="gender" /></td>
-										<td class=" "><s:property value="mobilePhone" /></td>
-										<td class=" "><s:property value="address" /></td>
-										<td class=" "><a class="btn btn-info btn-xs"><i class="fa fa-group"></i><s:property value="%{role.roleName}" /> </a> </td>
-										<td class=" "><s:property value="isEnabled" /></td>
+										<td class=""><s:property value="fullName" /></td>
+										<td class=""><s:property value="email" /></td>
+										<td class=""><s:property value="birthDate" /></td>
+										<td class=""><s:property value="gender" /></td>
+										<td class=""><s:property value="mobilePhone" /></td>
+										<td class=""><s:property value="address" /></td>
+										<td class=""><a class="btn btn-success btn-xs"><i class="fa"></i><s:property value="%{role.roleName}" /> </a> </td>
+										<td class=""><s:property value="isEnabled" /></td>
 										<td class="last"> 
 											<a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa </a> 
 											<s:url action="delete_employee" var="deleteURL">
@@ -49,9 +49,16 @@
 									</tr>
 								</s:iterator>
 							</tbody>
-
 						</table>
+						
 					</div>
+					<div class="ln_solid"></div>
+							<div class="form-group">
+								<div class="col-md-6 col-md-offset-3">
+									<s:reset cssClass="btn btn-primary" value="Reset" />
+									<s:submit id="send" cssClass="btn btn-success" value="Save" />
+								</div>
+							</div>
 				</div>
 			</div>
 		</div>
@@ -89,7 +96,7 @@
 
 <!-- Datatables -->
 <script src="js/datatables/js/jquery.dataTables.js"></script>
-<script src="js/datatables/tools/js/dataTables.tableTools.js"></script>
+<%-- <script src="js/datatables/tools/js/dataTables.tableTools.js"></script> --%>
 <script>
 	$(document).ready(function() {
 		$('input.tableflat').iCheck({
@@ -106,7 +113,7 @@
 								.dataTable(
 										{
 											"oLanguage" : {
-												"sSearch" : "Search all columns:"
+												"sSearch" : "Tìm kiếm:"
 											},
 											"aoColumnDefs" : [ {
 												'bSortable' : false,

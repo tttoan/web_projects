@@ -4,10 +4,13 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib uri="/struts-bootstrap-tags" prefix="sb"%>
 <%@ taglib prefix="sd" uri="/struts-dojo-tags"%>
+<%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
 <html>
 <head>
 <s:head />
 <sd:head />
+<sb:head />
+<sj:head jqueryui="true"/>
 <!-- Meta, title, CSS, favicons, etc. -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">

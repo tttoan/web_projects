@@ -3,13 +3,16 @@ package com.home.dao;
 // Generated Jan 12, 2016 11:21:58 PM by Hibernate Tools 4.0.0
 
 import static org.hibernate.criterion.Example.create;
+
 import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+
 import com.home.model.Statistic;
 
 /**
@@ -125,22 +128,30 @@ public class StatisticHome {
 			throw re;
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Statistic> getListInvoice() {
 		log.debug("retrieve list Statistic");
 		Transaction tx = null;
+		Session session = null;
 		try {
-			Session session = sessionFactory.openSession();
+			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
 			List<Statistic> results = session.createCriteria(Statistic.class).list();
 			tx.commit();
-			session.close();
 			log.debug("retrieve list Statistic successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("retrieve list Statistic failed", re);
 			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

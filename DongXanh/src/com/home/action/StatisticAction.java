@@ -6,8 +6,10 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.crypto.spec.IvParameterSpec;
 import javax.servlet.ServletContext;
@@ -26,22 +28,35 @@ import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
 
 import com.home.conts.InvoiceTable;
+import com.home.dao.CustomerHome;
 import com.home.dao.StatisticHome;
 import com.home.dao.UserHome;
+import com.home.model.Customer;
 import com.home.model.Statistic;
 import com.home.model.User;
 import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
+import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
-public class StatisticAction implements Action, ModelDriven<Statistic>, ServletContextAware, ServletRequestAware {
+public class StatisticAction extends ActionSupport implements Action, ModelDriven<Statistic>, ServletContextAware, ServletRequestAware {
 	private HttpServletRequest request;
 	private File upload;
 	private String uploadContentType;
 	private String uploadFileName;
+	private Statistic statistic = new Statistic();
+	public List<Statistic> statistics = new ArrayList<Statistic>();
+	private ServletContext ctx;
+	private Workbook workbook;
+	private List<User> listEmployee = new ArrayList<>();
+	private List<Customer> listCustomer = new ArrayList<>();
+	private Map<String, Customer> lookupCustomer = new HashMap<>();
+	private Map<String, User> lookupEmployee = new HashMap<>();
 	private String employeeName;
-	public List<String> listEmployeeName = new ArrayList<>();
+	private String customerNameLevel1;
+	private String customerNameLevel2;
+
 	public File getUpload() {
 		return upload;
 	}
@@ -66,75 +81,83 @@ public class StatisticAction implements Action, ModelDriven<Statistic>, ServletC
 		this.uploadFileName = uploadFileName;
 	}
 
-	private Statistic statistic = new Statistic();
-	public List<Statistic> statistics = new ArrayList<Statistic>();
-	private ServletContext ctx;
-	private Workbook workbook;
+	
 
 	@Override
 	public Statistic getModel() {
-		return statistic;
+		return getStatistic();
 	}
 
 	@Override
 	public void setServletContext(ServletContext sc) {
-		this.ctx = sc;
+		this.setCtx(sc);
 	}
 
 	@Override
 	public void setServletRequest(HttpServletRequest request) {
-		this.request = request;
+		this.setRequest(request);
 	}
 
 	@Override
 	public String execute() throws Exception {
-		return ERROR;
+		return SUCCESS;
 	}
-
-	public SessionFactory getSessionFactory(){
+	
+	@Override
+	public void validate(){
+		loadLookupEmployee();
+		loadLookupCustomer();
+	}
+	
+	public SessionFactory getSessionFactory() {
 		return HibernateUtil.getSessionFactory();
 	}
-	public String listInvoice() throws Exception {
+
+	public String listStatistic() throws Exception {
 		try {
 			StatisticHome sttHome = new StatisticHome(getSessionFactory());
 			statistics = sttHome.getListInvoice();
 			return SUCCESS;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return ERROR;
 		}
 	}
 
-	public String listEmployeeName() throws Exception{
-		try {
-			UserHome userHome = new UserHome(getSessionFactory());
-			List<User> users = userHome.getListUser();
-			for (User user : users) {
-				listEmployeeName.add(user.getFullName());
-			}
-			return SUCCESS;
-		} catch (Exception e) {
-			return ERROR;
+	public void loadLookupCustomer() {
+		CustomerHome cusHome = new CustomerHome(getSessionFactory());
+		listCustomer = cusHome.getListCustomer();
+		for (Customer customer : listCustomer)
+			lookupCustomer.put(customer.getDirector() + " - " + customer.getCustomerCode(), customer);
+
+	}
+
+	public void loadLookupEmployee() {
+		UserHome userHome = new UserHome(getSessionFactory());
+		listEmployee = userHome.getListUser();
+		for (User user : listEmployee){
+			System.out.println(user.getFullName() + " - " + user.getUserName());
+			lookupEmployee.put(user.getFullName() + " - " + user.getUserName(), user);
 		}
 	}
-	
-	public String addInvoice() throws Exception {
+	public String addStatistic() throws Exception {
 		try {
-			UserHome userHome = new UserHome(getSessionFactory());
-			User user = userHome.getUserByFullName(getEmployeeName());
-			//statistic.setUser(user);
-			StatisticHome sttHome = new StatisticHome(getSessionFactory());
-			sttHome.attachDirty(statistic);
+			User user = lookupEmployee.get(employeeName);
+			Customer cusLevel1 = lookupCustomer.get(customerNameLevel1);
+			Customer cusLevel2 = lookupCustomer.get(customerNameLevel2);
+			getStatistic().setUser(user);
+			getStatistic().setCustomerByCustomerCodeLevel1(cusLevel1);
+			getStatistic().setCustomerByCustomerCodeLevel2(cusLevel2);
+			StatisticHome sttHome = new StatisticHome(HibernateUtil.getSessionFactory());
+			sttHome.attachDirty(getStatistic());
 			return SUCCESS;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return ERROR;
 		}
 	}
 
-	public String importCustomer() throws Exception {
-		return SUCCESS;
-	}
-	
-	public String importInvoice() throws Exception {
+	public String importStatistic() throws Exception {
 		File theFile = new File(this.getUploadFileName());
 		FileUtils.copyFile(upload, theFile);
 		try (FileInputStream fis = new FileInputStream(theFile)) {
@@ -146,22 +169,22 @@ public class StatisticAction implements Action, ModelDriven<Statistic>, ServletC
 			rowIterator.next();
 			while (rowIterator.hasNext()) {
 				Row row = rowIterator.next();
-				statistic = new Statistic();
-				statistic.setDateReceived((Date)xls.getValue(row.getCell(InvoiceTable.dateReceived.value())));
-				//statistic.setCustomerCodeLevel2((String) xls.getValue(row.getCell(InvoiceTable.customerCodeLevel2.value())));
-				statistic.setCustomerNameLevel2((String) xls.getValue(row.getCell(InvoiceTable.customerNameLevel2.value())));
-				//statistic.setCustomerCodeLevel1((String) xls.getValue(row.getCell(InvoiceTable.customerCodeLevel1.value())));
-				statistic.setCustomerNameLevel1((String) xls.getValue(row.getCell(InvoiceTable.customerNameLevel1.value())));
-				statistic.setProductCode((String) xls.getValue(row.getCell(InvoiceTable.productCode.value())));
-				statistic.setCategoryName((String) xls.getValue(row.getCell(InvoiceTable.categoryName.value())));
-				statistic.setProductName((String) xls.getValue(row.getCell(InvoiceTable.productName.value())));
-				statistic.setTotalBox(((Double) xls.getValue(row.getCell(InvoiceTable.totalBox.value()))).intValue());
-				statistic.setQuantiy(((Double) xls.getValue(row.getCell(InvoiceTable.quantiy.value()))).intValue());
-				statistic.setUnitPrice(BigDecimal.valueOf((Double)xls.getValue(row.getCell(InvoiceTable.unitPrice.value()))));
-				statistic.setTotal(BigDecimal.valueOf((Double) xls.getValue(row.getCell(InvoiceTable.total.value()))));
-				//statistic.setUser(userHome.getUserByFullName((String)xls.getValue(row.getCell(InvoiceTable.userFullName.value()))));
-				addInvoice();
-				statistic = null;
+				setStatistic(new Statistic());
+				getStatistic().setDateReceived((Date) xls.getValue(row.getCell(InvoiceTable.dateReceived.value())));
+				// statistic.setCustomerCodeLevel2((String)
+				// xls.getValue(row.getCell(InvoiceTable.customerCodeLevel2.value())));
+				// statistic.setCustomerCodeLevel1((String)
+				// xls.getValue(row.getCell(InvoiceTable.customerCodeLevel1.value())));
+				getStatistic().setProductCode((String) xls.getValue(row.getCell(InvoiceTable.productCode.value())));
+				getStatistic().setCategoryName((String) xls.getValue(row.getCell(InvoiceTable.categoryName.value())));
+				getStatistic().setProductName((String) xls.getValue(row.getCell(InvoiceTable.productName.value())));
+				getStatistic().setTotalBox(((Double) xls.getValue(row.getCell(InvoiceTable.totalBox.value()))).intValue());
+				getStatistic().setQuantiy(((Double) xls.getValue(row.getCell(InvoiceTable.quantiy.value()))).intValue());
+				getStatistic().setUnitPrice(BigDecimal.valueOf((Double) xls.getValue(row.getCell(InvoiceTable.unitPrice.value()))));
+				getStatistic().setTotal(BigDecimal.valueOf((Double) xls.getValue(row.getCell(InvoiceTable.total.value()))));
+				// statistic.setUser(userHome.getUserByFullName((String)xls.getValue(row.getCell(InvoiceTable.userFullName.value()))));
+				addStatistic();
+				setStatistic(null);
 			}
 		} catch (Exception e) {
 			throw e;
@@ -170,11 +193,75 @@ public class StatisticAction implements Action, ModelDriven<Statistic>, ServletC
 		return SUCCESS;
 	}
 
+	public List<User> getListEmployee() {
+		return listEmployee;
+	}
+
+	public void setListEmployee(List<User> listEmployee) {
+		this.listEmployee = listEmployee;
+	}
+
+	public List<Customer> getListCustomer() {
+		return listCustomer;
+	}
+
+	public void setListCustomer(List<Customer> listCustomer) {
+		this.listCustomer = listCustomer;
+	}
+
+	public Statistic getStatistic() {
+		return statistic;
+	}
+
+	public void setStatistic(Statistic statistic) {
+		this.statistic = statistic;
+	}
+
+	public List<Statistic> getStatistics() {
+		return statistics;
+	}
+
+	public void setStatistics(List<Statistic> statistics) {
+		this.statistics = statistics;
+	}
+
+	public HttpServletRequest getRequest() {
+		return request;
+	}
+
+	public void setRequest(HttpServletRequest request) {
+		this.request = request;
+	}
+
+	public ServletContext getCtx() {
+		return ctx;
+	}
+
+	public void setCtx(ServletContext ctx) {
+		this.ctx = ctx;
+	}
+
 	public String getEmployeeName() {
 		return employeeName;
 	}
 
 	public void setEmployeeName(String employeeName) {
 		this.employeeName = employeeName;
+	}
+
+	public String getCustomerNameLevel1() {
+		return customerNameLevel1;
+	}
+
+	public void setCustomerNameLevel1(String customerNameLevel1) {
+		this.customerNameLevel1 = customerNameLevel1;
+	}
+
+	public String getCustomerNameLevel2() {
+		return customerNameLevel2;
+	}
+
+	public void setCustomerNameLevel2(String customerNameLevel2) {
+		this.customerNameLevel2 = customerNameLevel2;
 	}
 }

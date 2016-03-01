@@ -10,18 +10,20 @@
 
 	<package name="default" namespace="/" extends="struts-default">
 		<action name="login" method="getListCustomerByBirthday" class="com.home.action.LoginAction">
-			<result name="success">/index.jsp</result>
+			<result name="success" type="redirect">/index.jsp</result>
 			<result name="input">/login.jsp</result>
 		</action>
 		<action name="add_employee" method="addEmployee" class="com.home.action.UserAction">
 			<result name="success" type="redirectAction">list_employee</result>
-			<result name="input">move_to_add_employee</result>
+			<result name="input" type="redirectAction">move_to_add_employee</result>
 		</action>
-		<action name="list_employee" method="listEmployee" class="com.home.action.UserAction">
+		<action name="list_employee" method="listEmployee"
+			class="com.home.action.UserAction">
 			<result name="success">/employees.jsp</result>
 			<result name="input">/new_employee.jsp</result>
 		</action>
-		<action name="delete_user" method="deleteUserById" class="com.home.action.UserAction">
+		<action name="delete_employee" method="deleteEmployeeById"
+			class="com.home.action.UserAction">
 			<result name="success" type="redirectAction">list_employee</result>
 		</action>
 		<action name="move_to_add_employee" method="findAllRole"
@@ -51,33 +53,38 @@
 		</action>
 		<action name="delete_customer" method="deleteCustomerById"
 			class="com.home.action.CustomerAction">
-			<result name="success" type="chain">list_customer</result>
+			<result name="success">list_customer</result>
 			<result name="error">/error.jsp</result>
 		</action>
 
-		<action name="list_invoice" method="listInvoice"
+		<action name="list_statistic" method="listStatistic"
 			class="com.home.action.StatisticAction">
-			<result name="success">/invoices.jsp</result>
+			<result name="success">/statistics.jsp</result>
+			<result name="error" type="redirectAction">move_to_add_statistic</result>
 		</action>
 
-		<action name="move_to_add_invoice" method="listEmployeeName"
-			class="com.home.action.StatisticAction">
-			<result name="success">/new_invoice.jsp</result>
+		<action name="move_to_add_statistic" class="com.home.action.StatisticAction">
+			<result name="success">/new_statistic.jsp</result>
 		</action>
 
-		<action name="add_statictis" method="addStatistic"
+		<action name="add_statistic" method="addStatistic"
 			class="com.home.action.StatisticAction">
-			<result name="success" type="redirect">list_invoice</result>
+			<result name="success" type="redirectAction">list_statistic</result>
+			<result name="error" type="redirectAction">move_to_add_statistic</result>
+		</action>
+		<action name="delete_statistic" method="deleteStatistic"
+			class="com.home.action.StatisticAction">
+			<result name="success">list_statistic</result>
 		</action>
 
-		<action name="import_invoice" method="importInvoice"
+		<action name="import_statistic" method="importStatistic"
 			class="com.home.action.StatisticAction">
 			<interceptor-ref name="defaultStack" />
 			<interceptor-ref name="fileUpload">
 				<param name="allowedTypes">application/ms-excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
 			</interceptor-ref>
 			<result name="input">/index.jsp</result>
-			<result name="success">/invoices.jsp</result>
+			<result name="success">/statistics.jsp</result>
 		</action>
 		<action name="import_customer" method="importCustomer"
 			class="com.home.action.CustomerAction">
@@ -89,7 +96,6 @@
 			<result name="success">/customers.jsp</result>
 		</action>
 	</package>
-
 	<package name="product" namespace="/" extends="json-default">
 		<action name="*Action" class="com.home.action.ProductAction"
 			method="{1}">
