@@ -11,8 +11,7 @@
 		<div class="page-title">
 			<div class="title_left">
 				<h3>
-					Chương Trình Khuyến Mãi<br> <small> Click to add/edit
-						events </small>
+					Lịch công tác<br> <small> Click để tạo lịch </small>
 				</h3>
 			</div>
 

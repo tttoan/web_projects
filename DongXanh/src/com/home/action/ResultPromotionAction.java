@@ -44,7 +44,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	
 	public static void main(String[] args) {
 		try {
-			new ResultPromotionAction().listPromotionCusResult();
+			new ResultPromotionAction().listPromotionActive();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

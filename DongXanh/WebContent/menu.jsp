@@ -13,9 +13,11 @@
 			<li><a><i class="fa fa-desktop"></i> Khuyến Mãi <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
-					<li><a href="result_promotion.html"> Khái Quát </a></li>
-					<li><a href="list_promotion.html"> Danh Sách </a></li>
-					<li><a href="create_promotion.html"> Tạo Mới </a></li>
+					<li><s:url action="promotionResultAction" var="prURL" /> 
+						<s:a href="%{prURL}" theme="bootstrap"> Kết quả </s:a></li>
+					<li><a href="promotion.jsp"> Danh sách </a></li>
+					<li><a href="gift.jsp"> Quà tặng </a></li>
+					<li><a href="product.jsp"> Sản phẩm </a></li>
 				</ul></li>
 			<s:include value="menu_employee.jsp">
 				<s:param name="role_id">
@@ -42,8 +44,8 @@
 			<li><a><i class="fa fa-calendar"></i> Lịch công tác <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
-					<li><a href="working_schedule.html">Xem lịch của tôi</a></li>
-					<li><a href="create_working_schedule.html">Tạo mới</a></li>
+					<li><a href="user_plan.jsp">Xem lịch của tôi</a></li>
+					<li><a href="user_plan.jsp">Tạo mới</a></li>
 
 				</ul></li>
 		</ul>
