@@ -115,5 +115,6 @@
 	</package>
 	
 	<include file="promotion.xml"></include>
+	<include file="userplan.xml"></include>
 	
 </struts>
