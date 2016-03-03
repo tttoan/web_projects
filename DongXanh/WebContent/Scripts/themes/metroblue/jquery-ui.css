@@ -670,7 +670,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-accordion-content{border-color:#d4d4d4;background:#ffffff}
 .ui-accordion-header.ui-state-active, .ui-accordion-header.ui-state-active.ui-state-hover{background-color:#ffffff !important;color:#525252;border-color:#d4d4d4 !important;background-image:url(images/ui-icons_d4d4d4_0.png) !important;background-position: -230px -213px !important;}
 .ui-accordion-header.ui-state-active a{ color: #525252 !important;}
-.ui-accordion-header.ui-state-default{border-color:#2d89ef;background:#2d89ef;}
+.ui-accordion-header.ui-state-default{border-color:#2a3f54 ;background:#2a3f54 ;}
 .ui-accordion-header.ui-state-default a{ color: #ffffff;}
 .ui-accordion-header.ui-state-hover{background:#66B3FF;border-color:#66B3FF;}
 .ui-accordion-header.ui-state-hover a{color:#ffffff;}
@@ -683,7 +683,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 
 
 /* Tabs states */
-.ui-tabs-nav > .ui-state-default a{border-color:#2d89ef;background:#2d89ef;color:#ffffff;}
+.ui-tabs-nav > .ui-state-default a{border-color:#2a3f54 ;background:#2a3f54 ;color:#ffffff;}
 .ui-tabs-nav > .ui-state-active a{border-color:#d4d4d4 !important;background:#ffffff !important;color:#525252 !important;}
 .ui-tabs-nav > .ui-state-hover a{background:#66B3FF;border-color:#66B3FF;color:#ffffff;}
 .ui-tabs-nav > .ui-state-focus a{background:#66B3FF;border-color:;color:#ffffff;}
@@ -691,9 +691,9 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-tabs-nav{border-color:#d4d4d4;}
 
 /* Dialog states */
-.ui-dialog{border-color:#2d89ef;background-color:#ffffff !important;}
-.ui-dialog-titlebar{border-color:#2d89ef;color:#ffffff;background-color:#2d89ef;}
-.ui-dialog-buttonpane{border-color:#2d89ef !important;background-color:#ffffff;}
+.ui-dialog{border-color:#2a3f54 ;background-color:#ffffff !important;}
+.ui-dialog-titlebar{border-color:#2a3f54 ;color:#ffffff;background-color:#2a3f54 ;}
+.ui-dialog-buttonpane{border-color:#2a3f54  !important;background-color:#ffffff;}
 .ui-dialog-content{background-color:#ffffff !important;}
 .ui-dialog-titlebar .ui-icon{background-image:url(images/ui-icons_ffffff_0.png);}
 .ui-dialog-titlebar .ui-state-hover .ui-icon{background-image:url(images/ui-icons_2d89ef_0.png) !important;}
@@ -706,7 +706,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 
 /* Slider */
 .ui-slider{background:#d4d4d4;}
-.ui-slider .ui-slider-range{background:#2d89ef;}
+.ui-slider .ui-slider-range{background:#2a3f54 ;}
 .ui-slider .ui-state-default{background-color:#000000;}
 .ui-slider .ui-state-active{background-color:#525252 !important;}
 .ui-slider .ui-state-focus{background-color:#000000;}
@@ -714,17 +714,17 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 
 /* Progressbar */
 .ui-progressbar{background:#d4d4d4;}
-.ui-progressbar .ui-progressbar-value{background-color:#2d89ef;}
+.ui-progressbar .ui-progressbar-value{background-color:#2a3f54 ;}
 
 /* Autocomplete */
 
 .ui-autocomplete {border-color:#525252;}
 .ui-autocomplete a{background-color:#ffffff;color:#525252;}
-.ui-autocomplete .ui-state-hover{background:#2d89ef;color:#ffffff;}
+.ui-autocomplete .ui-state-hover{background:#2a3f54 ;color:#ffffff;}
 
 /* Datepicker */
-.ui-datepicker {border-color:#2d89ef;}
-.ui-datepicker .ui-datepicker-header{background-color:#2d89ef;color:#ffffff;}
+.ui-datepicker {border-color:#2a3f54 ;}
+.ui-datepicker .ui-datepicker-header{background-color:#2a3f54 ;color:#ffffff;}
 .ui-datepicker table {border-color:#ffffff; }
 .ui-datepicker-calendar{background:#ffffff;}
 .ui-datepicker-calendar .ui-state-default{background-color:#d4d4d4;border-color:#d4d4d4;color:#525252;}

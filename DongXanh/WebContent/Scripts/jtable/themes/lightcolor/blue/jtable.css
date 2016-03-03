@@ -477,14 +477,14 @@ div.jtable-busy-message {
   background-position: 5px;
 }
 div.jtable-main-container div.jtable-title {
-  background: #78b1ed;
-  background: -moz-linear-gradient(top, #78b1ed 0%, #417bb5 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #78b1ed), color-stop(100%, #417bb5));
-  background: -webkit-linear-gradient(top, #78b1ed 0%, #417bb5 100%);
-  background: -o-linear-gradient(top, #78b1ed 0%, #417bb5 100%);
-  background: -ms-linear-gradient(top, #78b1ed 0%, #417bb5 100%);
-  background: linear-gradient(to bottom, #78b1ed 0%, #417bb5 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#78b1ed', endColorstr='#417bb5', GradientType=0);
+  background: #2a3f54 ;
+  background: -moz-linear-gradient(top, #2a3f54  0%, #417bb5 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #2a3f54 ), color-stop(100%, #417bb5));
+  background: -webkit-linear-gradient(top, #2a3f54  0%, #417bb5 100%);
+  background: -o-linear-gradient(top, #2a3f54  0%, #417bb5 100%);
+  background: -ms-linear-gradient(top, #2a3f54  0%, #417bb5 100%);
+  background: linear-gradient(to bottom, #2a3f54  0%, #417bb5 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#2a3f54 ', endColorstr='#417bb5', GradientType=0);
   border-color: #2B5177;
 }
 div.jtable-main-container div.jtable-title div.jtable-title-text {
@@ -517,5 +517,5 @@ div.jtable-main-container div.jtable-bottom-panel span.jtable-add-record a {
 }
 div.jtable-busy-message {
   border-color: #2B5177;
-  background-color: #78B1ED;
+  background-color: #2a3f54 ;
 }
