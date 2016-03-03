@@ -4,7 +4,9 @@ package com.home.dao;
 
 import static org.hibernate.criterion.Example.create;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +22,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.internal.SessionImpl;
 
-import com.home.model.Category;
-import com.home.model.Customer;
 import com.home.model.GroupCustomer;
-import com.home.model.Product;
 import com.home.model.Promotion;
+import com.home.model.PromotionCus;
 
 /**
  * Home object for domain model class Promotion.
@@ -234,6 +234,33 @@ public class PromotionHome {
 		}
 	}
 	
+	public List<Promotion> getListPromotionActive() throws Exception{
+		log.debug("retrieve list Promotion");
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Query query  = session.createQuery("From Promotion Where startDate <= :startDate Order By startDate Desc");
+			query.setParameter("startDate", new Date(new java.util.Date().getTime()));
+			List<Promotion> results =  query.list();
+			tx.commit();
+			log.debug("retrieve list Promotion successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			if (tx!=null) tx.rollback();
+			log.error("retrieve list Promotion failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
 	public List<Promotion> getListPromotions(int startPageIndex, int recordsPerPage) throws Exception{
 		log.debug("retrieve list promotion");
 		Session session = null;
@@ -289,6 +316,56 @@ public class PromotionHome {
 		} catch (Exception re) {
 			re.printStackTrace();
 			log.error("retrieve list Promotion failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public List<PromotionCus> listPromotionCusResult(Date start, Date end) throws Exception{
+		log.debug("retrieve list PromotionCus");
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Query query  = session.createQuery(
+					"Select  customerNameLevel2, userId, productCode, categoryName, productName, sum(totalBox),sum(quantiy),sum(unitPrice),sum(total) "
+					+ "From Statistic "
+					+ "Where dateReceived >= :start And dateReceived <= :end "
+					+ "Group By customerNameLevel2, userId, productCode, categoryName, productName "
+					+ "Order By customerNameLevel2");
+			query.setParameter("start", start);
+			query.setParameter("end", end);
+			List lists = query.list();
+			List<PromotionCus> results = new ArrayList<PromotionCus>();
+			int idx = 1;
+			for (Object obj : lists) {
+				PromotionCus pc = new PromotionCus();
+				pc.setRow_index(idx++);
+				pc.setCustomerCode(((Object[])obj)[0].toString());
+				pc.setCustomerName(((Object[])obj)[0].toString());
+				pc.setUserId((int)((Object[])obj)[1]);
+				pc.setProductCode(((Object[])obj)[2].toString());
+				pc.setCategoryName(((Object[])obj)[3].toString());
+				pc.setProductName(((Object[])obj)[4].toString());
+				pc.setTotalBottle((long)((Object[])obj)[5]);
+				pc.setQuality((long)((Object[])obj)[6]);
+				pc.setTotaPrice((BigDecimal)((Object[])obj)[7]);
+				//pc.setTotaPoint((long)((Object[])obj)[8]);
+				results.add(pc);
+		    }
+			tx.commit();
+			log.debug("retrieve list PromotionCus successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			if (tx!=null) tx.rollback();
+			log.error("retrieve list PromotionCus failed", re);
 			throw re;
 		} finally{
 			try {

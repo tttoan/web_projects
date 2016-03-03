@@ -27,7 +27,6 @@ import com.home.model.Product;
 
 /**
  * Home object for domain model class Product.
- * 
  * @see com.home.dao.Product
  * @author Hibernate Tools
  */
@@ -35,22 +34,24 @@ public class ProductHome {
 
 	private static final Log log = LogFactory.getLog(ProductHome.class);
 
-	private SessionFactory sessionFactory;// = getSessionFactory();
+	private SessionFactory sessionFactory ;//= getSessionFactory();
 
-	public ProductHome() {
+	public ProductHome(){
 		sessionFactory = getSessionFactory();
 	};
 
-	public ProductHome(SessionFactory sessionFactory) {
+	public ProductHome(SessionFactory sessionFactory){
 		this.sessionFactory = sessionFactory;
 	}
 
 	protected SessionFactory getSessionFactory() {
 		try {
-			return (SessionFactory) new InitialContext().lookup("SessionFactory");
+			return (SessionFactory) new InitialContext()
+			.lookup("SessionFactory");
 		} catch (Exception e) {
 			log.error("Could not locate SessionFactory in JNDI", e);
-			throw new IllegalStateException("Could not locate SessionFactory in JNDI");
+			throw new IllegalStateException(
+					"Could not locate SessionFactory in JNDI");
 		}
 	}
 
@@ -65,7 +66,7 @@ public class ProductHome {
 		}
 	}
 
-	public void attachDirty(Product instance) throws Exception {
+	public void attachDirty(Product instance) throws Exception{
 		log.debug("attaching dirty Product instance");
 		Transaction tx = null;
 		Session session = null;
@@ -76,14 +77,13 @@ public class ProductHome {
 			tx.commit();
 			log.debug("attach successful");
 		} catch (Exception re) {
-			if (tx != null)
-				tx.rollback();
+			if (tx!=null) tx.rollback();
 			re.printStackTrace();
 			log.error("attach failed", re);
 			throw re;
-		} finally {
+		} finally{
 			try {
-				if (session != null) {
+				if(session != null){
 					session.close();
 				}
 			} catch (Exception e) {
@@ -91,7 +91,7 @@ public class ProductHome {
 		}
 	}
 
-	public void update(Product instance) throws Exception {
+	public void update(Product instance) throws Exception{
 		log.debug("attaching dirty Product instance");
 		Transaction tx = null;
 		Session session = null;
@@ -102,14 +102,13 @@ public class ProductHome {
 			tx.commit();
 			log.debug("attach successful");
 		} catch (Exception re) {
-			if (tx != null)
-				tx.rollback();
+			if (tx!=null) tx.rollback();
 			re.printStackTrace();
 			log.error("attach failed", re);
 			throw re;
-		} finally {
+		} finally{
 			try {
-				if (session != null) {
+				if(session != null){
 					session.close();
 				}
 			} catch (Exception e) {
@@ -128,7 +127,7 @@ public class ProductHome {
 		}
 	}
 
-	public void delete(Product persistentInstance) throws Exception {
+	public void delete(Product persistentInstance) throws Exception{
 		log.debug("deleting Product instance");
 		Transaction tx = null;
 		Session session = null;
@@ -139,13 +138,12 @@ public class ProductHome {
 			tx.commit();
 			log.debug("delete successful");
 		} catch (Exception re) {
-			if (tx != null)
-				tx.rollback();
+			if (tx!=null) tx.rollback();
 			log.error("delete failed", re);
 			throw re;
-		} finally {
+		} finally{
 			try {
-				if (session != null) {
+				if(session != null){
 					session.close();
 				}
 			} catch (Exception e) {
@@ -156,7 +154,8 @@ public class ProductHome {
 	public Product merge(Product detachedInstance) {
 		log.debug("merging Product instance");
 		try {
-			Product result = (Product) sessionFactory.getCurrentSession().merge(detachedInstance);
+			Product result = (Product) sessionFactory.getCurrentSession()
+					.merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -165,14 +164,14 @@ public class ProductHome {
 		}
 	}
 
-	public Product findById(java.lang.Integer id) throws Exception {
+	public Product findById(java.lang.Integer id) throws Exception{
 		log.debug("getting Product instance with id: " + id);
 		Transaction tx = null;
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			Product instance = (Product) session.get(Product.class, id);
+			Product instance = (Product)session.get(Product.class, id);
 			tx.commit();
 			if (instance == null) {
 				log.debug("get successful, no instance found");
@@ -181,13 +180,12 @@ public class ProductHome {
 			}
 			return instance;
 		} catch (Exception re) {
-			if (tx != null)
-				tx.rollback();
+			if (tx!=null) tx.rollback();
 			log.error("get failed", re);
 			throw re;
-		} finally {
+		} finally{
 			try {
-				if (session != null) {
+				if(session != null){
 					session.close();
 				}
 			} catch (Exception e) {
@@ -198,8 +196,11 @@ public class ProductHome {
 	public List<Product> findByExample(Product instance) {
 		log.debug("finding Product instance by example");
 		try {
-			List<Product> results = sessionFactory.getCurrentSession().createCriteria(Product.class).add(create(instance)).list();
-			log.debug("find by example successful, result size: " + results.size());
+			List<Product> results = (List<Product>) sessionFactory
+					.getCurrentSession().createCriteria("com.home.dao.Product")
+					.add(create(instance)).list();
+			log.debug("find by example successful, result size: "
+					+ results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
@@ -207,50 +208,24 @@ public class ProductHome {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Product> getListProduct() {
-		log.debug("finding Product instance by example");
-		Transaction tx = null;
-		Session session = null;
-		try {
-			session = sessionFactory.openSession();
-			tx = session.beginTransaction();
-			List<Product> results = session.createCriteria(Product.class).list();
-			tx.commit();
-			log.debug("find by example successful, result size: " + results.size());
-			return results;
-		} catch (RuntimeException re) {
-			log.error("find by example failed", re);
-			throw re;
-		} finally {
-			try {
-				if (session != null) {
-					session.close();
-				}
-			} catch (Exception e) {
-			}
-		}
-	}
-
-	public List<Product> getListProducts(int startPageIndex, int recordsPerPage) throws Exception {
+	public List<Product> getListProducts(int startPageIndex, int recordsPerPage) throws Exception{
 		log.debug("retrieve list Product");
-		// Transaction tx = null;
+		//Transaction tx = null;
 		Session session = null;
 		List<Product> results = new ArrayList<Product>();
 		try {
 			session = sessionFactory.openSession();
-			// tx = session.beginTransaction();
-			// List<Product> results =
-			// session.createQuery("FROM Product").list();
-			// tx.commit();
+			//			tx = session.beginTransaction();
+			//			List<Product> results = session.createQuery("FROM Product").list();
+			//			tx.commit();
 
 			SessionImpl sessionImpl = (SessionImpl) session;
 			Connection conn = sessionImpl.connection();
 
-			int range = startPageIndex + recordsPerPage;
+			int range = startPageIndex+recordsPerPage;
 			ResultSet rs = conn.createStatement().executeQuery(
-					"SELECT * FROM (SELECT @i:=@i+1 AS iterator, t.* FROM product t,(SELECT @i:=0) foo Order By id) AS XX WHERE iterator > " + startPageIndex + " AND iterator <= " + range);
-			while (rs.next()) {
+					"SELECT * FROM (SELECT @i:=@i+1 AS iterator, t.* FROM product t,(SELECT @i:=0) foo Order By id) AS XX WHERE iterator > "+startPageIndex+" AND iterator <= " + range);
+			while(rs.next()){
 				Product p = new Product();
 				p.setId(rs.getInt("id"));
 				p.setProductCode(rs.getString("product_code"));
@@ -275,9 +250,9 @@ public class ProductHome {
 			re.printStackTrace();
 			log.error("retrieve list Product failed", re);
 			throw re;
-		} finally {
+		} finally{
 			try {
-				if (session != null) {
+				if(session != null){
 					session.close();
 				}
 			} catch (Exception e) {
@@ -285,7 +260,7 @@ public class ProductHome {
 		}
 	}
 
-	public int getTotalRecords() throws Exception {
+	public int getTotalRecords() throws Exception{
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
@@ -297,17 +272,17 @@ public class ProductHome {
 			re.printStackTrace();
 			log.error("retrieve list Product failed", re);
 			throw re;
-		} finally {
+		} finally{
 			try {
-				if (session != null) {
+				if(session != null){
 					session.close();
 				}
 			} catch (Exception e) {
 			}
 		}
 	}
-
-	public LinkedHashMap<Integer, String> getListProducts() throws Exception {
+	
+	public LinkedHashMap<Integer, String> getListProducts() throws Exception{
 		log.debug("retrieve list Product");
 		Session session = null;
 		LinkedHashMap<Integer, String> results = new LinkedHashMap<Integer, String>();
@@ -317,7 +292,7 @@ public class ProductHome {
 			Connection conn = sessionImpl.connection();
 
 			ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM `product` Order by product_name");
-			while (rs.next()) {
+			while(rs.next()){
 				results.put(rs.getInt("id"), rs.getString("product_name"));
 			}
 			rs.close();
@@ -327,9 +302,9 @@ public class ProductHome {
 			re.printStackTrace();
 			log.error("retrieve list Product failed", re);
 			throw re;
-		} finally {
+		} finally{
 			try {
-				if (session != null) {
+				if(session != null){
 					session.close();
 				}
 			} catch (Exception e) {
