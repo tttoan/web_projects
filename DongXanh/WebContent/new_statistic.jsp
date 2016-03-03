@@ -81,7 +81,7 @@
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="unitPrice">Giá <span class="required">*</span>
+									for="unitPrice">Đơn Giá <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<s:textfield id="unitPrice" name="unitPrice"
@@ -91,11 +91,10 @@
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="totalBox">Số Thùng <span class="required">*</span>
+									for="uomId">Đơn vị tính <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<s:textfield id="totalBox" name="totalBox" onchange=""
-										value="%{1}" type="number"
+									<s:select id="uomId" name="uomId" list="listUom" listKey="id" listValue="uomName"
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>

@@ -21,8 +21,10 @@ import org.hibernate.SessionFactory;
 
 import com.home.conts.CustomerTable;
 import com.home.dao.CustomerHome;
+import com.home.dao.GroupCustomerHome;
 import com.home.dao.UserHome;
 import com.home.model.Customer;
+import com.home.model.GroupCustomer;
 import com.home.model.User;
 import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
@@ -36,6 +38,8 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private List<Customer> customers = new ArrayList<Customer>();
 	private String lookupEmployeeForCus;
 	public List<String> listLookupEmployeeForCus = new ArrayList<>();
+	private List<GroupCustomer> listGroupCustomer = new ArrayList<>();
+	private int grpCusId;
 	private ServletContext ctx;
 	private HttpServletRequest request;
 	private Workbook workbook;
@@ -73,7 +77,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	@Override
 	public void setServletContext(ServletContext sc) {
-		this.ctx = sc;
+		this.setCtx(sc);
 	}
 
 	@Override
@@ -140,6 +144,8 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	}
 	public String listLookupEmployeeForCus(){
 		try {
+			GroupCustomerHome grpCusHome = new GroupCustomerHome(getSessionFactory());
+			listGroupCustomer = grpCusHome.getListGrpCustomer();
 			UserHome userHome = new UserHome(getSessionFactory());
 			List<User> users = userHome.getListUser();
 			for (User user : users) {
@@ -155,6 +161,9 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			UserHome userHome = new UserHome(getSessionFactory());
 			User user = userHome.getUserByFullName(getLookupEmployeeForCus());
 			getCustomer().setUser(user);
+			GroupCustomer grpCus = new GroupCustomer();
+			grpCus.setId(grpCusId);
+			getCustomer().setGroupCustomer(grpCus);
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
 			cusHome.attachDirty(getCustomer());
 			return SUCCESS;
@@ -291,5 +300,29 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
+	}
+
+	public List<GroupCustomer> getListGroupCustomer() {
+		return listGroupCustomer;
+	}
+
+	public void setListGroupCustomer(List<GroupCustomer> listGroupCustomer) {
+		this.listGroupCustomer = listGroupCustomer;
+	}
+
+	public int getGrpCusId() {
+		return grpCusId;
+	}
+
+	public void setGrpCusId(int grpCusId) {
+		this.grpCusId = grpCusId;
+	}
+
+	public ServletContext getCtx() {
+		return ctx;
+	}
+
+	public void setCtx(ServletContext ctx) {
+		this.ctx = ctx;
 	}
 }

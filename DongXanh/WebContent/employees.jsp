@@ -9,11 +9,12 @@
 <div class="right_col" role="main">
 	<div class="">
 		<div class="clearfix"></div>
-		<div class="row" >
+		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
-						<table id="example" class="table table-striped responsive-utilities jambo_table">
+						<table id="example"
+							class="table table-striped responsive-utilities jambo_table">
 							<thead>
 								<tr class="headings">
 									<th>Họ và tên</th>
@@ -33,38 +34,31 @@
 									<tr class="even pointer">
 										<td class=""><s:property value="fullName" /></td>
 										<td class=""><s:property value="email" /></td>
-										<td class=""><s:property value="birthDate" /></td>
+										<td class=""><s:property value="%{getText('format.date',{birthDate})}" /></td>
 										<td class=""><s:property value="gender" /></td>
 										<td class=""><s:property value="mobilePhone" /></td>
 										<td class=""><s:property value="address" /></td>
-										<td class=""><a class="btn btn-success btn-xs"><i class="fa"></i><s:property value="%{role.roleName}" /> </a> </td>
+										<td class=""><a class="btn btn-success btn-xs"><i
+												class="fa"></i> <s:property value="%{role.roleName}" /> </a></td>
 										<td class=""><s:property value="isEnabled" /></td>
-										<td class="last"> 
-											<a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa </a> 
-											<s:url action="delete_employee" var="deleteURL">
-												<s:param name="userId" value="%{id}" ></s:param>
-											</s:url>
-											<s:a href="%{deleteURL}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Xóa </s:a>
-										</td>
+										<td class="last"><a href="#" class="btn btn-info btn-xs"><i
+												class="fa fa-pencil"></i> Sửa </a> <s:url
+												action="delete_employee" var="deleteURL">
+												<s:param name="userId" value="%{id}"></s:param>
+											</s:url> <s:a href="%{deleteURL}" class="btn btn-danger btn-xs">
+												<i class="fa fa-trash-o"></i> Xóa </s:a></td>
 									</tr>
 								</s:iterator>
 							</tbody>
 						</table>
-						
+
 					</div>
-					<div class="ln_solid"></div>
-							<div class="form-group">
-								<div class="col-md-6 col-md-offset-3">
-									<s:reset cssClass="btn btn-primary" value="Reset" />
-									<s:submit id="send" cssClass="btn btn-success" value="Save" />
-								</div>
-							</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<!-- footer content -->
-<s:include value="footer.jsp"></s:include>
+	<s:include value="footer.jsp"></s:include>
 	<!-- /footer content -->
 
 </div>

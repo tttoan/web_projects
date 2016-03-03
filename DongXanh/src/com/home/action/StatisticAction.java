@@ -31,10 +31,12 @@ import com.home.conts.InvoiceTable;
 import com.home.dao.CustomerHome;
 import com.home.dao.ProductHome;
 import com.home.dao.StatisticHome;
+import com.home.dao.UomHome;
 import com.home.dao.UserHome;
 import com.home.model.Customer;
 import com.home.model.Product;
 import com.home.model.Statistic;
+import com.home.model.Uom;
 import com.home.model.User;
 import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
@@ -54,6 +56,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	private List<User> listEmployee = new ArrayList<>();
 	private List<Customer> listCustomer = new ArrayList<>();
 	private List<Product> listProduct = new ArrayList<>();
+	private List<Uom> listUom = new ArrayList<>();
 	private Map<String, Customer> lookupCustomer = new HashMap<>();
 	private Map<String, User> lookupEmployee = new HashMap<>();
 	private Map<String, Product> lookupProduct = new HashMap<>();
@@ -61,6 +64,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	private String productName;
 	private String customerNameLevel1;
 	private String customerNameLevel2;
+	private int uomId;
 
 	public File getUpload() {
 		return upload;
@@ -113,6 +117,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		loadLookupEmployee();
 		loadLookupCustomer();
 		loadLookupProduct();
+		loadLookupUom();
 	}
 	
 	public SessionFactory getSessionFactory() {
@@ -136,7 +141,10 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		for (Product pro : listProduct)
 			lookupProduct.put(pro.getProductName() + " - " + pro.getProductCode() , pro);
 	}
-	
+	public void loadLookupUom() {
+		UomHome uomHome = new UomHome(getSessionFactory());
+		listUom = uomHome.getListUOM();
+	}
 	public void loadLookupCustomer() {
 		CustomerHome cusHome = new CustomerHome(getSessionFactory());
 		listCustomer = cusHome.getListCustomer();
@@ -157,10 +165,13 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 			Customer cusLevel1 = lookupCustomer.get(customerNameLevel1);
 			Customer cusLevel2 = lookupCustomer.get(customerNameLevel2);
 			Product product = lookupProduct.get(productName);
+			Uom uom = new Uom();
+			uom.setId(uomId);
 			getStatistic().setUser(user);
 			getStatistic().setCustomerByCustomerCodeLevel1(cusLevel1);
 			getStatistic().setCustomerByCustomerCodeLevel2(cusLevel2);
 			getStatistic().setProduct(product);
+			getStatistic().setUom(uom);
 			StatisticHome sttHome = new StatisticHome(HibernateUtil.getSessionFactory());
 			sttHome.attachDirty(getStatistic());
 			return SUCCESS;
@@ -170,7 +181,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		}
 	}
 
-	public String importStatistic() throws Exception {
+	public String importStatisticLevel1() throws Exception {
 		File theFile = new File(this.getUploadFileName());
 		FileUtils.copyFile(upload, theFile);
 		try (FileInputStream fis = new FileInputStream(theFile)) {
@@ -191,7 +202,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 //				getStatistic().setProductCode((String) xls.getValue(row.getCell(InvoiceTable.productCode.value())));
 //				getStatistic().setCategoryName((String) xls.getValue(row.getCell(InvoiceTable.categoryName.value())));
 //				getStatistic().setProductName((String) xls.getValue(row.getCell(InvoiceTable.productName.value())));
-				getStatistic().setTotalBox(((Double) xls.getValue(row.getCell(InvoiceTable.totalBox.value()))).intValue());
+//				getStatistic().setTotalBox(((Double) xls.getValue(row.getCell(InvoiceTable.totalBox.value()))).intValue());
 				getStatistic().setQuantity(((Double) xls.getValue(row.getCell(InvoiceTable.quantiy.value()))).intValue());
 				getStatistic().setUnitPrice(BigDecimal.valueOf((Double) xls.getValue(row.getCell(InvoiceTable.unitPrice.value()))));
 				getStatistic().setTotal(BigDecimal.valueOf((Double) xls.getValue(row.getCell(InvoiceTable.total.value()))));
@@ -300,5 +311,21 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	public void setProductName(String productName) {
 		this.productName = productName;
+	}
+
+	public List<Uom> getListUom() {
+		return listUom;
+	}
+
+	public void setListUom(List<Uom> listUom) {
+		this.listUom = listUom;
+	}
+
+	public int getUomId() {
+		return uomId;
+	}
+
+	public void setUomId(int uomId) {
+		this.uomId = uomId;
 	}
 }

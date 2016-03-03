@@ -36,7 +36,7 @@
 								cssClass="form-control" />
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="item form-group">
 						<label class="col-lg-3 control-label">Tên tài khoản:</label>
 						<div class="col-lg-8">
 							<s:textfield id="userName" name="userName"
@@ -58,9 +58,9 @@
 					</div>
 					<div class="form-group">
 						<label class="col-lg-3 control-label">Ngày sinh:</label>
-						<div class="col-lg-8">
+						<div class="col-lg-5">
 							<sd:datetimepicker id="birthDate" name="birthDate" displayFormat="dd-MM-yyyy"
-								value="%{'today'}" cssClass="form-control" />
+								value="%{'today'}" cssClass="form-control col-md-6 col-sm-6 col-xs-12" />
 						</div>
 					</div>
 					<div class="form-group">
@@ -92,7 +92,7 @@
 					</div>
 					<div class="form-group">
 						<label class="col-md-3 control-label"></label>
-						<div class="col-md-8">
+						<div class="col-md-9">
 							<s:reset cssClass="btn btn-default" value="Reset" />
 							<s:submit cssClass="btn btn-primary" value="Save" />
 						</div>

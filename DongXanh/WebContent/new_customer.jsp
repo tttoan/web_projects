@@ -57,7 +57,7 @@
 								</label>	
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<s:select id="groupCustomerName" name="groupCustomerName"
-										cssClass="form-control col-md-7 col-xs-12" list="{'1','2'}" />
+										cssClass="form-control col-md-7 col-xs-12" list="listGroupCustomer" listKey="id" listValue="groupName" />
 								</div>
 							</div>
 							<div class="item form-group">
@@ -86,7 +86,7 @@
 									for="certificateNumber">Giấy phép ĐKKD số <span
 									class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
+								<div class="col-md-2 col-sm-6 col-xs-12">
 									<s:textfield id="certificateNumber" name="certificateNumber"
 										class="form-control col-md-7 col-xs-12" />
 								</div>
