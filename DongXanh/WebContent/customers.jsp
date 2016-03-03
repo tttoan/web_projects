@@ -33,7 +33,7 @@
 										<td class=""><s:property value="businessName" /></td>
 										<td class=""><s:property value="directorMobile" /></td>
 										<td class=""> 
-											<a class="btn btn-success btn-xs"><i class="fa"></i> VIP </a> 
+											<a class="btn btn-success btn-xs"><i class="fa"></i><s:property value="groupCustomer.groupName" /></a> 
 										</td>
 										<td class=""><s:property value="email" /></td>
 										<td class="last"> 

@@ -8,10 +8,10 @@
             <column name="id" />
             <generator class="identity" />
         </id>
-        <many-to-one name="groupCustomer" class="com.home.model.GroupCustomer" fetch="select">
+        <many-to-one name="groupCustomer" class="com.home.model.GroupCustomer" fetch="join">
             <column name="group_customer_id" />
         </many-to-one>
-        <many-to-one name="user" class="com.home.model.User" fetch="select">
+        <many-to-one name="user" class="com.home.model.User" fetch="join">
             <column name="user_id" />
         </many-to-one>
         <property name="createTime" type="timestamp">

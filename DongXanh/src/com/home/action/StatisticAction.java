@@ -65,6 +65,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	private String customerNameLevel1;
 	private String customerNameLevel2;
 	private int uomId;
+	private int statisticId;
 
 	public File getUpload() {
 		return upload;
@@ -90,8 +91,6 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		this.uploadFileName = uploadFileName;
 	}
 
-	
-
 	@Override
 	public Statistic getModel() {
 		return getStatistic();
@@ -111,15 +110,15 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	public String execute() throws Exception {
 		return SUCCESS;
 	}
-	
+
 	@Override
-	public void validate(){
+	public void validate() {
 		loadLookupEmployee();
 		loadLookupCustomer();
 		loadLookupProduct();
 		loadLookupUom();
 	}
-	
+
 	public SessionFactory getSessionFactory() {
 		return HibernateUtil.getSessionFactory();
 	}
@@ -127,7 +126,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	public String listStatistic() throws Exception {
 		try {
 			StatisticHome sttHome = new StatisticHome(getSessionFactory());
-			statistics = sttHome.getListInvoice();
+			statistics = sttHome.getListStatistic();
 			return SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -139,12 +138,14 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		ProductHome proHome = new ProductHome(getSessionFactory());
 		listProduct = proHome.getListProduct();
 		for (Product pro : listProduct)
-			lookupProduct.put(pro.getProductName() + " - " + pro.getProductCode() , pro);
+			lookupProduct.put(pro.getProductName() + " - " + pro.getProductCode(), pro);
 	}
+
 	public void loadLookupUom() {
 		UomHome uomHome = new UomHome(getSessionFactory());
 		listUom = uomHome.getListUOM();
 	}
+
 	public void loadLookupCustomer() {
 		CustomerHome cusHome = new CustomerHome(getSessionFactory());
 		listCustomer = cusHome.getListCustomer();
@@ -155,19 +156,23 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	public void loadLookupEmployee() {
 		UserHome userHome = new UserHome(getSessionFactory());
 		listEmployee = userHome.getListUser();
-		for (User user : listEmployee){
+		for (User user : listEmployee) {
 			lookupEmployee.put(user.getFullName() + " - " + user.getUserName(), user);
 		}
 	}
+
 	public String deleteStatistic() throws Exception {
 		try {
-			
+			StatisticHome sttHome = new StatisticHome(getSessionFactory());
+			Statistic stt = sttHome.findById(statisticId);
+			sttHome.delete(stt);
 			return SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ERROR;
 		}
 	}
+
 	public String importStatistic() throws Exception {
 		try {
 			
@@ -177,6 +182,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 			return ERROR;
 		}
 	}
+
 	public String addStatistic() throws Exception {
 		try {
 			User user = lookupEmployee.get(employeeName);
@@ -217,10 +223,14 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 				// xls.getValue(row.getCell(InvoiceTable.customerCodeLevel2.value())));
 				// statistic.setCustomerCodeLevel1((String)
 				// xls.getValue(row.getCell(InvoiceTable.customerCodeLevel1.value())));
-//				getStatistic().setProductCode((String) xls.getValue(row.getCell(InvoiceTable.productCode.value())));
-//				getStatistic().setCategoryName((String) xls.getValue(row.getCell(InvoiceTable.categoryName.value())));
-//				getStatistic().setProductName((String) xls.getValue(row.getCell(InvoiceTable.productName.value())));
-//				getStatistic().setTotalBox(((Double) xls.getValue(row.getCell(InvoiceTable.totalBox.value()))).intValue());
+				// getStatistic().setProductCode((String)
+				// xls.getValue(row.getCell(InvoiceTable.productCode.value())));
+				// getStatistic().setCategoryName((String)
+				// xls.getValue(row.getCell(InvoiceTable.categoryName.value())));
+				// getStatistic().setProductName((String)
+				// xls.getValue(row.getCell(InvoiceTable.productName.value())));
+				// getStatistic().setTotalBox(((Double)
+				// xls.getValue(row.getCell(InvoiceTable.totalBox.value()))).intValue());
 				getStatistic().setQuantity(((Double) xls.getValue(row.getCell(InvoiceTable.quantiy.value()))).intValue());
 				getStatistic().setUnitPrice(BigDecimal.valueOf((Double) xls.getValue(row.getCell(InvoiceTable.unitPrice.value()))));
 				getStatistic().setTotal(BigDecimal.valueOf((Double) xls.getValue(row.getCell(InvoiceTable.total.value()))));
@@ -345,5 +355,13 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	public void setUomId(int uomId) {
 		this.uomId = uomId;
+	}
+
+	public int getStatisticId() {
+		return statisticId;
+	}
+
+	public void setStatisticId(int statisticId) {
+		this.statisticId = statisticId;
 	}
 }

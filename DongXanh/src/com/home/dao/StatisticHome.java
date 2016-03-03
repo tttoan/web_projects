@@ -80,12 +80,25 @@ public class StatisticHome {
 
 	public void delete(Statistic persistentInstance) {
 		log.debug("deleting Statistic instance");
+		Transaction tx = null;
+		Session session = null;
 		try {
-			sessionFactory.getCurrentSession().delete(persistentInstance);
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			session.delete(persistentInstance);
+			tx.commit();
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
 			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -103,8 +116,13 @@ public class StatisticHome {
 
 	public Statistic findById(java.lang.Integer id) {
 		log.debug("getting Statistic instance with id: " + id);
+		Transaction tx = null;
+		Session session = null;
 		try {
-			Statistic instance = (Statistic) sessionFactory.getCurrentSession().get("com.home.dao.Statistic", id);
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Statistic instance = (Statistic) session.get(Statistic.class, id);
+			tx.commit();
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -114,6 +132,14 @@ public class StatisticHome {
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
 			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -130,7 +156,7 @@ public class StatisticHome {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Statistic> getListInvoice() {
+	public List<Statistic> getListStatistic() {
 		log.debug("retrieve list Statistic");
 		Transaction tx = null;
 		Session session = null;

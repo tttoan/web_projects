@@ -33,7 +33,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
 public class CustomerAction extends ActionSupport implements Action, ModelDriven<Customer>, ServletContextAware, ServletRequestAware {
-	public String customerId;
+	public int customerId;
 	private Customer customer = new Customer();
 	private List<Customer> customers = new ArrayList<Customer>();
 	private String lookupEmployeeForCus;
@@ -109,8 +109,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	public String findCustomer(){
 		try {
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
-			Integer id = Integer.parseInt(getCustomerId());
-			setCustomer(cusHome.findById(id));
+			setCustomer(cusHome.findById(customerId));
 			System.out.println(getCustomer().getCustomerCode());
 			return SUCCESS;
 		} catch (Exception e) {
@@ -120,9 +119,8 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	
 	public String deleteCustomerById() throws Exception {
 		try {
-			Integer id = Integer.parseInt(getCustomerId());
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
-			Customer customer = cusHome.findById(id);
+			Customer customer = cusHome.findById(customerId);
 			cusHome.delete(customer);
 			return SUCCESS;
 		} catch (Exception e) {
@@ -172,11 +170,11 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		}
 	}
 
-	public String getCustomerId() {
+	public int getCustomerId() {
 		return customerId;
 	}
 
-	public void setCustomerId(String customerId) {
+	public void setCustomerId(int customerId) {
 		this.customerId = customerId;
 	}
 	public String importCustomer() throws Exception {

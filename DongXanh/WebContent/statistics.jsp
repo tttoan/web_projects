@@ -45,7 +45,7 @@
 										<td class="last"> 
 											<a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa </a> 
 											<s:url action="delete_statistic" var="deleteURL">
-												<s:param name="id" value="%{id}" ></s:param>
+												<s:param name="statisticId" value="%{id}" ></s:param>
 											</s:url>
 											<s:a href="%{deleteURL}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Xóa </s:a>
 										</td>

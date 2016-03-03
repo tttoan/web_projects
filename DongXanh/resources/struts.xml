@@ -53,7 +53,7 @@
 		</action>
 		<action name="delete_customer" method="deleteCustomerById"
 			class="com.home.action.CustomerAction">
-			<result name="success">list_customer</result>
+			<result name="success" type="redirectAction">list_customer</result>
 			<result name="error">/error.jsp</result>
 		</action>
 
@@ -74,7 +74,7 @@
 		</action>
 		<action name="delete_statistic" method="deleteStatistic"
 			class="com.home.action.StatisticAction">
-			<result name="success">list_statistic</result>
+			<result name="success" type="redirectAction">list_statistic</result>
 		</action>
 
 		<action name="import_statistic" method="importStatistic"
