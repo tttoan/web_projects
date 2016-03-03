@@ -9,6 +9,23 @@
 	<constant name="struts.custom.i18n.resources" value="struts"></constant>
 
 	<package name="default" namespace="/" extends="struts-default">
+	
+		<interceptors>
+                <interceptor class="com.home.action.LoginInterceptor" name="loginInterceptor">
+                </interceptor>
+                <interceptor-stack name="loginStack">
+                        <interceptor-ref name="loginInterceptor" />
+                        <interceptor-ref name="defaultStack" />
+                </interceptor-stack>
+        </interceptors>
+		
+		<!-- home link action -->
+        <action name="homeAction" class="com.home.action.LoginAction" method="execute">
+                <interceptor-ref name="loginStack" />
+                <result name="login">login.jsp</result>
+                <result name="success">index.jsp</result>
+        </action>
+        
 		<action name="login" method="getListCustomerByBirthday" class="com.home.action.LoginAction">
 			<result name="success" type="redirect">/index.jsp</result>
 			<result name="input">/login.jsp</result>
@@ -96,132 +113,7 @@
 			<result name="success">/customers.jsp</result>
 		</action>
 	</package>
-	<package name="product" namespace="/" extends="json-default">
-		<action name="*Action" class="com.home.action.ProductAction"
-			method="{1}">
-			<result type="json">/product.jsp</result>
-		</action>
-		<action name="getProducts" class="com.home.action.ProductAction"
-			method="list">
-			<result type="json" />
-		</action>
-		<action name="addProduct" class="com.home.action.ProductAction"
-			method="create">
-			<result type="json" />
-		</action>
-		<action name="editProduct" class="com.home.action.ProductAction"
-			method="update">
-			<result type="json" />
-		</action>
-		<action name="deleteProduct" class="com.home.action.ProductAction"
-			method="delete">
-			<result type="json" />
-		</action>
-		<action name="getAllCategoriesAction" class="com.home.action.ProductAction"
-			method="getAllCategories">
-			<result type="json" />
-		</action>
-	</package>
-
-	<package name="gift" namespace="/" extends="json-default">
-		<action name="*GiftAction" class="com.home.action.GiftAction"
-			method="{1}">
-			<result type="json">/gift.jsp</result>
-		</action>
-		<action name="listGiftAction" class="com.home.action.GiftAction"
-			method="list">
-			<result type="json">/gift.jsp</result>
-		</action>
-		<action name="createGiftAction" class="com.home.action.GiftAction"
-			method="create">
-			<result type="json">/gift.jsp</result>
-		</action>
-		<action name="updateGiftAction" class="com.home.action.GiftAction"
-			method="update">
-			<result type="json">/gift.jsp</result>
-		</action>
-		<action name="deleteGiftAction" class="com.home.action.GiftAction"
-			method="delete">
-			<result type="json">/gift.jsp</result>
-		</action>
-	</package>
-
-	<package name="promotion" namespace="/" extends="json-default">
-		<action name="*PromotionAction" class="com.home.action.PromotionAction"
-			method="{1}">
-			<result type="json">/promotion.jsp</result>
-		</action>
-		<action name="listPromotionAction" class="com.home.action.PromotionAction"
-			method="list">
-			<result type="json">/promotion.jsp</result>
-		</action>
-		<action name="createPromotionAction" class="com.home.action.PromotionAction"
-			method="create">
-			<result type="json">/promotion.jsp</result>
-		</action>
-		<action name="updatePromotionAction" class="com.home.action.PromotionAction"
-			method="update">
-			<result type="json">/promotion.jsp</result>
-		</action>
-		<action name="deletePromotionAction" class="com.home.action.PromotionAction"
-			method="delete">
-			<result type="json">/promotion.jsp</result>
-		</action>
-		<action name="getAllGroupCustomerAction" class="com.home.action.PromotionAction"
-			method="getAllGroupCustomer">
-			<result type="json" />
-		</action>
-	<action name="listPromotionProductAction" class="com.home.action.PromotionProductAction"
-			method="list">
-			<result type="json">/promotion.jsp</result>
-		</action>
-		<action name="createPromotionProductAction" class="com.home.action.PromotionProductAction"
-			method="create">
-			<result type="json">/promotion.jsp</result>
-		</action>
-		<action name="updatePromotionProductAction" class="com.home.action.PromotionProductAction"
-			method="update">
-			<result type="json">/promotion.jsp</result>
-		</action>
-		<action name="deletePromotionProductAction" class="com.home.action.PromotionProductAction"
-			method="delete">
-			<result type="json">/promotion.jsp</result>
-		</action>
-		<action name="getAllProductsAction" class="com.home.action.PromotionProductAction"
-			method="getAllProducts">
-			<result type="json" />
-		</action>
-		<action name="listPromotionGiftAction" class="com.home.action.PromotionGiftAction"
-			method="list">
-			<result type="json">/promotion.jsp</result>
-		</action>
-		<action name="createPromotionGiftAction" class="com.home.action.PromotionGiftAction"
-			method="create">
-			<result type="json">/promotion.jsp</result>
-		</action>
-		<action name="updatePromotionGiftAction" class="com.home.action.PromotionGiftAction"
-			method="update">
-			<result type="json">/promotion.jsp</result>
-		</action>
-		<action name="deletePromotionGiftAction" class="com.home.action.PromotionGiftAction"
-			method="delete">
-			<result type="json">/promotion.jsp</result>
-		</action>
-		<action name="getAllGiftsAction" class="com.home.action.PromotionGiftAction"
-			method="getAllGifts">
-			<result type="json" />
-		</action>
-	</package>
 	
-	<package name="promotion-result" namespace="/" extends="struts-default">
-		<action name="promotionResultAction" method="listPromotionActive"
-			class="com.home.action.ResultPromotionAction">
-			<result name="success">/promotion_result.jsp</result>
-		</action>
-		<action name="promotionCusResultAction" method="listPromotionCusResult"
-			class="com.home.action.ResultPromotionAction">
-			<result name="success">/promotion_cus.jsp</result>
-		</action>
-	</package>
+	<include file="promotion.xml"></include>
 	
 </struts>
