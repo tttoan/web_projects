@@ -171,5 +171,57 @@
 			method="getAllGroupCustomer">
 			<result type="json" />
 		</action>
+	<action name="listPromotionProductAction" class="com.home.action.PromotionProductAction"
+			method="list">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="createPromotionProductAction" class="com.home.action.PromotionProductAction"
+			method="create">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="updatePromotionProductAction" class="com.home.action.PromotionProductAction"
+			method="update">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="deletePromotionProductAction" class="com.home.action.PromotionProductAction"
+			method="delete">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="getAllProductsAction" class="com.home.action.PromotionProductAction"
+			method="getAllProducts">
+			<result type="json" />
+		</action>
+		<action name="listPromotionGiftAction" class="com.home.action.PromotionGiftAction"
+			method="list">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="createPromotionGiftAction" class="com.home.action.PromotionGiftAction"
+			method="create">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="updatePromotionGiftAction" class="com.home.action.PromotionGiftAction"
+			method="update">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="deletePromotionGiftAction" class="com.home.action.PromotionGiftAction"
+			method="delete">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="getAllGiftsAction" class="com.home.action.PromotionGiftAction"
+			method="getAllGifts">
+			<result type="json" />
+		</action>
 	</package>
+	
+	<package name="promotion-result" namespace="/" extends="struts-default">
+		<action name="promotionResultAction" method="listPromotionActive"
+			class="com.home.action.ResultPromotionAction">
+			<result name="success">/promotion_result.jsp</result>
+		</action>
+		<action name="promotionCusResultAction" method="listPromotionCusResult"
+			class="com.home.action.ResultPromotionAction">
+			<result name="success">/promotion_cus.jsp</result>
+		</action>
+	</package>
+	
 </struts>
