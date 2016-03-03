@@ -22,6 +22,15 @@ public class Promotion implements java.io.Serializable {
 	private Integer promotion_id;
 	private Set<PromotionGift> promotionGifts = new HashSet<PromotionGift>(0);
 	private Set<PromotionProduct> promotionProducts = new HashSet<PromotionProduct>(0);
+	private int row_index;
+
+	public int getRow_index() {
+		return row_index;
+	}
+
+	public void setRow_index(int row_index) {
+		this.row_index = row_index;
+	}
 
 	public Promotion() {
 	}

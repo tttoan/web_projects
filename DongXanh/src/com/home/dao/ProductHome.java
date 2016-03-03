@@ -207,6 +207,31 @@ public class ProductHome {
 			throw re;
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Product> getListProduct() {
+		log.debug("finding Product instance by example");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			List<Product> results = session.createCriteria(Product.class).list();
+			tx.commit();
+			log.debug("find by example successful, result size: " + results.size());
+			return results;
+		} catch (RuntimeException re) {
+			log.error("find by example failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
 
 	public List<Product> getListProducts(int startPageIndex, int recordsPerPage) throws Exception{
 		log.debug("retrieve list Product");
