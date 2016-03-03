@@ -30,6 +30,7 @@
         <mapping resource="com/home/model/Category.hbm.xml" />
         <mapping resource="com/home/model/WorkingPlan.hbm.xml" />
         <mapping resource="com/home/model/User.hbm.xml" />
+        <mapping resource="com/home/model/Uom.hbm.xml" />
         <mapping resource="com/home/model/Product.hbm.xml" />
         <mapping resource="com/home/model/PromotionGift.hbm.xml" />
         <mapping resource="com/home/model/Role.hbm.xml" />

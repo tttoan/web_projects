@@ -159,6 +159,24 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 			lookupEmployee.put(user.getFullName() + " - " + user.getUserName(), user);
 		}
 	}
+	public String deleteStatistic() throws Exception {
+		try {
+			
+			return SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+	}
+	public String importStatistic() throws Exception {
+		try {
+			
+			return SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+	}
 	public String addStatistic() throws Exception {
 		try {
 			User user = lookupEmployee.get(employeeName);
