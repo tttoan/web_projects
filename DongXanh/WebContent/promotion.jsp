@@ -125,7 +125,11 @@
         .promotion-status
         {
             font-weight: bold;
+            color: red;
         }
+       /*  table{
+    		color: red;
+		} */
 </style>
 
 </body>

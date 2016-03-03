@@ -11,6 +11,7 @@ $(document).ready(function() {
 		pageSize: 10, //Set page size (default: 10)   
 		sorting: true, //Enable sorting
 		defaultSorting: 'product_name ASC',
+		tableId : 'PromotionTable',
 		toolbar: {
 			items: [{
 				icon: '/images/excel.png',
@@ -317,7 +318,7 @@ $(document).ready(function() {
                  defaultValue: 'true',
                  create: false,
  				 edit: true,
- 				 listClass: 'promotion-status',
+ 				 //listClass: 'promotion-status',
              },
 			
 		},
@@ -345,6 +346,7 @@ $(document).ready(function() {
 		//Validate form when it is being submitted
 		loadingRecords: function (event, data) {
 			//alert("loadingRecords! " + data);
+			//alert("333  " + JSON.stringify(data));
 			//return data.form.validationEngine('validate');
 			RowNumber = 0;
 		},
@@ -369,3 +371,4 @@ function sortObject(obj) {
     });
     return arr; // returns array
 }
+

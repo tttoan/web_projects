@@ -536,6 +536,12 @@ THE SOFTWARE.
         /* Create a cell for given field.
         *************************************************************************/
         _createCellForRecordField: function (record, fieldName) {
+        	//alert(JSON.stringify(record))
+        	if(fieldName == 'status' && record.promotion_id && record.status == true){
+        		 return $('<td></td>')
+                 .addClass("promotion-status")
+                 .append((this._getDisplayTextForRecordField(record, fieldName)));
+        	}
             return $('<td></td>')
                 .addClass(this.options.fields[fieldName].listClass)
                 .append((this._getDisplayTextForRecordField(record, fieldName)));
@@ -4480,7 +4486,7 @@ THE SOFTWARE.
         *************************************************************************/
         _createCellForRecordField: function (record, fieldName) {
             var $column = base._createCellForRecordField.apply(this, arguments);
-
+           // alert(fieldName);
             var field = this.options.fields[fieldName];
             if (field.visibility == 'hidden') {
                 $column.hide();
