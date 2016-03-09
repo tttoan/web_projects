@@ -23,6 +23,7 @@ public class Promotion implements java.io.Serializable {
 	private Set<PromotionGift> promotionGifts = new HashSet<PromotionGift>(0);
 	private Set<PromotionProduct> promotionProducts = new HashSet<PromotionProduct>(0);
 	private int row_index;
+	private Short customerRegist;
 
 	public int getRow_index() {
 		return row_index;
@@ -133,5 +134,13 @@ public class Promotion implements java.io.Serializable {
 
 	public void setPromotion_id(Integer promotion_id) {
 		this.promotion_id = promotion_id;
+	}
+	
+	public Short getCustomerRegist() {
+		return this.customerRegist;
+	}
+
+	public void setCustomerRegist(Short customerRegist) {
+		this.customerRegist = customerRegist;
 	}
 }

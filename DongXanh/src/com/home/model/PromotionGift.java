@@ -1,5 +1,8 @@
 package com.home.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 // Generated Feb 24, 2016 9:17:27 PM by Hibernate Tools 4.3.1
 
 /**
@@ -14,6 +17,9 @@ public class PromotionGift implements java.io.Serializable {
 	private Integer maxPoint;
 	private Integer gift_id;
 	private Integer promotion_id;
+	private String unit;
+	private String formula;
+	private Set<RegisterGift> registerGifts = new HashSet<RegisterGift>(0);
 
 	public PromotionGift() {
 	}
@@ -69,7 +75,7 @@ public class PromotionGift implements java.io.Serializable {
 	public void setMaxPoint(Integer maxPoint) {
 		this.maxPoint = maxPoint;
 	}
-	
+
 	public Integer getGift_id() {
 		return gift_id;
 	}
@@ -86,4 +92,27 @@ public class PromotionGift implements java.io.Serializable {
 		this.promotion_id = promotion_id;
 	}
 
+	public String getUnit() {
+		return this.unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+	public String getFormula() {
+		return this.formula;
+	}
+
+	public void setFormula(String formula) {
+		this.formula = formula;
+	}
+
+	public Set<RegisterGift> getRegisterGifts() {
+		return this.registerGifts;
+	}
+
+	public void setRegisterGifts(Set<RegisterGift> registerGifts) {
+		this.registerGifts = registerGifts;
+	}
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Mar 9, 2016 8:44:09 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.home.model.PromotionRegister" table="promotion_register" catalog="db_promotion" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="customer" class="com.home.model.Customer" fetch="select">
+            <column name="customer_id" not-null="true" />
+        </many-to-one>
+        <property name="totalPoint" type="java.lang.Integer">
+            <column name="total_point" />
+        </property>
+        <property name="totalBox" type="java.lang.Integer">
+            <column name="total_box" />
+        </property>
+        <set name="registerGifts" table="register_gift" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="register_id" not-null="true" />
+            </key>
+            <one-to-many class="com.home.model.RegisterGift" />
+        </set>
+        <set name="registerProducts" table="register_product" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="register_id" not-null="true" />
+            </key>
+            <one-to-many class="com.home.model.RegisterProduct" />
+        </set>
+    </class>
+</hibernate-mapping>
