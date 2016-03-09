@@ -36,5 +36,8 @@
         <mapping resource="com/home/model/Role.hbm.xml" />
         <mapping resource="com/home/model/PromotionProduct.hbm.xml" />
         <mapping resource="com/home/model/Gift.hbm.xml" />
+        <mapping resource="com/home/model/PromotionRegister.hbm.xml" />
+        <mapping resource="com/home/model/RegisterGift.hbm.xml" />
+        <mapping resource="com/home/model/RegisterProduct.hbm.xml" />
     </session-factory>
 </hibernate-configuration>
