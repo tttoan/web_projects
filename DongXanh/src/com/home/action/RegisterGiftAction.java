@@ -22,7 +22,7 @@ import com.opensymphony.xwork2.ActionContext;
  * @author USER
  *
  */
-public class PromotionGiftAction implements ServletContextAware{
+public class RegisterGiftAction implements ServletContextAware{
 
 	private ServletContext ctx;
 
@@ -43,7 +43,7 @@ public class PromotionGiftAction implements ServletContextAware{
 
 	public static void main(String[] args) {
 		try {
-			PromotionGiftAction action = new PromotionGiftAction();
+			RegisterGiftAction action = new RegisterGiftAction();
 			//action.create();
 			//action.list();
 			//action.delete();

@@ -30,18 +30,18 @@ import com.home.model.PromotionGift;
  * @see com.home.dao.PromotionGift
  * @author Hibernate Tools
  */
-public class PromotionGiftHome {
+public class RegisterGiftHome {
 
 	private static final Log log = LogFactory
-			.getLog(PromotionGiftHome.class);
+			.getLog(RegisterGiftHome.class);
 
 	private SessionFactory sessionFactory ;//= getSessionFactory();
 
-	public PromotionGiftHome(){
+	public RegisterGiftHome(){
 		sessionFactory = getSessionFactory();
 	};
 
-	public PromotionGiftHome(SessionFactory sessionFactory){
+	public RegisterGiftHome(SessionFactory sessionFactory){
 		this.sessionFactory = sessionFactory;
 	}
 

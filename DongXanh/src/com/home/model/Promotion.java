@@ -22,6 +22,7 @@ public class Promotion implements java.io.Serializable {
 	private Integer promotion_id;
 	private Set<PromotionGift> promotionGifts = new HashSet<PromotionGift>(0);
 	private Set<PromotionProduct> promotionProducts = new HashSet<PromotionProduct>(0);
+	private Set<PromotionRegister>  promotionRegisters = new HashSet<PromotionRegister>(0);
 	private int row_index;
 	private Short customerRegist;
 
@@ -142,5 +143,13 @@ public class Promotion implements java.io.Serializable {
 
 	public void setCustomerRegist(Short customerRegist) {
 		this.customerRegist = customerRegist;
+	}
+	
+	public Set<PromotionRegister> getPromotionRegisters() {
+		return promotionRegisters;
+	}
+
+	public void setPromotionRegisters(Set<PromotionRegister> promotionRegisters) {
+		this.promotionRegisters = promotionRegisters;
 	}
 }

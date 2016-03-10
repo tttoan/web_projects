@@ -188,4 +188,34 @@ public class GroupCustomerHome {
 			}
 		}
 	}
+	
+	public HashMap<Integer, String> getListCustomers() throws Exception{
+		log.debug("retrieve list GroupCustomer");
+		Session session = null;
+		HashMap<Integer, String> results = new HashMap<Integer, String>();
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM `customer` Order By customer_code");
+			while(rs.next()){
+				results.put(rs.getInt("id"), rs.getString("customer_code"));
+			}
+			rs.close();
+			log.debug("retrieve list GroupCustomer successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list GroupCustomer failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
 }

@@ -122,6 +122,34 @@
 		</action>
 	</package>
 	
+	
+	<package name="promotion_register" namespace="/" extends="json-default">
+		<action name="*PromotionRegisterAction" class="com.home.action.PromotionRegistAction"
+			method="{1}">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="listPromotionRegisterAction" class="com.home.action.PromotionRegistAction"
+			method="list">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="createPromotionRegisterAction" class="com.home.action.PromotionRegistAction"
+			method="create">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="updatePromotionRegisterAction" class="com.home.action.PromotionRegistAction"
+			method="update">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="deletePromotionRegisterAction" class="com.home.action.PromotionRegistAction"
+			method="delete">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="getCustomerRegisterAction" class="com.home.action.PromotionRegistAction"
+			method="getCustomerRegister">
+			<result type="json" />
+		</action>
+	</package>
+	
 	<package name="promotion-result" namespace="/" extends="struts-default">
 		<action name="promotionResultAction" method="listPromotionActive"
 			class="com.home.action.ResultPromotionAction">

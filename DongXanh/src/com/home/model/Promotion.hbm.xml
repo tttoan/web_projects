@@ -41,5 +41,11 @@
             </key>
             <one-to-many class="com.home.model.PromotionProduct" />
         </set>
+         <set name="promotionRegisters" table="promotion_register" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="promotion_id" not-null="true" />
+            </key>
+            <one-to-many class="com.home.model.PromotionRegister" />
+        </set>
     </class>
 </hibernate-mapping>

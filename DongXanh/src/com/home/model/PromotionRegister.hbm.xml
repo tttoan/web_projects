@@ -11,6 +11,9 @@
         <many-to-one name="customer" class="com.home.model.Customer" fetch="select">
             <column name="customer_id" not-null="true" />
         </many-to-one>
+        <many-to-one name="promotion" class="com.home.model.Promotion" fetch="select">
+            <column name="promotion_id" not-null="true" />
+        </many-to-one>
         <property name="totalPoint" type="java.lang.Integer">
             <column name="total_point" />
         </property>

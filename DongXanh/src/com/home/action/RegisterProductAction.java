@@ -1,7 +1,10 @@
 package com.home.action;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -9,11 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.util.ServletContextAware;
 
-import com.home.dao.GiftHome;
-import com.home.dao.PromotionGiftHome;
-import com.home.model.Gift;
+import com.home.dao.ProductHome;
+import com.home.dao.PromotionProductHome;
+import com.home.model.Product;
 import com.home.model.Promotion;
-import com.home.model.PromotionGift;
+import com.home.model.PromotionProduct;
 import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
@@ -22,28 +25,26 @@ import com.opensymphony.xwork2.ActionContext;
  * @author USER
  *
  */
-public class PromotionGiftAction implements ServletContextAware{
+public class RegisterProductAction implements ServletContextAware{
 
 	private ServletContext ctx;
 
-	private PromotionGift record ;
-	private List<PromotionGift> records ;
+	private PromotionProduct record ;
+	private List<PromotionProduct> records ;
 	private String result;
 	private String message;
 	private int totalRecordCount;
-	private LinkedHashMap<Integer, String> gifts ;
+	private LinkedHashMap<Integer, String> products ;
 
 	private Integer id;
 	private Integer maxQuantity;
 	private Integer maxPoint;
-	private Integer gift_id;
+	private Integer product_id;
 	private Integer promotion_id;
-	private String unit;
-	private String formula;
 
 	public static void main(String[] args) {
 		try {
-			PromotionGiftAction action = new PromotionGiftAction();
+			RegisterProductAction action = new RegisterProductAction();
 			//action.create();
 			//action.list();
 			//action.delete();
@@ -59,7 +60,7 @@ public class PromotionGiftAction implements ServletContextAware{
 	}
 
 	private int getTotalProducts(){
-		PromotionGiftHome productHome = new PromotionGiftHome(HibernateUtil.getSessionFactory());
+		PromotionProductHome productHome = new PromotionProductHome(HibernateUtil.getSessionFactory());
 		try {
 			return productHome.getTotalRecords(1);
 		} catch (Exception e) {
@@ -68,11 +69,22 @@ public class PromotionGiftAction implements ServletContextAware{
 		}
 	}
 	
+//	public String setPromotionId() throws Exception {
+//		System.out.println("promotion_id=" + promotion_id);
+//		Map session = ActionContext.getContext().getSession();
+//		session.put("promotion_id", promotion_id);
+//		return Action.SUCCESS; 
+//	}
 
 	public String list() throws Exception {
 		try {
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
 			// Fetch Data from User Table
+//			Map<String, String[]> map = request.getParameterMap();
+//			Set<String> set = map.keySet();
+//			for (String key : set) {
+//				System.out.println(key + ": " + map.get(key));
+//			}
 			
 			int startPageIndex = Integer.parseInt(request.getParameter("jtStartIndex"));
 			int recordsPerPage = Integer.parseInt(request.getParameter("jtPageSize"));
@@ -81,9 +93,13 @@ public class PromotionGiftAction implements ServletContextAware{
 			//System.out.println("startPageIndex: " + startPageIndex);
 			//System.out.println("recordsPerPage: " + recordsPerPage);
 
+			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
+//			if(promotion_id == null){
+//				promotion_id = (int) ActionContext.getContext().getSession().get("promotion_id");
+//			}
 			if(promotion_id != null){
-				PromotionGiftHome productHome = new PromotionGiftHome(HibernateUtil.getSessionFactory());
-				records = productHome.getListPromotionGifts(promotion_id, startPageIndex, recordsPerPage);
+				PromotionProductHome productHome = new PromotionProductHome(HibernateUtil.getSessionFactory());
+				records = productHome.getListPromotionProducts(promotion_id, startPageIndex, recordsPerPage);
 				// Get Total Record Count for Pagination
 				totalRecordCount = productHome.getTotalRecords(promotion_id);
 			}else{
@@ -104,23 +120,21 @@ public class PromotionGiftAction implements ServletContextAware{
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
 			promotion_id = Integer.parseInt(request.getParameter("promotion_id"));
 			
-			record = new PromotionGift();
+			record = new PromotionProduct();
 			record.setId(id);
 			record.setMaxPoint(maxPoint);
 			record.setMaxQuantity(maxQuantity);
-			record.setFormula(formula);
-			record.setUnit(unit);
 			
-			Gift gift = new Gift();
-			gift.setId(gift_id);		
-			record.setGift(gift);
+			Product product = new Product();
+			product.setId(product_id);		
+			record.setProduct(product);
 
 			Promotion promotion = new Promotion();
 			promotion.setId(promotion_id);
 			record.setPromotion(promotion);
 			
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
-			PromotionGiftHome productHome = new PromotionGiftHome(HibernateUtil.getSessionFactory());
+			PromotionProductHome productHome = new PromotionProductHome(HibernateUtil.getSessionFactory());
 			productHome.attachDirty(record);
 			result = "OK";
 		} catch (Exception e) {
@@ -136,23 +150,21 @@ public class PromotionGiftAction implements ServletContextAware{
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
 			promotion_id = Integer.parseInt(request.getParameter("promotion_id"));
 			
-			PromotionGift record = new PromotionGift();
+			PromotionProduct record = new PromotionProduct();
 			record.setId(id);
 			record.setMaxPoint(maxPoint);
 			record.setMaxQuantity(maxQuantity);
-			record.setFormula(formula);
-			record.setUnit(unit);
 			
-			Gift gift = new Gift();
-			gift.setId(gift_id);		
-			record.setGift(gift);
+			Product product = new Product();
+			product.setId(product_id);		
+			record.setProduct(product);
 
 			Promotion promotion = new Promotion();
 			promotion.setId(promotion_id);
 			record.setPromotion(promotion);
 			
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
-			PromotionGiftHome productHome = new PromotionGiftHome(HibernateUtil.getSessionFactory());
+			PromotionProductHome productHome = new PromotionProductHome(HibernateUtil.getSessionFactory());
 			productHome.update(record);
 			result = "OK";
 		} catch (Exception e) {
@@ -166,8 +178,8 @@ public class PromotionGiftAction implements ServletContextAware{
 	public String delete() throws Exception {
 		try {
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
-			PromotionGiftHome productHome = new PromotionGiftHome(HibernateUtil.getSessionFactory());
-			PromotionGift record = productHome.findById(id);
+			PromotionProductHome productHome = new PromotionProductHome(HibernateUtil.getSessionFactory());
+			PromotionProduct record = productHome.findById(id);
 			productHome.delete(record);
 			result = "OK";
 		} catch (Exception e){
@@ -178,11 +190,11 @@ public class PromotionGiftAction implements ServletContextAware{
 		return Action.SUCCESS;
 	}
 
-	public String getAllGifts() throws Exception {
+	public String getAllProducts() throws Exception {
 		try {
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
-			GiftHome giftHome = new GiftHome(HibernateUtil.getSessionFactory());
-			gifts =  giftHome.getListGifts();
+			ProductHome productHome = new ProductHome(HibernateUtil.getSessionFactory());
+			products =  productHome.getListProducts();
 			result = "OK";
 		} catch (Exception e) {
 			result = "ERROR";
@@ -192,20 +204,19 @@ public class PromotionGiftAction implements ServletContextAware{
 		return Action.SUCCESS;
 	}
 	
-
-	public PromotionGift getRecord() {
+	public PromotionProduct getRecord() {
 		return record;
 	}
 
-	public void setRecord(PromotionGift record) {
+	public void setRecord(PromotionProduct record) {
 		this.record = record;
 	}
 
-	public List<PromotionGift> getRecords() {
+	public List<PromotionProduct> getRecords() {
 		return records;
 	}
 
-	public void setRecords(List<PromotionGift> records) {
+	public void setRecords(List<PromotionProduct> records) {
 		this.records = records;
 	}
 
@@ -233,12 +244,12 @@ public class PromotionGiftAction implements ServletContextAware{
 		this.totalRecordCount = totalRecordCount;
 	}
 
-	public LinkedHashMap<Integer, String> getGifts() {
-		return gifts;
+	public LinkedHashMap<Integer, String> getProducts() {
+		return products;
 	}
 
-	public void setGifts(LinkedHashMap<Integer, String> gifts) {
-		this.gifts = gifts;
+	public void setProducts(LinkedHashMap<Integer, String> products) {
+		this.products = products;
 	}
 
 	public Integer getId() {
@@ -265,12 +276,12 @@ public class PromotionGiftAction implements ServletContextAware{
 		this.maxPoint = maxPoint;
 	}
 
-	public Integer getGift_id() {
-		return gift_id;
+	public Integer getProduct_id() {
+		return product_id;
 	}
 
-	public void setGift_id(Integer gift_id) {
-		this.gift_id = gift_id;
+	public void setProduct_id(Integer product_id) {
+		this.product_id = product_id;
 	}
 
 	public Integer getPromotion_id() {
@@ -281,19 +292,6 @@ public class PromotionGiftAction implements ServletContextAware{
 		this.promotion_id = promotion_id;
 	}
 
-	public String getUnit() {
-		return unit;
-	}
 
-	public void setUnit(String unit) {
-		this.unit = unit;
-	}
 
-	public String getFormula() {
-		return formula;
-	}
-
-	public void setFormula(String formula) {
-		this.formula = formula;
-	}
 }

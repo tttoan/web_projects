@@ -20,28 +20,28 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.internal.SessionImpl;
 
-import com.home.model.Gift;
+import com.home.model.Category;
 import com.home.model.Product;
 import com.home.model.Promotion;
-import com.home.model.PromotionGift;
+import com.home.model.PromotionProduct;
 
 /**
- * Home object for domain model class PromotionGift.
- * @see com.home.dao.PromotionGift
+ * Home object for domain model class PromotionProduct.
+ * @see com.home.dao.PromotionProduct
  * @author Hibernate Tools
  */
-public class PromotionGiftHome {
+public class RegisterProductHome {
 
 	private static final Log log = LogFactory
-			.getLog(PromotionGiftHome.class);
+			.getLog(RegisterProductHome.class);
 
 	private SessionFactory sessionFactory ;//= getSessionFactory();
 
-	public PromotionGiftHome(){
+	public RegisterProductHome(){
 		sessionFactory = getSessionFactory();
 	};
 
-	public PromotionGiftHome(SessionFactory sessionFactory){
+	public RegisterProductHome(SessionFactory sessionFactory){
 		this.sessionFactory = sessionFactory;
 	}
 
@@ -56,8 +56,8 @@ public class PromotionGiftHome {
 		}
 	}
 
-	public void persist(PromotionGift transientInstance) {
-		log.debug("persisting PromotionGift instance");
+	public void persist(PromotionProduct transientInstance) {
+		log.debug("persisting PromotionProduct instance");
 		try {
 			sessionFactory.getCurrentSession().persist(transientInstance);
 			log.debug("persist successful");
@@ -67,8 +67,8 @@ public class PromotionGiftHome {
 		}
 	}
 
-	public void attachDirty(PromotionGift instance) throws Exception{
-		log.debug("attaching dirty PromotionGift instance");
+	public void attachDirty(PromotionProduct instance) throws Exception{
+		log.debug("attaching dirty PromotionProduct instance");
 		Transaction tx = null;
 		Session session = null;
 		try {
@@ -92,8 +92,8 @@ public class PromotionGiftHome {
 		}
 	}
 
-	public void update(PromotionGift instance) throws Exception{
-		log.debug("attaching dirty PromotionGift instance");
+	public void update(PromotionProduct instance) throws Exception{
+		log.debug("attaching dirty PromotionProduct instance");
 		Transaction tx = null;
 		Session session = null;
 		try {
@@ -117,8 +117,8 @@ public class PromotionGiftHome {
 		}
 	}
 
-	public void delete(PromotionGift persistentInstance) throws Exception{
-		log.debug("deleting PromotionGift instance");
+	public void delete(PromotionProduct persistentInstance) throws Exception{
+		log.debug("deleting PromotionProduct instance");
 		Transaction tx = null;
 		Session session = null;
 		try {
@@ -141,8 +141,8 @@ public class PromotionGiftHome {
 		}
 	}
 
-	public void attachClean(PromotionGift instance) {
-		log.debug("attaching clean PromotionGift instance");
+	public void attachClean(PromotionProduct instance) {
+		log.debug("attaching clean PromotionProduct instance");
 		try {
 			sessionFactory.getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
@@ -152,10 +152,10 @@ public class PromotionGiftHome {
 		}
 	}
 
-	public PromotionGift merge(PromotionGift detachedInstance) {
-		log.debug("merging PromotionGift instance");
+	public PromotionProduct merge(PromotionProduct detachedInstance) {
+		log.debug("merging PromotionProduct instance");
 		try {
-			PromotionGift result = (PromotionGift) sessionFactory
+			PromotionProduct result = (PromotionProduct) sessionFactory
 					.getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
@@ -165,14 +165,14 @@ public class PromotionGiftHome {
 		}
 	}
 
-	public PromotionGift findById(java.lang.Integer id) {
-		log.debug("getting PromotionGift instance with id: " + id);
+	public PromotionProduct findById(java.lang.Integer id) {
+		log.debug("getting PromotionProduct instance with id: " + id);
 		Transaction tx = null;
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			PromotionGift instance = (PromotionGift)session.get(PromotionGift.class, id);
+			PromotionProduct instance = (PromotionProduct)session.get(PromotionProduct.class, id);
 			tx.commit();
 			if (instance == null) {
 				log.debug("get successful, no instance found");
@@ -194,12 +194,12 @@ public class PromotionGiftHome {
 		}
 	}
 
-	public List<PromotionGift> findByExample(PromotionGift instance) {
-		log.debug("finding PromotionGift instance by example");
+	public List<PromotionProduct> findByExample(PromotionProduct instance) {
+		log.debug("finding PromotionProduct instance by example");
 		try {
-			List<PromotionGift> results = (List<PromotionGift>) sessionFactory
+			List<PromotionProduct> results = (List<PromotionProduct>) sessionFactory
 					.getCurrentSession()
-					.createCriteria("com.home.dao.PromotionGift")
+					.createCriteria("com.home.dao.PromotionProduct")
 					.add(create(instance)).list();
 			log.debug("find by example successful, result size: "
 					+ results.size());
@@ -210,10 +210,10 @@ public class PromotionGiftHome {
 		}
 	}
 
-	public List<PromotionGift> getListPromotionGifts(int promotion_id, int startPageIndex, int recordsPerPage) throws Exception{
-		log.debug("retrieve list PromotionGift");
+	public List<PromotionProduct> getListPromotionProducts(int promotion_id, int startPageIndex, int recordsPerPage) throws Exception{
+		log.debug("retrieve list PromotionProduct");
 		Session session = null;
-		List<PromotionGift> results = new ArrayList<PromotionGift>();
+		List<PromotionProduct> results = new ArrayList<PromotionProduct>();
 		try {
 			session = sessionFactory.openSession();
 
@@ -222,15 +222,15 @@ public class PromotionGiftHome {
 
 			int range = startPageIndex+recordsPerPage;
 			ResultSet rs = conn.createStatement().executeQuery(
-					"SELECT * FROM (SELECT @i:=@i+1 AS iterator, t.* FROM promotion_gift t,(SELECT @i:=0) foo Where promotion_id="+promotion_id+" Order By id) AS XX WHERE iterator > "+startPageIndex+" AND iterator <= " + range);
+					"SELECT * FROM (SELECT @i:=@i+1 AS iterator, t.* FROM promotion_product t,(SELECT @i:=0) foo Where promotion_id="+promotion_id+" Order By id) AS XX WHERE iterator > "+startPageIndex+" AND iterator <= " + range);
 			while(rs.next()){
-				PromotionGift pp = new PromotionGift();
+				PromotionProduct pp = new PromotionProduct();
 				pp.setId(rs.getInt("id"));
 
-				Gift gift = new Gift();
-				gift.setId(rs.getInt("gift_id"));		
-				pp.setGift(gift);
-				pp.setGift_id(gift.getId());
+				Product product = new Product();
+				product.setId(rs.getInt("product_id"));		
+				pp.setProduct(product);
+				pp.setProduct_id(product.getId());
 
 				Promotion promotion = new Promotion();
 				promotion.setId(rs.getInt("promotion_id"));
@@ -239,13 +239,11 @@ public class PromotionGiftHome {
 
 				pp.setMaxQuantity(rs.getInt("max_quantity"));
 				pp.setMaxPoint(rs.getInt("max_point"));
-				pp.setUnit(rs.getString("unit"));
-				pp.setFormula(rs.getString("formula"));
 
 				results.add(pp);
 			}
 			rs.close();
-			log.debug("retrieve list PromotionGift successful, result size: " + results.size());
+			log.debug("retrieve list PromotionProduct successful, result size: " + results.size());
 			return results;
 		} catch (Exception re) {
 			re.printStackTrace();
@@ -265,7 +263,7 @@ public class PromotionGiftHome {
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
-			String sql = "SELECT COUNT(*) AS COUNT FROM PromotionGift WHERE promotion=:promotion";
+			String sql = "SELECT COUNT(*) AS COUNT FROM PromotionProduct WHERE promotion=:promotion";
 			Query query = session.createQuery(sql);
 			query.setInteger("promotion", promotion_id);
 			List results = query.list();

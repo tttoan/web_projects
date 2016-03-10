@@ -1,6 +1,5 @@
 package com.home.action;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,9 +10,10 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.util.ServletContextAware;
 
 import com.home.dao.GroupCustomerHome;
-import com.home.dao.PromotionHome;
-import com.home.model.GroupCustomer;
+import com.home.dao.PromotionRegistHome;
+import com.home.model.Customer;
 import com.home.model.Promotion;
+import com.home.model.PromotionRegister;
 import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
@@ -22,29 +22,27 @@ import com.opensymphony.xwork2.ActionContext;
  * @author USER
  *
  */
-public class PromotionAction implements ServletContextAware{
+public class PromotionRegistAction implements ServletContextAware{
 
 	private ServletContext ctx;
-	private Promotion record ;
-	private List<Promotion> records ;
+	private PromotionRegister record ;
+	private List<PromotionRegister> records ;
 	private String result;
 	private String message;
 	private int totalRecordCount;
-	private HashMap<Integer, String> groupCustomers ;
+	private HashMap<Integer, String> mapCustomers ;
 
 	private Integer id;
-	private String promotionName;
-	private Date startDate;
-	private Date endDate;
-	private String remarks;
-	private Boolean status;
+	private Integer customer_id;
 	private Integer group_customer_id;
-	private Short customerRegist; 
+	private Integer totalPoint;
+	private Integer totalBox;
+	private Integer promotion_id;
 
 
 	public static void main(String[] args) {
 		try {
-			new PromotionAction().list();
+			new PromotionRegistAction().list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -63,14 +61,14 @@ public class PromotionAction implements ServletContextAware{
 			int startPageIndex = Integer.parseInt(request.getParameter("jtStartIndex"));
 			int recordsPerPage = Integer.parseInt(request.getParameter("jtPageSize"));
 			//String sorting = request.getParameter("jtSorting");
-			//System.out.println("startPageIndex: " + startPageIndex);
-			//System.out.println("recordsPerPage: " + recordsPerPage);
+			promotion_id = Integer.parseInt(request.getParameter("promotion_id"));
+			group_customer_id = Integer.parseInt(request.getParameter("group_customer_id"));
 
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
-			PromotionHome promotionHome = new PromotionHome(HibernateUtil.getSessionFactory());
-			records = promotionHome.getListPromotions(startPageIndex, recordsPerPage);
+			PromotionRegistHome promotionRegistHome = new PromotionRegistHome(HibernateUtil.getSessionFactory());
+			records = promotionRegistHome.getListPromotionRegisters(promotion_id, startPageIndex, recordsPerPage);
 			// Get Total Record Count for Pagination
-			totalRecordCount = promotionHome.getTotalRecords();
+			totalRecordCount = promotionRegistHome.getTotalRecords();
 			result = "OK";
 		} catch (Exception e) {
 			result = "ERROR";
@@ -83,21 +81,22 @@ public class PromotionAction implements ServletContextAware{
 
 	public String create() throws Exception {
 		try {
-			record = new Promotion();
+			record = new PromotionRegister();
 			record.setId(id);
-			record.setPromotionName(promotionName);
-			record.setStartDate(startDate);
-			record.setEndDate(endDate);
-			record.setRemarks(remarks);
-			record.setStatus(true);
-			record.setCustomerRegist(customerRegist);
-			GroupCustomer group = new GroupCustomer();
-			group.setId(group_customer_id);
-			record.setGroupCustomer(group);
+			Customer cus = new Customer();
+			cus.setId(customer_id);
+			record.setCustomer(cus);
+			record.setCustomer_id(cus.getId());
+			Promotion promotion = new Promotion();
+			promotion.setId(promotion_id);
+			record.setPromotion(promotion);
+			record.setPromotion_id(promotion.getId());
+			record.setTotalBox(totalBox);
+			record.setTotalPoint(totalPoint);
 
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
-			PromotionHome promotionHome = new PromotionHome(HibernateUtil.getSessionFactory());
-			promotionHome.attachDirty(record);
+			PromotionRegistHome promotionRegistHome = new PromotionRegistHome(HibernateUtil.getSessionFactory());
+			promotionRegistHome.attachDirty(record);
 			result = "OK";
 		} catch (Exception e) {
 			result = "ERROR";
@@ -109,21 +108,22 @@ public class PromotionAction implements ServletContextAware{
 
 	public String update() throws Exception {
 		try {
-			Promotion record = new Promotion();
+			PromotionRegister record = new PromotionRegister();
 			record.setId(id);
-			record.setPromotionName(promotionName);
-			record.setStartDate(startDate);
-			record.setEndDate(endDate);
-			record.setRemarks(remarks);
-			record.setStatus(status);
-			record.setCustomerRegist(customerRegist);
-			GroupCustomer group = new GroupCustomer();
-			group.setId(group_customer_id);
-			record.setGroupCustomer(group);
+			Customer cus = new Customer();
+			cus.setId(customer_id);
+			record.setCustomer(cus);
+			record.setCustomer_id(cus.getId());
+			Promotion promotion = new Promotion();
+			promotion.setId(promotion_id);
+			record.setPromotion(promotion);
+			record.setPromotion_id(promotion.getId());
+			record.setTotalBox(totalBox);
+			record.setTotalPoint(totalPoint);
 
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
-			PromotionHome promotionHome = new PromotionHome(HibernateUtil.getSessionFactory());
-			promotionHome.update(record);
+			PromotionRegistHome promotionRegistHome = new PromotionRegistHome(HibernateUtil.getSessionFactory());
+			promotionRegistHome.update(record);
 			result = "OK";
 		} catch (Exception e) {
 			result = "ERROR";
@@ -136,9 +136,9 @@ public class PromotionAction implements ServletContextAware{
 	public String delete() throws Exception {
 		try {
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
-			PromotionHome promotionHome = new PromotionHome(HibernateUtil.getSessionFactory());
-			Promotion record = promotionHome.findById(id);
-			promotionHome.delete(record);
+			PromotionRegistHome promotionRegistHome = new PromotionRegistHome(HibernateUtil.getSessionFactory());
+			PromotionRegister  record = promotionRegistHome.findById(id);
+			promotionRegistHome.delete(record);
 			result = "OK";
 		} catch (Exception e){
 			result = "ERROR";
@@ -148,11 +148,11 @@ public class PromotionAction implements ServletContextAware{
 		return Action.SUCCESS;
 	}
 
-	public String getAllGroupCustomer() throws Exception {
+	public String getCustomerRegister() throws Exception {
 		try {
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
 			GroupCustomerHome groupCustomerHome = new GroupCustomerHome(HibernateUtil.getSessionFactory());
-			groupCustomers = groupCustomerHome.getListGroupCustomer();
+			mapCustomers = groupCustomerHome.getListCustomers();
 			result = "OK";
 		} catch (Exception e) {
 			result = "ERROR";
@@ -162,22 +162,23 @@ public class PromotionAction implements ServletContextAware{
 		return Action.SUCCESS;
 	}
 
-	public Promotion getRecord() {
+
+	public PromotionRegister getRecord() {
 		return record;
 	}
 
 
-	public void setRecord(Promotion record) {
+	public void setRecord(PromotionRegister record) {
 		this.record = record;
 	}
 
 
-	public List<Promotion> getRecords() {
+	public List<PromotionRegister> getRecords() {
 		return records;
 	}
 
 
-	public void setRecords(List<Promotion> records) {
+	public void setRecords(List<PromotionRegister> records) {
 		this.records = records;
 	}
 
@@ -212,13 +213,13 @@ public class PromotionAction implements ServletContextAware{
 	}
 
 
-	public HashMap<Integer, String> getGroupCustomers() {
-		return groupCustomers;
+	public HashMap<Integer, String> getMapCustomers() {
+		return mapCustomers;
 	}
 
 
-	public void setGroupCustomers(HashMap<Integer, String> groupCustomers) {
-		this.groupCustomers = groupCustomers;
+	public void setMapCustomers(HashMap<Integer, String> mapCustomers) {
+		this.mapCustomers = mapCustomers;
 	}
 
 
@@ -232,53 +233,13 @@ public class PromotionAction implements ServletContextAware{
 	}
 
 
-	public String getPromotionName() {
-		return promotionName;
+	public Integer getCustomer_id() {
+		return customer_id;
 	}
 
 
-	public void setPromotionName(String promotionName) {
-		this.promotionName = promotionName;
-	}
-
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
-
-	public String getRemarks() {
-		return remarks;
-	}
-
-
-	public void setRemarks(String remarks) {
-		this.remarks = remarks;
-	}
-
-
-	public Boolean getStatus() {
-		return status;
-	}
-
-
-	public void setStatus(Boolean status) {
-		this.status = status;
+	public void setCustomer_id(Integer customer_id) {
+		this.customer_id = customer_id;
 	}
 
 
@@ -290,14 +251,34 @@ public class PromotionAction implements ServletContextAware{
 	public void setGroup_customer_id(Integer group_customer_id) {
 		this.group_customer_id = group_customer_id;
 	}
-	
-	public Short getCustomerRegist() {
-		return customerRegist;
+
+
+	public Integer getTotalPoint() {
+		return totalPoint;
 	}
 
 
-	public void setCustomerRegist(Short customerRegist) {
-		this.customerRegist = customerRegist;
+	public void setTotalPoint(Integer totalPoint) {
+		this.totalPoint = totalPoint;
 	}
 
+
+	public Integer getTotalBox() {
+		return totalBox;
+	}
+
+
+	public void setTotalBox(Integer totalBox) {
+		this.totalBox = totalBox;
+	}
+
+
+	public Integer getPromotion_id() {
+		return promotion_id;
+	}
+
+
+	public void setPromotion_id(Integer promotion_id) {
+		this.promotion_id = promotion_id;
+	}
 }

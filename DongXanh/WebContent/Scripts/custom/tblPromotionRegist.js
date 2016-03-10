@@ -2,11 +2,11 @@ $(document).ready(function() {
 	var RowNumber = 0;
 	var ProductNumber = 0;
 	var GiftNumber = 0;
-	var groupCusOptions = null;
+	var CustomerRegisterOptions = null;
 	var productOptions = null;
 	var giftOptions = null;
-	$('#PromotionTableContainer').jtable({
-		title : 'Danh sách các chương trình khuyến mãi',
+	$('#RegisterTableContainer').jtable({
+		title : 'Danh sách khách hàng đăng ký',
 		paging: true, //Enable paging
 		pageSize: 10, //Set page size (default: 10)   
 		sorting: true, //Enable sorting
@@ -30,10 +30,10 @@ $(document).ready(function() {
 			}]
 		},
 		actions : {
-			listAction : 'listPromotionAction',
-			createAction : 'createPromotionAction',
-			updateAction : 'updatePromotionAction',
-			deleteAction : 'deletePromotionAction'
+			listAction : 'listPromotionRegisterAction',
+			createAction : 'createPromotionRegisterAction',
+			updateAction : 'updatePromotionRegisterAction',
+			deleteAction : 'deletePromotionRegisterAction'
 		},
 
 		fields : {
@@ -51,33 +51,6 @@ $(document).ready(function() {
 			promotion_id : {
 				type: 'hidden',
 			},
-			//CHILD TABLE DEFINITION FOR "CUSTOMER"
-            Customer: {
-                title: '',
-                width: '3%',
-                sorting: false,
-                edit: false,
-                create: false,
-                listClass: 'child-opener-image-column',
-                display: function (Customer) {
-                    if(Customer.record.customerRegist == 1){
-                    	 var $img = $('<img class="child-opener-image" src="images/user-group.png" title="Khách hàng đăng ký" />');
-                         //Open child table when user clicks the image
-                         $img.click(function () {
-                         	// window.location = url;
-                         	// document.location.href='listPromotionGiftAction?promotion_id='+Customer.record.promotion_id+'&group_customer_id='+Customer.record.group_customer_id;
-                        	 $.ajax({ //Not found in cache, get from server
-									url: 'listPromotionGiftAction?promotion_id='+Customer.record.promotion_id+'&group_customer_id='+Customer.record.group_customer_id,
-									type: 'POST',
-									dataType: 'json',
-									async: false
-                        	 });
-                         });
-                         //Return image to show on the person row
-                         return $img;
-                    }
-                }
-            },
 			//CHILD TABLE DEFINITION FOR "GIFT"
             Gift: {
                 title: '',
@@ -88,20 +61,20 @@ $(document).ready(function() {
                 listClass: 'child-opener-image-column',
                 display: function (promotionGift) {
                     //Create an image that will be used to open child table
-                    var $img = $('<img class="child-opener-image" src="images/gift.png" title="Quà tặng" />');
+                    var $img = $('<img class="child-opener-image" src="images/gift.png" title="Đăng ký quà tặng" />');
                     //Open child table when user clicks the image
                     $img.click(function () {
-                        $('#PromotionTableContainer').jtable('openChildTable',
+                        $('#RegisterTableContainer').jtable('openChildTable',
                                 $img.closest('tr'),
                                 {
-		                        	title: '[' + promotionGift.record.promotionName + '] - Quà tặng',
+		                        	title: '[' + promotionGift.record.promotionName + '] - Đăng ký quà tặng',
 									paging: true, //Enable paging
 									pageSize: 10, //Set page size (default: 10) 
 									actions: {
-										listAction : 'listPromotionGiftAction?promotion_id='+promotionGift.record.promotion_id,
-										createAction : 'createPromotionGiftAction?promotion_id='+promotionGift.record.promotion_id,
-										updateAction : 'updatePromotionGiftAction?promotion_id='+promotionGift.record.promotion_id,
-										deleteAction : 'deletePromotionGiftAction?promotion_id='+promotionGift.record.promotion_id,
+										listAction : 'listRegisterGiftAction?promotion_id='+promotionGift.record.promotion_id,
+										createAction : 'createRegisterGiftAction?promotion_id='+promotionGift.record.promotion_id,
+										updateAction : 'updateRegisterGiftAction?promotion_id='+promotionGift.record.promotion_id,
+										deleteAction : 'deleteRegisterGiftAction?promotion_id='+promotionGift.record.promotion_id,
 									},
                                     fields: {
                                     	GiftNumber : {
@@ -134,7 +107,7 @@ $(document).ready(function() {
         										var options = [];
 
         										$.ajax({ //Not found in cache, get from server
-        											url: 'getAllGiftsAction',
+        											url: 'getRegisterGiftsAction',
         											type: 'POST',
         											dataType: 'json',
         											async: false,
@@ -152,25 +125,6 @@ $(document).ready(function() {
         										return giftOptions = options; //Cache results and return options
         									}
         								},
-        								unit: {
-        									title: 'Đơn vị',
-        									width: '10%',
-        								},
-        								maxQuantity: {
-        									title: 'Số thùng phải đạt',
-        									width: '10%',
-        								},
-        								maxPoint: {
-        									title: 'Số điểm phải đạt',
-        									width: '10%',
-        								},
-        								formula: {
-        									title: 'Công thức',
-        									width: '24%',
-        									type: 'textarea',
-        									defaultValue: 'return $diemdk >= $diemth;',
-        									list: false
-        								}
                                     },
                                     loadingRecords: function (event, data) {
                             			GiftNumber = 0;
@@ -193,7 +147,7 @@ $(document).ready(function() {
                 listClass: 'child-opener-image-column',
                 display: function (promotionProduct) {
                     //Create an image that will be used to open child table
-                    var $img = $('<img class="child-opener-image" src="images/product.png" title="Sản phẩm áp dụng"   />');
+                    var $img = $('<img class="child-opener-image" src="images/product.png" title="Đăng ký sản phẩm"   />');
                     //Open child table when user clicks the image
                     $img.click(function () {
                     	
@@ -201,17 +155,17 @@ $(document).ready(function() {
                     	//document.getElementById("promotion_id").value=promotionProduct.record.promotion_id;
                     	//document.forms["setPromotionId"].submit();
                     	
-                        $('#PromotionTableContainer').jtable('openChildTable',
+                        $('#RegisterTableContainer').jtable('openChildTable',
                                 $img.closest('tr'), //Parent row
                                 {
-                                title: '[' + promotionProduct.record.promotionName + '] - Sản phẩm áp dụng',
+                                title: '[' + promotionProduct.record.promotionName + '] - Đăng ký sản phẩm',
                                 paging: true, //Enable paging
                         		pageSize: 10, //Set page size (default: 10) 
                                 actions: {
-                                	listAction : 'listPromotionProductAction?promotion_id='+promotionProduct.record.promotion_id,
-                        			createAction : 'createPromotionProductAction?promotion_id='+promotionProduct.record.promotion_id,
-                        			updateAction : 'updatePromotionProductAction?promotion_id='+promotionProduct.record.promotion_id,
-                        			deleteAction : 'deletePromotionProductAction?promotion_id='+promotionProduct.record.promotion_id,
+                                	listAction : 'listRegisterProductAction?promotion_id='+promotionProduct.record.promotion_id,
+                        			createAction : 'createRegisterProductAction?promotion_id='+promotionProduct.record.promotion_id,
+                        			updateAction : 'updateRegisterProductAction?promotion_id='+promotionProduct.record.promotion_id,
+                        			deleteAction : 'deleteRegisterProductAction?promotion_id='+promotionProduct.record.promotion_id,
                                 },
                                 fields: {
                                 	ProductNumber : {
@@ -244,7 +198,7 @@ $(document).ready(function() {
                                                 var options = [];
 
                                                 $.ajax({ //Not found in cache, get from server
-                                                    url: 'getAllProductsAction',
+                                                    url: 'getRegisterProductsAction',
                                                     type: 'POST',
                                                     dataType: 'json',
                                                     async: false,
@@ -262,12 +216,12 @@ $(document).ready(function() {
                                                 return productOptions = (options); //Cache results and return options
                                             }
                                     },
-//                                    maxQuantity: {
-//                                        title: 'Số thùng đạt',
-//                                        width: '20%',
-//                                    },
-                                    maxPoint: {
-                                        title: 'Điểm cho mỗi thùng (sản phẩm)',
+                                    point: {
+                                        title: 'Số điểm đăng ký',
+                                        width: '20%',
+                                    },
+                                    box: {
+                                        title: 'Số thùng đăng ký',
                                         width: '20%',
                                     }
                                 },
@@ -289,20 +243,20 @@ $(document).ready(function() {
 				edit: false,
 				list: false
 			},
-			group_customer_id : {
-				title : 'Nhóm khách hàng',
-				width : '15%',
+			customer_id : {
+				title : 'Khách hàng',
+				width : '40%',
 				edit : true,
 				 options: function () {
                      
-                     if (groupCusOptions) { //Check for cache
-                         return groupCusOptions;
+                     if (CustomerRegisterOptions) { //Check for cache
+                         return CustomerRegisterOptions;
                      }
 
                      var options = [];
 
                      $.ajax({ //Not found in cache, get from server
-                         url: 'getAllGroupCustomerAction',
+                         url: 'getCustomerRegisterAction',
                          type: 'POST',
                          dataType: 'json',
                          async: false,
@@ -312,62 +266,26 @@ $(document).ready(function() {
                                  alert(data.message);
                                  return;
                              }
-                             options = data.groupCustomers;
+                             options = data.mapCustomers;
                              //alert("333  " + JSON.stringify(options));
                          }
                      });
                      //alert("4444  " + data.categories);
-                     return groupCusOptions = options; //Cache results and return options
+                     return CustomerRegisterOptions = options; //Cache results and return options
                  }
 			},
-			promotionName : {
-				title : 'Tên khuyến mãi',
+			totalPoint : {
+				title : 'Tổng số điểm đăng ký',
 				width : '20%',
-				edit : true,
-				inputClass: 'validate[required]'
-			},
-			startDate : {
-				title : 'Bắt đầu',
-				width : '10%',
-				edit : true,
-				type: 'date',
-				displayFormat: 'dd-mm-yy',
-				inputClass: 'validate[required]'
-			},
-			endDate : {
-				title : 'Kết thúc',
-				width : '10%',
-				edit : true,
-				type: 'date',
-				displayFormat: 'dd-mm-yy',
-				inputClass: 'validate[required]'
-			},
-			remarks : {
-				title : 'Đặc tả',
-				width : '25%',
-				edit : true,
-				type: 'textarea',
-			},
-			customerRegist: {
-                title: 'Khách hàng đăng ký',
-                width: '10%',
-                type: 'checkbox',
-                values: { '0': 'Không', '1': 'Có' },
-                defaultValue: '1',
-                create: true,
+				create: true,
 				edit: true,
-				list: false
-            },
-			status: {
-                 title: 'Tình trạng',
-                 width: '15%',
-                 type: 'checkbox',
-                 values: { 'false': 'Kết thúc', 'true': 'Áp dụng' },
-                 defaultValue: 'true',
-                 create: false,
- 				 edit: true,
- 				 //listClass: 'promotion-status',
-             },
+			},
+			totalBox : {
+				title : 'Tổng số thùng đăng ký',
+				width : '20%',
+				create: true,
+				edit: true,
+			},
 			
 		},
 		//Initialize validation logic when a form is created
@@ -399,24 +317,7 @@ $(document).ready(function() {
 			RowNumber = 0;
 		},
 	});
-	$('#PromotionTableContainer').jtable('load');
+	$('#RegisterTableContainer').jtable('load');
 });
 
-
-function sortObject(obj) {
-    var arr = [];
-    var prop;
-    for (prop in obj) {
-        if (obj.hasOwnProperty(prop)) {
-            arr.push({
-                'key': prop,
-                'value': obj[prop]
-            });
-        }
-    }
-    arr.sort(function(a, b) {
-        return a.value - b.value;
-    });
-    return arr; // returns array
-}
 
