@@ -228,6 +228,7 @@ public class RegisterGiftHome {
 				PromotionGift promotionGift = new PromotionGift();
 				promotionGift.setId(rs.getInt("p_gift_id"));
 				pp.setPromotionGift(promotionGift);
+				pp.setP_gift_id(promotionGift.getId());
 
 				results.add(pp);
 			}

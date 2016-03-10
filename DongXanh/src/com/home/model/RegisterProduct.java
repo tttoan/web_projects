@@ -12,14 +12,15 @@ public class RegisterProduct implements java.io.Serializable {
 	private PromotionRegister promotionRegister;
 	private Integer point;
 	private Integer box;
-	private Integer product_id;
+	private Integer p_product_id;
 
-	public Integer getProduct_id() {
-		return product_id;
+
+	public Integer getP_product_id() {
+		return p_product_id;
 	}
 
-	public void setProduct_id(Integer product_id) {
-		this.product_id = product_id;
+	public void setP_product_id(Integer p_product_id) {
+		this.p_product_id = p_product_id;
 	}
 
 	public RegisterProduct() {

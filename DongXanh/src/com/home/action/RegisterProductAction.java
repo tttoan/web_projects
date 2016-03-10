@@ -191,8 +191,11 @@ public class RegisterProductAction implements ServletContextAware{
 		return Action.SUCCESS;
 	}
 
-	public String getAllProducts() throws Exception {
+	public String getRegisterProducts() throws Exception {
 		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			promotion_id = Integer.parseInt(request.getParameter("promotion_id"));
+			
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
 			ProductHome productHome = new ProductHome(HibernateUtil.getSessionFactory());
 			products =  productHome.getListProducts(promotion_id);

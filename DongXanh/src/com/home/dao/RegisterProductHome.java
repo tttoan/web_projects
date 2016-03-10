@@ -228,6 +228,7 @@ public class RegisterProductHome {
 				PromotionProduct promotionProduct = new PromotionProduct();
 				promotionProduct.setId(rs.getInt("p_product_id"));		
 				pp.setPromotionProduct(promotionProduct);
+				pp.setP_product_id(promotionProduct.getId());
 
 				pp.setBox(rs.getInt("box"));
 				pp.setPoint(rs.getInt("point"));

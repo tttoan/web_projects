@@ -64,14 +64,14 @@ $(document).ready(function() {
                     	 var $img = $('<img class="child-opener-image" src="images/user-group.png" title="Khách hàng đăng ký" />');
                          //Open child table when user clicks the image
                          $img.click(function () {
-                         	// window.location = url;
-                         	// document.location.href='listPromotionGiftAction?promotion_id='+Customer.record.promotion_id+'&group_customer_id='+Customer.record.group_customer_id;
-                        	 $.ajax({ //Not found in cache, get from server
-									url: 'listPromotionGiftAction?promotion_id='+Customer.record.promotion_id+'&group_customer_id='+Customer.record.group_customer_id,
-									type: 'POST',
-									dataType: 'json',
-									async: false
-                        	 });
+                         	 window.location = 'promotion_register.jsp?promotion_id='+Customer.record.promotion_id+'&group_customer_id='+Customer.record.group_customer_id;
+                         	 //document.location.href='listPromotionRegisterAction?promotion_id='+Customer.record.promotion_id+'&group_customer_id='+Customer.record.group_customer_id;
+//                        	 $.ajax({ //Not found in cache, get from server
+//									url: 'listPromotionRegisterAction?promotion_id='+Customer.record.promotion_id+'&group_customer_id='+Customer.record.group_customer_id,
+//									type: 'POST',
+//									dataType: 'json',
+//									async: false
+//                        	 });
                          });
                          //Return image to show on the person row
                          return $img;

@@ -5,6 +5,9 @@ $(document).ready(function() {
 	var CustomerRegisterOptions = null;
 	var productOptions = null;
 	var giftOptions = null;
+	var vPromotion_id = $('[name="promotion_id"]').val();
+	var vGroup_customer_id = $('[name="group_customer_id"]').val();
+	
 	$('#RegisterTableContainer').jtable({
 		title : 'Danh sách khách hàng đăng ký',
 		paging: true, //Enable paging
@@ -30,10 +33,10 @@ $(document).ready(function() {
 			}]
 		},
 		actions : {
-			listAction : 'listPromotionRegisterAction',
-			createAction : 'createPromotionRegisterAction',
-			updateAction : 'updatePromotionRegisterAction',
-			deleteAction : 'deletePromotionRegisterAction'
+			listAction : 'listPromotionRegisterAction?promotion_id='+vPromotion_id+'&group_customer_id='+vGroup_customer_id,
+			createAction : 'createPromotionRegisterAction?promotion_id='+vPromotion_id+'&group_customer_id='+vGroup_customer_id,
+			updateAction : 'updatePromotionRegisterAction?promotion_id='+vPromotion_id+'&group_customer_id='+vGroup_customer_id,
+			deleteAction : 'deletePromotionRegisterAction?promotion_id='+vPromotion_id+'&group_customer_id='+vGroup_customer_id,
 		},
 
 		fields : {
@@ -67,14 +70,14 @@ $(document).ready(function() {
                         $('#RegisterTableContainer').jtable('openChildTable',
                                 $img.closest('tr'),
                                 {
-		                        	title: '[' + promotionGift.record.promotionName + '] - Đăng ký quà tặng',
+		                        	title: '[' + promotionGift.record.id + '] - Đăng ký quà tặng',
 									paging: true, //Enable paging
 									pageSize: 10, //Set page size (default: 10) 
 									actions: {
-										listAction : 'listRegisterGiftAction?promotion_id='+promotionGift.record.promotion_id,
-										createAction : 'createRegisterGiftAction?promotion_id='+promotionGift.record.promotion_id,
-										updateAction : 'updateRegisterGiftAction?promotion_id='+promotionGift.record.promotion_id,
-										deleteAction : 'deleteRegisterGiftAction?promotion_id='+promotionGift.record.promotion_id,
+										listAction : 'listRegisterGiftAction?promotion_id='+vPromotion_id+'&register_id='+promotionGift.record.id,
+										createAction : 'createRegisterGiftAction?promotion_id='+vPromotion_id+'&register_id='+promotionGift.record.id,
+										updateAction : 'updateRegisterGiftAction?promotion_id='+vPromotion_id+'&register_id='+promotionGift.record.id,
+										deleteAction : 'deleteRegisterGiftAction?promotion_id='+vPromotion_id+'&register_id='+promotionGift.record.id,
 									},
                                     fields: {
                                     	GiftNumber : {
@@ -94,7 +97,7 @@ $(document).ready(function() {
         									edit: false,
         									list: false
         								},
-        								gift_id: {
+        								p_gift_id: {
         									title: 'Quà tặng',
         									width: '40%',
         									edit : true,
@@ -107,7 +110,7 @@ $(document).ready(function() {
         										var options = [];
 
         										$.ajax({ //Not found in cache, get from server
-        											url: 'getRegisterGiftsAction',
+        											url: 'getRegisterGiftsAction?promotion_id='+vPromotion_id,
         											type: 'POST',
         											dataType: 'json',
         											async: false,
@@ -158,14 +161,14 @@ $(document).ready(function() {
                         $('#RegisterTableContainer').jtable('openChildTable',
                                 $img.closest('tr'), //Parent row
                                 {
-                                title: '[' + promotionProduct.record.promotionName + '] - Đăng ký sản phẩm',
+                                title: '[' + promotionProduct.record.id + '] - Đăng ký sản phẩm',
                                 paging: true, //Enable paging
                         		pageSize: 10, //Set page size (default: 10) 
                                 actions: {
-                                	listAction : 'listRegisterProductAction?promotion_id='+promotionProduct.record.promotion_id,
-                        			createAction : 'createRegisterProductAction?promotion_id='+promotionProduct.record.promotion_id,
-                        			updateAction : 'updateRegisterProductAction?promotion_id='+promotionProduct.record.promotion_id,
-                        			deleteAction : 'deleteRegisterProductAction?promotion_id='+promotionProduct.record.promotion_id,
+                                	listAction : 'listRegisterProductAction?promotion_id='+vPromotion_id+'&register_id='+promotionProduct.record.id,
+                        			createAction : 'createRegisterProductAction?promotion_id='+vPromotion_id+'&register_id='+promotionProduct.record.id,
+                        			updateAction : 'updateRegisterProductAction?promotion_id='+vPromotion_id+'&register_id='+promotionProduct.record.id,
+                        			deleteAction : 'deleteRegisterProductAction?promotion_id='+vPromotion_id+'&register_id='+promotionProduct.record.id,
                                 },
                                 fields: {
                                 	ProductNumber : {
@@ -185,7 +188,7 @@ $(document).ready(function() {
                                         edit: false,
                                         list: false
                                     },
-                                    product_id: {
+                                    p_product_id: {
                                         title: 'Sản phẩm',
                                         width: '50%',
                                         edit : true,
@@ -198,7 +201,7 @@ $(document).ready(function() {
                                                 var options = [];
 
                                                 $.ajax({ //Not found in cache, get from server
-                                                    url: 'getRegisterProductsAction',
+                                                    url: 'getRegisterProductsAction?promotion_id='+vPromotion_id,
                                                     type: 'POST',
                                                     dataType: 'json',
                                                     async: false,

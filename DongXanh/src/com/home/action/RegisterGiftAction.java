@@ -169,8 +169,10 @@ public class RegisterGiftAction implements ServletContextAware{
 		return Action.SUCCESS;
 	}
 
-	public String getAllGifts() throws Exception {
+	public String getRegisterGifts() throws Exception {
 		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			promotion_id = Integer.parseInt(request.getParameter("promotion_id"));
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
 			GiftHome giftHome = new GiftHome(HibernateUtil.getSessionFactory());
 			gifts =  giftHome.getListGifts(promotion_id);

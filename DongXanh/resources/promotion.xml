@@ -80,7 +80,7 @@
 			method="getAllGroupCustomer">
 			<result type="json" />
 		</action>
-	<action name="listPromotionProductAction" class="com.home.action.PromotionProductAction"
+		<action name="listPromotionProductAction" class="com.home.action.PromotionProductAction"
 			method="list">
 			<result type="json">/promotion.jsp</result>
 		</action>
@@ -146,6 +146,56 @@
 		</action>
 		<action name="getCustomerRegisterAction" class="com.home.action.PromotionRegistAction"
 			method="getCustomerRegister">
+			<result type="json" />
+		</action>
+		
+		<action name="*RegisterGiftAction" class="com.home.action.RegisterGiftAction"
+			method="{1}">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="listRegisterGiftAction" class="com.home.action.RegisterGiftAction"
+			method="list">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="createRegisterGiftAction" class="com.home.action.RegisterGiftAction"
+			method="create">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="updateRegisterGiftAction" class="com.home.action.RegisterGiftAction"
+			method="update">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="deleteRegisterGiftAction" class="com.home.action.RegisterGiftAction"
+			method="delete">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="getRegisterGiftsAction" class="com.home.action.RegisterGiftAction"
+			method="getRegisterGifts">
+			<result type="json" />
+		</action>
+		
+		<action name="*RegisterProductAction" class="com.home.action.RegisterProductAction"
+			method="{1}">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="listRegisterProductAction" class="com.home.action.RegisterProductAction"
+			method="list">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="createRegisterProductAction" class="com.home.action.RegisterProductAction"
+			method="create">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="updateRegisterProductAction" class="com.home.action.RegisterProductAction"
+			method="update">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="deleteRegisterProductAction" class="com.home.action.RegisterProductAction"
+			method="delete">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="getRegisterProductsAction" class="com.home.action.RegisterProductAction"
+			method="getRegisterProducts">
 			<result type="json" />
 		</action>
 	</package>

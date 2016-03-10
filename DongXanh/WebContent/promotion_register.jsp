@@ -9,6 +9,14 @@
 <div class="right_col" role="main">
 	<div class="">
 
+		<input type="hidden" id="group_customer_id" name="group_customer_id" value="<%=request.getParameter("group_customer_id")%>">
+		<input type="hidden" id="promotion_id" name="promotion_id" value="<%=request.getParameter("promotion_id")%>">
+
+		<p class="url">
+			<span class="fs1" aria-hidden="true" data-icon="?"></span> <a
+				href="promotion.jsp" data-original-title="">Quay lại ..</a>
+		</p>
+
 		<div class="row">
 			<div class="col-md-12">
 				<div class="x_panel">
@@ -18,11 +26,12 @@
 						<div id="RegisterTableContainer"></div>
 
 					</div>
-						
 				</div>
 			</div>
 		</div>
 	</div>
+
+	
 
 	<!-- footer content -->
 	<%@ include file="footer.jsp"%>

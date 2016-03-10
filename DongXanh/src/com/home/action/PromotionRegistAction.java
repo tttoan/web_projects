@@ -81,6 +81,9 @@ public class PromotionRegistAction implements ServletContextAware{
 
 	public String create() throws Exception {
 		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			promotion_id = Integer.parseInt(request.getParameter("promotion_id"));
+			
 			record = new PromotionRegister();
 			record.setId(id);
 			Customer cus = new Customer();
@@ -108,6 +111,9 @@ public class PromotionRegistAction implements ServletContextAware{
 
 	public String update() throws Exception {
 		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			promotion_id = Integer.parseInt(request.getParameter("promotion_id"));
+			
 			PromotionRegister record = new PromotionRegister();
 			record.setId(id);
 			Customer cus = new Customer();
