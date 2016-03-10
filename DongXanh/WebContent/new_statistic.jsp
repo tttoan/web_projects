@@ -8,75 +8,95 @@
 <%@ include file="header.jsp"%>
 <%@ include file="user_profile.jsp"%>
 <%@ include file="menu.jsp"%>
-<script>
-	function change() {
-		var el1 = document.getElementById("quantiy");
-		var el2 = document.getElementById("price");
-		var el3 = document.getElementById("total");
-		el3.value = el1.value * el2.value;
-	}
-</script>
 <!-- page content -->
 <div class="right_col" role="main">
+
 	<div class="">
 		<div class="page-title">
 			<div class="title_left">
-				<h3>Thêm Hóa Đơn</h3>
+				<s:if test="%{edit}">
+					<h3>Sửa Số Liệu Hóa Đơn</h3>
+				</s:if>
+				<s:else>
+					<h3>Thêm Hóa Đơn</h3>
+				</s:else>
+
 			</div>
 
 		</div>
 		<div class="clearfix"></div>
+
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
 						<s:form action="add_statistic" theme="bootstrap" method="post"
 							cssClass="form-horizontal form-label-left">
+							<s:hidden name="stat.id" value="%{statId}"></s:hidden>
+							<s:hidden name="edit" value="%{edit}"></s:hidden>
+							<span class="section"></span>
+
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="dateReceived">Ngày nhận <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<sd:datetimepicker id="dateReceived" name="dateReceived"
-										cssClass="form-control col-md-7 col-xs-12" value="%{'today'}"
-										displayFormat="dd-MM-yyyy" />
+										cssClass="form-control col-md-7 col-xs-12"
+										value="%{stat.dateReceived}" displayFormat="dd-MM-yyyy" />
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="customerNameLevel2">Tên cấp 2 <span
-									class="required">*</span>
+									for="emp.id">Nhân viên TT <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<sd:autocompleter id="customerNameLevel2"
-										name="customerNameLevel2"
+									<s:select id="emp.id" name="emp.id"
+										cssClass="form-control col-md-7 col-xs-12" headerKey="-1"
+										headerValue="-- Chọn nhân viên thị trường --"
+										showDownArrow="false" autoComplete="true" list="listEmployee"
+										value="%{stat.user.id}" listKey="id"
+										listValue="fullName +' - '+ userName" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for=cusLevel2.id>Tên cấp 2 <span class="required">*</span>
+								</label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<s:select id="cusLevel2.id" name="cusLevel2.id" headerKey="-1"
+										headerValue="-- Chọn khách hàng cấp 2 --"
 										cssClass="form-control col-md-7 col-xs-12"
+										value="%{stat.customerByCustomerCodeLevel2.id}"
 										showDownArrow="false" autoComplete="true" list="listCustomer"
 										listKey="id" listValue="director +' - '+ customerCode" />
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="customerNameLevel1">Tên cấp 1 <span
-									class="required">*</span>
+									for="cusLevel1.id">Tên cấp 1 <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<sd:autocompleter id="customerNameLevel1"
-										name="customerNameLevel1" showDownArrow="false"
-										autoComplete="true" cssClass="form-control col-md-7 col-xs-12"
-										list="listCustomer" listKey="id" listValue="director +' - '+ customerCode"/>
+									<s:select id="cusLevel1.id" name="cusLevel1.id"
+										showDownArrow="false" autoComplete="true"
+										value="%{stat.customerByCustomerCodeLevel1.id}"
+										cssClass="form-control col-md-7 col-xs-12" list="listCustomer"
+										listKey="id" headerKey="-1"
+										headerValue="-- Chọn khách hàng cấp 1 --"
+										listValue="director +' - '+ customerCode" />
 								</div>
 							</div>
+
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="productName">Sản phẩm <span
-									class="required">*</span>
+									for="pro.id">Sản phẩm <span class="required">*</span>
 								</label>
+
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<sd:autocompleter id="productName"
-										name="productName" showDownArrow="false"
-										autoComplete="true" cssClass="form-control col-md-7 col-xs-12"
-										list="listProduct" listKey="id" listValue="productName +' - '+ productCode"/>
+									<s:select id="pro.id" name="pro.id" value="%{stat.product.id}"
+										cssClass="form-control col-md-7 col-xs-12" list="listProduct"
+										headerKey="-1" headerValue="-- Chọn sản phẩm --" listKey="id"
+										listValue="productName +' - '+ productCode" />
 								</div>
 							</div>
 							<div class="item form-group">
@@ -84,18 +104,21 @@
 									for="unitPrice">Đơn giá <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<s:textfield id="unitPrice" name="unitPrice"
-										required="required" value="%{getText('format.money',{0})}"
-										cssClass="form-control col-md-7 col-xs-12" />
+									<input type="text" id="unitPrice" name="unitPrice" readonly
+										required="required" data-validate-minmax="1,1000000000"
+										value="${stat.unitPrice}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="uomId">Đơn vị tính <span class="required">*</span>
+									for="totalBox">Số thùng <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<s:select id="uomId" name="uomId" list="listUom" listKey="id" listValue="uomName"
-										cssClass="form-control col-md-7 col-xs-12" />
+									<input type="number" id="totalBox" name="totalBox"
+										value="${stat.totalBox}" required="required"
+										data-validate-minmax="1,1000"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
@@ -103,9 +126,10 @@
 									for="quantity">Số lượng <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<s:textfield id="quantity" name="quantity" onchange=""
-										value="%{1}" type="number"
-										cssClass="form-control col-md-7 col-xs-12" />
+									<input type="number" id="quantity" name="quantity"
+										value="${stat.quantity}" required="required"
+										data-validate-minmax="1,1000"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
@@ -113,27 +137,17 @@
 									for="total">Thành tiền <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<s:textfield id="total" name="total" required="required"
-										value="%{getText('format.money',{0})}"
-										cssClass="form-control col-md-7 col-xs-12" />
+									<input type=text id="total" name="total" required="required"
+										readonly data-validate-minmax="1,100000000"
+										value="${stat.total}" class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
-							<div class="item form-group">
-								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="employeeName">NVTT <span class="required">*</span>
-								</label>
-								<div class="col-md-4 col-sm-4 col-xs-12">
-									<sd:autocompleter id="employeeName" name="employeeName"
-										cssClass="form-control col-md-7 col-xs-12"
-										showDownArrow="false" autoComplete="true" list="listEmployee"
-										listKey="id" listValue="fullName +' - '+ userName" />
-								</div>
-							</div>
+
 							<div class="ln_solid"></div>
 							<div class="form-group">
 								<div class="col-md-6 col-md-offset-3">
-									<s:reset class="btn btn-primary" value="Reset" />
-									<s:submit id="sends" value="Submit" class="btn btn-success" />
+									<button type="reset" class="btn btn-primary">Reset</button>
+									<button id="send" type="submit" class="btn btn-success">Save</button>
 								</div>
 							</div>
 						</s:form>
@@ -144,7 +158,7 @@
 	</div>
 
 	<!-- footer content -->
-	<s:include value="footer.jsp" />
+	<jsp:include page="footer.jsp"></jsp:include>
 	<!-- /footer content -->
 
 </div>

@@ -13,15 +13,13 @@ public class Uom implements java.io.Serializable {
 	private Integer id;
 	private String uomName;
 	private String description;
-	private Set<Statistic> statistics = new HashSet<Statistic>(0);
 
 	public Uom() {
 	}
 
-	public Uom(String uomName, String description, Set<Statistic> statistics) {
+	public Uom(String uomName, String description) {
 		this.uomName = uomName;
 		this.description = description;
-		this.statistics = statistics;
 	}
 
 	public Integer getId() {
@@ -46,14 +44,6 @@ public class Uom implements java.io.Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public Set<Statistic> getStatistics() {
-		return this.statistics;
-	}
-
-	public void setStatistics(Set<Statistic> statistics) {
-		this.statistics = statistics;
 	}
 
 }

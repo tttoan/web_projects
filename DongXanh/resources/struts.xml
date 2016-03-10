@@ -75,7 +75,7 @@
 			<result name="success" type="redirectAction">list_customer</result>
 			<result name="error">/error.jsp</result>
 		</action>
-
+		
 		<action name="list_statistic" method="listStatistic"
 			class="com.home.action.StatisticAction">
 			<result name="success">/statistics.jsp</result>
@@ -84,6 +84,7 @@
 
 		<action name="move_to_add_statistic" class="com.home.action.StatisticAction">
 			<result name="success">/new_statistic.jsp</result>
+			<result name="error">/new_statistic.jsp</result>
 		</action>
 
 		<action name="add_statistic" method="addStatistic"

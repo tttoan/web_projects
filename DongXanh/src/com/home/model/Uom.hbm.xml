@@ -14,11 +14,5 @@
         <property name="description" type="string">
             <column name="description" length="45" />
         </property>
-        <set name="statistics" table="statistic" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="uom_id" />
-            </key>
-            <one-to-many class="com.home.model.Statistic" />
-        </set>
     </class>
 </hibernate-mapping>

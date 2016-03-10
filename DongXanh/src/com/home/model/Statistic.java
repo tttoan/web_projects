@@ -1,6 +1,6 @@
 package com.home.model;
 
-// Generated Mar 1, 2016 10:27:23 PM by Hibernate Tools 4.3.1
+// Generated Mar 10, 2016 8:21:51 PM by Hibernate Tools 4.3.1
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -14,29 +14,27 @@ public class Statistic implements java.io.Serializable {
 	private Customer customerByCustomerCodeLevel1;
 	private Customer customerByCustomerCodeLevel2;
 	private Product product;
-	private Uom uom;
 	private User user;
 	private Date dateReceived;
+	private Integer totalBox;
 	private Integer quantity;
 	private BigDecimal unitPrice;
 	private BigDecimal total;
-	private Integer quantiy;
 
 	public Statistic() {
 	}
 
-	public Statistic(Customer customerByCustomerCodeLevel1, Customer customerByCustomerCodeLevel2, Product product, Uom uom, User user, Date dateReceived, Integer quantity, BigDecimal unitPrice,
-			BigDecimal total, Integer quantiy) {
+	public Statistic(Customer customerByCustomerCodeLevel1, Customer customerByCustomerCodeLevel2, Product product, User user, Date dateReceived, Integer totalBox, Integer quantity,
+			BigDecimal unitPrice, BigDecimal total) {
 		this.customerByCustomerCodeLevel1 = customerByCustomerCodeLevel1;
 		this.customerByCustomerCodeLevel2 = customerByCustomerCodeLevel2;
 		this.product = product;
-		this.uom = uom;
 		this.user = user;
 		this.dateReceived = dateReceived;
+		this.totalBox = totalBox;
 		this.quantity = quantity;
 		this.unitPrice = unitPrice;
 		this.total = total;
-		this.quantiy = quantiy;
 	}
 
 	public Integer getId() {
@@ -71,14 +69,6 @@ public class Statistic implements java.io.Serializable {
 		this.product = product;
 	}
 
-	public Uom getUom() {
-		return this.uom;
-	}
-
-	public void setUom(Uom uom) {
-		this.uom = uom;
-	}
-
 	public User getUser() {
 		return this.user;
 	}
@@ -93,6 +83,14 @@ public class Statistic implements java.io.Serializable {
 
 	public void setDateReceived(Date dateReceived) {
 		this.dateReceived = dateReceived;
+	}
+
+	public Integer getTotalBox() {
+		return this.totalBox;
+	}
+
+	public void setTotalBox(Integer totalBox) {
+		this.totalBox = totalBox;
 	}
 
 	public Integer getQuantity() {
@@ -117,14 +115,6 @@ public class Statistic implements java.io.Serializable {
 
 	public void setTotal(BigDecimal total) {
 		this.total = total;
-	}
-
-	public Integer getQuantiy() {
-		return this.quantiy;
-	}
-
-	public void setQuantiy(Integer quantiy) {
-		this.quantiy = quantiy;
 	}
 
 }

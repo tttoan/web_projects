@@ -9,11 +9,12 @@
 <div class="right_col" role="main">
 	<div class="">
 		<div class="clearfix"></div>
-		<div class="row" >
+		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
-						<table  id="example" class="table table-striped responsive-utilities jambo_table">
+						<table id="example"
+							class="table table-striped responsive-utilities jambo_table">
 							<thead>
 								<tr class="headings">
 									<th>Ngày nhận</th>
@@ -33,22 +34,27 @@
 
 								<s:iterator value="statistics">
 									<tr class="even pointer">
-										<td class=""><s:property value="%{getText('format.date',{dateReceived})}" /></td>
-										<td class=""><s:property value="customerByCustomerCodeLevel1.director" /></td>
-										<td class=""><s:property value="customerByCustomerCodeLevel2.director" /></td>
+										<td class=""><s:property
+												value="%{getText('format.date',{dateReceived})}" /></td>
+										<td class=""><s:property
+												value="customerByCustomerCodeLevel1.director" /></td>
+										<td class=""><s:property
+												value="customerByCustomerCodeLevel2.director" /></td>
 										<td class=""><s:property value="product.productName" /></td>
 										<td class=""><s:property value="totalBox" /></td>
 										<td class=""><s:property value="quantity" /></td>
 										<td class=""><s:property value="unitPrice" /></td>
 										<td class=""><s:property value="total" /></td>
 										<td class=""><s:property value="user.fullName" /></td>
-										<td class="last"> 
-											<a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa </a> 
-											<s:url action="delete_statistic" var="deleteURL">
-												<s:param name="statisticId" value="%{id}" ></s:param>
-											</s:url>
-											<s:a href="%{deleteURL}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Xóa </s:a>
-										</td>
+										<td class="last"><s:url action="move_to_add_statistic"
+												var="editURL">
+												<s:param name="statId" value="%{id}"></s:param>
+											</s:url> <s:a href="%{editURL}" class="btn btn-info btn-xs">
+												<i class="fa fa-pencil"></i> Sửa </s:a> <s:url
+												action="delete_statistic" var="deleteURL">
+												<s:param name="statId" value="%{id}"></s:param>
+											</s:url> <s:a href="%{deleteURL}" class="btn btn-danger btn-xs">
+												<i class="fa fa-trash-o"></i> Xóa </s:a></td>
 									</tr>
 								</s:iterator>
 							</tbody>
