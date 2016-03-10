@@ -20,13 +20,11 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.internal.SessionImpl;
 
-import com.home.model.Category;
-import com.home.model.Product;
-import com.home.model.Promotion;
 import com.home.model.PromotionProduct;
+import com.home.model.RegisterProduct;
 
 /**
- * Home object for domain model class PromotionProduct.
+ * Home object for domain model class RegisterProduct.
  * @see com.home.dao.PromotionProduct
  * @author Hibernate Tools
  */
@@ -56,8 +54,8 @@ public class RegisterProductHome {
 		}
 	}
 
-	public void persist(PromotionProduct transientInstance) {
-		log.debug("persisting PromotionProduct instance");
+	public void persist(RegisterProduct transientInstance) {
+		log.debug("persisting RegisterProduct instance");
 		try {
 			sessionFactory.getCurrentSession().persist(transientInstance);
 			log.debug("persist successful");
@@ -67,8 +65,8 @@ public class RegisterProductHome {
 		}
 	}
 
-	public void attachDirty(PromotionProduct instance) throws Exception{
-		log.debug("attaching dirty PromotionProduct instance");
+	public void attachDirty(RegisterProduct instance) throws Exception{
+		log.debug("attaching dirty RegisterProduct instance");
 		Transaction tx = null;
 		Session session = null;
 		try {
@@ -92,8 +90,8 @@ public class RegisterProductHome {
 		}
 	}
 
-	public void update(PromotionProduct instance) throws Exception{
-		log.debug("attaching dirty PromotionProduct instance");
+	public void update(RegisterProduct instance) throws Exception{
+		log.debug("attaching dirty RegisterProduct instance");
 		Transaction tx = null;
 		Session session = null;
 		try {
@@ -117,8 +115,8 @@ public class RegisterProductHome {
 		}
 	}
 
-	public void delete(PromotionProduct persistentInstance) throws Exception{
-		log.debug("deleting PromotionProduct instance");
+	public void delete(RegisterProduct persistentInstance) throws Exception{
+		log.debug("deleting RegisterProduct instance");
 		Transaction tx = null;
 		Session session = null;
 		try {
@@ -141,8 +139,8 @@ public class RegisterProductHome {
 		}
 	}
 
-	public void attachClean(PromotionProduct instance) {
-		log.debug("attaching clean PromotionProduct instance");
+	public void attachClean(RegisterProduct instance) {
+		log.debug("attaching clean RegisterProduct instance");
 		try {
 			sessionFactory.getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
@@ -152,10 +150,10 @@ public class RegisterProductHome {
 		}
 	}
 
-	public PromotionProduct merge(PromotionProduct detachedInstance) {
-		log.debug("merging PromotionProduct instance");
+	public RegisterProduct merge(RegisterProduct detachedInstance) {
+		log.debug("merging RegisterProduct instance");
 		try {
-			PromotionProduct result = (PromotionProduct) sessionFactory
+			RegisterProduct result = (RegisterProduct) sessionFactory
 					.getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
@@ -165,14 +163,14 @@ public class RegisterProductHome {
 		}
 	}
 
-	public PromotionProduct findById(java.lang.Integer id) {
-		log.debug("getting PromotionProduct instance with id: " + id);
+	public RegisterProduct findById(java.lang.Integer id) {
+		log.debug("getting RegisterProduct instance with id: " + id);
 		Transaction tx = null;
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			PromotionProduct instance = (PromotionProduct)session.get(PromotionProduct.class, id);
+			RegisterProduct instance = (RegisterProduct)session.get(RegisterProduct.class, id);
 			tx.commit();
 			if (instance == null) {
 				log.debug("get successful, no instance found");
@@ -194,12 +192,12 @@ public class RegisterProductHome {
 		}
 	}
 
-	public List<PromotionProduct> findByExample(PromotionProduct instance) {
-		log.debug("finding PromotionProduct instance by example");
+	public List<RegisterProduct> findByExample(RegisterProduct instance) {
+		log.debug("finding RegisterProduct instance by example");
 		try {
-			List<PromotionProduct> results = (List<PromotionProduct>) sessionFactory
+			List<RegisterProduct> results = (List<RegisterProduct>) sessionFactory
 					.getCurrentSession()
-					.createCriteria("com.home.dao.PromotionProduct")
+					.createCriteria("com.home.dao.RegisterProduct")
 					.add(create(instance)).list();
 			log.debug("find by example successful, result size: "
 					+ results.size());
@@ -210,10 +208,10 @@ public class RegisterProductHome {
 		}
 	}
 
-	public List<PromotionProduct> getListPromotionProducts(int promotion_id, int startPageIndex, int recordsPerPage) throws Exception{
-		log.debug("retrieve list PromotionProduct");
+	public List<RegisterProduct> getListRegisterProducts(int register_id, int startPageIndex, int recordsPerPage) throws Exception{
+		log.debug("retrieve list RegisterProduct");
 		Session session = null;
-		List<PromotionProduct> results = new ArrayList<PromotionProduct>();
+		List<RegisterProduct> results = new ArrayList<RegisterProduct>();
 		try {
 			session = sessionFactory.openSession();
 
@@ -222,28 +220,22 @@ public class RegisterProductHome {
 
 			int range = startPageIndex+recordsPerPage;
 			ResultSet rs = conn.createStatement().executeQuery(
-					"SELECT * FROM (SELECT @i:=@i+1 AS iterator, t.* FROM promotion_product t,(SELECT @i:=0) foo Where promotion_id="+promotion_id+" Order By id) AS XX WHERE iterator > "+startPageIndex+" AND iterator <= " + range);
+					"SELECT * FROM (SELECT @i:=@i+1 AS iterator, t.* FROM register_product t,(SELECT @i:=0) foo Where register_id="+register_id+" Order By id) AS XX WHERE iterator > "+startPageIndex+" AND iterator <= " + range);
 			while(rs.next()){
-				PromotionProduct pp = new PromotionProduct();
+				RegisterProduct pp = new RegisterProduct();
 				pp.setId(rs.getInt("id"));
 
-				Product product = new Product();
-				product.setId(rs.getInt("product_id"));		
-				pp.setProduct(product);
-				pp.setProduct_id(product.getId());
+				PromotionProduct promotionProduct = new PromotionProduct();
+				promotionProduct.setId(rs.getInt("p_product_id"));		
+				pp.setPromotionProduct(promotionProduct);
 
-				Promotion promotion = new Promotion();
-				promotion.setId(rs.getInt("promotion_id"));
-				pp.setPromotion(promotion);
-				pp.setPromotion_id(promotion.getId());
-
-				pp.setMaxQuantity(rs.getInt("max_quantity"));
-				pp.setMaxPoint(rs.getInt("max_point"));
+				pp.setBox(rs.getInt("box"));
+				pp.setPoint(rs.getInt("point"));
 
 				results.add(pp);
 			}
 			rs.close();
-			log.debug("retrieve list PromotionProduct successful, result size: " + results.size());
+			log.debug("retrieve list RegisterProduct successful, result size: " + results.size());
 			return results;
 		} catch (Exception re) {
 			re.printStackTrace();
@@ -259,13 +251,13 @@ public class RegisterProductHome {
 		}
 	}
 
-	public int getTotalRecords(int promotion_id) throws Exception{
+	public int getTotalRecords(int register_id) throws Exception{
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
-			String sql = "SELECT COUNT(*) AS COUNT FROM PromotionProduct WHERE promotion=:promotion";
+			String sql = "SELECT COUNT(*) AS COUNT FROM RegisterProduct WHERE promotionRegister=:register_id";
 			Query query = session.createQuery(sql);
-			query.setInteger("promotion", promotion_id);
+			query.setInteger("register_id", register_id);
 			List results = query.list();
 			return Integer.parseInt(results.get(0).toString());
 		} catch (Exception re) {

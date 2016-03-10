@@ -1,10 +1,7 @@
 package com.home.action;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -14,9 +11,10 @@ import org.apache.struts2.util.ServletContextAware;
 
 import com.home.dao.ProductHome;
 import com.home.dao.PromotionProductHome;
-import com.home.model.Product;
-import com.home.model.Promotion;
+import com.home.dao.RegisterProductHome;
 import com.home.model.PromotionProduct;
+import com.home.model.PromotionRegister;
+import com.home.model.RegisterProduct;
 import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
@@ -29,18 +27,21 @@ public class RegisterProductAction implements ServletContextAware{
 
 	private ServletContext ctx;
 
-	private PromotionProduct record ;
-	private List<PromotionProduct> records ;
+	private RegisterProduct record ;
+	private List<RegisterProduct> records ;
 	private String result;
 	private String message;
 	private int totalRecordCount;
 	private LinkedHashMap<Integer, String> products ;
 
 	private Integer id;
-	private Integer maxQuantity;
-	private Integer maxPoint;
+	private Integer register_id;
+	private Integer p_product_id;
+	private Integer point;
+	private Integer box;
 	private Integer product_id;
 	private Integer promotion_id;
+
 
 	public static void main(String[] args) {
 		try {
@@ -88,8 +89,8 @@ public class RegisterProductAction implements ServletContextAware{
 			
 			int startPageIndex = Integer.parseInt(request.getParameter("jtStartIndex"));
 			int recordsPerPage = Integer.parseInt(request.getParameter("jtPageSize"));
-			String sorting = request.getParameter("jtSorting");
-			promotion_id = Integer.parseInt(request.getParameter("promotion_id"));
+			//String sorting = request.getParameter("jtSorting");
+			register_id = Integer.parseInt(request.getParameter("register_id"));
 			//System.out.println("startPageIndex: " + startPageIndex);
 			//System.out.println("recordsPerPage: " + recordsPerPage);
 
@@ -97,11 +98,11 @@ public class RegisterProductAction implements ServletContextAware{
 //			if(promotion_id == null){
 //				promotion_id = (int) ActionContext.getContext().getSession().get("promotion_id");
 //			}
-			if(promotion_id != null){
-				PromotionProductHome productHome = new PromotionProductHome(HibernateUtil.getSessionFactory());
-				records = productHome.getListPromotionProducts(promotion_id, startPageIndex, recordsPerPage);
+			if(register_id != null){
+				RegisterProductHome registerProductHome = new RegisterProductHome(HibernateUtil.getSessionFactory());
+				records = registerProductHome.getListRegisterProducts(register_id, startPageIndex, recordsPerPage);
 				// Get Total Record Count for Pagination
-				totalRecordCount = productHome.getTotalRecords(promotion_id);
+				totalRecordCount = registerProductHome.getTotalRecords(register_id);
 			}else{
 				totalRecordCount = 0;
 			}
@@ -118,24 +119,24 @@ public class RegisterProductAction implements ServletContextAware{
 	public String create() throws Exception {
 		try {
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
-			promotion_id = Integer.parseInt(request.getParameter("promotion_id"));
+			register_id = Integer.parseInt(request.getParameter("register_id"));
 			
-			record = new PromotionProduct();
+			record = new RegisterProduct();
 			record.setId(id);
-			record.setMaxPoint(maxPoint);
-			record.setMaxQuantity(maxQuantity);
+			record.setBox(box);
+			record.setPoint(point);
 			
-			Product product = new Product();
-			product.setId(product_id);		
-			record.setProduct(product);
+			PromotionProduct promotionProduct = new PromotionProduct();
+			promotionProduct.setId(p_product_id);
+			record.setPromotionProduct(promotionProduct);
 
-			Promotion promotion = new Promotion();
-			promotion.setId(promotion_id);
-			record.setPromotion(promotion);
+			PromotionRegister promotionRegister = new PromotionRegister();
+			promotionRegister.setId(register_id);
+			record.setPromotionRegister(promotionRegister);
 			
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
-			PromotionProductHome productHome = new PromotionProductHome(HibernateUtil.getSessionFactory());
-			productHome.attachDirty(record);
+			RegisterProductHome registerProductHome = new RegisterProductHome(HibernateUtil.getSessionFactory());
+			registerProductHome.attachDirty(record);
 			result = "OK";
 		} catch (Exception e) {
 			result = "ERROR";
@@ -148,24 +149,24 @@ public class RegisterProductAction implements ServletContextAware{
 	public String update() throws Exception {
 		try {
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
-			promotion_id = Integer.parseInt(request.getParameter("promotion_id"));
+			register_id = Integer.parseInt(request.getParameter("register_id"));
 			
-			PromotionProduct record = new PromotionProduct();
+			RegisterProduct record = new RegisterProduct();
 			record.setId(id);
-			record.setMaxPoint(maxPoint);
-			record.setMaxQuantity(maxQuantity);
+			record.setBox(box);
+			record.setPoint(point);
 			
-			Product product = new Product();
-			product.setId(product_id);		
-			record.setProduct(product);
+			PromotionProduct promotionProduct = new PromotionProduct();
+			promotionProduct.setId(p_product_id);
+			record.setPromotionProduct(promotionProduct);
 
-			Promotion promotion = new Promotion();
-			promotion.setId(promotion_id);
-			record.setPromotion(promotion);
+			PromotionRegister promotionRegister = new PromotionRegister();
+			promotionRegister.setId(register_id);
+			record.setPromotionRegister(promotionRegister);
 			
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
-			PromotionProductHome productHome = new PromotionProductHome(HibernateUtil.getSessionFactory());
-			productHome.update(record);
+			RegisterProductHome registerProductHome = new RegisterProductHome(HibernateUtil.getSessionFactory());
+			registerProductHome.update(record);
 			result = "OK";
 		} catch (Exception e) {
 			result = "ERROR";
@@ -178,9 +179,9 @@ public class RegisterProductAction implements ServletContextAware{
 	public String delete() throws Exception {
 		try {
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
-			PromotionProductHome productHome = new PromotionProductHome(HibernateUtil.getSessionFactory());
-			PromotionProduct record = productHome.findById(id);
-			productHome.delete(record);
+			RegisterProductHome registerProductHome = new RegisterProductHome(HibernateUtil.getSessionFactory());
+			RegisterProduct record = registerProductHome.findById(id);
+			registerProductHome.delete(record);
 			result = "OK";
 		} catch (Exception e){
 			result = "ERROR";
@@ -194,7 +195,7 @@ public class RegisterProductAction implements ServletContextAware{
 		try {
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
 			ProductHome productHome = new ProductHome(HibernateUtil.getSessionFactory());
-			products =  productHome.getListProducts();
+			products =  productHome.getListProducts(promotion_id);
 			result = "OK";
 		} catch (Exception e) {
 			result = "ERROR";
@@ -204,19 +205,19 @@ public class RegisterProductAction implements ServletContextAware{
 		return Action.SUCCESS;
 	}
 	
-	public PromotionProduct getRecord() {
+	public RegisterProduct getRecord() {
 		return record;
 	}
 
-	public void setRecord(PromotionProduct record) {
+	public void setRecord(RegisterProduct record) {
 		this.record = record;
 	}
 
-	public List<PromotionProduct> getRecords() {
+	public List<RegisterProduct> getRecords() {
 		return records;
 	}
 
-	public void setRecords(List<PromotionProduct> records) {
+	public void setRecords(List<RegisterProduct> records) {
 		this.records = records;
 	}
 
@@ -260,20 +261,36 @@ public class RegisterProductAction implements ServletContextAware{
 		this.id = id;
 	}
 
-	public Integer getMaxQuantity() {
-		return maxQuantity;
+	public Integer getRegister_id() {
+		return register_id;
 	}
 
-	public void setMaxQuantity(Integer maxQuantity) {
-		this.maxQuantity = maxQuantity;
+	public void setRegister_id(Integer register_id) {
+		this.register_id = register_id;
 	}
 
-	public Integer getMaxPoint() {
-		return maxPoint;
+	public Integer getP_product_id() {
+		return p_product_id;
 	}
 
-	public void setMaxPoint(Integer maxPoint) {
-		this.maxPoint = maxPoint;
+	public void setP_product_id(Integer p_product_id) {
+		this.p_product_id = p_product_id;
+	}
+
+	public Integer getPoint() {
+		return point;
+	}
+
+	public void setPoint(Integer point) {
+		this.point = point;
+	}
+
+	public Integer getBox() {
+		return box;
+	}
+
+	public void setBox(Integer box) {
+		this.box = box;
 	}
 
 	public Integer getProduct_id() {
@@ -283,7 +300,6 @@ public class RegisterProductAction implements ServletContextAware{
 	public void setProduct_id(Integer product_id) {
 		this.product_id = product_id;
 	}
-
 	public Integer getPromotion_id() {
 		return promotion_id;
 	}
@@ -291,7 +307,6 @@ public class RegisterProductAction implements ServletContextAware{
 	public void setPromotion_id(Integer promotion_id) {
 		this.promotion_id = promotion_id;
 	}
-
 
 
 }

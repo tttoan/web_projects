@@ -298,4 +298,34 @@ public class GiftHome {
 			}
 		}
 	}
+	
+	public LinkedHashMap<Integer, String> getListGifts(int promotion_id) throws Exception{
+		log.debug("retrieve list Gift");
+		Session session = null;
+		LinkedHashMap<Integer, String> results = new LinkedHashMap<Integer, String>();
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			ResultSet rs = conn.createStatement().executeQuery("SELECT pg.id,  gift_name FROM `gift` g JOIN `promotion_gift` pg ON g.id=pg.gift_id WHERE promotion_id="+promotion_id+"  Order by gift_name");
+			while(rs.next()){
+				results.put(rs.getInt("id"), rs.getString("gift_name"));
+			}
+			rs.close();
+			log.debug("retrieve list Gift successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Gift failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
 }

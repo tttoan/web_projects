@@ -11,9 +11,10 @@ import org.apache.struts2.util.ServletContextAware;
 
 import com.home.dao.GiftHome;
 import com.home.dao.PromotionGiftHome;
-import com.home.model.Gift;
-import com.home.model.Promotion;
+import com.home.dao.RegisterGiftHome;
 import com.home.model.PromotionGift;
+import com.home.model.PromotionRegister;
+import com.home.model.RegisterGift;
 import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
@@ -26,20 +27,18 @@ public class RegisterGiftAction implements ServletContextAware{
 
 	private ServletContext ctx;
 
-	private PromotionGift record ;
-	private List<PromotionGift> records ;
+	private RegisterGift record ;
+	private List<RegisterGift> records ;
 	private String result;
 	private String message;
 	private int totalRecordCount;
 	private LinkedHashMap<Integer, String> gifts ;
 
 	private Integer id;
-	private Integer maxQuantity;
-	private Integer maxPoint;
 	private Integer gift_id;
+	private Integer register_id;
+	private Integer p_gift_id;
 	private Integer promotion_id;
-	private String unit;
-	private String formula;
 
 	public static void main(String[] args) {
 		try {
@@ -76,16 +75,16 @@ public class RegisterGiftAction implements ServletContextAware{
 			
 			int startPageIndex = Integer.parseInt(request.getParameter("jtStartIndex"));
 			int recordsPerPage = Integer.parseInt(request.getParameter("jtPageSize"));
-			String sorting = request.getParameter("jtSorting");
-			promotion_id = Integer.parseInt(request.getParameter("promotion_id"));
+			//String sorting = request.getParameter("jtSorting");
+			register_id = Integer.parseInt(request.getParameter("register_id"));
 			//System.out.println("startPageIndex: " + startPageIndex);
 			//System.out.println("recordsPerPage: " + recordsPerPage);
 
-			if(promotion_id != null){
-				PromotionGiftHome productHome = new PromotionGiftHome(HibernateUtil.getSessionFactory());
-				records = productHome.getListPromotionGifts(promotion_id, startPageIndex, recordsPerPage);
+			if(register_id != null){
+				RegisterGiftHome registerGiftHome = new RegisterGiftHome(HibernateUtil.getSessionFactory());
+				records = registerGiftHome.getListRegisterGifts(register_id, startPageIndex, recordsPerPage);
 				// Get Total Record Count for Pagination
-				totalRecordCount = productHome.getTotalRecords(promotion_id);
+				totalRecordCount = registerGiftHome.getTotalRecords(register_id);
 			}else{
 				totalRecordCount = 0;
 			}
@@ -102,26 +101,22 @@ public class RegisterGiftAction implements ServletContextAware{
 	public String create() throws Exception {
 		try {
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
-			promotion_id = Integer.parseInt(request.getParameter("promotion_id"));
+			register_id = Integer.parseInt(request.getParameter("register_id"));
 			
-			record = new PromotionGift();
+			record = new RegisterGift();
 			record.setId(id);
-			record.setMaxPoint(maxPoint);
-			record.setMaxQuantity(maxQuantity);
-			record.setFormula(formula);
-			record.setUnit(unit);
 			
-			Gift gift = new Gift();
-			gift.setId(gift_id);		
-			record.setGift(gift);
-
-			Promotion promotion = new Promotion();
-			promotion.setId(promotion_id);
-			record.setPromotion(promotion);
+			PromotionGift promotionGift = new PromotionGift();
+			promotionGift.setId(p_gift_id);
+			record.setPromotionGift(promotionGift);
+			
+			PromotionRegister promotionRegister = new PromotionRegister();
+			promotionRegister.setId(register_id);
+			record.setPromotionRegister(promotionRegister);
 			
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
-			PromotionGiftHome productHome = new PromotionGiftHome(HibernateUtil.getSessionFactory());
-			productHome.attachDirty(record);
+			RegisterGiftHome registerGiftHome = new RegisterGiftHome(HibernateUtil.getSessionFactory());
+			registerGiftHome.attachDirty(record);
 			result = "OK";
 		} catch (Exception e) {
 			result = "ERROR";
@@ -134,26 +129,22 @@ public class RegisterGiftAction implements ServletContextAware{
 	public String update() throws Exception {
 		try {
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
-			promotion_id = Integer.parseInt(request.getParameter("promotion_id"));
+			register_id = Integer.parseInt(request.getParameter("register_id"));
 			
-			PromotionGift record = new PromotionGift();
+			RegisterGift record = new RegisterGift();
 			record.setId(id);
-			record.setMaxPoint(maxPoint);
-			record.setMaxQuantity(maxQuantity);
-			record.setFormula(formula);
-			record.setUnit(unit);
 			
-			Gift gift = new Gift();
-			gift.setId(gift_id);		
-			record.setGift(gift);
-
-			Promotion promotion = new Promotion();
-			promotion.setId(promotion_id);
-			record.setPromotion(promotion);
+			PromotionGift promotionGift = new PromotionGift();
+			promotionGift.setId(p_gift_id);
+			record.setPromotionGift(promotionGift);
+			
+			PromotionRegister promotionRegister = new PromotionRegister();
+			promotionRegister.setId(register_id);
+			record.setPromotionRegister(promotionRegister);
 			
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
-			PromotionGiftHome productHome = new PromotionGiftHome(HibernateUtil.getSessionFactory());
-			productHome.update(record);
+			RegisterGiftHome registerGiftHome = new RegisterGiftHome(HibernateUtil.getSessionFactory());
+			registerGiftHome.update(record);
 			result = "OK";
 		} catch (Exception e) {
 			result = "ERROR";
@@ -166,9 +157,9 @@ public class RegisterGiftAction implements ServletContextAware{
 	public String delete() throws Exception {
 		try {
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
-			PromotionGiftHome productHome = new PromotionGiftHome(HibernateUtil.getSessionFactory());
-			PromotionGift record = productHome.findById(id);
-			productHome.delete(record);
+			RegisterGiftHome registerGiftHome = new RegisterGiftHome(HibernateUtil.getSessionFactory());
+			RegisterGift record = registerGiftHome.findById(id);
+			registerGiftHome.delete(record);
 			result = "OK";
 		} catch (Exception e){
 			result = "ERROR";
@@ -182,7 +173,7 @@ public class RegisterGiftAction implements ServletContextAware{
 		try {
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
 			GiftHome giftHome = new GiftHome(HibernateUtil.getSessionFactory());
-			gifts =  giftHome.getListGifts();
+			gifts =  giftHome.getListGifts(promotion_id);
 			result = "OK";
 		} catch (Exception e) {
 			result = "ERROR";
@@ -192,20 +183,20 @@ public class RegisterGiftAction implements ServletContextAware{
 		return Action.SUCCESS;
 	}
 	
-
-	public PromotionGift getRecord() {
+	
+	public RegisterGift getRecord() {
 		return record;
 	}
 
-	public void setRecord(PromotionGift record) {
+	public void setRecord(RegisterGift record) {
 		this.record = record;
 	}
 
-	public List<PromotionGift> getRecords() {
+	public List<RegisterGift> getRecords() {
 		return records;
 	}
 
-	public void setRecords(List<PromotionGift> records) {
+	public void setRecords(List<RegisterGift> records) {
 		this.records = records;
 	}
 
@@ -249,22 +240,6 @@ public class RegisterGiftAction implements ServletContextAware{
 		this.id = id;
 	}
 
-	public Integer getMaxQuantity() {
-		return maxQuantity;
-	}
-
-	public void setMaxQuantity(Integer maxQuantity) {
-		this.maxQuantity = maxQuantity;
-	}
-
-	public Integer getMaxPoint() {
-		return maxPoint;
-	}
-
-	public void setMaxPoint(Integer maxPoint) {
-		this.maxPoint = maxPoint;
-	}
-
 	public Integer getGift_id() {
 		return gift_id;
 	}
@@ -273,6 +248,22 @@ public class RegisterGiftAction implements ServletContextAware{
 		this.gift_id = gift_id;
 	}
 
+	public Integer getRegister_id() {
+		return register_id;
+	}
+
+	public void setRegister_id(Integer register_id) {
+		this.register_id = register_id;
+	}
+
+	public Integer getP_gift_id() {
+		return p_gift_id;
+	}
+
+	public void setP_gift_id(Integer p_gift_id) {
+		this.p_gift_id = p_gift_id;
+	}
+	
 	public Integer getPromotion_id() {
 		return promotion_id;
 	}
@@ -281,19 +272,5 @@ public class RegisterGiftAction implements ServletContextAware{
 		this.promotion_id = promotion_id;
 	}
 
-	public String getUnit() {
-		return unit;
-	}
 
-	public void setUnit(String unit) {
-		this.unit = unit;
-	}
-
-	public String getFormula() {
-		return formula;
-	}
-
-	public void setFormula(String formula) {
-		this.formula = formula;
-	}
 }

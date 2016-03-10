@@ -10,6 +10,7 @@ public class RegisterGift implements java.io.Serializable {
 	private Integer id;
 	private PromotionGift promotionGift;
 	private PromotionRegister promotionRegister;
+	private Integer gift_id;
 
 	public RegisterGift() {
 	}
@@ -43,4 +44,11 @@ public class RegisterGift implements java.io.Serializable {
 		this.promotionRegister = promotionRegister;
 	}
 
+	public Integer getGift_id() {
+		return gift_id;
+	}
+
+	public void setGift_id(Integer gift_id) {
+		this.gift_id = gift_id;
+	}
 }

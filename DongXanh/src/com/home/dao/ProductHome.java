@@ -336,4 +336,34 @@ public class ProductHome {
 			}
 		}
 	}
+	
+	public LinkedHashMap<Integer, String> getListProducts(int promotion_id) throws Exception{
+		log.debug("retrieve list Product");
+		Session session = null;
+		LinkedHashMap<Integer, String> results = new LinkedHashMap<Integer, String>();
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			ResultSet rs = conn.createStatement().executeQuery("SELECT pp.id, product_name FROM `product` p JOIN `promotion_product` pp ON p.id=pp.product_id WHERE promotion_id="+promotion_id+" Order by product_name");
+			while(rs.next()){
+				results.put(rs.getInt("id"), rs.getString("product_name"));
+			}
+			rs.close();
+			log.debug("retrieve list Product successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
 }

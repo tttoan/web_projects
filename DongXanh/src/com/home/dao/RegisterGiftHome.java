@@ -20,10 +20,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.internal.SessionImpl;
 
-import com.home.model.Gift;
-import com.home.model.Product;
-import com.home.model.Promotion;
 import com.home.model.PromotionGift;
+import com.home.model.RegisterGift;
 
 /**
  * Home object for domain model class PromotionGift.
@@ -56,8 +54,8 @@ public class RegisterGiftHome {
 		}
 	}
 
-	public void persist(PromotionGift transientInstance) {
-		log.debug("persisting PromotionGift instance");
+	public void persist(RegisterGift transientInstance) {
+		log.debug("persisting RegisterGift instance");
 		try {
 			sessionFactory.getCurrentSession().persist(transientInstance);
 			log.debug("persist successful");
@@ -67,8 +65,8 @@ public class RegisterGiftHome {
 		}
 	}
 
-	public void attachDirty(PromotionGift instance) throws Exception{
-		log.debug("attaching dirty PromotionGift instance");
+	public void attachDirty(RegisterGift instance) throws Exception{
+		log.debug("attaching dirty RegisterGift instance");
 		Transaction tx = null;
 		Session session = null;
 		try {
@@ -92,8 +90,8 @@ public class RegisterGiftHome {
 		}
 	}
 
-	public void update(PromotionGift instance) throws Exception{
-		log.debug("attaching dirty PromotionGift instance");
+	public void update(RegisterGift instance) throws Exception{
+		log.debug("attaching dirty RegisterGift instance");
 		Transaction tx = null;
 		Session session = null;
 		try {
@@ -117,8 +115,8 @@ public class RegisterGiftHome {
 		}
 	}
 
-	public void delete(PromotionGift persistentInstance) throws Exception{
-		log.debug("deleting PromotionGift instance");
+	public void delete(RegisterGift persistentInstance) throws Exception{
+		log.debug("deleting RegisterGift instance");
 		Transaction tx = null;
 		Session session = null;
 		try {
@@ -141,8 +139,8 @@ public class RegisterGiftHome {
 		}
 	}
 
-	public void attachClean(PromotionGift instance) {
-		log.debug("attaching clean PromotionGift instance");
+	public void attachClean(RegisterGift instance) {
+		log.debug("attaching clean RegisterGift instance");
 		try {
 			sessionFactory.getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
@@ -152,10 +150,10 @@ public class RegisterGiftHome {
 		}
 	}
 
-	public PromotionGift merge(PromotionGift detachedInstance) {
-		log.debug("merging PromotionGift instance");
+	public RegisterGift merge(RegisterGift detachedInstance) {
+		log.debug("merging RegisterGift instance");
 		try {
-			PromotionGift result = (PromotionGift) sessionFactory
+			RegisterGift result = (RegisterGift) sessionFactory
 					.getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
@@ -165,14 +163,14 @@ public class RegisterGiftHome {
 		}
 	}
 
-	public PromotionGift findById(java.lang.Integer id) {
-		log.debug("getting PromotionGift instance with id: " + id);
+	public RegisterGift findById(java.lang.Integer id) {
+		log.debug("getting RegisterGift instance with id: " + id);
 		Transaction tx = null;
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			PromotionGift instance = (PromotionGift)session.get(PromotionGift.class, id);
+			RegisterGift instance = (RegisterGift)session.get(RegisterGift.class, id);
 			tx.commit();
 			if (instance == null) {
 				log.debug("get successful, no instance found");
@@ -194,12 +192,12 @@ public class RegisterGiftHome {
 		}
 	}
 
-	public List<PromotionGift> findByExample(PromotionGift instance) {
-		log.debug("finding PromotionGift instance by example");
+	public List<RegisterGift> findByExample(RegisterGift instance) {
+		log.debug("finding RegisterGift instance by example");
 		try {
-			List<PromotionGift> results = (List<PromotionGift>) sessionFactory
+			List<RegisterGift> results = (List<RegisterGift>) sessionFactory
 					.getCurrentSession()
-					.createCriteria("com.home.dao.PromotionGift")
+					.createCriteria("com.home.dao.RegisterGift")
 					.add(create(instance)).list();
 			log.debug("find by example successful, result size: "
 					+ results.size());
@@ -210,10 +208,10 @@ public class RegisterGiftHome {
 		}
 	}
 
-	public List<PromotionGift> getListPromotionGifts(int promotion_id, int startPageIndex, int recordsPerPage) throws Exception{
-		log.debug("retrieve list PromotionGift");
+	public List<RegisterGift> getListRegisterGifts(int register_id, int startPageIndex, int recordsPerPage) throws Exception{
+		log.debug("retrieve list RegisterGift");
 		Session session = null;
-		List<PromotionGift> results = new ArrayList<PromotionGift>();
+		List<RegisterGift> results = new ArrayList<RegisterGift>();
 		try {
 			session = sessionFactory.openSession();
 
@@ -222,30 +220,19 @@ public class RegisterGiftHome {
 
 			int range = startPageIndex+recordsPerPage;
 			ResultSet rs = conn.createStatement().executeQuery(
-					"SELECT * FROM (SELECT @i:=@i+1 AS iterator, t.* FROM promotion_gift t,(SELECT @i:=0) foo Where promotion_id="+promotion_id+" Order By id) AS XX WHERE iterator > "+startPageIndex+" AND iterator <= " + range);
+					"SELECT * FROM (SELECT @i:=@i+1 AS iterator, t.* FROM register_gift t,(SELECT @i:=0) foo Where register_id="+register_id+" Order By id) AS XX WHERE iterator > "+startPageIndex+" AND iterator <= " + range);
 			while(rs.next()){
-				PromotionGift pp = new PromotionGift();
+				RegisterGift pp = new RegisterGift();
 				pp.setId(rs.getInt("id"));
 
-				Gift gift = new Gift();
-				gift.setId(rs.getInt("gift_id"));		
-				pp.setGift(gift);
-				pp.setGift_id(gift.getId());
-
-				Promotion promotion = new Promotion();
-				promotion.setId(rs.getInt("promotion_id"));
-				pp.setPromotion(promotion);
-				pp.setPromotion_id(promotion.getId());
-
-				pp.setMaxQuantity(rs.getInt("max_quantity"));
-				pp.setMaxPoint(rs.getInt("max_point"));
-				pp.setUnit(rs.getString("unit"));
-				pp.setFormula(rs.getString("formula"));
+				PromotionGift promotionGift = new PromotionGift();
+				promotionGift.setId(rs.getInt("p_gift_id"));
+				pp.setPromotionGift(promotionGift);
 
 				results.add(pp);
 			}
 			rs.close();
-			log.debug("retrieve list PromotionGift successful, result size: " + results.size());
+			log.debug("retrieve list RegisterGift successful, result size: " + results.size());
 			return results;
 		} catch (Exception re) {
 			re.printStackTrace();
@@ -261,13 +248,13 @@ public class RegisterGiftHome {
 		}
 	}
 
-	public int getTotalRecords(int promotion_id) throws Exception{
+	public int getTotalRecords(int register_id) throws Exception{
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
-			String sql = "SELECT COUNT(*) AS COUNT FROM PromotionGift WHERE promotion=:promotion";
+			String sql = "SELECT COUNT(*) AS COUNT FROM RegisterGift WHERE promotionRegister=:register_id";
 			Query query = session.createQuery(sql);
-			query.setInteger("promotion", promotion_id);
+			query.setInteger("register_id", register_id);
 			List results = query.list();
 			return Integer.parseInt(results.get(0).toString());
 		} catch (Exception re) {
