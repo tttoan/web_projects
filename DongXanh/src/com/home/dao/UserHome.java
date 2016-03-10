@@ -42,6 +42,36 @@ public class UserHome {
 		}
 	}
 
+	public boolean checkUsernameExist(String userName) throws Exception {
+		log.debug("persisting User instance");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Query query = session.createQuery("from User where user_name=:userName");
+			query.setString("userName", userName);
+			User results = (User) query.uniqueResult();
+			tx.commit();
+			log.debug("persist successful");
+			if (results != null)
+				return true;
+			else
+				return false;
+		} catch (RuntimeException re) {
+			log.error("persist failed", re);
+			throw re;
+		} finally {
+			if (session != null) {
+				try {
+					session.close();
+				} catch (Exception e) {
+					throw e;
+				}
+			}
+		}
+	}
+
 	public void persist(User transientInstance) {
 		log.debug("persisting User instance");
 		Transaction tx = null;
@@ -57,21 +87,52 @@ public class UserHome {
 			throw re;
 		}
 	}
-
-	public void attachDirty(User instance) {
+	public void updateDirty(User instance) {
 		log.debug("attaching dirty User instance");
 		Transaction tx = null;
+		Session session = null;
 		try {
-			Session session = sessionFactory.openSession();
+			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			session.save(instance);
+			session.update(instance);
 			tx.commit();
-			session.close();
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			tx.rollback();
 			log.error("attach failed", re);
 			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	public void attachDirty(User instance) {
+		log.debug("attaching dirty User instance");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			session.save(instance);
+			tx.commit();
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			tx.rollback();
+			log.error("attach failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -118,12 +179,12 @@ public class UserHome {
 	public User findById(java.lang.Integer id) {
 		log.debug("getting User instance with id: " + id);
 		Transaction tx = null;
+		Session session = null;
 		try {
-			Session session = sessionFactory.openSession();
+			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
 			User instance = (User) session.get(User.class, id);
 			tx.commit();
-			session.close();
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -133,6 +194,14 @@ public class UserHome {
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
 			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -195,14 +264,13 @@ public class UserHome {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
 			List<User> results = session.createCriteria(User.class).list();
-			//List<User> results = session.createQuery("FROM User").list();
 			tx.commit();
 			log.debug("retrieve list Users successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("retrieve list Users failed", re);
 			throw re;
-		}finally {
+		} finally {
 			try {
 				if (session != null) {
 					session.close();

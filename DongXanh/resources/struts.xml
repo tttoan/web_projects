@@ -9,43 +9,45 @@
 	<constant name="struts.custom.i18n.resources" value="struts"></constant>
 
 	<package name="default" namespace="/" extends="struts-default">
-	
+
 		<interceptors>
-                <interceptor class="com.home.action.LoginInterceptor" name="loginInterceptor">
-                </interceptor>
-                <interceptor-stack name="loginStack">
-                        <interceptor-ref name="loginInterceptor" />
-                        <interceptor-ref name="defaultStack" />
-                </interceptor-stack>
-        </interceptors>
-		
+			<interceptor class="com.home.action.LoginInterceptor"
+				name="loginInterceptor">
+			</interceptor>
+			<interceptor-stack name="loginStack">
+				<interceptor-ref name="loginInterceptor" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+
 		<!-- home link action -->
-        <action name="homeAction" class="com.home.action.LoginAction" method="execute">
-                <interceptor-ref name="loginStack" />
-                <result name="login">login.jsp</result>
-                <result name="success">index.jsp</result>
-        </action>
-        
+		<action name="homeAction" class="com.home.action.LoginAction"
+			method="execute">
+			<interceptor-ref name="loginStack" />
+			<result name="login">login.jsp</result>
+			<result name="success">index.jsp</result>
+		</action>
+
 		<action name="login" method="getListCustomerByBirthday" class="com.home.action.LoginAction">
-			<result name="success" type="redirect">/index.jsp</result>
-			<result name="input">/login.jsp</result>
+			<result name="success">/index.jsp</result>
+			<result name="input" type="redirect">/login.jsp</result>
 		</action>
 		<action name="add_employee" method="addEmployee" class="com.home.action.UserAction">
 			<result name="success" type="redirectAction">list_employee</result>
-			<result name="input" type="redirectAction">move_to_add_employee</result>
+			<result name="input">/new_employee.jsp</result>
 		</action>
 		<action name="list_employee" method="listEmployee"
 			class="com.home.action.UserAction">
 			<result name="success">/employees.jsp</result>
-			<result name="input">/new_employee.jsp</result>
+			<result name="input">/employees.jsp</result>
 		</action>
 		<action name="delete_employee" method="deleteEmployeeById"
 			class="com.home.action.UserAction">
 			<result name="success" type="redirectAction">list_employee</result>
 		</action>
-		<action name="move_to_add_employee" method="findAllRole"
-			class="com.home.action.UserAction">
+		<action name="move_to_add_employee" class="com.home.action.UserAction">
 			<result name="success">/new_employee.jsp</result>
+			<result name="error">/employees.jsp</result>
 		</action>
 		<action name="move_to_add_customer" method="listLookupEmployeeForCus"
 			class="com.home.action.CustomerAction">
@@ -113,8 +115,8 @@
 			<result name="success">/customers.jsp</result>
 		</action>
 	</package>
-	
+
 	<include file="promotion.xml"></include>
 	<include file="userplan.xml"></include>
-	
+
 </struts>

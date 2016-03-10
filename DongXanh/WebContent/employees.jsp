@@ -18,13 +18,11 @@
 							<thead>
 								<tr class="headings">
 									<th>Họ và tên</th>
+									<th>Tên TK</th>
 									<th>Email</th>
 									<th>Ngày sinh</th>
-									<th>giới tính</th>
 									<th>Điện thoại</th>
-									<th>Địa chỉ</th>
 									<th>Nhóm</th>
-									<th>Trạng thái</th>
 									<th class=" no-link last"><span class="nobr"></span></th>
 								</tr>
 							</thead>
@@ -33,16 +31,18 @@
 								<s:iterator value="listEmployee">
 									<tr class="even pointer">
 										<td class=""><s:property value="fullName" /></td>
+										<td class=""><s:property value="userName" /></td>
 										<td class=""><s:property value="email" /></td>
-										<td class=""><s:property value="%{getText('format.date',{birthDate})}" /></td>
-										<td class=""><s:property value="gender" /></td>
+										<td class=""><s:property
+												value="%{getText('format.date',{birthDate})}" /></td>
 										<td class=""><s:property value="mobilePhone" /></td>
-										<td class=""><s:property value="address" /></td>
 										<td class=""><a class="btn btn-success btn-xs"><i
 												class="fa"></i> <s:property value="%{role.roleName}" /> </a></td>
-										<td class=""><s:property value="isEnabled" /></td>
-										<td class="last"><a href="#" class="btn btn-info btn-xs"><i
-												class="fa fa-pencil"></i> Sửa </a> <s:url
+										<td class="last"><s:url action="move_to_add_employee"
+												var="editURL">
+												<s:param name="userId" value="%{id}"></s:param>
+											</s:url> <s:a href="%{editURL}" class="btn btn-info btn-xs">
+												<i class="fa fa-pencil"></i> Sửa </s:a> <s:url
 												action="delete_employee" var="deleteURL">
 												<s:param name="userId" value="%{id}"></s:param>
 											</s:url> <s:a href="%{deleteURL}" class="btn btn-danger btn-xs">

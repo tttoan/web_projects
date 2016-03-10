@@ -2,15 +2,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
-<%@ taglib uri="/struts-bootstrap-tags" prefix="sb"%>
 <%@ taglib prefix="sd" uri="/struts-dojo-tags"%>
 <%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
+<s:include value="loginCheck.jsp" />
 <html>
 <head>
 <s:head />
-<sd:head />
-<sb:head />
-<sj:head jqueryui="true"/>
+<sd:head/>
+<sj:head />
 <!-- Meta, title, CSS, favicons, etc. -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -31,6 +30,10 @@
 	media="print">
 <script src="js/jquery.min.js"></script>
 <link href="css/calendar/fullcalendar.css" rel="stylesheet">
+
+<!-- <link rel="stylesheet" href="css/jquery-ui.css"> -->
+<%-- <script src="js/jquery-1.10.2.js"></script> --%>
+<%-- <script src="js/jquery-ui.js"></script> --%>
 <!--[if lt IE 9]>
             <script src="../assets/js/ie8-responsive-file-warning.js"></script>
             <![endif]-->
@@ -44,6 +47,7 @@
 
 
 <body class="nav-md">
+
 	<div class="container body">
 		<div class="main_container">
 			<div class="col-md-3 left_col">

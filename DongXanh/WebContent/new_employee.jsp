@@ -9,100 +9,144 @@
 <%@ taglib uri="/struts-dojo-tags" prefix="sd"%>
 <!-- page content -->
 <div class="right_col" role="main">
-	<div class="container" style="padding-top: 60px;">
-		<h3 class="page-header">Tạo Hồ Sơ Nhân Viên</h3>
+
+	<div class="">
+		<div class="page-title">
+			<div class="title_left">
+				<s:if test="%{edit}">
+					<h3>Sửa thông tin nhân viên</h3>
+				</s:if>
+				<s:else>
+					<h3>Thêm nhân viên</h3>
+				</s:else>
+				
+			</div>
+
+		</div>
+		<div class="clearfix"></div>
+
 		<div class="row">
-			<!-- left column -->
-			<!-- 				<div class="col-md-4 col-sm-6 col-xs-12"> -->
-			<!-- 					<div class="text-center"> -->
-			<!-- 						<img src="images/img.jpg" class="avatar img-circle img-thumbnail" -->
-			<!-- 							alt="avatar"> -->
-			<!-- 						<h6>Upload a different photo...</h6> -->
-			<!-- 						<input type="file" class="text-center center-block well well-sm"> -->
-			<!-- 					</div> -->
-			<!-- 				</div> -->
-			<!-- edit form column -->
-			<div class="col-md-9 col-sm-6 col-xs-12 personal-info">
-				<!-- 				<div class="alert alert-info alert-dismissable"> -->
-				<!-- 					<a class="panel-close close" data-dismiss="alert"></a> <i -->
-				<!-- 						class="fa fa-coffee"></i> -->
-				<!-- 				</div> -->
-				<s:form action="add_employee" method="post"
-					cssClass="form-horizontal" theme="bootstrap">
-					<div class="form-group">
-						<label class="col-lg-3 control-label">Họ và tên:</label>
-						<div class="col-lg-8">
-							<s:textfield id="fullName" name="fullName"
-								cssClass="form-control" />
-						</div>
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<div class="x_panel">
+					<div class="x_content">
+						<s:form action="add_employee" method="get" theme="bootstrap"
+							cssClass="form-horizontal form-label-left">
+							<s:hidden name="id" value="%{userId}"></s:hidden>
+							<s:hidden name="edit" value="%{edit}"></s:hidden>
+							<s:if test="hasActionErrors()">
+								<div class="errors">
+									<s:actionerror />
+								</div>
+							</s:if>
+							<span class="section"></span>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="fullName">Họ và tên <span class="required">*</span>
+								</label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<input id="fullName" type="text" name="fullName"
+										data-validate-length-range="5,20" value="${user.fullName}"
+										class="optional form-control col-md-7 col-xs-12">
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="userName">Tên tài khoản <span class="required">*</span>
+								</label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<input id="userName" type="text" name="userName"
+										data-validate-length-range="5,20" value="${user.userName}"
+										class="optional form-control col-md-7 col-xs-12">
+								</div>
+							</div>
+							<div class="item form-group">
+								<label for="password" class="control-label col-md-3">Mật khẩu </label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<input id="password" type="password" name="password"
+										data-validate-length="6,8" value="${user.password}"
+										class="form-control col-md-7 col-xs-12" required="required">
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="email">Email <span class="required">*</span>
+								</label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<input type="email" id="email" name="email" required="required" value="${user.email}"
+										class="form-control col-md-7 col-xs-12">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="birthDate">Ngày sinh <span class="required">*</span>
+								</label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<sd:datetimepicker id="birthDate" name="birthDate"
+										value="%{user.birthDate}" cssClass="form-control col-md-7 col-xs-12"
+										displayFormat="dd-MM-yyyy" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="gender">Giới tính <span class="required">*</span>
+								</label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<select id="gender" name="gender" required="required" 
+										class="form-control col-md-7 col-xs-12">
+										<option selected="selected" >Nam</option>
+										<option >Nữ</option>
+									</select>
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="mobilePhone">Điện thoại <span class="required">*</span>
+								</label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<input id="mobilePhone" type="text" name="mobilePhone"
+										data-validate-length-range="10,11" value="${user.mobilePhone}"
+										class="optional form-control col-md-7 col-xs-12">
+								</div>
+							</div>
+
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="address">Địa chỉ <span class="required">*</span>
+								</label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<textarea id="address" name="address" required="required"
+										class="form-control col-md-7 col-xs-12">${user.address}</textarea>
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="roleId">Nhóm <span class="required">*</span>
+								</label>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<select id="roleId" name="roleId" required="required" 
+										class="form-control col-md-7 col-xs-12">
+										<option value="1">Nhân viên</option>
+										<option value="2">Quản trị viên</option>
+									</select>
+								</div>
+							</div>
+							<div class="ln_solid"></div>
+							<div class="form-group">
+								<div class="col-md-6 col-md-offset-3">
+									<button type="reset" class="btn btn-primary">Reset</button>
+									<button id="send" type="submit" class="btn btn-success">Save</button>
+								</div>
+							</div>
+						</s:form>
+
 					</div>
-					<div class="item form-group">
-						<label class="col-lg-3 control-label">Tên tài khoản:</label>
-						<div class="col-lg-8">
-							<s:textfield id="userName" name="userName"
-								cssClass="form-control" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-lg-3 control-label">Mật khẩu:</label>
-						<div class="col-lg-8">
-							<s:password id="password" name="password" cssClass="form-control" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-lg-3 control-label">Email:</label>
-						<div class="col-lg-8">
-							<s:textfield id="email" name="email" type="email"
-								cssClass="form-control" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-lg-3 control-label">Ngày sinh:</label>
-						<div class="col-lg-5">
-							<sd:datetimepicker id="birthDate" name="birthDate" displayFormat="dd-MM-yyyy"
-								value="%{'today'}" cssClass="form-control col-md-6 col-sm-6 col-xs-12" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-lg-3 control-label">Giới tính:</label>
-						<div class="col-lg-8">
-							<s:select id="gender" name="gender" list="{'Nam','Nữ'}"
-								cssClass="form-control" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-lg-3 control-label">Điện thoại:</label>
-						<div class="col-lg-8">
-							<s:textfield id="mobilePhone" name="mobilePhone"
-								cssClass="form-control" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-lg-3 control-label">Địa chỉ:</label>
-						<div class="col-lg-8">
-							<s:textarea id="address" name="address" cssClass="form-control" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-lg-3 control-label">Nhóm: </label>
-						<div class="col-lg-8">
-							<s:select id="roleId" name="roleId" cssClass="form-control"
-								list="listRole" listKey="roleId" listValue="roleName" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-md-3 control-label"></label>
-						<div class="col-md-9">
-							<s:reset cssClass="btn btn-default" value="Reset" />
-							<s:submit cssClass="btn btn-primary" value="Save" />
-						</div>
-					</div>
-				</s:form>
+				</div>
 			</div>
 		</div>
 	</div>
+
 	<!-- footer content -->
-	<s:include value="footer.jsp" />
+	<jsp:include page="footer.jsp"></jsp:include>
 	<!-- /footer content -->
 
 </div>

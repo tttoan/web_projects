@@ -2,6 +2,7 @@ package com.home.action;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +31,7 @@ public class LoginAction extends ActionSupport implements Action, ModelDriven<Us
 	public List<Customer> listBirthCus = new ArrayList<>();
 	private HttpServletRequest request;
 	private ServletContext ctx;
-
+	private Map<String, Object> session;
 	@Override
 	public User getModel() {
 		return user;
@@ -72,11 +73,13 @@ public class LoginAction extends ActionSupport implements Action, ModelDriven<Us
 			addActionError("Username or password is not valid");
 		} else {
 			user = userDB;
-			ActionContext.getContext().getSession().put(MyConts.LOGIN_SESSION, user.getId() + ":" + user.getUserName());
+			setSession(ActionContext.getContext().getSession());
+			getSession().put("logined", "true");
+			getSession().put("context", new Date());
 		}
 	}
 
-	public String getListCustomerByBirthday(){
+	public String getListCustomerByBirthday() {
 		try {
 			listBirthCus.clear();
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
@@ -87,21 +90,28 @@ public class LoginAction extends ActionSupport implements Action, ModelDriven<Us
 				birthday.set(Calendar.MINUTE, 0);
 				birthday.set(Calendar.SECOND, 0);
 				birthday.set(Calendar.MILLISECOND, 0);
-				
+
 				Calendar today = (Calendar) birthday.clone();
 				Calendar furture = (Calendar) birthday.clone();
 				furture.add(Calendar.DATE, 7);
 				birthday.setTime(customer.getDirectorBirthday());
 				birthday.set(Calendar.YEAR, furture.get(Calendar.YEAR));
-				if(birthday.getTimeInMillis() >= today.getTimeInMillis() && birthday.getTimeInMillis() <= furture.getTimeInMillis()){
+				if (birthday.getTimeInMillis() >= today.getTimeInMillis() && birthday.getTimeInMillis() <= furture.getTimeInMillis()) {
 					listBirthCus.add(customer);
 				}
-				
 			}
 			return SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ERROR;
 		}
+	}
+
+	public Map<String, Object> getSession() {
+		return session;
+	}
+
+	public void setSession(Map<String, Object> session) {
+		this.session = session;
 	}
 }
