@@ -101,7 +101,7 @@
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="unitPriceFm">Đơn giá <span class="required">*</span>
 								</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
+								<div class="col-md-3 col-sm-6 col-xs-12">
 									<s:hidden id="unitPrice" name="unitPrice"
 										value="%{stat.product.unitPrice}"></s:hidden>
 									<input type="text" id="unitPriceFm" name="unitPriceFm" readonly
@@ -114,7 +114,7 @@
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="totalBox">Số thùng <span class="required">*</span>
 								</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
+								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input type="number" id="totalBox" name="totalBox"
 										value="${stat.totalBox}" required="required"
 										data-validate-minmax="1,1000"
@@ -125,7 +125,7 @@
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="quantity">Số lượng <span class="required">*</span>
 								</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
+								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input type="number" id="quantity" name="quantity"
 										value="${stat.quantity}" required="required"
 										data-validate-minmax="1,1000"
@@ -136,7 +136,7 @@
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="total">Thành tiền <span class="required">*</span>
 								</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
+								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input type=text id="total" name="total" required="required"
 										readonly data-validate-minmax="1,100000000"
 										value="${stat.total}" class="form-control col-md-7 col-xs-12">
