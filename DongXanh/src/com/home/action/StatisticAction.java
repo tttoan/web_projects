@@ -6,7 +6,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -49,9 +51,11 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	private List<Customer> listCustomer = new ArrayList<>();
 	private List<Product> listProduct = new ArrayList<>();
 	private int statId;
+	private ArrayList<String> districts = new ArrayList<>();
 	private Customer cusLevel1 = new Customer();
 	private Customer cusLevel2 = new Customer();
 	private User emp = new User();
+	
 	private Product pro = new Product();
 	
 	public File getUpload() {
@@ -80,7 +84,8 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	@Override
 	public Statistic getModel() {
-		return getStat();
+		stat = new Statistic();
+		return stat;
 	}
 
 	@Override
@@ -104,6 +109,18 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 				throw e;
 			}
 		}
+		return SUCCESS;
+	}
+
+	public String dbDistricts() {
+		// Do the database code or business logic here.
+		districts = new ArrayList<String>();
+		districts.add("District 1");
+		districts.add("District 2");
+		districts.add("District 3");
+		districts.add("District 4");
+		districts.add("District 5");
+		System.out.println(districts);
 		return SUCCESS;
 	}
 
@@ -158,7 +175,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	public String importStatistic() throws Exception {
 		try {
-			
+
 			return SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -208,7 +225,6 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 				// getStat().setTotalBox(((Double)
 				// xls.getValue(row.getCell(InvoiceTable.totalBox.value()))).intValue());
 				getStat().setQuantity(((Double) xls.getValue(row.getCell(InvoiceTable.quantiy.value()))).intValue());
-				getStat().setUnitPrice(BigDecimal.valueOf((Double) xls.getValue(row.getCell(InvoiceTable.unitPrice.value()))));
 				getStat().setTotal(BigDecimal.valueOf((Double) xls.getValue(row.getCell(InvoiceTable.total.value()))));
 				// statistic.setUser(userHome.getUserByFullName((String)xls.getValue(row.getCell(InvoiceTable.userFullName.value()))));
 				addStatistic();
@@ -236,6 +252,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	public void setListCustomer(List<Customer> listCustomer) {
 		this.listCustomer = listCustomer;
 	}
+
 	public List<Statistic> getStats() {
 		return statistics;
 	}
@@ -326,5 +343,13 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	public void setStatId(int statId) {
 		this.statId = statId;
+	}
+
+	public ArrayList<String> getDistricts() {
+		return districts;
+	}
+
+	public void setDistricts(ArrayList<String> districts) {
+		this.districts = districts;
 	}
 }

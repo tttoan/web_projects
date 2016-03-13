@@ -16,10 +16,9 @@ public class Statistic implements java.io.Serializable {
 	private Product product;
 	private User user;
 	private Date dateReceived;
-	private Integer totalBox;
-	private Integer quantity;
-	private BigDecimal unitPrice;
-	private BigDecimal total;
+	private Integer totalBox = 0;
+	private Integer quantity = 0;
+	private BigDecimal total = new BigDecimal(0);
 
 	public Statistic() {
 	}
@@ -33,7 +32,6 @@ public class Statistic implements java.io.Serializable {
 		this.dateReceived = dateReceived;
 		this.totalBox = totalBox;
 		this.quantity = quantity;
-		this.unitPrice = unitPrice;
 		this.total = total;
 	}
 
@@ -99,14 +97,6 @@ public class Statistic implements java.io.Serializable {
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
-	}
-
-	public BigDecimal getUnitPrice() {
-		return this.unitPrice;
-	}
-
-	public void setUnitPrice(BigDecimal unitPrice) {
-		this.unitPrice = unitPrice;
 	}
 
 	public BigDecimal getTotal() {

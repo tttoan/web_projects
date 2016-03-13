@@ -23,7 +23,7 @@ import com.opensymphony.xwork2.ActionContext;
  * @author USER
  *
  */
-public class ProductAction implements ServletContextAware{
+public class ProductAction implements Action, ServletContextAware{
 
 	private ServletContext ctx;
 
@@ -32,9 +32,10 @@ public class ProductAction implements ServletContextAware{
 	private String result;
 	private String message;
 	private int totalRecordCount;
-	private HashMap<Integer, String> categories ;
+	private HashMap<Integer, String> categories;
 
 	private Integer id;
+	private Integer proId;
 	private Integer category_id;
 	private String productCode;
 	private String productType;
@@ -194,7 +195,15 @@ public class ProductAction implements ServletContextAware{
 		}
 		return productType;
 	}
-
+	public String retrieveUnitPriceById()  throws Exception {
+		ProductHome productHome = new ProductHome(HibernateUtil.getSessionFactory());
+		Product record = productHome.findById(proId);
+		if(record != null)
+			unitPrice = record.getUnitPrice();
+		else 
+			unitPrice = new BigDecimal(0);
+		return SUCCESS;
+	}
 
 	public Product getRecord() {
 		return record;
@@ -330,6 +339,19 @@ public class ProductAction implements ServletContextAware{
 
 	public void setCategory_id(Integer category_id) {
 		this.category_id = category_id;
+	}
+
+	@Override
+	public String execute() throws Exception {
+		return SUCCESS;
+	}
+
+	public Integer getProId() {
+		return proId;
+	}
+
+	public void setProId(Integer proId) {
+		this.proId = proId;
 	}
 
 

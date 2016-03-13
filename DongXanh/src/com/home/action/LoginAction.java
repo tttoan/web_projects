@@ -34,6 +34,7 @@ public class LoginAction extends ActionSupport implements Action, ModelDriven<Us
 	private Map<String, Object> session;
 	@Override
 	public User getModel() {
+		user = new User();
 		return user;
 	}
 
@@ -70,7 +71,7 @@ public class LoginAction extends ActionSupport implements Action, ModelDriven<Us
 		UserHome userHome = new UserHome(getSessionFactory());
 		User userDB = userHome.getUserByCredentials(user.getUserName(), user.getPassword());
 		if (userDB == null) {
-			addActionError("Username or password is not valid");
+			addActionError(getText("error.login"));
 		} else {
 			user = userDB;
 			setSession(ActionContext.getContext().getSession());

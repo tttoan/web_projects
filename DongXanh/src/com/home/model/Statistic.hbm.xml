@@ -29,9 +29,6 @@
         <property name="quantity" type="java.lang.Integer">
             <column name="quantity" />
         </property>
-        <property name="unitPrice" type="big_decimal">
-            <column name="unit_price" precision="10" />
-        </property>
         <property name="total" type="big_decimal">
             <column name="total" precision="10" />
         </property>

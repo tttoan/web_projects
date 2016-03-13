@@ -2,21 +2,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
-<%@ taglib prefix="sd" uri="/struts-dojo-tags"%>
+<%@ taglib prefix="sx" uri="/struts-dojo-tags"%>
 <%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
 <s:include value="loginCheck.jsp" />
 <html>
 <head>
 <s:head />
-<sd:head/>
-<sj:head />
+<sx:head />
+<sj:head jqueryui="true" />
+
+
 <!-- Meta, title, CSS, favicons, etc. -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Promotion Management</title>
 
 <!-- Bootstrap core CSS -->
-
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="fonts/css/font-awesome.min.css" rel="stylesheet">
 <link href="css/animate.min.css" rel="stylesheet">
@@ -32,7 +33,8 @@
 <link href="css/calendar/fullcalendar.css" rel="stylesheet">
 
 <!-- <link rel="stylesheet" href="css/jquery-ui.css"> -->
-<%-- <script src="js/jquery-1.10.2.js"></script> --%>
+<%-- <script src="js/jquery-1.10.2.js" type="text/javascript"></script> --%>
+
 <%-- <script src="js/jquery-ui.js"></script> --%>
 <!--[if lt IE 9]>
             <script src="../assets/js/ie8-responsive-file-warning.js"></script>

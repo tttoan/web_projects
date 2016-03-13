@@ -3,7 +3,7 @@
 	pageEncoding="UTF-8"%>
 <%-- Using Struts2 Tags in JSP --%>
 <%@ taglib uri="/struts-tags" prefix="s"%>
-<%@ taglib uri="/struts-dojo-tags" prefix="sd"%>
+<%@ taglib uri="/struts-dojo-tags" prefix="sx"%>
 <%@ taglib uri="/struts-jquery-tags" prefix="sj"%>
 <%@ include file="header.jsp"%>
 <%@ include file="user_profile.jsp"%>
@@ -20,12 +20,9 @@
 				<s:else>
 					<h3>Thêm Hóa Đơn</h3>
 				</s:else>
-
 			</div>
-
 		</div>
 		<div class="clearfix"></div>
-
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
@@ -35,13 +32,12 @@
 							<s:hidden name="stat.id" value="%{statId}"></s:hidden>
 							<s:hidden name="edit" value="%{edit}"></s:hidden>
 							<span class="section"></span>
-
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="dateReceived">Ngày nhận <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<sd:datetimepicker id="dateReceived" name="dateReceived"
+									<sx:datetimepicker id="dateReceived" name="dateReceived"
 										cssClass="form-control col-md-7 col-xs-12"
 										value="%{stat.dateReceived}" displayFormat="dd-MM-yyyy" />
 								</div>
@@ -50,8 +46,9 @@
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="emp.id">Nhân viên TT <span class="required">*</span>
 								</label>
+
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<s:select id="emp.id" name="emp.id"
+									<s:select id="emp_id" name="emp.id"
 										cssClass="form-control col-md-7 col-xs-12" headerKey="-1"
 										headerValue="-- Chọn nhân viên thị trường --"
 										showDownArrow="false" autoComplete="true" list="listEmployee"
@@ -64,6 +61,7 @@
 									for=cusLevel2.id>Tên cấp 2 <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
+									<s:url id="url" value="/add_statistic.action" />
 									<s:select id="cusLevel2.id" name="cusLevel2.id" headerKey="-1"
 										headerValue="-- Chọn khách hàng cấp 2 --"
 										cssClass="form-control col-md-7 col-xs-12"
@@ -89,11 +87,11 @@
 
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="pro.id">Sản phẩm <span class="required">*</span>
+									for="pro_id">Sản phẩm <span class="required">*</span>
 								</label>
 
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<s:select id="pro.id" name="pro.id" value="%{stat.product.id}"
+									<s:select id="pro_id" name="pro.id" value="%{stat.product.id}"
 										cssClass="form-control col-md-7 col-xs-12" list="listProduct"
 										headerKey="-1" headerValue="-- Chọn sản phẩm --" listKey="id"
 										listValue="productName +' - '+ productCode" />
@@ -101,12 +99,14 @@
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="unitPrice">Đơn giá <span class="required">*</span>
+									for="unitPriceFm">Đơn giá <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<input type="text" id="unitPrice" name="unitPrice" readonly
+									<s:hidden id="unitPrice" name="unitPrice"
+										value="%{stat.product.unitPrice}"></s:hidden>
+									<input type="text" id="unitPriceFm" name="unitPriceFm" readonly
 										required="required" data-validate-minmax="1,1000000000"
-										value="${stat.unitPrice}"
+										value="${stat.product.unitPrice}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -228,6 +228,47 @@
 		if (this.checked)
 			$('form .alert').remove();
 	}).prop('checked', false);
+</script>
+
+<script>
+	$(document).ready(function() {
+		$('#quantity').change(function() {
+			var unitPrice = $("#unitPrice").val();
+			var quantity = $("#quantity").val();
+			$('#total').val((unitPrice * quantity));
+		});
+	});
+</script>
+
+<script>
+	$(document).ready(function() {
+		$('#pro_id').change(function() {
+			var proId = {
+				"proId" : $("#pro_id").val()
+			};
+			$.ajax({
+				url : "readDistricts",
+				data : JSON.stringify(proId),
+				dataType : 'json',
+				contentType : 'application/json',
+				type : 'POST',
+				async : true,
+				success : function(res) {
+					$('#unitPrice').val(res);
+					$('#unitPriceFm').val(res);
+					var quantity = $("#quantity").val();
+					$('#total').val((res * quantity));
+					// 															for (var i = 0; i < res.length; i++) {
+					// 																$('#district')
+					// 																		.append(
+					// 																				'<option value=' + res[i] + '>'
+					// 																						+ res[i]
+					// 																						+ '</option>');
+					// 															}
+				}
+			});
+		});
+	});
 </script>
 
 </body>
