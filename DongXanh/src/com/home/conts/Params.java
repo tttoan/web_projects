@@ -6,7 +6,16 @@ package com.home.conts;
  * @TO DO: for execute script
  */
 public class Params {
+	
+	public static final String FUNCION1 = "PromotionResult()";
+	
+	public static final String FUNCION2 = "GetResult()";
 
+	/**
+	 * Ket qua khuyen mai
+	 */
+	public static final String RESULT = "$ketqua";
+	
 	/**
 	 * Tong diem dang ky
 	 */

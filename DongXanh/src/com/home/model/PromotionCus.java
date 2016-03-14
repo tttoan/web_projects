@@ -1,9 +1,15 @@
 package com.home.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
+import antlr.collections.List;
 
 public class PromotionCus {
 	private String promotionName;
+	private int customerId;
 	private String customerCode;
 	private String customerName;
 	private String sellMan;
@@ -21,7 +27,20 @@ public class PromotionCus {
 	private String productName;
 	private  long totaPoint;
 	private BigDecimal totaPrice;
+	private Set<Product> products = new HashSet<Product>(0);
 	
+	public int getCustomerId() {
+		return customerId;
+	}
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
+	public Set<Product> getProducts() {
+		return products;
+	}
+	public void setProducts(Set<Product> products) {
+		this.products = products;
+	}
 	public String getPromotionName() {
 		return promotionName;
 	}

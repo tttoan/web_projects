@@ -1,6 +1,6 @@
 package com.home.action;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 
