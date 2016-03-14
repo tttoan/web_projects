@@ -54,16 +54,48 @@ public class StatisticHome {
 	public void attachDirty(Statistic instance) {
 		log.debug("attaching dirty Statistic instance");
 		Transaction tx = null;
+		Session session = null;
 		try {
-			Session session = sessionFactory.openSession();
+			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			session.saveOrUpdate(instance);
+			session.save(instance);
 			tx.commit();
-			session.close();
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void updateDirty(Statistic instance) {
+		log.debug("attaching dirty Statistic instance");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			session.update(instance);
+			tx.commit();
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

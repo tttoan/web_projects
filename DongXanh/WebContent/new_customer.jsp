@@ -62,7 +62,7 @@
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-2 col-sm-3 col-xs-12"
-									for="createTime">Ngày Lập <span class="required">*</span>
+									for="createTime">Ngày Lập 
 								</label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<sd:datetimepicker id="createTime" name="createTime"

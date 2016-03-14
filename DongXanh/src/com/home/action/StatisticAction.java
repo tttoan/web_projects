@@ -185,12 +185,15 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	public String addStatistic() throws Exception {
 		try {
-			getStat().setUser(emp);
-			getStat().setCustomerByCustomerCodeLevel1(cusLevel1);
-			getStat().setCustomerByCustomerCodeLevel2(cusLevel2);
-			getStat().setProduct(pro);
+			stat.setUser(emp);
+			stat.setCustomerByCustomerCodeLevel1(cusLevel1);
+			stat.setCustomerByCustomerCodeLevel2(cusLevel2);
+			stat.setProduct(pro);
 			StatisticHome sttHome = new StatisticHome(HibernateUtil.getSessionFactory());
-			sttHome.attachDirty(getStat());
+			if(stat.getId() == 0)
+				sttHome.attachDirty(stat);
+			else
+				sttHome.updateDirty(stat);
 			return SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();

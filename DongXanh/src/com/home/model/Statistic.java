@@ -1,6 +1,6 @@
 package com.home.model;
 
-// Generated Mar 10, 2016 8:21:51 PM by Hibernate Tools 4.3.1
+// Generated Mar 14, 2016 8:28:37 PM by Hibernate Tools 4.3.1
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -17,14 +17,13 @@ public class Statistic implements java.io.Serializable {
 	private User user;
 	private Date dateReceived;
 	private Integer totalBox = 0;
-	private Integer quantity = 0;
+	private Integer quantity =0;
 	private BigDecimal total = new BigDecimal(0);
 
 	public Statistic() {
 	}
 
-	public Statistic(Customer customerByCustomerCodeLevel1, Customer customerByCustomerCodeLevel2, Product product, User user, Date dateReceived, Integer totalBox, Integer quantity,
-			BigDecimal unitPrice, BigDecimal total) {
+	public Statistic(Customer customerByCustomerCodeLevel1, Customer customerByCustomerCodeLevel2, Product product, User user, Date dateReceived, Integer totalBox, Integer quantity, BigDecimal total) {
 		this.customerByCustomerCodeLevel1 = customerByCustomerCodeLevel1;
 		this.customerByCustomerCodeLevel2 = customerByCustomerCodeLevel2;
 		this.product = product;
