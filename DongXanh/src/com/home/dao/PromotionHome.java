@@ -356,7 +356,7 @@ public class PromotionHome {
 				pc.setProductCode(((Object[])obj)[2].toString());
 				pc.setCategoryName(((Object[])obj)[3].toString());
 				pc.setProductName(((Object[])obj)[4].toString());
-				pc.setTotalBottle((long)((Object[])obj)[5]);
+				pc.setTotalBox((long)((Object[])obj)[5]);
 				pc.setQuality((long)((Object[])obj)[6]);
 				pc.setTotaPrice((BigDecimal)((Object[])obj)[7]);
 				//pc.setTotaPoint((long)((Object[])obj)[8]);

@@ -59,7 +59,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			groupCustomers = groupCustomerHome.getListGroupCustomer();
 			int idx = 1;
 			for (Promotion p : promotions) {
-				System.out.println(p.getGroupCustomer().getId());
+				//System.out.println(p.getGroupCustomer().getId());
 				GroupCustomer group = new GroupCustomer();
 				group.setId(p.getGroupCustomer().getId());
 				group.setGroupName(groupCustomers.get(group.getId()));

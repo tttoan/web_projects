@@ -9,7 +9,7 @@ public class PromotionCus {
 	private String sellMan;
 	private long totalProduct;
 	private  long totalPass;
-	private  long totalBottle;
+	private  long totalBox;
 	private  long quality;
 	private  long totalGift;
 	private float percentPass;
@@ -58,11 +58,11 @@ public class PromotionCus {
 	public void setTotalPass(long totalPass) {
 		this.totalPass = totalPass;
 	}
-	public long getTotalBottle() {
-		return totalBottle;
+	public long getTotalBox() {
+		return totalBox;
 	}
-	public void setTotalBottle(long totalBottle) {
-		this.totalBottle = totalBottle;
+	public void setTotalBox(long totalBox) {
+		this.totalBox = totalBox;
 	}
 	public long getQuality() {
 		return quality;
