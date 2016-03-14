@@ -29,41 +29,49 @@
 						%>
 						<s:form action="add_customer" method="post"
 							cssClass="form-horizontal form-label-left" theme="bootstrap">
-							<div class="item">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
-									for="customerCode">Mã KH <%=yearNow%> <span
+							<span class="section"></span>
+
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="customerCode">Mã khách hàng (<%=yearNow%>) <span
 									class="required">*</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="customerCode" name="customerCode"
-										cssClass="form-control col-md-7 col-xs-12" value="%{customer.customerCode}" />
+									<input id="customerCode" type="text" name="customerCode"
+										data-validate-length-range="3,20" value="${cus.customerCode}"
+										class="optional form-control col-md-7 col-xs-12">
 								</div>
 							</div>
+
 							<div class="item form-group">
-								<label class="control-label col-md-2 col-sm-1 col-xs-12"
-									for="email">NVTT <span class="required">+</span>
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="emp.id">Nhân viên TT <span class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<sd:autocompleter id="employeeName" name="employeeName"
-										list="{1}" showDownArrow="false" emptyOption="true"
-										autoComplete="false" cssClass="form-control col-md-7 col-xs-12" />
+
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<s:select id="emp_id" name="emp.id"
+										cssClass="form-control col-md-7 col-xs-12" headerKey="-1"
+										headerValue="-- Chọn nhân viên thị trường --"
+										showDownArrow="false" autoComplete="true" list="listEmployee"
+										value="%{cus.user.id}" listKey="id"
+										listValue="fullName +' - '+ userName" />
 								</div>
 							</div>
+
 							<div class="item">
 								<s:hidden name="groupCustomerId" value="" />
 								<label class="control-label col-md-2 col-sm-3 col-xs-12"
-									for="groupCustomerName">Nhóm <span
-									class="required">*</span>
-								</label>	
+									for="groupCustomerName">Nhóm <span class="required">*</span>
+								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<s:select id="groupCustomerName" name="groupCustomerName"
-										cssClass="form-control col-md-7 col-xs-12" list="listGroupCustomer" listKey="id" listValue="groupName" />
+										cssClass="form-control col-md-7 col-xs-12"
+										list="listGroupCustomer" listKey="id" listValue="groupName" />
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-2 col-sm-3 col-xs-12"
-									for="createTime">Ngày Lập 
-								</label>
+									for="createTime">Ngày Lập </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<sd:datetimepicker id="createTime" name="createTime"
 										displayFormat="dd-MM-yyyy" value="%{'today'}"
@@ -475,8 +483,8 @@
 									(Triệu đồng): <span class="required">*</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="revenueExpect1" name="revenueExpect1" value="%{0}"
-										cssClass="form-control col-md-7 col-xs-12" />
+									<s:textfield id="revenueExpect1" name="revenueExpect1"
+										value="%{0}" cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
 							<div class="item form-group">
@@ -485,8 +493,8 @@
 									(Triệu đồng): <span class="required">*</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="revenueExpect2" name="revenueExpect2"  value="%{0}"
-										cssClass="form-control col-md-7 col-xs-12" />
+									<s:textfield id="revenueExpect2" name="revenueExpect2"
+										value="%{0}" cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
 							<div class="item form-group">
@@ -495,8 +503,8 @@
 									(Triệu đồng): <span class="required">*</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="revenueExpect3" name="revenueExpect3" value="%{0}"
-										cssClass="form-control col-md-7 col-xs-12" />
+									<s:textfield id="revenueExpect3" name="revenueExpect3"
+										value="%{0}" cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
 							<div class="item form-group">

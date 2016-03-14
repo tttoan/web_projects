@@ -19,7 +19,7 @@
 				<s:else>
 					<h3>Thêm nhân viên</h3>
 				</s:else>
-				
+
 			</div>
 
 		</div>
@@ -60,7 +60,8 @@
 								</div>
 							</div>
 							<div class="item form-group">
-								<label for="password" class="control-label col-md-3">Mật khẩu </label>
+								<label for="password" class="control-label col-md-3">Mật
+									khẩu </label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<input id="password" type="password" name="password"
 										data-validate-length="6,8" value="${user.password}"
@@ -72,8 +73,8 @@
 									for="email">Email <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<input type="email" id="email" name="email" required="required" value="${user.email}"
-										class="form-control col-md-7 col-xs-12">
+									<input type="email" id="email" name="email" required="required"
+										value="${user.email}" class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="form-group">
@@ -82,7 +83,8 @@
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<sd:datetimepicker id="birthDate" name="birthDate"
-										value="%{user.birthDate}" cssClass="form-control col-md-7 col-xs-12"
+										value="%{user.birthDate}"
+										cssClass="form-control col-md-7 col-xs-12"
 										displayFormat="dd-MM-yyyy" />
 								</div>
 							</div>
@@ -91,10 +93,10 @@
 									for="gender">Giới tính <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<select id="gender" name="gender" required="required" 
+									<select id="gender" name="gender" required="required"
 										class="form-control col-md-7 col-xs-12">
-										<option selected="selected" >Nam</option>
-										<option >Nữ</option>
+										<option selected="selected">Nam</option>
+										<option>Nữ</option>
 									</select>
 								</div>
 							</div>
@@ -123,11 +125,11 @@
 									for="roleId">Nhóm <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<select id="roleId" name="roleId" required="required" 
-										class="form-control col-md-7 col-xs-12">
-										<option value="1">Nhân viên</option>
-										<option value="2">Quản trị viên</option>
-									</select>
+									<s:select id="roleId" name="roleId" showDownArrow="false"
+										autoComplete="true" value="%{user.role.roleId}"
+										cssClass="form-control col-md-7 col-xs-12" list="listRole"
+										listKey="roleId" headerKey="-1"
+										headerValue="-- Chọn phân quyền --" listValue="roleName" />
 								</div>
 							</div>
 							<div class="ln_solid"></div>

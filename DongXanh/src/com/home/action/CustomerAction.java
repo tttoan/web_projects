@@ -34,7 +34,7 @@ import com.opensymphony.xwork2.ModelDriven;
 
 public class CustomerAction extends ActionSupport implements Action, ModelDriven<Customer>, ServletContextAware, ServletRequestAware {
 	public int customerId;
-	private Customer customer = new Customer();
+	private Customer cus = new Customer();
 	private List<Customer> customers = new ArrayList<Customer>();
 	private String lookupEmployeeForCus;
 	public List<String> listLookupEmployeeForCus = new ArrayList<>();
@@ -46,7 +46,10 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private File upload;
 	private String uploadContentType;
 	private String uploadFileName;
+	private User emp = new User();
 	public 	int yearNow = (Calendar.getInstance()).get(Calendar.YEAR);
+	private List<Customer> listCustomer = new ArrayList<>();
+	private List<User> listEmployee = new ArrayList<>();;
 	public File getUpload() {
 		return upload;
 	}
@@ -104,8 +107,20 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	}
 	@Override
 	public void validate() {
-		
+		loadLookupEmployee();
+		loadLookupCustomer();
 	}
+	
+	public void loadLookupCustomer() {
+		CustomerHome cusHome = new CustomerHome(getSessionFactory());
+		setListCustomer(cusHome.getListCustomer());
+	}
+
+	public void loadLookupEmployee() {
+		UserHome userHome = new UserHome(getSessionFactory());
+		setListEmployee(userHome.getListUser());
+	}
+	
 	public String findCustomer(){
 		try {
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
@@ -293,11 +308,11 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	}
 
 	public Customer getCustomer() {
-		return customer;
+		return cus;
 	}
 
 	public void setCustomer(Customer customer) {
-		this.customer = customer;
+		this.cus = customer;
 	}
 
 	public List<GroupCustomer> getListGroupCustomer() {
@@ -322,5 +337,29 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	public void setCtx(ServletContext ctx) {
 		this.ctx = ctx;
+	}
+
+	public User getEmp() {
+		return emp;
+	}
+
+	public void setEmp(User emp) {
+		this.emp = emp;
+	}
+
+	public List<Customer> getListCustomer() {
+		return listCustomer;
+	}
+
+	public void setListCustomer(List<Customer> listCustomer) {
+		this.listCustomer = listCustomer;
+	}
+
+	public List<User> getListEmployee() {
+		return listEmployee;
+	}
+
+	public void setListEmployee(List<User> listEmployee) {
+		this.listEmployee = listEmployee;
 	}
 }
