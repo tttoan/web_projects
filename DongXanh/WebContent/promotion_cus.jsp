@@ -11,6 +11,12 @@ pageEncoding="UTF-8"%>
 		<div class="clearfix"></div>
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
+
+				<p class="url">
+					<span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
+					<a href="#"><i class="fa fa-paperclip"></i> Download </a>
+				</p>
+
 				<div class="x_panel">
 					<div class="x_content">
 						<table id="example"
@@ -26,6 +32,7 @@ pageEncoding="UTF-8"%>
 									<th>Số thùng</th>
 									<th>Số lượng</th>
 									<th>Kết quả</th>
+									<th>Thong bao</th>
 								</tr>
 							</thead>
 
@@ -38,9 +45,10 @@ pageEncoding="UTF-8"%>
 										<td class=""><s:property value="sellMan" /></td>
 										<td class=""><s:property value="totalProduct" /></td>
 										<td class=""><s:property value="totalPass" /></td>
-										<td class=""><s:property value="totalBottle" /></td>
+										<td class=""><s:property value="totalBox" /></td>
 										<td class=""><s:property value="quality" /></td>
 										<td class=""><s:property value="result" /></td>
+										<td class=""><s:property value="resultString" /></td>
 									</tr>
 								</s:iterator>
 							</tbody>
