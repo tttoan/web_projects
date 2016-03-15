@@ -15,7 +15,12 @@
 	<div class="">
 		<div class="page-title">
 			<div class="title_left">
-				<h3>Tạo Hồ Sơ Khách Hàng</h3>
+				<s:if test="%{edit}">
+					<h3>Sửa thông tin khách hàng</h3>
+				</s:if>
+				<s:else>
+					<h3>Thêm khách hàng</h3>
+				</s:else>
 			</div>
 		</div>
 		<div class="clearfix"></div>
@@ -29,8 +34,24 @@
 						%>
 						<s:form action="add_customer" method="post"
 							cssClass="form-horizontal form-label-left" theme="bootstrap">
+							<s:hidden name="id" value="%{customerId}"></s:hidden>
+							<s:hidden name="edit" value="%{edit}"></s:hidden>
+							<s:if test="hasActionErrors()">
+								<div class="errors">
+									<s:actionerror />
+								</div>
+							</s:if>
 							<span class="section"></span>
 
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="createTime">Ngày Lập </label>
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<sd:datetimepicker id="createTime" name="createTime"
+										displayFormat="dd-MM-yyyy" value="%{'today'}"
+										cssClass="form-control col-md-7 col-xs-12" />
+								</div>
+							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="customerCode">Mã khách hàng (<%=yearNow%>) <span
@@ -39,7 +60,7 @@
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input id="customerCode" type="text" name="customerCode"
 										data-validate-length-range="3,20" value="${cus.customerCode}"
-										class="optional form-control col-md-7 col-xs-12">
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 
@@ -48,63 +69,62 @@
 									for="emp.id">Nhân viên TT <span class="required">*</span>
 								</label>
 
-								<div class="col-md-6 col-sm-6 col-xs-12">
+								<div class="col-md-5 col-sm-6 col-xs-12">
 									<s:select id="emp_id" name="emp.id"
 										cssClass="form-control col-md-7 col-xs-12" headerKey="-1"
 										headerValue="-- Chọn nhân viên thị trường --"
 										showDownArrow="false" autoComplete="true" list="listEmployee"
-										value="%{cus.user.id}" listKey="id"
-										listValue="fullName +' - '+ userName" />
+										listKey="id" listValue="fullName +' - '+ userName"
+										value="%{cus.user.id}" />
 								</div>
 							</div>
 
-							<div class="item">
+							<div class="item form-group">
 								<s:hidden name="groupCustomerId" value="" />
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
-									for="groupCustomerName">Nhóm <span class="required">*</span>
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="grpCustomer_id">Nhóm <span class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:select id="groupCustomerName" name="groupCustomerName"
-										cssClass="form-control col-md-7 col-xs-12"
-										list="listGroupCustomer" listKey="id" listValue="groupName" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<s:select id="grpCustomer_id" name="grpCustomer.id"
+										headerKey="-1" headerValue="-- Chọn nhóm khách hàng --"
+										cssClass="form-control col-md-7 col-xs-12" list="listGrpCus"
+										listKey="id" listValue="groupName"
+										value="%{cus.groupCustomer.id}" />
 								</div>
 							</div>
-							<div class="item form-group">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
-									for="createTime">Ngày Lập </label>
-								<div class="col-md-2 col-sm-6 col-xs-12">
-									<sd:datetimepicker id="createTime" name="createTime"
-										displayFormat="dd-MM-yyyy" value="%{'today'}"
-										cssClass="form-control col-md-7 col-xs-12" />
-								</div>
-							</div>
+							<br>
 							<span class="section">Phần I: Thông tin khách hàng</span>
-							<div class="item">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="businessName">Tên doanh nghiệp (cửa hàng) <span
-									class="required">+</span>
+									class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="businessName" name="businessName"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="businessName" type="text" name="cus.businessName"
+										required="required" data-validate-length-range="1,100"
+										value="${cus.businessName}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="certificateNumber">Giấy phép ĐKKD số <span
 									class="required">*</span>
 								</label>
-								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="certificateNumber" name="certificateNumber"
-										class="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="certificateNumber" type="text"
+										name="cus.certificateNumber" required="required"
+										data-validate-length-range="1,100"
+										value="${cus.certificateNumber}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 
-							<div class="item">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="certificateDate">Ngày cấp <span class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
+								<div class="col-md-5 col-sm-6 col-xs-12">
 									<sd:datetimepicker id="certificateDate" name="certificateDate"
 										displayFormat="dd-MM-yyyy" value="%{'today'}"
 										cssClass="form-control col-md-7 col-xs-12" />
@@ -112,59 +132,67 @@
 							</div>
 
 							<div class="item form-group">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="certificateAddress">Địa chỉ đăng kí KD <span
 									class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="certificateAddress" name="certificateAddress"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<textarea id="certificateAddress" name="cus.certificateAddress"
+										required="required" class="form-control col-md-7 col-xs-12">${cus.certificateAddress}</textarea>
 								</div>
 							</div>
-							<div class="item">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="taxNumber">Mã số thuế <span class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="taxNumber" name="taxNumber"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="taxNumber" type="text" name="cus.taxNumber"
+										required="required" data-validate-length-range="1,100"
+										value="${cus.taxNumber}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
+
 							<div class="item form-group">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="budgetRegister">Vốn đăng kí <span class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="budgetRegister" name="budgetRegister"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="budgetRegister" type="text" required="required"
+										name="cus.budgetRegister" data-validate-length-range="1,100"
+										value="${cus.budgetRegister}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
-							<div class="item">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="telefone">Điện thoại bàn <span class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="telefone" name="telefone"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="telefone" type="text" name="cus.telefone"
+										required="required" data-validate-length-range="1,100"
+										value="${cus.telefone}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="fax">Fax <span class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="fax" name="fax"
-										cssClass="form-control col-md-2 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="fax" type="text" name="cus.fax" required="required"
+										data-validate-length-range="1,100" value="${cus.fax}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="email">Email <span class="required">*</span>
 								</label>
-								<div class="col-md-4 col-sm-6 col-xs-12">
-									<s:textfield id="email" name="email" type="email"
-										value="%{'thanhhqq@gmail.com'}"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input type="email" id="email" name="cus.email"
+										required="required" required="required" value="${cus.email}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
@@ -172,9 +200,11 @@
 									for="socialAddress">Địa chỉ mạng xã hội (Facebook,
 									Twitter, Zalo,…) <span class="required">*</span>
 								</label>
-								<div class="col-md-8 col-sm-6 col-xs-12">
-									<s:textfield id="socialAddress" name="socialAddress"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="socialAddress" type="text" name="cus.socialAddress"
+										data-validate-length-range="1,1000" required="required"
+										value="${cus.socialAddress}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
@@ -183,8 +213,10 @@
 									class="required">*</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<s:textfield id="businessAddress" name="businessAddress"
-										cssClass="form-control col-md-7 col-xs-12" />
+									<input id="businessAddress" type="text"
+										name="cus.businessAddress" data-validate-length-range="1,1000"
+										value="${cus.socialAddress}" required="required"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
@@ -193,31 +225,38 @@
 									class="required">*</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<s:textfield id="adviser" name="adviser"
-										cssClass="form-control col-md-7 col-xs-12" />
+									<input id="adviser" type="text" name="cus.adviser"
+										required="required" data-validate-length-range="1,50"
+										value="${cus.socialAddress}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
-							<div class="item">
+							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="director">Người quyết định chính công việc <span
 									class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="director" name="director"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="director" type="text" name="cus.director"
+										required="required" data-validate-length-range="1,50"
+										value="${cus.director}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
-									for="directorMobile">ĐT di động <span class="required">*</span>
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="directorMobile">ĐTDĐ Người quyết định <span
+									class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="directorMobile" name="directorMobile"
-										value="%{'0935441344'}"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="directorMobile" name="cus.directorMobile"
+										type="text" required="required"
+										data-validate-length-range="1,11"
+										value="${cus.directorMobile}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
-							<div class="item">
+							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="directorBirthday">Ngày sinh: <span
 									class="required">*</span>
@@ -229,47 +268,55 @@
 								</div>
 							</div>
 							<div class="item form-group">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="directorDomicile">Nguyên quán: <span
 									class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="directorDomicile" name="directorDomicile"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="directorDomicile" type="text" required="required"
+										name="cus.directorDomicile" data-validate-length-range="1,100"
+										value="${cus.directorDomicile}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
-							<div class="item">
+							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="sellMan">Người bán hàng trực tiếp <span
 									class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="sellMan" name="sellMan"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="sellMan" type="text" required="required"
+										name="cus.sellMan" data-validate-length-range="1,100"
+										value="${cus.sellMan}" class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
-									for="sellManMobile">ĐT di động <span class="required">*</span>
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="sellManMobile">ĐTDĐ Người bán hàng <span
+									class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="sellManMobile" name="sellManMobile"
-										value="%{'0935441344'}"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="sellManMobile" type="text" required="required"
+										name="cus.sellManMobile" data-validate-length-range="1,100"
+										value="${cus.sellManMobile}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 
 							<div class="item form-group">
-								<label class="control-label col-md-4 col-sm-3 col-xs-12"
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="budgetOriginal">Ước vốn tự có để kinh doanh
 									(Triệu) <span class="required">*</span>
 								</label>
-								<div class="col-md-4 col-sm-6 col-xs-12">
-									<s:textfield id="budgetOriginal" name="budgetOriginal"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="budgetOriginal" type="text" required="required"
+										name="cus.budgetOriginal" data-validate-length-range="1,100"
+										value="${cus.sellManMobile}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 
+							<br>
 							<span class="section">Phần II: Hiện trạng kinh doanh thuốc
 								BVTV</span>
 
@@ -278,172 +325,199 @@
 									for="otherBusiness">Ngành nghề kinh doanh khác <span
 									class="required">*</span>
 								</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
-									<s:textfield id="otherBusiness" name="otherBusiness"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="otherBusiness" type="text" required="required"
+										name="cus.otherBusiness" data-validate-length-range="1,100"
+										value="${cus.otherBusiness}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
-								<label class="col-md-3 col-sm-3 col-xs-12">Các cấp I
-									đang nhận hàng chính </label>
+								<label class=" control-label col-md-3 col-sm-3 col-xs-12">Các
+									cấp I đang nhận hàng chính </label>
 							</div>
-							<div class="item">
-								<label class="control-label col-md-1 col-sm-3 col-xs-12"
-									for="customer1Level1">Tên: <span class="required">+</span>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="cus1Level1_id">Tên <span class="required">(1)*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<sd:autocompleter id="customer1Level1" name="customer1Level1"
-										cssClass="form-control col-md-7 col-xs-12"
-										showDownArrow="false" autoComplete="true" list="{1}" />
-								</div>
-							</div>
-							<div class="item">
-								<label class="control-label col-md-1 col-sm-3 col-xs-12"
-									for="customer1Phone">ÐT <span class="required">*</span>
-								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="customer1Phone" name="customer1Phone"
-										value="%{'0935441344'}"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<s:select id="cus1Level1_id" name="cus1Level1.id"
+										showDownArrow="false" autoComplete="true"
+										value="%{cus.customer.id}"
+										cssClass="form-control col-md-7 col-xs-12" list="listCustomer"
+										listKey="id" headerKey="-1"
+										headerValue="-- Chọn khách hàng cấp 1 --"
+										listValue="director +' - '+ customerCode" />
 								</div>
 							</div>
 							<div class="item form-group">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="cus1Phone">Ðiện thoại <span class="required">(1)*</span>
+								</label>
+								<div class="col-md-3 col-sm-6 col-xs-12">
+									<input id="cus1Phone" type="text" required="required"
+										name="cus1Phone" data-validate-length-range="1,100" value=""
+										class="form-control col-md-7 col-xs-12">
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="customer1Percent">Tỉ lệ nhận (%) <span
-									class="required">*</span>
+									class="required">(1)*</span>
 								</label>
-								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="customer1Percent" name="customer1Percent"
-										type="number" cssClass="form-control col-md-7 col-xs-12"
-										value="%{0}" />
+								<div class="col-md-3 col-sm-6 col-xs-12">
+									<input type="number" id="customer1Percent"
+										name="cus.customer1Percent" value="${cus.customer1Percent}"
+										required="required" data-validate-minmax="0,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 
-							<div class="item">
-								<label class="control-label col-md-1 col-sm-3 col-xs-12"
-									for="customer2Level1">Tên: <span class="required">+</span>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="cus2Level1_id">Tên <span class="required">(2)*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<sd:autocompleter id="customer2Level1" name="customer2Level1"
-										cssClass="form-control col-md-7 col-xs-12"
-										showDownArrow="false" autoComplete="true" list="{1}" />
-								</div>
-							</div>
-							<div class="item">
-								<label class="control-label col-md-1 col-sm-3 col-xs-12"
-									for="customer2Phone">ÐT: <span class="required">*</span>
-								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="customer2Phone" name="customer2Phone"
-										value="%{'0935441344'}"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<s:select id="cus2Level1_id" name="cus2Level1.id"
+										showDownArrow="false" autoComplete="true"
+										value="%{cus.customer.id}"
+										cssClass="form-control col-md-7 col-xs-12" list="listCustomer"
+										listKey="id" headerKey="-1"
+										headerValue="-- Chọn khách hàng cấp 1 --"
+										listValue="director +' - '+ customerCode" />
 								</div>
 							</div>
 							<div class="item form-group">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="cus2Phone">Ðiện thoại <span class="required">(2)*</span>
+								</label>
+								<div class="col-md-3 col-sm-6 col-xs-12">
+									<input id="cus2Phone" name="cus2Phone" type="text"
+										required="required" data-validate-length-range="1,100"
+										value="" class="form-control col-md-7 col-xs-12">
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="customer2Percent">Tỉ lệ nhận (%) <span
-									class="required">*</span>
+									class="required">(2)*</span>
 								</label>
-								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="customer2Percent" name="customer2Percent"
-										type="number" cssClass="form-control col-md-7 col-xs-12"
-										value="%{0}" />
+								<div class="col-md-3 col-sm-6 col-xs-12">
+									<input type="number" id="customer2Percent"
+										name="cus.customer2Percent" value="${cus.customer2Percent}"
+										required="required" data-validate-minmax="0,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 
-							<div class="item">
-								<label class="control-label col-md-1 col-sm-3 col-xs-12"
-									for="customer3Level1">Tên: <span class="required">+</span>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="cus3Level1_id">Tên <span class="required">(3)*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<sd:autocompleter id="customer3Level1" name="customer3Level1"
-										cssClass="form-control col-md-7 col-xs-12"
-										showDownArrow="false" autoComplete="true" list="{1}" />
-								</div>
-							</div>
-							<div class="item">
-								<label class="control-label col-md-1 col-sm-3 col-xs-12"
-									for="customer3Phone">ÐT <span class="required">*</span>
-								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="customer3Phone" name="customer3Phone"
-										value="%{'0935441344'}"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<s:select id="cus3Level1_id" name="cus3Level1.id"
+										showDownArrow="false" autoComplete="true"
+										value="%{cus.customer.id}"
+										cssClass="form-control col-md-7 col-xs-12" list="listCustomer"
+										listKey="id" headerKey="-1"
+										headerValue="-- Chọn khách hàng cấp 1 --"
+										listValue="director +' - '+ customerCode" />
 								</div>
 							</div>
 							<div class="item form-group">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="cus3Phone">Ðiện thoại <span class="required">(3)*</span>
+								</label>
+								<div class="col-md-3 col-sm-6 col-xs-12">
+									<input id="cus3Phone" name="cus3Phone" type="text"
+										required="required" data-validate-length-range="1,100"
+										value="" class="form-control col-md-7 col-xs-12">
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="customer3Percent">Tỉ lệ nhận (%) <span
-									class="required">*</span>
+									class="required">(3)*</span>
 								</label>
-								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="customer3Percent" name="customer3Percent"
-										type="number" cssClass="form-control col-md-7 col-xs-12"
-										value="%{0}" />
+								<div class="col-md-3 col-sm-6 col-xs-12">
+									<input id="customer3Percent" name="cus.customer3Percent"
+										type="number" value="${cus.customer3Percent}"
+										required="required" data-validate-minmax="0,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 
-							<div class="item">
-								<label class="control-label col-md-1 col-sm-3 col-xs-12"
-									for="customer4Level1">Tên: <span class="required">*</span>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="cus4Level1_id">Tên <span class="required">(4)*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<sd:autocompleter id="customer4Level1" name="customer4Level1"
-										cssClass="form-control col-md-7 col-xs-12"
-										showDownArrow="false" autoComplete="true" list="{1}" />
-								</div>
-							</div>
-							<div class="item">
-								<label class="control-label col-md-1 col-sm-3 col-xs-12"
-									for="customer4Phone">ĐT <span class="required">*</span>
-								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="customer4Phone" name="customer4Phone"
-										value="%{'0935441344'}"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<s:select id="cus4Level1_id" name="cus4Level1.id"
+										showDownArrow="false" autoComplete="true"
+										value="%{cus.customer.id}"
+										cssClass="form-control col-md-7 col-xs-12" list="listCustomer"
+										listKey="id" headerKey="-1"
+										headerValue="-- Chọn khách hàng cấp 1 --"
+										listValue="director +' - '+ customerCode" />
 								</div>
 							</div>
 							<div class="item form-group">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="cus4Phone">Ðiện thoại <span class="required">(4)*</span>
+								</label>
+								<div class="col-md-3 col-sm-6 col-xs-12">
+									<input id="cus4Phone" name="cus4Phone" type="text"
+										required="required" data-validate-length-range="1,100"
+										value="" class="form-control col-md-7 col-xs-12">
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="customer4Percent">Tỉ lệ nhận (%) <span
-									class="required">*</span>
+									class="required">(4)*</span>
 								</label>
-								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="customer4Percent" name="customer4Percent"
-										type="number" cssClass="form-control col-md-7 col-xs-12"
-										value="%{0}" />
+								<div class="col-md-3 col-sm-6 col-xs-12">
+									<input id="customer4Percent" name="cus.customer4Percent"
+										type="number" value="${cus.customer4Percent}"
+										required="required" data-validate-minmax="0,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 
-							<div class="item">
-								<label class="control-label col-md-1 col-sm-3 col-xs-12"
-									for="customer5Level1">Tên: <span class="required">+</span>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="cus5Level1_id">Tên <span class="required">(5)*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<sd:autocompleter id="customer5Level1" name="customer5Level1"
-										cssClass="form-control col-md-7 col-xs-12"
-										showDownArrow="false" autoComplete="true" list="{1}" />
-								</div>
-							</div>
-							<div class="item">
-								<label class="control-label col-md-1 col-sm-3 col-xs-12"
-									for="customer5Phone">ĐT <span class="required">*</span>
-								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="customer5Phone" name="customer5Phone"
-										value="%{'0935441344'}"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<s:select id="cus5Level1_id" name="cus5Level1.id"
+										showDownArrow="false" autoComplete="true"
+										value="%{cus.customer.id}"
+										cssClass="form-control col-md-7 col-xs-12" list="listCustomer"
+										listKey="id" headerKey="-1"
+										headerValue="-- Chọn khách hàng cấp 1 --"
+										listValue="director +' - '+ customerCode" />
 								</div>
 							</div>
 							<div class="item form-group">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
-									for="customer5Percent">Tỉ lệ nhận (%) <span
-									class="required">*</span>
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="cus5Phone">Ðiện thoại <span class="required">(5)*</span>
 								</label>
-								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="customer5Percent" name="customer5Percent"
-										type="number" cssClass="form-control col-md-7 col-xs-12"
-										value="%{0}" />
+								<div class="col-md-3 col-sm-6 col-xs-12">
+									<input id="cus5Phone" name="cus5Phone" type="text"
+										required="required" data-validate-length-range="1,100"
+										value="" class="form-control col-md-7 col-xs-12">
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="customer5Percent">Tỉ lệ nhận (%) <span
+									class="required">(5)*</span>
+								</label>
+								<div class="col-md-3 col-sm-6 col-xs-12">
+									<input id="customer5Percent" name="cus.customer5Percent"
+										type="number" value="${cus.customer5Percent}"
+										required="required" data-validate-minmax="0,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 
@@ -457,9 +531,11 @@
 									for="revenue1"> <%=(yearNow - 2)%> - <%=(yearNow - 1)%>
 									(Triệu đồng): <span class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="revenue1" name="revenue1" value="%{0}"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="revenue1" name="revenue1" type=text
+										required="required" data-validate-minmax="1,100000000"
+										value="${cus.revenue1}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
@@ -467,9 +543,11 @@
 									for="revenue2"> <%=(yearNow - 1)%> - <%=(yearNow)%>
 									(Triệu đồng): <span class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="revenue2" name="revenue2" value="%{0}"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="revenue2" name="revenue2" type=text
+										required="required" data-validate-minmax="1,100000000"
+										value="${cus.revenue1}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 
@@ -482,9 +560,11 @@
 									for="revenueExpect1"> <%=(yearNow)%> - <%=(yearNow + 1)%>
 									(Triệu đồng): <span class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="revenueExpect1" name="revenueExpect1"
-										value="%{0}" cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="revenueExpect1" name="revenueExpect1" type=text
+										required="required" data-validate-minmax="1,100000000"
+										value="${cus.revenueExpect1}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
@@ -492,9 +572,11 @@
 									for="revenueExpect2"> <%=(yearNow + 1)%> - <%=(yearNow + 2)%>
 									(Triệu đồng): <span class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="revenueExpect2" name="revenueExpect2"
-										value="%{0}" cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="revenueExpect2" name="revenueExpect2" type=text
+										required="required" data-validate-minmax="1,100000000"
+										value="${cus.revenueExpect2}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
@@ -502,9 +584,11 @@
 									for="revenueExpect3"> <%=(yearNow + 2)%> - <%=(yearNow + 3)%>
 									(Triệu đồng): <span class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="revenueExpect3" name="revenueExpect3"
-										value="%{0}" cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="revenueExpect3" name="revenueExpect3" type=text
+										required="required" data-validate-minmax="1,100000000"
+										value="${cus.revenueExpect3}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
@@ -512,54 +596,62 @@
 									số phân phối của các Cty kinh doanh thuốc BVTV cung ứng </label>
 							</div>
 
-							<div class="item">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="percentProvide1">Trên 30% <span class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="percentProvide1" name="percentProvide1"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="percentProvide1" name="percentProvide1" type=text
+										required="required" data-validate-minmax="1,100000000"
+										value="${cus.percentProvide1}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="percentProvide2">20 - 30% <span class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="percentProvide2" name="percentProvide2"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="percentProvide2" name="percentProvide2" type=text
+										required="required" data-validate-minmax="1,100000000"
+										value="${cus.percentProvide2}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
-							<div class="item">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="percentProvide3">10 - 20% <span class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="percentProvide3" name="percentProvide3"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="percentProvide3" name="percentProvide3" type=text
+										required="required" data-validate-minmax="1,100000000"
+										value="${cus.percentProvide3}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="percentProvide4">Dưới 10% <span class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:textfield id="percentProvide4" name="percentProvide4"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="percentProvide4" name="percentProvide4" type=text
+										required="required" data-validate-minmax="1,100000000"
+										value="${cus.percentProvide4}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 
 							<div class="item form-group">
-								<label class="control-label col-md-4 col-sm-3 col-xs-12"
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="productSell">Tên ít nhất 7 sản phẩm Đồng Xanh đang
 									bán theo số lượng thấp dần </label>
-								<div class="col-md-8 col-sm-6 col-xs-12">
-									<s:textarea id="productSell" name="productSell"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<textarea id="productSell" name="productSell"
+										required="required" class="form-control col-md-7 col-xs-12">${cus.productSell}</textarea>
 								</div>
 							</div>
 
-
+							<br>
 							<div class="item form-group">
 								<label class="col-md-8 col-sm-3 col-xs-12">Danh mục các
 									mặt hàng (tên thương mại) đang tiêu thụ mạnh </label>
@@ -568,51 +660,58 @@
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="product1Hot">3 Sản phẩm thuốc trừ cỏ </label>
-								<div class="col-md-9 col-sm-6 col-xs-12">
-									<s:textfield id="product1Hot" name="product1Hot"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<input id="product1Hot" name="product1Hot" type="text"
+										data-validate-length-range="0,1000" value="${cus.product1Hot}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="product2Hot">5 Sản phẩm thuốc trừ sâu </label>
-								<div class="col-md-9 col-sm-6 col-xs-12">
-									<s:textfield id="product2Hot" name="product2Hot"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<input id="product2Hot" name="product2Hot" type="text"
+										data-validate-length-range="0,1000" value="${cus.product2Hot}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="product3Hot">3 Sản phẩm thuốc trừ rầy </label>
-								<div class="col-md-9 col-sm-6 col-xs-12">
-									<s:textfield id="product3Hot" name="product3Hot"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<input id="product3Hot" name="product3Hot" type="text"
+										data-validate-length-range="0,1000" value="${cus.product3Hot}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="product4Hot">5 Sản phẩm thuốc trừ bệnh </label>
-								<div class="col-md-9 col-sm-6 col-xs-12">
-									<s:textfield id="product4Hot" name="product4Hot"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<input id="product4Hot" name="product4Hot" type="text"
+										data-validate-length-range="0,1000" value="${cus.product4Hot}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="product5Hot">3 Sản phẩm kích thích sinh trưởng </label>
-								<div class="col-md-9 col-sm-6 col-xs-12">
-									<s:textfield id="product5Hot" name="product5Hot"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<input id="product5Hot" name="product5Hot" type="text"
+										data-validate-length-range="0,1000" value="${cus.product5Hot}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="product6Hot">3 Sản phẩm thuốc trừ ốc </label>
-								<div class="col-md-9 col-sm-6 col-xs-12">
-									<s:textfield id="product6Hot" name="product6Hot"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<input id="product6Hot" name="product6Hot" type="text"
+										data-validate-length-range="0,1000" value="${cus.product6Hot}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
+							<br>
 							<div class="item form-group">
 								<label class="col-md-8 col-sm-3 col-xs-12">Cây trồng
 									trong khu vực (chọn cây trồng chính) </label>
@@ -620,219 +719,247 @@
 
 							<div class="item form-group">
 								<label class="control-label col-md-2 col-sm-3 col-xs-12"
-									for="farmProduct1">+ Lúa (%) </label>
+									style="color: blue;" for="farmProduct1">+ Lúa (%) </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct1" name="farmProduct1"
-										type="number" cssClass="form-control col-md-7 col-xs-12"
-										value="%{0}" />
-
+									<input id="farmProduct1" name="farmProduct1" type="number"
+										value="${cus.farmProduct1}" required="required"
+										data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
 									vụ 1: Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct1Session"
-										name="farmProduct1Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct1Session" name="farmProduct1Session"
+										type="number" value="${cus.farmProduct1Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct1Session"
-										name="farmProduct1Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct1Session" name="farmProduct1Session"
+										type="number" value="${cus.farmProduct1Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
 									vụ 2 : Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct1Session"
-										name="farmProduct1Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct1Session" name="farmProduct1Session"
+										type="number" value="${cus.farmProduct1Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct1Session"
-										name="farmProduct1Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct1Session" name="farmProduct1Session"
+										type="number" value="${cus.farmProduct1Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
 									vụ 3: Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct1Session"
-										name="farmProduct1Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct1Session" name="farmProduct1Session"
+										type="number" value="${cus.farmProduct1Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct1Session"
-										name="farmProduct1Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct1Session" name="farmProduct1Session"
+										type="number" value="${cus.farmProduct1Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-2 col-sm-3 col-xs-12"
-									for="product2Hot">+ Rau màu (%) </label>
+									style="color: blue;" for="product2Hot">+ Rau màu (%) </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct2" name="farmProduct2"
-										type="number" cssClass="form-control col-md-7 col-xs-12"
-										value="%{0}" />
+									<input id="product2Hot" name="product2Hot" type="number"
+										value="${cus.product2Hot}" required="required"
+										data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
 									vụ 1: Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct2Session"
-										name="farmProduct2Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct2Session" name="farmProduct2Session"
+										type="number" value="${cus.farmProduct2Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct2Session"
-										name="farmProduct2Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct2Session" name="farmProduct2Session"
+										type="number" value="${cus.farmProduct2Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
 									vụ 2 : Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct2Session"
-										name="farmProduct2Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct2Session" name="farmProduct2Session"
+										type="number" value="${cus.farmProduct2Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct2Session"
-										name="farmProduct2Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct2Session" name="farmProduct2Session"
+										type="number" value="${cus.farmProduct2Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
 									vụ 3: Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct2Session"
-										name="farmProduct2Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct2Session" name="farmProduct2Session"
+										type="number" value="${cus.farmProduct2Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct2Session"
-										name="farmProduct2Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct2Session" name="farmProduct2Session"
+										type="number" value="${cus.farmProduct2Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-2 col-sm-3 col-xs-12"
-									for="product3Hot">+ Cây ăn trái (%) </label>
+									style="color: blue;" for="product3Hot">+ Cây ăn trái
+									(%) </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct3" name="farmProduct3"
-										type="number" cssClass="form-control col-md-7 col-xs-12"
-										value="%{0}" />
+									<input id="product3Hot" name="product3Hot" type="number"
+										value="${cus.product3Hot}" required="required"
+										data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
 									vụ 1: Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct3Session"
-										name="farmProduct3Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct3Session" name="farmProduct3Session"
+										type="number" value="${cus.farmProduct3Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct3Session"
-										name="farmProduct3Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct3Session" name="farmProduct3Session"
+										type="number" value="${cus.farmProduct3Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
 									vụ 2 : Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct3Session"
-										name="farmProduct3Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct3Session" name="farmProduct3Session"
+										type="number" value="${cus.farmProduct3Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct3Session"
-										name="farmProduct3Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct3Session" name="farmProduct3Session"
+										type="number" value="${cus.farmProduct3Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
 									vụ 3: Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct3Session"
-										name="farmProduct3Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct3Session" name="farmProduct3Session"
+										type="number" value="${cus.farmProduct3Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct3Session"
-										name="farmProduct3Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct3Session" name="farmProduct3Session"
+										type="number" value="${cus.farmProduct3Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-2 col-sm-3 col-xs-12"
-									for="product4Hot">+ Khác (%) </label>
+									style="color: blue;" for="product4Hot">+ Khác (%) </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct4" name="farmProduct4"
-										type="number" cssClass="form-control col-md-7 col-xs-12"
-										value="%{0}" />
+									<input id="product4Hot" name="product4Hot" type="number"
+										value="${cus.product4Hot}" required="required"
+										data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
 									vụ 1: Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct4Session"
-										name="farmProduct4Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct4Session" name="farmProduct4Session"
+										type="number" value="${cus.farmProduct4Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct4Session"
-										name="farmProduct4Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct4Session" name="farmProduct4Session"
+										type="number" value="${cus.farmProduct4Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
 									vụ 2 : Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct4Session"
-										name="farmProduct4Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct4Session" name="farmProduct4Session"
+										type="number" value="${cus.farmProduct4Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct4Session"
-										name="farmProduct4Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct4Session" name="farmProduct4Session"
+										type="number" value="${cus.farmProduct4Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12">Mùa
 									vụ 3: Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct4Session"
-										name="farmProduct4Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct4Session" name="farmProduct4Session"
+										type="number" value="${cus.farmProduct4Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:textfield id="farmProduct4Session"
-										name="farmProduct4Session" type="number"
-										cssClass="form-control col-md-7 col-xs-12" value="%{0}" />
+									<input id="farmProduct4Session" name="farmProduct4Session"
+										type="number" value="${cus.farmProduct4Session}"
+										required="required" data-validate-minmax="1,100"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="ln_solid"></div>
@@ -921,7 +1048,102 @@
 			$('form .alert').remove();
 	}).prop('checked', false);
 </script>
+<script>
+	$(document).ready(function() {
+		$('#cus1Level1_id').change(function() {
+			var commonCusId = {
+					"cus1Level1Id" : $("#cus1Level1_id").val()
+				};
+				$.ajax({
+					url : "readInfoCustomer",
+					data : JSON.stringify(commonCusId),
+					dataType : 'json',
+					contentType : 'application/json',
+					type : 'POST',
+					async : true,
+					success : function(res) {
+						$('#cus1Phone').val(res);
+					}
+				});
+		});
+	});
 
+	$(document).ready(function() {
+		$('#cus2Level1_id').change(function() {
+			var commonCusId = {
+					"cus2Level1Id" : $("#cus2Level1_id").val()
+				};
+				$.ajax({
+					url : "readInfoCustomer",
+					data : JSON.stringify(commonCusId),
+					dataType : 'json',
+					contentType : 'application/json',
+					type : 'POST',
+					async : true,
+					success : function(res) {
+						$('#cus2Phone').val(res);
+					}
+				});
+		});
+	});
+
+	$(document).ready(function() {
+		$('#cus3Level1_id').change(function() {
+			var commonCusId = {
+					"cus3Level1Id" : $("#cus3Level1_id").val()
+				};
+				$.ajax({
+					url : "readInfoCustomer",
+					data : JSON.stringify(commonCusId),
+					dataType : 'json',
+					contentType : 'application/json',
+					type : 'POST',
+					async : true,
+					success : function(res) {
+						$('#cus3Phone').val(res);
+					}
+				});
+		});
+	});
+
+	$(document).ready(function() {
+		$('#cus4Level1_id').change(function() {
+			var commonCusId = {
+					"cus4Level1Id" : $("#cus4Level1_id").val()
+				};
+				$.ajax({
+					url : "readInfoCustomer",
+					data : JSON.stringify(commonCusId),
+					dataType : 'json',
+					contentType : 'application/json',
+					type : 'POST',
+					async : true,
+					success : function(res) {
+						$('#cus4Phone').val(res);
+					}
+				});
+		});
+	});
+
+	$(document).ready(function() {
+		$('#cus5Level1_id').change(function() {
+			var commonCusId = {
+					"cus5Level1Id" : $("#cus5Level1_id").val()
+				};
+				$.ajax({
+					url : "readInfoCustomer",
+					data : JSON.stringify(commonCusId),
+					dataType : 'json',
+					contentType : 'application/json',
+					type : 'POST',
+					async : true,
+					success : function(res) {
+						$('#cus5Phone').val(res);
+					}
+				});
+		});
+	});
+</script>
 </body>
 
 </html>

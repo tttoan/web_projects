@@ -130,6 +130,11 @@
 				<param name="root">unitPrice</param>
 			</result>
 		</action>
+		<action name="readInfoCustomer" class="com.home.action.CustomerAction" method="retrievePhoneById">
+			<result type="json">
+				<param name="root">commonCusPhone</param>
+			</result>
+		</action>
 	</package>
 	<include file="promotion.xml"></include>
 	<include file="userplan.xml"></include>

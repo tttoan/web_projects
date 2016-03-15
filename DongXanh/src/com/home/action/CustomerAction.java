@@ -1,6 +1,7 @@
 package com.home.action;
 import java.io.File;
 import java.io.FileInputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,9 +23,11 @@ import org.hibernate.SessionFactory;
 import com.home.conts.CustomerTable;
 import com.home.dao.CustomerHome;
 import com.home.dao.GroupCustomerHome;
+import com.home.dao.ProductHome;
 import com.home.dao.UserHome;
 import com.home.model.Customer;
 import com.home.model.GroupCustomer;
+import com.home.model.Product;
 import com.home.model.User;
 import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
@@ -33,12 +36,12 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
 public class CustomerAction extends ActionSupport implements Action, ModelDriven<Customer>, ServletContextAware, ServletRequestAware {
+	private boolean edit = false;
 	public int customerId;
 	private Customer cus = new Customer();
 	private List<Customer> customers = new ArrayList<Customer>();
 	private String lookupEmployeeForCus;
 	public List<String> listLookupEmployeeForCus = new ArrayList<>();
-	private List<GroupCustomer> listGroupCustomer = new ArrayList<>();
 	private int grpCusId;
 	private ServletContext ctx;
 	private HttpServletRequest request;
@@ -49,11 +52,75 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private User emp = new User();
 	public 	int yearNow = (Calendar.getInstance()).get(Calendar.YEAR);
 	private List<Customer> listCustomer = new ArrayList<>();
-	private List<User> listEmployee = new ArrayList<>();;
+	private List<User> listEmployee = new ArrayList<>();
+	private List<GroupCustomer> listGrpCus = new ArrayList<>();
+	private GroupCustomer grpCustomer = new GroupCustomer();
+	private Customer cus1Level1 = new Customer();
+	private Customer cus2Level1 = new Customer();
+	private Customer cus3Level1 = new Customer();
+	private Customer cus4Level1 = new Customer();
+	private Customer cus5Level1 = new Customer();
+	private int cus1Level1Id;
+	private int cus2Level1Id;
+	private int cus3Level1Id;
+	private int cus4Level1Id;
+	private int cus5Level1Id;
+	private String commonCusPhone;
+	
+	public String retrievePhoneById()  throws Exception {
+		int commonCusId = 0;
+		if(cus1Level1Id != 0)
+			commonCusId = cus1Level1Id;
+		else if(cus2Level1Id != 0)
+			commonCusId = cus2Level1Id;
+		else if(cus3Level1Id != 0)
+			commonCusId = cus3Level1Id;
+		else if(cus4Level1Id != 0)
+			commonCusId = cus4Level1Id;
+		else if(cus5Level1Id != 0)
+			commonCusId = cus5Level1Id;
+		CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
+		Customer record = cusHome.findById(commonCusId);
+		if(record != null)
+			commonCusPhone = record.getTelefone();
+		else 
+			commonCusPhone = "";
+		return SUCCESS;
+	}
+	
+	public Customer getCus1Level1() {
+		return cus1Level1;
+	}
+	public void setCus1Level1(Customer cus1Level1) {
+		this.cus1Level1 = cus1Level1;
+	}
+	public Customer getCus2Level1() {
+		return cus2Level1;
+	}
+	public void setCus2Level1(Customer cus2Level1) {
+		this.cus2Level1 = cus2Level1;
+	}
+	public Customer getCus3Level1() {
+		return cus3Level1;
+	}
+	public void setCus3Level1(Customer cus3Level1) {
+		this.cus3Level1 = cus3Level1;
+	}
+	public Customer getCus4Level1() {
+		return cus4Level1;
+	}
+	public void setCus4Level1(Customer cus4Level1) {
+		this.cus4Level1 = cus4Level1;
+	}
+	public Customer getCus5Level1() {
+		return cus5Level1;
+	}
+	public void setCus5Level1(Customer cus5Level1) {
+		this.cus5Level1 = cus5Level1;
+	}
 	public File getUpload() {
 		return upload;
 	}
-
 	public String getUploadContentType() {
 		return uploadContentType;
 	}
@@ -93,6 +160,15 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	}
 	@Override
 	public String execute() throws Exception {
+		if (customerId != 0) {
+			try {
+				CustomerHome cusHome = new CustomerHome(getSessionFactory());
+				cus = cusHome.findById(customerId);
+				setEdit(true);
+			} catch (Exception e) {
+				throw e;
+			}
+		}
 		return SUCCESS;
 	}
 
@@ -109,16 +185,38 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	public void validate() {
 		loadLookupEmployee();
 		loadLookupCustomer();
+		loadLookupGrpCustomer();
 	}
 	
 	public void loadLookupCustomer() {
-		CustomerHome cusHome = new CustomerHome(getSessionFactory());
-		setListCustomer(cusHome.getListCustomer());
+		try {
+			CustomerHome cusHome = new CustomerHome(getSessionFactory());
+			listCustomer = cusHome.getListCustomer();
+		} catch (Exception e) {
+			e.printStackTrace();
+			addActionError("Error: load lookup customers. Exception: "+e.getMessage());
+		}
 	}
 
 	public void loadLookupEmployee() {
-		UserHome userHome = new UserHome(getSessionFactory());
-		setListEmployee(userHome.getListUser());
+		try {
+			UserHome userHome = new UserHome(getSessionFactory());
+			listEmployee = userHome.getListUser();
+		} catch (Exception e) {
+			e.printStackTrace();
+			addActionError("Error: load lookup customers. Exception: "+e.getMessage());
+		}
+		
+	}
+	public void loadLookupGrpCustomer() {
+		try {
+			GroupCustomerHome grpCusHome = new GroupCustomerHome(getSessionFactory());
+			listGrpCus = grpCusHome.getListGrpCustomer();
+		} catch (Exception e) {
+			e.printStackTrace();
+			addActionError("Error: load lookup group of customers. Exception: "+e.getMessage());
+		}
+		
 	}
 	
 	public String findCustomer(){
@@ -158,7 +256,6 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	public String listLookupEmployeeForCus(){
 		try {
 			GroupCustomerHome grpCusHome = new GroupCustomerHome(getSessionFactory());
-			listGroupCustomer = grpCusHome.getListGrpCustomer();
 			UserHome userHome = new UserHome(getSessionFactory());
 			List<User> users = userHome.getListUser();
 			for (User user : users) {
@@ -169,6 +266,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			return ERROR;
 		}
 	}
+	
 	public String addCustomer() throws Exception {
 		try {
 			UserHome userHome = new UserHome(getSessionFactory());
@@ -178,7 +276,11 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			grpCus.setId(grpCusId);
 			getCustomer().setGroupCustomer(grpCus);
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
-			cusHome.attachDirty(getCustomer());
+			if(cus.getId() == 0)
+				cusHome.attachDirty(getCustomer());
+			else
+				cusHome.updateDirty(cus);
+			
 			return SUCCESS;
 		} catch (Exception e) {
 			return ERROR;
@@ -314,15 +416,6 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	public void setCustomer(Customer customer) {
 		this.cus = customer;
 	}
-
-	public List<GroupCustomer> getListGroupCustomer() {
-		return listGroupCustomer;
-	}
-
-	public void setListGroupCustomer(List<GroupCustomer> listGroupCustomer) {
-		this.listGroupCustomer = listGroupCustomer;
-	}
-
 	public int getGrpCusId() {
 		return grpCusId;
 	}
@@ -361,5 +454,81 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	public void setListEmployee(List<User> listEmployee) {
 		this.listEmployee = listEmployee;
+	}
+
+
+
+	public boolean isEdit() {
+		return edit;
+	}
+
+
+
+	public void setEdit(boolean edit) {
+		this.edit = edit;
+	}
+
+
+
+	public List<GroupCustomer> getListGrpCus() {
+		return listGrpCus;
+	}
+
+
+
+	public void setListGrpCus(List<GroupCustomer> listGrpCus) {
+		this.listGrpCus = listGrpCus;
+	}
+	public GroupCustomer getGrpCustomer() {
+		return grpCustomer;
+	}
+	public void setGrpCustomer(GroupCustomer grpCustomer) {
+		this.grpCustomer = grpCustomer;
+	}
+	public String getCommonCusPhone() {
+		return commonCusPhone;
+	}
+	public void setCommonCusPhone(String commonCusPhone) {
+		this.commonCusPhone = commonCusPhone;
+	}
+
+	public int getCus1Level1Id() {
+		return cus1Level1Id;
+	}
+
+	public void setCus1Level1Id(int cus1Level1Id) {
+		this.cus1Level1Id = cus1Level1Id;
+	}
+
+	public int getCus2Level1Id() {
+		return cus2Level1Id;
+	}
+
+	public void setCus2Level1Id(int cus2Level1Id) {
+		this.cus2Level1Id = cus2Level1Id;
+	}
+
+	public int getCus3Level1Id() {
+		return cus3Level1Id;
+	}
+
+	public void setCus3Level1Id(int cus3Level1Id) {
+		this.cus3Level1Id = cus3Level1Id;
+	}
+
+	public int getCus4Level1Id() {
+		return cus4Level1Id;
+	}
+
+	public void setCus4Level1Id(int cus4Level1Id) {
+		this.cus4Level1Id = cus4Level1Id;
+	}
+
+	public int getCus5Level1Id() {
+		return cus5Level1Id;
+	}
+
+	public void setCus5Level1Id(int cus5Level1Id) {
+		this.cus5Level1Id = cus5Level1Id;
 	}
 }

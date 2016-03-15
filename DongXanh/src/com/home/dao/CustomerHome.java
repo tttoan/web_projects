@@ -107,6 +107,30 @@ public class CustomerHome {
 		}
 	}
 	
+	public void updateDirty(Customer transientInstance) {
+		log.debug("attaching dirty Customer instance");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			session.update(transientInstance);
+			tx.commit();
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public void attachDirty(Customer transientInstance) {
 		log.debug("attaching dirty Customer instance");
 		Transaction tx = null;

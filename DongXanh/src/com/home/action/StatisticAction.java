@@ -55,6 +55,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	private Customer cusLevel1 = new Customer();
 	private Customer cusLevel2 = new Customer();
 	private User emp = new User();
+
 	
 	private Product pro = new Product();
 	
@@ -355,4 +356,6 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	public void setDistricts(ArrayList<String> districts) {
 		this.districts = districts;
 	}
+
+	
 }
