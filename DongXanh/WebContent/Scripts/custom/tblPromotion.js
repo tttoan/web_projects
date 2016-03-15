@@ -168,7 +168,7 @@ $(document).ready(function() {
         									title: 'Công thức',
         									width: '24%',
         									type: 'textarea',
-        									defaultValue: 'return $diemdk >= $diemth;',
+        									defaultValue: '$ketqua = ($diemdk >= $diemth); return $ketqua;',
         									list: false
         								}
                                     },

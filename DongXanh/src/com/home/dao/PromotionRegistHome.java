@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.naming.InitialContext;
@@ -23,10 +25,16 @@ import org.hibernate.Transaction;
 import org.hibernate.internal.SessionImpl;
 
 import com.home.model.Customer;
+import com.home.model.Gift;
 import com.home.model.GroupCustomer;
+import com.home.model.Product;
 import com.home.model.Promotion;
 import com.home.model.PromotionCus;
+import com.home.model.PromotionGift;
+import com.home.model.PromotionProduct;
 import com.home.model.PromotionRegister;
+import com.home.model.RegisterGift;
+import com.home.model.RegisterProduct;
 
 /**
  * Home object for domain model class Promotion.
@@ -236,6 +244,126 @@ public class PromotionRegistHome {
 		}
 	}
 	
+	public PromotionRegister getPromotionRegister(int promotion_id, int customer_id) throws Exception{
+		log.debug("retrieve list PromotionRegister");
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Query query  = session.createQuery("From PromotionRegister Where promotion = :promotion And customer_id = :customer_id");
+			query.setParameter("promotion", promotion_id);
+			query.setParameter("customer_id", customer_id);
+			List<PromotionRegister> results =  query.list();
+			tx.commit();
+			log.debug("retrieve list PromotionRegister successful, result size: " + results.size());
+			return results.get(0);
+		} catch (Exception re) {
+			if (tx!=null) tx.rollback();
+			log.error("retrieve list PromotionRegister failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public List<RegisterGift> getRegisterGifts(int register_id, int promotion_id) throws Exception{
+		log.debug("retrieve list PromotionRegister");
+		Session session = null;
+		List<RegisterGift> results = new ArrayList<RegisterGift>();
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			ResultSet rs = conn.createStatement().executeQuery(
+					"SELECT * FROM `register_gift` rg JOIN `promotion_gift` pg ON rg.p_gift_id=pg.id JOIN `gift` g ON g.id=pg.gift_id"
+					+ "WHERE promotion_id="+promotion_id+" AND register_id="+register_id+" ORDER BY pg.id, rg.id");
+			while(rs.next()){
+				RegisterGift registerGift = new RegisterGift();
+				PromotionGift promotionGift = new PromotionGift();
+				promotionGift.setPromotion_id(rs.getInt("promotion_id"));
+				promotionGift.setGift_id(rs.getInt("gift_id"));
+				promotionGift.setMaxQuantity(rs.getInt("max_quantity"));
+				promotionGift.setMaxPoint(rs.getInt("max_point"));
+				promotionGift.setUnit(rs.getString("unit"));
+				promotionGift.setFormula(rs.getString("formula"));
+				
+				Gift gift = new Gift();
+				gift.setId(rs.getInt("gift_id"));
+				gift.setGiftName(rs.getString("gift_name"));
+				promotionGift.setGift(gift);
+				
+				registerGift.setPromotionGift(promotionGift);
+				results.add(registerGift);
+			}
+			rs.close();
+			log.debug("retrieve list PromotionRegister successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			log.error("retrieve list PromotionRegister failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public List<RegisterProduct> getRegisterProducts(int register_id, int promotion_id) throws Exception{
+		log.debug("retrieve list PromotionRegister");
+		Session session = null;
+		List<RegisterProduct> results = new ArrayList<RegisterProduct>();
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			ResultSet rs = conn.createStatement().executeQuery(
+					"SELECT * FROM `register_product` rg JOIN  `promotion_product` pg ON rg.p_product_id=pg.id JOIN `product` p ON p.id=pg.product_id"
+					+ "WHERE promotion_id="+promotion_id+" AND register_id="+register_id+" ORDER BY pg.id, rg.id");
+			while(rs.next()){
+				RegisterProduct registerProduct = new RegisterProduct();
+				registerProduct.setPoint(rs.getInt("point"));
+				registerProduct.setBox(rs.getInt("box"));
+				
+				PromotionProduct promotionProduct = new PromotionProduct();
+				promotionProduct.setProduct_id(rs.getInt("product_id"));
+				promotionProduct.setMaxPoint(rs.getInt("max_point"));
+				registerProduct.setPromotionProduct(promotionProduct);
+				
+				Product product = new Product();
+				product.setId(rs.getInt("product_id"));
+				product.setProductCode("product_code");
+				product.setProductName("product_name");
+				promotionProduct.setProduct(product);
+				
+				results.add(registerProduct);
+			}
+			rs.close();
+			log.debug("retrieve list PromotionRegister successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			log.error("retrieve list PromotionRegister failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
 	public List<PromotionRegister> getListPromotionRegister(int promotion_id) throws Exception{
 		log.debug("retrieve list PromotionRegister");
 		Session session = null;
@@ -243,7 +371,7 @@ public class PromotionRegistHome {
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			Query query  = session.createQuery("From PromotionRegister Where promotion <= :promotion Order By id");
+			Query query  = session.createQuery("From PromotionRegister Where promotion = :promotion Order By id");
 			query.setParameter("promotion", promotion_id);
 			List<PromotionRegister> results =  query.list();
 			tx.commit();
@@ -318,6 +446,36 @@ public class PromotionRegistHome {
 		} catch (Exception re) {
 			re.printStackTrace();
 			log.error("retrieve list PromotionRegister failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public HashMap<Integer, Integer> getMapProductsRegister(int promotion_id) throws Exception{
+		log.debug("retrieve list Product");
+		Session session = null;
+		HashMap<Integer, Integer> results = new HashMap<Integer, Integer>();
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM `promotion_product` WHERE promotion_id="+promotion_id+" ");
+			while(rs.next()){
+				results.put(rs.getInt("product_id"), rs.getInt("max_point"));
+			}
+			rs.close();
+			log.debug("retrieve list Product successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Product failed", re);
 			throw re;
 		} finally{
 			try {

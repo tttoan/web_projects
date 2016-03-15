@@ -33,7 +33,7 @@ public class Params {
 	 */
 	public static final String BOX_DONE = "$thungth";
 	/**
-	 * Tong san pham dang ky, [ten san pham][so luong]
+	 * Tong san pham dang ky, [ten san pham][so luong thung]
 	 */
 	public static final String PRODUCT_REGIST = "$sanphamdk";
 	/**
@@ -41,7 +41,7 @@ public class Params {
 	 */
 	public static final String PRODUCT_DONE = "$sanphamth";
 	/**
-	 * Ten khach hang
+	 * Ma khach hang
 	 */
 	public static final String CUSTOMER = "$khachhang";
 	/**

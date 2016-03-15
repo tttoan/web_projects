@@ -16,12 +16,15 @@ import org.apache.struts2.util.ServletContextAware;
 import com.home.conts.Params;
 import com.home.dao.GroupCustomerHome;
 import com.home.dao.PromotionHome;
+import com.home.dao.PromotionRegistHome;
 import com.home.model.GroupCustomer;
 import com.home.model.Promotion;
 import com.home.model.PromotionCus;
 import com.home.model.PromotionGift;
 import com.home.model.PromotionProduct;
 import com.home.model.PromotionRegister;
+import com.home.model.RegisterGift;
+import com.home.model.RegisterProduct;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
 import com.home.util.SystemUtil;
@@ -37,6 +40,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	private List<PromotionCus> promotionCuss = new ArrayList<PromotionCus>();
 	private HashMap<Integer, String> groupCustomers ;
 	private Integer promotion_id;
+	private HashMap<Integer, Integer> mapProductPoint = new HashMap<Integer, Integer>();
 
 	@Override
 	public void setServletRequest(HttpServletRequest request) {
@@ -112,15 +116,18 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	
 	private List<PromotionCus> accessPromotionResult(Promotion promotion) throws Exception{
 		List<PromotionCus> result = new ArrayList<>();
+		PromotionRegistHome promotionRegistHome = new PromotionRegistHome(HibernateUtil.getSessionFactory());
 		try {
 			if(promotionCuss != null && !promotionCuss.isEmpty()){
 				Set<PromotionRegister>  promotionRegisters = promotion.getPromotionRegisters();
-				Set<PromotionGift> registerGifts = promotion.getPromotionGifts();
+				Set<PromotionGift> promotionGifts = promotion.getPromotionGifts();
 				Set<PromotionProduct> promotionProducts = promotion.getPromotionProducts();
+				mapProductPoint = promotionRegistHome.getMapProductsRegister(promotion_id);
+				
 				if(promotionRegisters == null){
 					//Get from DB again nha ku
 				}
-				if(registerGifts == null){
+				if(promotionGifts == null){
 					//Get from DB again nha ku
 				}
 				if(promotionProducts == null){
@@ -129,15 +136,53 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 				
 				//Process customer registered yes or no
 				if(promotion.getCustomerRegist() == 1){
+					
 					//Get promotion result
 					for (PromotionCus pCus : promotionCuss) {
-						if(isRegister(pCus, promotionRegisters)){
+						PromotionRegister promotionRegister = isRegister(pCus, promotionRegisters);
+						if(promotionRegister != null){
+							//Get customer register
+							//PromotionRegister promotionRegister = promotionRegistHome.getPromotionRegister(promotion_id, pCus.getCustomerId());
+							
+							//Get list gifts register
+							List<RegisterGift> listRegisterGifts = promotionRegistHome.getRegisterGifts(promotionRegister.getId(), promotion_id);
+							//Get list product register
+							List<RegisterProduct> listRegisterProducts = promotionRegistHome.getRegisterProducts(promotionRegister.getId(), promotion_id);
+							
+							//Duyet trong danh sach qua tang dang ky
+							StringBuilder resultString = new StringBuilder();
+							for (RegisterGift registerGift : listRegisterGifts) {
+								String str = getPromotionResult(
+										registerGift.getPromotionGift().getFormula(), 
+										pCus, 
+										promotionRegister.getTotalBox(), 
+										promotionRegister.getTotalPoint(), 
+										paramRegisterGifts(listRegisterGifts), 
+										paramRegisterProducts(listRegisterProducts));
+								resultString.append(str).append("; ");
+							}
+							pCus.setResultString(resultString.toString().trim());
+							
 							result.add(pCus);
 						}
 					}
 				}else{
 					//Get promotion result
 					for (PromotionCus pCus : promotionCuss) {
+						//Duyet trong danh sach qua tang dang ky
+						StringBuilder resultString = new StringBuilder();
+						for (PromotionGift promotionGift : promotionGifts) {
+							String str = getPromotionResult(
+									promotionGift.getFormula(), 
+									pCus, 
+									0, 
+									0, 
+									null, 
+									null);
+							resultString.append(str).append("; ");
+						}
+						pCus.setResultString(resultString.toString().trim());
+						
 						result.add(pCus);
 					}
 				}
@@ -149,60 +194,83 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		return result;
 	}
 	
-	private boolean isRegister(PromotionCus pCus, Set<PromotionRegister>  promotionRegisters){
+	private String[] paramRegisterGifts(List<RegisterGift> listRegisterGifts){
+		String[] arrGifts = new String[listRegisterGifts.size()];
+		for (int i = 0; i < listRegisterGifts.size(); i++) {
+			arrGifts[i] = listRegisterGifts.get(i).getPromotionGift().getGift().getGiftName();
+		}
+		return arrGifts;
+	}
+	
+	private Object[][] paramRegisterProducts(List<RegisterProduct> listRegisterProducts){
+		Object[][] arrProducts = new Object[listRegisterProducts.size()][3];
+		for (int i = 0; i < listRegisterProducts.size(); i++) {
+			arrProducts[i] = new Object[]{listRegisterProducts.get(i).getPromotionProduct().getProduct().getProductCode(), listRegisterProducts.get(i).getBox(), listRegisterProducts.get(i).getPoint()};
+		}
+		return arrProducts;
+	}
+	
+	private PromotionRegister isRegister(PromotionCus pCus, Set<PromotionRegister>  promotionRegisters){
 		for (PromotionRegister promotionRegister : promotionRegisters) {
 			if(pCus.getCustomerId() == promotionRegister.getCustomer_id() ||
 					pCus.getCustomerId() == promotionRegister.getCustomer().getId() ||
 					pCus.getCustomerCode().equalsIgnoreCase(promotionRegister.getCustomer().getCustomerCode())){
-				return true;
+				return promotionRegister;
 			}
 		}
-		return false;
+		return null;
 	}
 	
-	private String getPromotionResult(PromotionCus pCus, String script) throws Exception{
+	private String getPromotionResult(String script, 
+			PromotionCus pCus, 
+			int total_box_regist, 
+			int total_point_regist, 
+			Object[] gift_regist, 
+			Object[][] product_regist) throws Exception{
 		try {
 			ScriptEngine engine  = SystemUtil.compileScript(generateScriptFunction(script));
-			engine.put(Params.BOX_DONE, 41);
-			engine.put(Params.BOX_REGIST, 41);
-			engine.put(Params.CUSTOMER, 41);
-			engine.put(Params.GIFT_REGIST, 41);
-			engine.put(Params.GIFT_REGIST, 41);
-			engine.put(Params.POINT_DONE, 41);
-			engine.put(Params.POINT_REGIST, 41);
-			engine.put(Params.PRODUCT_DONE, 41);
-			engine.put(Params.PRODUCT_REGIST, 41);
+			engine.put(Params.BOX_DONE, pCus.getTotalBox());
+			engine.put(Params.BOX_REGIST, total_box_regist);
+			engine.put(Params.CUSTOMER, pCus.getCustomerCode());
+			engine.put(Params.GIFT_REGIST, gift_regist);
+			engine.put(Params.POINT_DONE, pCus.getTotaPoint(mapProductPoint));// Sum (sam pham * diem)
+			engine.put(Params.POINT_REGIST, total_point_regist);
+			engine.put(Params.PRODUCT_DONE, pCus.paramProducts());
+			engine.put(Params.PRODUCT_REGIST, product_regist);
 			
 			Object objDescription = engine.eval(Params.FUNCION1);
 			Object objResult = engine.eval(Params.FUNCION2);
 			
-			if(objResult == null){
-				pCus.setResult(false);
-			}else{
-				if(objResult instanceof String){
-					try {
-						pCus.setResult(Boolean.getBoolean(StringUtil.notNull(objResult)));
-					} catch (Exception e) {
-						e.printStackTrace();
-						if("đạt".equalsIgnoreCase(StringUtil.notNull(objResult)) ||
-								"dat".equalsIgnoreCase(StringUtil.notNull(objResult))){
-							pCus.setResult(true);
-						}
-					}	
-				}
-				else if(objResult instanceof Boolean){
-					pCus.setResult((boolean)objResult);
-				}
-				else if(objResult instanceof Integer){
-					int intRs = (Integer)objResult;
-					if(intRs > 0){
-						pCus.setResult(true);
-					}else{
-						pCus.setResult(false);
+			if(!pCus.isResult()){
+				if(objResult == null){
+					pCus.setResult(false);
+				}else{
+					if(objResult instanceof String){
+						try {
+							pCus.setResult(Boolean.getBoolean(StringUtil.notNull(objResult)));
+						} catch (Exception e) {
+							e.printStackTrace();
+							if("đạt".equalsIgnoreCase(StringUtil.notNull(objResult)) ||
+									"dat".equalsIgnoreCase(StringUtil.notNull(objResult))){
+								pCus.setResult(true);
+							}
+						}	
 					}
+					else if(objResult instanceof Boolean){
+						pCus.setResult((boolean)objResult);
+					}
+					else if(objResult instanceof Integer){
+						int intRs = (Integer)objResult;
+						if(intRs > 0){
+							pCus.setResult(true);
+						}else{
+							pCus.setResult(false);
+						}
+					}
+					
 				}
-				
 			}
+			
 			return StringUtil.notNull(objDescription);
 		} catch (Exception e) {
 			e.printStackTrace();

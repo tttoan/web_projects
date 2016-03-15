@@ -2,6 +2,7 @@ package com.home.model;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,15 +21,29 @@ public class PromotionCus {
 	private  long totalGift;
 	private float percentPass;
 	private boolean result;
+	private String resultString;
 	private int row_index;
 	private int userId;
 	private String productCode;
 	private String categoryName;
 	private String productName;
-	private  long totaPoint;
+	private  long totalPoint;
 	private BigDecimal totaPrice;
 	private Set<Product> products = new HashSet<Product>(0);
+	private Set<PromotionGift> promotionGifts = new HashSet<PromotionGift>(0);
 	
+	public String getResultString() {
+		return resultString;
+	}
+	public void setResultString(String resultString) {
+		this.resultString = resultString;
+	}
+	public Set<PromotionGift> getPromotionGifts() {
+		return promotionGifts;
+	}
+	public void setPromotionGifts(Set<PromotionGift> promotionGifts) {
+		this.promotionGifts = promotionGifts;
+	}
 	public int getCustomerId() {
 		return customerId;
 	}
@@ -137,11 +152,23 @@ public class PromotionCus {
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
-	public long getTotaPoint() {
-		return totaPoint;
+	public long getTotaPoint(HashMap<Integer, Integer> mapProductPoint) {
+		if(totalPoint > 0){
+			return totalPoint;
+		}
+		else{
+			int total_p = 0;
+			for (Product product : products) {
+				if(mapProductPoint.containsKey(product.getId())){
+					total_p += (product.getMaxQuantity() * mapProductPoint.get(product.getId()));
+				}
+			}
+			totalPoint = total_p;
+			return totalPoint;
+		}
 	}
-	public void setTotaPoint(long totaPoint) {
-		this.totaPoint = totaPoint;
+	public void setTotalPoint(long totaPoint) {
+		this.totalPoint = totaPoint;
 	}
 	public BigDecimal getTotaPrice() {
 		return totaPrice;
@@ -150,5 +177,13 @@ public class PromotionCus {
 		this.totaPrice = totaPrice;
 	}
 	
+	public Object[][] paramProducts(){
+		Object[][]values = new Object[products.size()][3];
+		int i = 0;
+		for (Product product : products) {
+			values[i++] = new Object[]{product.getProductCode(), product.getMaxQuantity()};
+		}
+		return values;
+	}
 	
 }
