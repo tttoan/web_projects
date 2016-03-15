@@ -29,7 +29,7 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
-						<s:form action="add_employee" method="get" theme="bootstrap"
+						<s:form action="add_employee" method="post" theme="bootstrap"
 							cssClass="form-horizontal form-label-left">
 							<s:hidden name="id" value="%{userId}"></s:hidden>
 							<s:hidden name="edit" value="%{edit}"></s:hidden>

@@ -18,7 +18,7 @@
 							<thead>
 								<tr class="headings">
 									<th>Họ và tên</th>
-									<th>Tên TK</th>
+									<th>Tên tài khoản</th>
 									<th>Email</th>
 									<th>Ngày sinh</th>
 									<th>Điện thoại</th>

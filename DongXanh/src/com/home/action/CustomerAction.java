@@ -1,4 +1,5 @@
 package com.home.action;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.math.BigDecimal;
@@ -37,10 +38,8 @@ import com.opensymphony.xwork2.ModelDriven;
 
 public class CustomerAction extends ActionSupport implements Action, ModelDriven<Customer>, ServletContextAware, ServletRequestAware {
 	private boolean edit = false;
-	public int customerId;
-	private Customer cus = new Customer();
-	private List<Customer> customers = new ArrayList<Customer>();
-	private String lookupEmployeeForCus;
+	private int custId = 0;
+	private Customer cust = new Customer();
 	public List<String> listLookupEmployeeForCus = new ArrayList<>();
 	private int grpCusId;
 	private ServletContext ctx;
@@ -50,8 +49,9 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private String uploadContentType;
 	private String uploadFileName;
 	private User emp = new User();
-	public 	int yearNow = (Calendar.getInstance()).get(Calendar.YEAR);
+	public int yearNow = (Calendar.getInstance()).get(Calendar.YEAR);
 	private List<Customer> listCustomer = new ArrayList<>();
+	private List<Customer> customers = new ArrayList<>();
 	private List<User> listEmployee = new ArrayList<>();
 	private List<GroupCustomer> listGrpCus = new ArrayList<>();
 	private GroupCustomer grpCustomer = new GroupCustomer();
@@ -65,62 +65,73 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private int cus3Level1Id;
 	private int cus4Level1Id;
 	private int cus5Level1Id;
-	private String commonCusPhone;
-	
-	public String retrievePhoneById()  throws Exception {
+	private String commonCusPhone = "";
+
+	public String retrievePhoneById() throws Exception {
 		int commonCusId = 0;
-		if(cus1Level1Id != 0)
+		if (cus1Level1Id != 0)
 			commonCusId = cus1Level1Id;
-		else if(cus2Level1Id != 0)
+		else if (cus2Level1Id != 0)
 			commonCusId = cus2Level1Id;
-		else if(cus3Level1Id != 0)
+		else if (cus3Level1Id != 0)
 			commonCusId = cus3Level1Id;
-		else if(cus4Level1Id != 0)
+		else if (cus4Level1Id != 0)
 			commonCusId = cus4Level1Id;
-		else if(cus5Level1Id != 0)
+		else if (cus5Level1Id != 0)
 			commonCusId = cus5Level1Id;
 		CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
 		Customer record = cusHome.findById(commonCusId);
-		if(record != null)
+		if (record != null)
 			commonCusPhone = record.getTelefone();
-		else 
+		else
 			commonCusPhone = "";
 		return SUCCESS;
 	}
-	
+
 	public Customer getCus1Level1() {
 		return cus1Level1;
 	}
+
 	public void setCus1Level1(Customer cus1Level1) {
 		this.cus1Level1 = cus1Level1;
 	}
+
 	public Customer getCus2Level1() {
 		return cus2Level1;
 	}
+
 	public void setCus2Level1(Customer cus2Level1) {
 		this.cus2Level1 = cus2Level1;
 	}
+
 	public Customer getCus3Level1() {
 		return cus3Level1;
 	}
+
 	public void setCus3Level1(Customer cus3Level1) {
 		this.cus3Level1 = cus3Level1;
 	}
+
 	public Customer getCus4Level1() {
 		return cus4Level1;
 	}
+
 	public void setCus4Level1(Customer cus4Level1) {
 		this.cus4Level1 = cus4Level1;
 	}
+
 	public Customer getCus5Level1() {
 		return cus5Level1;
 	}
+
 	public void setCus5Level1(Customer cus5Level1) {
 		this.cus5Level1 = cus5Level1;
 	}
+
 	public File getUpload() {
 		return upload;
 	}
+
 	public String getUploadContentType() {
 		return uploadContentType;
 	}
@@ -140,9 +151,11 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	public void setUploadFileName(String uploadFileName) {
 		this.uploadFileName = uploadFileName;
 	}
+
 	@Override
 	public Customer getModel() {
-		return getCustomer();
+		cust = new Customer();
+		return cust;
 	}
 
 	@Override
@@ -155,15 +168,17 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		this.setRequest(request);
 
 	}
-	public SessionFactory getSessionFactory(){
+
+	public SessionFactory getSessionFactory() {
 		return HibernateUtil.getSessionFactory();
 	}
+
 	@Override
 	public String execute() throws Exception {
-		if (customerId != 0) {
+		if (custId != 0) {
 			try {
 				CustomerHome cusHome = new CustomerHome(getSessionFactory());
-				cus = cusHome.findById(customerId);
+				setCust(cusHome.findById(custId));
 				setEdit(true);
 			} catch (Exception e) {
 				throw e;
@@ -172,29 +187,33 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		return SUCCESS;
 	}
 
-	public String listCustomer() throws Exception {
+	@Override
+	public void validate() {
 		try {
-			CustomerHome cusHome = new CustomerHome(getSessionFactory());
-			setCustomers(cusHome.getListCustomer());
+			loadLookupEmployee();
+			loadLookupCustomer();
+			loadLookupGrpCustomer();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public String listCustomer() {
+		try {
+			customers = listCustomer;
 			return SUCCESS;
 		} catch (Exception e) {
 			return ERROR;
 		}
 	}
-	@Override
-	public void validate() {
-		loadLookupEmployee();
-		loadLookupCustomer();
-		loadLookupGrpCustomer();
-	}
-	
+
 	public void loadLookupCustomer() {
 		try {
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
 			listCustomer = cusHome.getListCustomer();
 		} catch (Exception e) {
 			e.printStackTrace();
-			addActionError("Error: load lookup customers. Exception: "+e.getMessage());
+			addActionError("Error: load lookup customers. Exception: " + e.getMessage());
 		}
 	}
 
@@ -204,36 +223,37 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			listEmployee = userHome.getListUser();
 		} catch (Exception e) {
 			e.printStackTrace();
-			addActionError("Error: load lookup customers. Exception: "+e.getMessage());
+			addActionError("Error: load lookup customers. Exception: " + e.getMessage());
 		}
-		
+
 	}
+
 	public void loadLookupGrpCustomer() {
 		try {
 			GroupCustomerHome grpCusHome = new GroupCustomerHome(getSessionFactory());
 			listGrpCus = grpCusHome.getListGrpCustomer();
 		} catch (Exception e) {
 			e.printStackTrace();
-			addActionError("Error: load lookup group of customers. Exception: "+e.getMessage());
+			addActionError("Error: load lookup group of customers. Exception: " + e.getMessage());
 		}
-		
+
 	}
-	
-	public String findCustomer(){
+
+	public String findCustomer() {
 		try {
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
-			setCustomer(cusHome.findById(customerId));
-			System.out.println(getCustomer().getCustomerCode());
+			setCust(cusHome.findById(custId));
+			System.out.println(getCust().getCustomerCode());
 			return SUCCESS;
 		} catch (Exception e) {
 			return ERROR;
 		}
 	}
-	
+
 	public String deleteCustomerById() throws Exception {
 		try {
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
-			Customer customer = cusHome.findById(customerId);
+			Customer customer = cusHome.findById(custId);
 			cusHome.delete(customer);
 			return SUCCESS;
 		} catch (Exception e) {
@@ -241,59 +261,46 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			return ERROR;
 		}
 	}
-	
-	public String notifyListCutomer() throws Exception{
+
+	public String notifyListCutomer() throws Exception {
 		try {
-//			CustomerHome cusHome = new CustomerHome(getSessionFactory());
-//			Customer customer = cusHome.findById(id);
-//			cusHome.delete(customer);
+			// CustomerHome cusHome = new CustomerHome(getSessionFactory());
+			// Customer customer = cusHome.findById(id);
+			// cusHome.delete(customer);
 			return SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ERROR;
 		}
 	}
-	public String listLookupEmployeeForCus(){
-		try {
-			GroupCustomerHome grpCusHome = new GroupCustomerHome(getSessionFactory());
-			UserHome userHome = new UserHome(getSessionFactory());
-			List<User> users = userHome.getListUser();
-			for (User user : users) {
-				listLookupEmployeeForCus.add(user.getFullName());
-			}
-			return SUCCESS;
-		} catch (Exception e) {
-			return ERROR;
-		}
-	}
-	
+
 	public String addCustomer() throws Exception {
 		try {
-			UserHome userHome = new UserHome(getSessionFactory());
-			User user = userHome.getUserByFullName(getLookupEmployeeForCus());
-			getCustomer().setUser(user);
-			GroupCustomer grpCus = new GroupCustomer();
-			grpCus.setId(grpCusId);
-			getCustomer().setGroupCustomer(grpCus);
+			if(emp.getId() > 0)
+				getCust().setUser(emp);
+			if(grpCustomer.getId() > 0)
+				getCust().setGroupCustomer(grpCustomer);
+			if (cus1Level1.getId() > 0)
+				getCust().setCustomerByCustomer1Level1Id(cus1Level1);
+			if (cus2Level1.getId() > 0)
+				getCust().setCustomerByCustomer2Level1Id(cus2Level1);
+			if (cus3Level1.getId() > 0)
+				getCust().setCustomerByCustomer3Level1Id(cus3Level1);
+			if (cus4Level1.getId() > 0)
+				getCust().setCustomerByCustomer4Level1Id(cus4Level1);
+			if (cus5Level1.getId() > 0)
+				getCust().setCustomerByCustomer5Level1Id(cus5Level1);
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
-			if(cus.getId() == 0)
-				cusHome.attachDirty(getCustomer());
+			if (getCust().getId() == 0)
+				cusHome.attachDirty(getCust());
 			else
-				cusHome.updateDirty(cus);
-			
+				cusHome.updateDirty(getCust());
 			return SUCCESS;
 		} catch (Exception e) {
-			return ERROR;
+			return INPUT;
 		}
 	}
 
-	public int getCustomerId() {
-		return customerId;
-	}
-
-	public void setCustomerId(int customerId) {
-		this.customerId = customerId;
-	}
 	public String importCustomer() throws Exception {
 		File theFile = new File(this.getUploadFileName());
 		FileUtils.copyFile(upload, theFile);
@@ -306,80 +313,80 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			rowIterator.next();
 			while (rowIterator.hasNext()) {
 				Row row = rowIterator.next();
-				setCustomer(new Customer());
-				getCustomer().setCustomerCode((String)xls.getValue(row.getCell(CustomerTable.customerCode.value())));
-				getCustomer().setBusinessName((String)xls.getValue(row.getCell(CustomerTable.businessName.value())));
-				getCustomer().setCreateTime((Date)xls.getValue(row.getCell(CustomerTable.createTime.value())));
-				getCustomer().setCertificateNumber((String)xls.getValue(row.getCell(CustomerTable.certificateNumber.value())));
-				getCustomer().setCertificateDate((Date)xls.getValue(row.getCell(CustomerTable.certificateDate.value())));
-				getCustomer().setCertificateAddress((String)xls.getValue(row.getCell(CustomerTable.certificateAddress.value())));
-				getCustomer().setTaxNumber((String)xls.getValue(row.getCell(CustomerTable.taxNumber.value())));
-				getCustomer().setBudgetRegister((Integer)xls.getValue(row.getCell(CustomerTable.budgetRegister.value())));
-				getCustomer().setTelefone((String)xls.getValue(row.getCell(CustomerTable.telefone.value())));
-				getCustomer().setFax((String)xls.getValue(row.getCell(CustomerTable.fax.value())));
-				getCustomer().setEmail((String)xls.getValue(row.getCell(CustomerTable.email.value())));
-				getCustomer().setSocialAddress((String)xls.getValue(row.getCell(CustomerTable.socialAddress.value())));
-				getCustomer().setBusinessAddress((String)xls.getValue(row.getCell(CustomerTable.businessAddress.value())));
-				getCustomer().setAdviser((String)xls.getValue(row.getCell(CustomerTable.adviser.value())));
-				getCustomer().setDirector((String)xls.getValue(row.getCell(CustomerTable.director.value())));
-				getCustomer().setDirectorMobile((String)xls.getValue(row.getCell(CustomerTable.directorMobile.value())));
-				getCustomer().setDirectorBirthday((Date)xls.getValue(row.getCell(CustomerTable.directorBirthday.value())));
-				getCustomer().setDirectorDomicile((String)xls.getValue(row.getCell(CustomerTable.directorDomicile.value())));
-				getCustomer().setSellMan((String)xls.getValue(row.getCell(CustomerTable.sellMan.value())));
-				getCustomer().setSellManMobile((String)xls.getValue(row.getCell(CustomerTable.sellManMobile.value())));
-				getCustomer().setBudgetOriginal((Integer)xls.getValue(row.getCell(CustomerTable.budgetOriginal.value())));
-				getCustomer().setOtherBusiness((String)xls.getValue(row.getCell(CustomerTable.otherBusiness.value())));
-				
-				getCustomer().setCustomer1Level1((String)xls.getValue(row.getCell(CustomerTable.customer1Level1.value())));
-				getCustomer().setCustomer1Phone((String)xls.getValue(row.getCell(CustomerTable.customer1Phone.value())));
-				getCustomer().setCustomer1Percent((String)xls.getValue(row.getCell(CustomerTable.customer1Percent.value())));
-				
-				getCustomer().setCustomer2Level1((String)xls.getValue(row.getCell(CustomerTable.customer2Level1.value())));
-				getCustomer().setCustomer2Phone((String)xls.getValue(row.getCell(CustomerTable.customer2Phone.value())));
-				getCustomer().setCustomer2Percent((String)xls.getValue(row.getCell(CustomerTable.customer2Percent.value())));
-				
-				getCustomer().setCustomer3Level1((String)xls.getValue(row.getCell(CustomerTable.customer3Level1.value())));
-				getCustomer().setCustomer3Phone((String)xls.getValue(row.getCell(CustomerTable.customer3Phone.value())));
-				getCustomer().setCustomer3Percent((String)xls.getValue(row.getCell(CustomerTable.customer3Percent.value())));
-				
-				getCustomer().setCustomer4Level1((String)xls.getValue(row.getCell(CustomerTable.customer4Level1.value())));
-				getCustomer().setCustomer4Phone((String)xls.getValue(row.getCell(CustomerTable.customer4Phone.value())));
-				getCustomer().setCustomer4Percent((String)xls.getValue(row.getCell(CustomerTable.customer4Percent.value())));
-				
-				getCustomer().setCustomer5Level1((String)xls.getValue(row.getCell(CustomerTable.customer5Level1.value())));
-				getCustomer().setCustomer5Phone((String)xls.getValue(row.getCell(CustomerTable.customer5Phone.value())));
-				getCustomer().setCustomer5Percent((String)xls.getValue(row.getCell(CustomerTable.customer5Percent.value())));
-				
-				getCustomer().setRevenue1((String)xls.getValue(row.getCell(CustomerTable.revenue1.value())));
-				getCustomer().setRevenue2((String)xls.getValue(row.getCell(CustomerTable.revenue2.value())));
-				getCustomer().setPercentProvide1((String)xls.getValue(row.getCell(CustomerTable.percentProvide1.value())));
-				getCustomer().setPercentProvide2((String)xls.getValue(row.getCell(CustomerTable.percentProvide2.value())));
-				getCustomer().setPercentProvide3((String)xls.getValue(row.getCell(CustomerTable.percentProvide3.value())));
-				getCustomer().setPercentProvide4((String)xls.getValue(row.getCell(CustomerTable.percentProvide4.value())));
-				getCustomer().setProductSell((String)xls.getValue(row.getCell(CustomerTable.productSell.value())));
-				getCustomer().setProduct1Hot((String)xls.getValue(row.getCell(CustomerTable.product1Hot.value())));
-				getCustomer().setProduct2Hot((String)xls.getValue(row.getCell(CustomerTable.product2Hot.value())));
-				getCustomer().setProduct3Hot((String)xls.getValue(row.getCell(CustomerTable.product3Hot.value())));
-				getCustomer().setProduct4Hot((String)xls.getValue(row.getCell(CustomerTable.product4Hot.value())));
-				getCustomer().setProduct5Hot((String)xls.getValue(row.getCell(CustomerTable.product5Hot.value())));
-				getCustomer().setProduct6Hot((String)xls.getValue(row.getCell(CustomerTable.product6Hot.value())));
-				
-				getCustomer().setFarmProduct1((String)xls.getValue(row.getCell(CustomerTable.farmProduct1.value())));
-				getCustomer().setFarmProduct1Session((String)xls.getValue(row.getCell(CustomerTable.farmProduct1Session.value())));
-				
-				getCustomer().setFarmProduct2((String)xls.getValue(row.getCell(CustomerTable.farmProduct2.value())));
-				getCustomer().setFarmProduct2Session((String)xls.getValue(row.getCell(CustomerTable.farmProduct2Session.value())));
-				
-				getCustomer().setFarmProduct3((String)xls.getValue(row.getCell(CustomerTable.farmProduct3.value())));
-				getCustomer().setFarmProduct3Session((String)xls.getValue(row.getCell(CustomerTable.farmProduct3Session.value())));
-				
-				getCustomer().setFarmProduct4((String)xls.getValue(row.getCell(CustomerTable.farmProduct4.value())));
-				getCustomer().setFarmProduct4Session((String)xls.getValue(row.getCell(CustomerTable.farmProduct4Session.value())));
-				
-				getCustomer().setUser(userHome.getUserByFullName((String)xls.getValue(row.getCell(CustomerTable.userFullName.value()))));
-				
+				cust = new Customer();
+				cust.setCustomerCode((String) xls.getValue(row.getCell(CustomerTable.customerCode.value())));
+				cust.setBusinessName((String) xls.getValue(row.getCell(CustomerTable.businessName.value())));
+				cust.setCreateTime((Date) xls.getValue(row.getCell(CustomerTable.createTime.value())));
+				cust.setCertificateNumber((String) xls.getValue(row.getCell(CustomerTable.certificateNumber.value())));
+				cust.setCertificateDate((Date) xls.getValue(row.getCell(CustomerTable.certificateDate.value())));
+				cust.setCertificateAddress((String) xls.getValue(row.getCell(CustomerTable.certificateAddress.value())));
+				cust.setTaxNumber((String) xls.getValue(row.getCell(CustomerTable.taxNumber.value())));
+				// cust.setBudgetRegister((Integer)xls.getValue(row.getCell(CustomerTable.budgetRegister.value())));
+				cust.setTelefone((String) xls.getValue(row.getCell(CustomerTable.telefone.value())));
+				cust.setFax((String) xls.getValue(row.getCell(CustomerTable.fax.value())));
+				cust.setEmail((String) xls.getValue(row.getCell(CustomerTable.email.value())));
+				cust.setSocialAddress((String) xls.getValue(row.getCell(CustomerTable.socialAddress.value())));
+				cust.setBusinessAddress((String) xls.getValue(row.getCell(CustomerTable.businessAddress.value())));
+				cust.setAdviser((String) xls.getValue(row.getCell(CustomerTable.adviser.value())));
+				cust.setDirector((String) xls.getValue(row.getCell(CustomerTable.director.value())));
+				cust.setDirectorMobile((String) xls.getValue(row.getCell(CustomerTable.directorMobile.value())));
+				cust.setDirectorBirthday((Date) xls.getValue(row.getCell(CustomerTable.directorBirthday.value())));
+				cust.setDirectorDomicile((String) xls.getValue(row.getCell(CustomerTable.directorDomicile.value())));
+				cust.setSellMan((String) xls.getValue(row.getCell(CustomerTable.sellMan.value())));
+				cust.setSellManMobile((String) xls.getValue(row.getCell(CustomerTable.sellManMobile.value())));
+				cust.setBudgetOriginal((Integer) xls.getValue(row.getCell(CustomerTable.budgetOriginal.value())));
+				cust.setOtherBusiness((String) xls.getValue(row.getCell(CustomerTable.otherBusiness.value())));
+
+//				cust.setCustomer1Level1((String) xls.getValue(row.getCell(CustomerTable.customer1Level1.value())));
+//				cust.setCustomer1Phone((String) xls.getValue(row.getCell(CustomerTable.customer1Phone.value())));
+//				// cust.setCustomer1Percent((String)xls.getValue(row.getCell(CustomerTable.customer1Percent.value())));
+//
+//				cust.setCustomer2Level1((String) xls.getValue(row.getCell(CustomerTable.customer2Level1.value())));
+//				cust.setCustomer2Phone((String) xls.getValue(row.getCell(CustomerTable.customer2Phone.value())));
+//				// cust.setCustomer2Percent((String)xls.getValue(row.getCell(CustomerTable.customer2Percent.value())));
+//
+//				cust.setCustomer3Level1((String) xls.getValue(row.getCell(CustomerTable.customer3Level1.value())));
+//				cust.setCustomer3Phone((String) xls.getValue(row.getCell(CustomerTable.customer3Phone.value())));
+//				// cust.setCustomer3Percent((String)xls.getValue(row.getCell(CustomerTable.customer3Percent.value())));
+//
+//				cust.setCustomer4Level1((String) xls.getValue(row.getCell(CustomerTable.customer4Level1.value())));
+//				cust.setCustomer4Phone((String) xls.getValue(row.getCell(CustomerTable.customer4Phone.value())));
+//				// cust.setCustomer4Percent((String)xls.getValue(row.getCell(CustomerTable.customer4Percent.value())));
+//
+//				cust.setCustomer5Level1((String) xls.getValue(row.getCell(CustomerTable.customer5Level1.value())));
+//				cust.setCustomer5Phone((String) xls.getValue(row.getCell(CustomerTable.customer5Phone.value())));
+				// cust.setCustomer5Percent((String)xls.getValue(row.getCell(CustomerTable.customer5Percent.value())));
+
+				// cust.setRevenue1((String)xls.getValue(row.getCell(CustomerTable.revenue1.value())));
+				// cust.setRevenue2((String)xls.getValue(row.getCell(CustomerTable.revenue2.value())));
+				cust.setPercentProvide1((String) xls.getValue(row.getCell(CustomerTable.percentProvide1.value())));
+				cust.setPercentProvide2((String) xls.getValue(row.getCell(CustomerTable.percentProvide2.value())));
+				cust.setPercentProvide3((String) xls.getValue(row.getCell(CustomerTable.percentProvide3.value())));
+				cust.setPercentProvide4((String) xls.getValue(row.getCell(CustomerTable.percentProvide4.value())));
+				cust.setProductSell((String) xls.getValue(row.getCell(CustomerTable.productSell.value())));
+				cust.setProduct1Hot((String) xls.getValue(row.getCell(CustomerTable.product1Hot.value())));
+				cust.setProduct2Hot((String) xls.getValue(row.getCell(CustomerTable.product2Hot.value())));
+				cust.setProduct3Hot((String) xls.getValue(row.getCell(CustomerTable.product3Hot.value())));
+				cust.setProduct4Hot((String) xls.getValue(row.getCell(CustomerTable.product4Hot.value())));
+				cust.setProduct5Hot((String) xls.getValue(row.getCell(CustomerTable.product5Hot.value())));
+				cust.setProduct6Hot((String) xls.getValue(row.getCell(CustomerTable.product6Hot.value())));
+
+				// cust.setFarmProduct1((String)xls.getValue(row.getCell(CustomerTable.farmProduct1.value())));
+				cust.setFarmProduct1Session((String) xls.getValue(row.getCell(CustomerTable.farmProduct1Session.value())));
+
+				// cust.setFarmProduct2((String)xls.getValue(row.getCell(CustomerTable.farmProduct2.value())));
+				cust.setFarmProduct2Session((String) xls.getValue(row.getCell(CustomerTable.farmProduct2Session.value())));
+
+				// cust.setFarmProduct3((String)xls.getValue(row.getCell(CustomerTable.farmProduct3.value())));
+				cust.setFarmProduct3Session((String) xls.getValue(row.getCell(CustomerTable.farmProduct3Session.value())));
+
+				// cust.setFarmProduct4((String)xls.getValue(row.getCell(CustomerTable.farmProduct4.value())));
+				cust.setFarmProduct4Session((String) xls.getValue(row.getCell(CustomerTable.farmProduct4Session.value())));
+
+				cust.setUser(userHome.getUserByFullName((String) xls.getValue(row.getCell(CustomerTable.userFullName.value()))));
+
 				addCustomer();
-				setCustomer(null);
+				setCust(null);
 			}
 		} catch (Exception e) {
 			throw e;
@@ -391,31 +398,11 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	public HttpServletRequest getRequest() {
 		return request;
 	}
+
 	public void setRequest(HttpServletRequest request) {
 		this.request = request;
 	}
-	public String getLookupEmployeeForCus() {
-		return lookupEmployeeForCus;
-	}
-	public void setLookupEmployeeForCus(String lookupEmployeeForCus) {
-		this.lookupEmployeeForCus = lookupEmployeeForCus;
-	}
 
-	public List<Customer> getCustomers() {
-		return customers;
-	}
-
-	public void setCustomers(List<Customer> customers) {
-		this.customers = customers;
-	}
-
-	public Customer getCustomer() {
-		return cus;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.cus = customer;
-	}
 	public int getGrpCusId() {
 		return grpCusId;
 	}
@@ -456,38 +443,34 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		this.listEmployee = listEmployee;
 	}
 
-
-
 	public boolean isEdit() {
 		return edit;
 	}
-
-
 
 	public void setEdit(boolean edit) {
 		this.edit = edit;
 	}
 
-
-
 	public List<GroupCustomer> getListGrpCus() {
 		return listGrpCus;
 	}
 
-
-
 	public void setListGrpCus(List<GroupCustomer> listGrpCus) {
 		this.listGrpCus = listGrpCus;
 	}
+
 	public GroupCustomer getGrpCustomer() {
 		return grpCustomer;
 	}
+
 	public void setGrpCustomer(GroupCustomer grpCustomer) {
 		this.grpCustomer = grpCustomer;
 	}
+
 	public String getCommonCusPhone() {
 		return commonCusPhone;
 	}
+
 	public void setCommonCusPhone(String commonCusPhone) {
 		this.commonCusPhone = commonCusPhone;
 	}
@@ -530,5 +513,29 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	public void setCus5Level1Id(int cus5Level1Id) {
 		this.cus5Level1Id = cus5Level1Id;
+	}
+
+	public Customer getCust() {
+		return cust;
+	}
+
+	public void setCust(Customer cust) {
+		this.cust = cust;
+	}
+
+	public int getCustId() {
+		return custId;
+	}
+
+	public void setCustId(int custId) {
+		this.custId = custId;
+	}
+
+	public List<Customer> getCustomers() {
+		return customers;
+	}
+
+	public void setCustomers(List<Customer> customers) {
+		this.customers = customers;
 	}
 }

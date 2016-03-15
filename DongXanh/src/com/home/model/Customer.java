@@ -1,7 +1,8 @@
 package com.home.model;
 
-// Generated Feb 29, 2016 9:07:10 PM by Hibernate Tools 4.3.1
+// Generated Mar 15, 2016 10:27:34 PM by Hibernate Tools 4.3.1
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,6 +13,11 @@ import java.util.Set;
 public class Customer implements java.io.Serializable {
 
 	private Integer id;
+	private Customer customerByCustomer5Level1Id;
+	private Customer customerByCustomer4Level1Id;
+	private Customer customerByCustomer2Level1Id;
+	private Customer customerByCustomer3Level1Id;
+	private Customer customerByCustomer1Level1Id;
 	private GroupCustomer groupCustomer;
 	private User user;
 	private Date createTime;
@@ -20,7 +26,7 @@ public class Customer implements java.io.Serializable {
 	private String certificateAddress;
 	private String taxNumber;
 	private String businessName;
-	private Integer budgetRegister;
+	private BigDecimal budgetRegister;
 	private String telefone;
 	private String fax;
 	private String email;
@@ -38,26 +44,16 @@ public class Customer implements java.io.Serializable {
 	private String sellManMobile;
 	private Integer budgetOriginal;
 	private String otherBusiness;
-	private String customer1Level1;
-	private String customer1Phone;
-	private String customer1Percent;
-	private String customer2Level1;
-	private String customer2Phone;
-	private String customer2Percent;
-	private String customer3Level1;
-	private String customer3Phone;
-	private String customer3Percent;
-	private String customer4Level1;
-	private String customer4Phone;
-	private String customer4Percent;
-	private String customer5Level1;
-	private String customer5Phone;
-	private String customer5Percent;
-	private String revenue1;
-	private String revenue2;
-	private String revenueExpect1;
-	private String revenueExpect2;
-	private String revenueExpect3;
+	private Float customer1Percent;
+	private Float customer2Percent;
+	private Float customer3Percent;
+	private Float customer4Percent;
+	private Float customer5Percent;
+	private BigDecimal revenue1;
+	private BigDecimal revenue2;
+	private BigDecimal revenueExpect1;
+	private BigDecimal revenueExpect2;
+	private BigDecimal revenueExpect3;
 	private String percentProvide1;
 	private String percentProvide2;
 	private String percentProvide3;
@@ -69,30 +65,54 @@ public class Customer implements java.io.Serializable {
 	private String product4Hot;
 	private String product5Hot;
 	private String product6Hot;
-	private String farmProduct1;
+	private Float farmProduct1;
 	private String farmProduct1Session;
-	private String farmProduct2;
+	private Float farmProduct2;
 	private String farmProduct2Session;
-	private String farmProduct3;
+	private Float farmProduct3;
 	private String farmProduct3Session;
-	private String farmProduct4;
+	private Float farmProduct4;
 	private String farmProduct4Session;
 	private Integer totalVipCustomer;
+	private Set<PromotionRegister> promotionRegisters = new HashSet<PromotionRegister>(0);
+	private Set<Customer> customersForCustomer5Level1Id = new HashSet<Customer>(0);
 	private Set<Statistic> statisticsForCustomerCodeLevel1 = new HashSet<Statistic>(0);
 	private Set<Statistic> statisticsForCustomerCodeLevel2 = new HashSet<Statistic>(0);
+	private Set<Customer> customersForCustomer4Level1Id = new HashSet<Customer>(0);
+	private Set<Customer> customersForCustomer2Level1Id = new HashSet<Customer>(0);
+	private Set<Customer> customersForCustomer3Level1Id = new HashSet<Customer>(0);
+	private Set<Customer> customersForCustomer1Level1Id = new HashSet<Customer>(0);
 
 	public Customer() {
+		this.budgetRegister = new BigDecimal(0);
+		this.budgetOriginal = 0;
+		this.customer1Percent = new Float(0);
+		this.customer2Percent= new Float(0);
+		this.customer3Percent= new Float(0);
+		this.customer4Percent= new Float(0);
+		this.customer5Percent= new Float(0);
+		this.farmProduct1= new Float(0);
+		this.farmProduct2= new Float(0);
+		this.farmProduct3= new Float(0);
+		this.farmProduct4= new Float(0);
+		this.totalVipCustomer = 0;
 	}
 
-	public Customer(GroupCustomer groupCustomer, User user, Date createTime, String certificateNumber, Date certificateDate, String certificateAddress, String taxNumber, String businessName,
-			Integer budgetRegister, String telefone, String fax, String email, String socialAddress, String businessAddress, String lawyer, String adviser, String director, String directorMobile,
-			Date directorBirthday, Boolean directorBirthdayNotify, String customerCode, String directorDomicile, String sellMan, String sellManMobile, Integer budgetOriginal, String otherBusiness,
-			String customer1Level1, String customer1Phone, String customer1Percent, String customer2Level1, String customer2Phone, String customer2Percent, String customer3Level1,
-			String customer3Phone, String customer3Percent, String customer4Level1, String customer4Phone, String customer4Percent, String customer5Level1, String customer5Phone,
-			String customer5Percent, String revenue1, String revenue2, String revenueExpect1, String revenueExpect2, String revenueExpect3, String percentProvide1, String percentProvide2,
-			String percentProvide3, String percentProvide4, String productSell, String product1Hot, String product2Hot, String product3Hot, String product4Hot, String product5Hot, String product6Hot,
-			String farmProduct1, String farmProduct1Session, String farmProduct2, String farmProduct2Session, String farmProduct3, String farmProduct3Session, String farmProduct4,
-			String farmProduct4Session, Integer totalVipCustomer, Set<Statistic> statisticsForCustomerCodeLevel1, Set<Statistic> statisticsForCustomerCodeLevel2) {
+	public Customer(Customer customerByCustomer5Level1Id, Customer customerByCustomer4Level1Id, Customer customerByCustomer2Level1Id, Customer customerByCustomer3Level1Id,
+			Customer customerByCustomer1Level1Id, GroupCustomer groupCustomer, User user, Date createTime, String certificateNumber, Date certificateDate, String certificateAddress, String taxNumber,
+			String businessName, BigDecimal budgetRegister, String telefone, String fax, String email, String socialAddress, String businessAddress, String lawyer, String adviser, String director,
+			String directorMobile, Date directorBirthday, Boolean directorBirthdayNotify, String customerCode, String directorDomicile, String sellMan, String sellManMobile, Integer budgetOriginal,
+			String otherBusiness, Float customer1Percent, Float customer2Percent, Float customer3Percent, Float customer4Percent, Float customer5Percent, BigDecimal revenue1, BigDecimal revenue2,
+			BigDecimal revenueExpect1, BigDecimal revenueExpect2, BigDecimal revenueExpect3, String percentProvide1, String percentProvide2, String percentProvide3, String percentProvide4,
+			String productSell, String product1Hot, String product2Hot, String product3Hot, String product4Hot, String product5Hot, String product6Hot, Float farmProduct1, String farmProduct1Session,
+			Float farmProduct2, String farmProduct2Session, Float farmProduct3, String farmProduct3Session, Float farmProduct4, String farmProduct4Session, Integer totalVipCustomer,
+			Set<PromotionRegister> promotionRegisters, Set<Customer> customersForCustomer5Level1Id, Set<Statistic> statisticsForCustomerCodeLevel1, Set<Statistic> statisticsForCustomerCodeLevel2,
+			Set<Customer> customersForCustomer4Level1Id, Set<Customer> customersForCustomer2Level1Id, Set<Customer> customersForCustomer3Level1Id, Set<Customer> customersForCustomer1Level1Id) {
+		this.customerByCustomer5Level1Id = customerByCustomer5Level1Id;
+		this.customerByCustomer4Level1Id = customerByCustomer4Level1Id;
+		this.customerByCustomer2Level1Id = customerByCustomer2Level1Id;
+		this.customerByCustomer3Level1Id = customerByCustomer3Level1Id;
+		this.customerByCustomer1Level1Id = customerByCustomer1Level1Id;
 		this.groupCustomer = groupCustomer;
 		this.user = user;
 		this.createTime = createTime;
@@ -119,20 +139,10 @@ public class Customer implements java.io.Serializable {
 		this.sellManMobile = sellManMobile;
 		this.budgetOriginal = budgetOriginal;
 		this.otherBusiness = otherBusiness;
-		this.customer1Level1 = customer1Level1;
-		this.customer1Phone = customer1Phone;
 		this.customer1Percent = customer1Percent;
-		this.customer2Level1 = customer2Level1;
-		this.customer2Phone = customer2Phone;
 		this.customer2Percent = customer2Percent;
-		this.customer3Level1 = customer3Level1;
-		this.customer3Phone = customer3Phone;
 		this.customer3Percent = customer3Percent;
-		this.customer4Level1 = customer4Level1;
-		this.customer4Phone = customer4Phone;
 		this.customer4Percent = customer4Percent;
-		this.customer5Level1 = customer5Level1;
-		this.customer5Phone = customer5Phone;
 		this.customer5Percent = customer5Percent;
 		this.revenue1 = revenue1;
 		this.revenue2 = revenue2;
@@ -159,8 +169,14 @@ public class Customer implements java.io.Serializable {
 		this.farmProduct4 = farmProduct4;
 		this.farmProduct4Session = farmProduct4Session;
 		this.totalVipCustomer = totalVipCustomer;
+		this.promotionRegisters = promotionRegisters;
+		this.customersForCustomer5Level1Id = customersForCustomer5Level1Id;
 		this.statisticsForCustomerCodeLevel1 = statisticsForCustomerCodeLevel1;
 		this.statisticsForCustomerCodeLevel2 = statisticsForCustomerCodeLevel2;
+		this.customersForCustomer4Level1Id = customersForCustomer4Level1Id;
+		this.customersForCustomer2Level1Id = customersForCustomer2Level1Id;
+		this.customersForCustomer3Level1Id = customersForCustomer3Level1Id;
+		this.customersForCustomer1Level1Id = customersForCustomer1Level1Id;
 	}
 
 	public Integer getId() {
@@ -169,6 +185,46 @@ public class Customer implements java.io.Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Customer getCustomerByCustomer5Level1Id() {
+		return this.customerByCustomer5Level1Id;
+	}
+
+	public void setCustomerByCustomer5Level1Id(Customer customerByCustomer5Level1Id) {
+		this.customerByCustomer5Level1Id = customerByCustomer5Level1Id;
+	}
+
+	public Customer getCustomerByCustomer4Level1Id() {
+		return this.customerByCustomer4Level1Id;
+	}
+
+	public void setCustomerByCustomer4Level1Id(Customer customerByCustomer4Level1Id) {
+		this.customerByCustomer4Level1Id = customerByCustomer4Level1Id;
+	}
+
+	public Customer getCustomerByCustomer2Level1Id() {
+		return this.customerByCustomer2Level1Id;
+	}
+
+	public void setCustomerByCustomer2Level1Id(Customer customerByCustomer2Level1Id) {
+		this.customerByCustomer2Level1Id = customerByCustomer2Level1Id;
+	}
+
+	public Customer getCustomerByCustomer3Level1Id() {
+		return this.customerByCustomer3Level1Id;
+	}
+
+	public void setCustomerByCustomer3Level1Id(Customer customerByCustomer3Level1Id) {
+		this.customerByCustomer3Level1Id = customerByCustomer3Level1Id;
+	}
+
+	public Customer getCustomerByCustomer1Level1Id() {
+		return this.customerByCustomer1Level1Id;
+	}
+
+	public void setCustomerByCustomer1Level1Id(Customer customerByCustomer1Level1Id) {
+		this.customerByCustomer1Level1Id = customerByCustomer1Level1Id;
 	}
 
 	public GroupCustomer getGroupCustomer() {
@@ -235,11 +291,11 @@ public class Customer implements java.io.Serializable {
 		this.businessName = businessName;
 	}
 
-	public Integer getBudgetRegister() {
+	public BigDecimal getBudgetRegister() {
 		return this.budgetRegister;
 	}
 
-	public void setBudgetRegister(Integer budgetRegister) {
+	public void setBudgetRegister(BigDecimal budgetRegister) {
 		this.budgetRegister = budgetRegister;
 	}
 
@@ -379,163 +435,83 @@ public class Customer implements java.io.Serializable {
 		this.otherBusiness = otherBusiness;
 	}
 
-	public String getCustomer1Level1() {
-		return this.customer1Level1;
-	}
-
-	public void setCustomer1Level1(String customer1Level1) {
-		this.customer1Level1 = customer1Level1;
-	}
-
-	public String getCustomer1Phone() {
-		return this.customer1Phone;
-	}
-
-	public void setCustomer1Phone(String customer1Phone) {
-		this.customer1Phone = customer1Phone;
-	}
-
-	public String getCustomer1Percent() {
+	public Float getCustomer1Percent() {
 		return this.customer1Percent;
 	}
 
-	public void setCustomer1Percent(String customer1Percent) {
+	public void setCustomer1Percent(Float customer1Percent) {
 		this.customer1Percent = customer1Percent;
 	}
 
-	public String getCustomer2Level1() {
-		return this.customer2Level1;
-	}
-
-	public void setCustomer2Level1(String customer2Level1) {
-		this.customer2Level1 = customer2Level1;
-	}
-
-	public String getCustomer2Phone() {
-		return this.customer2Phone;
-	}
-
-	public void setCustomer2Phone(String customer2Phone) {
-		this.customer2Phone = customer2Phone;
-	}
-
-	public String getCustomer2Percent() {
+	public Float getCustomer2Percent() {
 		return this.customer2Percent;
 	}
 
-	public void setCustomer2Percent(String customer2Percent) {
+	public void setCustomer2Percent(Float customer2Percent) {
 		this.customer2Percent = customer2Percent;
 	}
 
-	public String getCustomer3Level1() {
-		return this.customer3Level1;
-	}
-
-	public void setCustomer3Level1(String customer3Level1) {
-		this.customer3Level1 = customer3Level1;
-	}
-
-	public String getCustomer3Phone() {
-		return this.customer3Phone;
-	}
-
-	public void setCustomer3Phone(String customer3Phone) {
-		this.customer3Phone = customer3Phone;
-	}
-
-	public String getCustomer3Percent() {
+	public Float getCustomer3Percent() {
 		return this.customer3Percent;
 	}
 
-	public void setCustomer3Percent(String customer3Percent) {
+	public void setCustomer3Percent(Float customer3Percent) {
 		this.customer3Percent = customer3Percent;
 	}
 
-	public String getCustomer4Level1() {
-		return this.customer4Level1;
-	}
-
-	public void setCustomer4Level1(String customer4Level1) {
-		this.customer4Level1 = customer4Level1;
-	}
-
-	public String getCustomer4Phone() {
-		return this.customer4Phone;
-	}
-
-	public void setCustomer4Phone(String customer4Phone) {
-		this.customer4Phone = customer4Phone;
-	}
-
-	public String getCustomer4Percent() {
+	public Float getCustomer4Percent() {
 		return this.customer4Percent;
 	}
 
-	public void setCustomer4Percent(String customer4Percent) {
+	public void setCustomer4Percent(Float customer4Percent) {
 		this.customer4Percent = customer4Percent;
 	}
 
-	public String getCustomer5Level1() {
-		return this.customer5Level1;
-	}
-
-	public void setCustomer5Level1(String customer5Level1) {
-		this.customer5Level1 = customer5Level1;
-	}
-
-	public String getCustomer5Phone() {
-		return this.customer5Phone;
-	}
-
-	public void setCustomer5Phone(String customer5Phone) {
-		this.customer5Phone = customer5Phone;
-	}
-
-	public String getCustomer5Percent() {
+	public Float getCustomer5Percent() {
 		return this.customer5Percent;
 	}
 
-	public void setCustomer5Percent(String customer5Percent) {
+	public void setCustomer5Percent(Float customer5Percent) {
 		this.customer5Percent = customer5Percent;
 	}
 
-	public String getRevenue1() {
+	public BigDecimal getRevenue1() {
 		return this.revenue1;
 	}
 
-	public void setRevenue1(String revenue1) {
+	public void setRevenue1(BigDecimal revenue1) {
 		this.revenue1 = revenue1;
 	}
 
-	public String getRevenue2() {
+	public BigDecimal getRevenue2() {
 		return this.revenue2;
 	}
 
-	public void setRevenue2(String revenue2) {
+	public void setRevenue2(BigDecimal revenue2) {
 		this.revenue2 = revenue2;
 	}
 
-	public String getRevenueExpect1() {
+	public BigDecimal getRevenueExpect1() {
 		return this.revenueExpect1;
 	}
 
-	public void setRevenueExpect1(String revenueExpect1) {
+	public void setRevenueExpect1(BigDecimal revenueExpect1) {
 		this.revenueExpect1 = revenueExpect1;
 	}
 
-	public String getRevenueExpect2() {
+	public BigDecimal getRevenueExpect2() {
 		return this.revenueExpect2;
 	}
 
-	public void setRevenueExpect2(String revenueExpect2) {
+	public void setRevenueExpect2(BigDecimal revenueExpect2) {
 		this.revenueExpect2 = revenueExpect2;
 	}
 
-	public String getRevenueExpect3() {
+	public BigDecimal getRevenueExpect3() {
 		return this.revenueExpect3;
 	}
 
-	public void setRevenueExpect3(String revenueExpect3) {
+	public void setRevenueExpect3(BigDecimal revenueExpect3) {
 		this.revenueExpect3 = revenueExpect3;
 	}
 
@@ -627,11 +603,11 @@ public class Customer implements java.io.Serializable {
 		this.product6Hot = product6Hot;
 	}
 
-	public String getFarmProduct1() {
+	public Float getFarmProduct1() {
 		return this.farmProduct1;
 	}
 
-	public void setFarmProduct1(String farmProduct1) {
+	public void setFarmProduct1(Float farmProduct1) {
 		this.farmProduct1 = farmProduct1;
 	}
 
@@ -643,11 +619,11 @@ public class Customer implements java.io.Serializable {
 		this.farmProduct1Session = farmProduct1Session;
 	}
 
-	public String getFarmProduct2() {
+	public Float getFarmProduct2() {
 		return this.farmProduct2;
 	}
 
-	public void setFarmProduct2(String farmProduct2) {
+	public void setFarmProduct2(Float farmProduct2) {
 		this.farmProduct2 = farmProduct2;
 	}
 
@@ -659,11 +635,11 @@ public class Customer implements java.io.Serializable {
 		this.farmProduct2Session = farmProduct2Session;
 	}
 
-	public String getFarmProduct3() {
+	public Float getFarmProduct3() {
 		return this.farmProduct3;
 	}
 
-	public void setFarmProduct3(String farmProduct3) {
+	public void setFarmProduct3(Float farmProduct3) {
 		this.farmProduct3 = farmProduct3;
 	}
 
@@ -675,11 +651,11 @@ public class Customer implements java.io.Serializable {
 		this.farmProduct3Session = farmProduct3Session;
 	}
 
-	public String getFarmProduct4() {
+	public Float getFarmProduct4() {
 		return this.farmProduct4;
 	}
 
-	public void setFarmProduct4(String farmProduct4) {
+	public void setFarmProduct4(Float farmProduct4) {
 		this.farmProduct4 = farmProduct4;
 	}
 
@@ -699,6 +675,22 @@ public class Customer implements java.io.Serializable {
 		this.totalVipCustomer = totalVipCustomer;
 	}
 
+	public Set<PromotionRegister> getPromotionRegisters() {
+		return this.promotionRegisters;
+	}
+
+	public void setPromotionRegisters(Set<PromotionRegister> promotionRegisters) {
+		this.promotionRegisters = promotionRegisters;
+	}
+
+	public Set<Customer> getCustomersForCustomer5Level1Id() {
+		return this.customersForCustomer5Level1Id;
+	}
+
+	public void setCustomersForCustomer5Level1Id(Set<Customer> customersForCustomer5Level1Id) {
+		this.customersForCustomer5Level1Id = customersForCustomer5Level1Id;
+	}
+
 	public Set<Statistic> getStatisticsForCustomerCodeLevel1() {
 		return this.statisticsForCustomerCodeLevel1;
 	}
@@ -713,6 +705,38 @@ public class Customer implements java.io.Serializable {
 
 	public void setStatisticsForCustomerCodeLevel2(Set<Statistic> statisticsForCustomerCodeLevel2) {
 		this.statisticsForCustomerCodeLevel2 = statisticsForCustomerCodeLevel2;
+	}
+
+	public Set<Customer> getCustomersForCustomer4Level1Id() {
+		return this.customersForCustomer4Level1Id;
+	}
+
+	public void setCustomersForCustomer4Level1Id(Set<Customer> customersForCustomer4Level1Id) {
+		this.customersForCustomer4Level1Id = customersForCustomer4Level1Id;
+	}
+
+	public Set<Customer> getCustomersForCustomer2Level1Id() {
+		return this.customersForCustomer2Level1Id;
+	}
+
+	public void setCustomersForCustomer2Level1Id(Set<Customer> customersForCustomer2Level1Id) {
+		this.customersForCustomer2Level1Id = customersForCustomer2Level1Id;
+	}
+
+	public Set<Customer> getCustomersForCustomer3Level1Id() {
+		return this.customersForCustomer3Level1Id;
+	}
+
+	public void setCustomersForCustomer3Level1Id(Set<Customer> customersForCustomer3Level1Id) {
+		this.customersForCustomer3Level1Id = customersForCustomer3Level1Id;
+	}
+
+	public Set<Customer> getCustomersForCustomer1Level1Id() {
+		return this.customersForCustomer1Level1Id;
+	}
+
+	public void setCustomersForCustomer1Level1Id(Set<Customer> customersForCustomer1Level1Id) {
+		this.customersForCustomer1Level1Id = customersForCustomer1Level1Id;
 	}
 
 }

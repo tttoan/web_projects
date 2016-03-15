@@ -37,11 +37,14 @@
 										</td>
 										<td class=""><s:property value="email" /></td>
 										<td class="last"> 
-											<a href="#" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa </a> 
-											<s:url action="delete_customer" var="deleteURL">
-												<s:param name="customerId" value="%{id}" ></s:param>
+											<s:url action="move_to_add_customer" var="editURL" >
+												<s:param name="custId" value="%{id}" ></s:param>
 											</s:url>
-											<s:a href="%{deleteURL}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Xóa </s:a>
+											<s:a href="%{editURL}" cssClass="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa </s:a> 
+											<s:url action="delete_customer" var="deleteURL">
+												<s:param name="custId" value="%{id}" ></s:param>
+											</s:url>
+											<s:a href="%{deleteURL}" cssClass="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Xóa </s:a>
 										</td>
 									</tr>
 								</s:iterator>

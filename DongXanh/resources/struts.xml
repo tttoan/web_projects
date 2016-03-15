@@ -8,7 +8,7 @@
 	<constant name="struts.convention.result.path" value="/"></constant>
 	<constant name="struts.custom.i18n.resources" value="struts"></constant>
 
-	<package name="default" namespace="/" extends="struts-default">
+	<package name="default1" namespace="/" extends="struts-default">
 		<interceptors>
 			<interceptor class="com.home.action.LoginInterceptor"
 				name="loginInterceptor">
@@ -48,9 +48,10 @@
 			<result name="success">/new_employee.jsp</result>
 			<result name="error">/employees.jsp</result>
 		</action>
-		<action name="move_to_add_customer" method="listLookupEmployeeForCus"
+		<action name="move_to_add_customer"
 			class="com.home.action.CustomerAction">
 			<result name="success">/new_customer.jsp</result>
+			<result name="error">/customers.jsp</result>
 		</action>
 		<action name="notify_list_customer" method="notifyListCutomer"
 			class="com.home.action.CustomerAction">
@@ -60,6 +61,7 @@
 		<action name="add_customer" method="addCustomer"
 			class="com.home.action.CustomerAction">
 			<result name="success" type="redirectAction">list_customer</result>
+			<result name="input">/new_customer.jsp</result>
 		</action>
 		<action name="find_customer" method="findCustomer"
 			class="com.home.action.CustomerAction">
