@@ -49,4 +49,9 @@ public class Params {
 	 */
 	public static final String GIFT_REGIST = "$quadk";
 	
+	/**
+	 * Qua tang duoc thuc hien
+	 */
+	public static final String GIFT_DONE = "$quath";
+	
 }

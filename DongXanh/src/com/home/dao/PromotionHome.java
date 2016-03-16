@@ -350,13 +350,13 @@ public class PromotionHome {
 			Connection conn = sessionImpl.connection();
 
 			PreparedStatement pre = conn.prepareStatement(
-					"Select  c2.customer_code, c2.business_name, u.user_name, p.product_code, p.product_type, p.product_name, sum(total_box) as total_box,sum(quantity) as quantity,sum(total) as total "
+					"Select  c2.customer_code, c2.business_name, u.user_name, p.id as product_id, p.product_code, p.product_type, p.product_name, sum(total_box) as total_box,sum(quantity) as quantity,sum(total) as total "
 					+ "From `statistic` s "//JOIN Customer c1 ON s.customerByCustomerCodeLevel1=c1.id "
 					+ "JOIN `customer` c2 ON s.customer_code_level2=c2.id "
 					+ "JOIN `product` p ON p.id=s.product_id "
 					+ "JOIN `user` u ON u.id=s.user_id "
 					+ "Where date_received >= ? And date_received <= ? "
-					+ "Group By c2.customer_code, c2.business_name, u.user_name, p.product_code, p.product_type, p.product_name "
+					+ "Group By c2.customer_code, c2.business_name, u.user_name, product_id, p.product_code, p.product_type, p.product_name "
 					+ "Order By c2.customer_code, p.product_code");
 			
 			pre.setDate(1, start);
@@ -380,6 +380,7 @@ public class PromotionHome {
 				//pc.setTotaPoint((long)((Object[])obj)[8]);
 				
 				Product product = new Product();
+				product.setId(rs.getInt("product_id"));
 				product.setProductCode(StringUtil.notNull(rs.getString("product_code")));
 				product.setProductType(StringUtil.notNull(rs.getString("product_type")));
 				product.setProductName(StringUtil.notNull(rs.getString("product_name")));

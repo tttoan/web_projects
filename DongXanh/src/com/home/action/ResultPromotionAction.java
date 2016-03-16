@@ -256,6 +256,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			engine.put(Params.BOX_REGIST, total_box_regist);
 			engine.put(Params.CUSTOMER, pCus.getCustomerCode());
 			engine.put(Params.GIFT_REGIST, gift_regist);
+			engine.put(Params.GIFT_DONE, "quà thực hiện");
 			engine.put(Params.POINT_DONE, pCus.getTotaPoint(mapProductPoint));// Sum (sam pham * diem)
 			engine.put(Params.POINT_REGIST, total_point_regist);
 			engine.put(Params.PRODUCT_DONE, pCus.paramProducts());
@@ -297,7 +298,8 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			return StringUtil.notNull(objDescription);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw e;
+			//throw e;
+			return (e.getMessage() + "<br>" + e.toString());
 		}
 	}
 
@@ -312,6 +314,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		str.append("var ").append(Params.BOX_REGIST).append(";\n");
 		str.append("var ").append(Params.CUSTOMER).append(";\n");
 		str.append("var ").append(Params.GIFT_REGIST).append(";\n");
+		str.append("var ").append(Params.GIFT_DONE).append(";\n");
 		str.append("var ").append(Params.POINT_DONE).append(";\n");
 		str.append("var ").append(Params.POINT_REGIST).append(";\n");
 		str.append("var ").append(Params.PRODUCT_DONE).append(";\n");
@@ -325,7 +328,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	
 	public String exportPromotionReport() throws Exception {
 		try {
-			PromotionHome promotionHome = new PromotionHome(HibernateUtil.getSessionFactory());
+			/*PromotionHome promotionHome = new PromotionHome(HibernateUtil.getSessionFactory());
 
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
 			promotion_id = Integer.parseInt(request.getParameter("id"));
@@ -342,7 +345,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			//			}
 
 			promotionCuss = accessPromotionResult(mapResult, promotion);
-			
+			*/
 			try {
 				//Init data
 				String[] sheetNames = new String[]{"Ket qua"};

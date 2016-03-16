@@ -49,15 +49,9 @@ $(document).ready(function() {
 				edit: false,
 				list: false
 			},
-//			productType : {
-//				title : 'Loại sản phẩm',
-//				width : '20%',
-//				edit : true,
-//				options: { 'TTS': 'Thuốc trừ sâu', 'TTC': 'Thuốc trừ cỏ' }
-//			},
 			category_id : {
 				title : 'Loại sản phẩm',
-				width : '20%',
+				width : '15%',
 				edit : true,
 				 options: function () {
                      
@@ -85,6 +79,12 @@ $(document).ready(function() {
                      //alert("4444  " + data.categories);
                      return categoryOptions = options; //Cache results and return options
                  }
+			},
+			productCode :{
+				title : 'Mã sản phẩm',
+				width : '15%',
+				edit : true,
+				inputClass: 'validate[required]'
 			},
 			productName : {
 				title : 'Tên sản phẩm',

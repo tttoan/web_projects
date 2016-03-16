@@ -170,7 +170,7 @@ public class PromotionCus {
 			int total_p = 0;
 			for (Product product : products) {
 				if(mapProductPoint.containsKey(product.getId())){
-					total_p += (product.getMaxQuantity() * mapProductPoint.get(product.getId()));
+					total_p += (product.getMinQuantity()/*so thung*/ * mapProductPoint.get(product.getId()));
 				}
 			}
 			totalPoint = total_p;

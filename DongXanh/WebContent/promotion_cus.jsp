@@ -11,18 +11,14 @@ pageEncoding="UTF-8"%>
 		<div class="clearfix"></div>
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
-
+				
 				<p class="url">
 					<span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-					<a href="#"><i class="fa fa-paperclip"></i> Download </a>
+					<s:url id="fileDownload" namespace="/" action="promotionResultDownload"></s:url>
+						Download file -
+						<s:a href="%{fileDownload}"><i class="fa fa-paperclip"></i>Kết quả khuyến mãi.xls</s:a>
 				</p>
-
-				<s:url id="fileDownload" namespace="/" action="download"></s:url>
-				<h4>
-					Download file -
-					<s:a href="%{fileDownload}">Ket qua khuyen mai.xls</s:a>
-				</h4>
-
+				
 				<div class="x_panel">
 					<div class="x_content">
 						<table id="example"
@@ -37,7 +33,7 @@ pageEncoding="UTF-8"%>
 									<th>Số thùng</th>
 									<th>Số lượng</th>
 									<th>Kết quả</th>
-									<th>Báo báo</th>
+									<th>Báo cáo</th>
 								</tr>
 							</thead>
 
