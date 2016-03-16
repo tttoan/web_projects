@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.home.util.StringUtil;
+
 import antlr.collections.List;
 
 public class PromotionCus {
@@ -22,6 +24,7 @@ public class PromotionCus {
 	private float percentPass;
 	private boolean result;
 	private String resultString;
+	private String resultPromotion;
 	private int row_index;
 	private String productCode;
 	private String categoryName;
@@ -31,7 +34,21 @@ public class PromotionCus {
 	private Set<Product> products = new HashSet<Product>(0);
 	private Set<PromotionGift> promotionGifts = new HashSet<PromotionGift>(0);
 	
+	public String getResultPromotion() {
+		return resultPromotion;
+	}
+	public void setResultPromotion(String resultPromotion) {
+		this.resultPromotion = resultPromotion;
+	}
+	
 	public String getResultString() {
+		if(StringUtil.notNull(resultString).isEmpty()){
+			if(result){
+				return "Đạt";
+			}else{
+				return "Không đạt";
+			}
+		}
 		return resultString;
 	}
 	public void setResultString(String resultString) {

@@ -26,13 +26,12 @@ pageEncoding="UTF-8"%>
 									<th>No</th>
 									<th>Mã khách hàng</th>
 									<th>Tên khách hàng</th>
-									<th>Nhân viên thị trường</th>
+									<th>NVTT</th>
 									<th>Số mặt hàng</th>
-									<th>Số mặt hàng đạt</th>
 									<th>Số thùng</th>
 									<th>Số lượng</th>
 									<th>Kết quả</th>
-									<th>Thông báo</th>
+									<th>Báo báo</th>
 								</tr>
 							</thead>
 
@@ -44,11 +43,10 @@ pageEncoding="UTF-8"%>
 										<td class=""><s:property value="customerName" /></td>
 										<td class=""><s:property value="sellMan" /></td>
 										<td class=""><s:property value="totalProduct" /></td>
-										<td class=""><s:property value="totalPass" /></td>
 										<td class=""><s:property value="totalBox" /></td>
 										<td class=""><s:property value="quality" /></td>
-										<td class=""><s:property value="result" /></td>
 										<td class=""><s:property value="resultString" /></td>
+										<td class=""><s:property value="resultPromotion" /></td>
 									</tr>
 								</s:iterator>
 							</tbody>

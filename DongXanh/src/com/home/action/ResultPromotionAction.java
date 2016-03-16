@@ -2,6 +2,7 @@ package com.home.action;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -100,13 +101,13 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 
 			Date start = new Date(promotion.getStartDate().getTime());
 			Date end = new Date(promotion.getEndDate().getTime());
-			promotionCuss = promotionHome.listPromotionCusResult(start, end);
+			LinkedHashMap<String, PromotionCus> mapResult = promotionHome.listPromotionCusResult(start, end);
 //			for (PromotionCus promotionCus : promotionCuss) {
 //				System.out.println("--------->" + promotionCus.getCustomerCode());
 //				System.out.println("--------->" + promotionCus.getCustomerName());
 //			}
 			
-			promotionCuss = accessPromotionResult(promotion);
+			promotionCuss = accessPromotionResult(mapResult, promotion);
 			return SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -114,11 +115,11 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		}
 	}
 	
-	private List<PromotionCus> accessPromotionResult(Promotion promotion) throws Exception{
+	private List<PromotionCus> accessPromotionResult(LinkedHashMap<String, PromotionCus> mapResult, Promotion promotion) throws Exception{
 		List<PromotionCus> result = new ArrayList<>();
 		PromotionRegistHome promotionRegistHome = new PromotionRegistHome(HibernateUtil.getSessionFactory());
 		try {
-			if(promotionCuss != null && !promotionCuss.isEmpty()){
+			if(mapResult != null && !mapResult.isEmpty()){
 				Set<PromotionRegister>  promotionRegisters = promotion.getPromotionRegisters();
 				Set<PromotionGift> promotionGifts = promotion.getPromotionGifts();
 				Set<PromotionProduct> promotionProducts = promotion.getPromotionProducts();
@@ -135,10 +136,12 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 				}
 				
 				//Process customer registered yes or no
+				Set<String> customerCodes = mapResult.keySet();
 				if(promotion.getCustomerRegist() == 1){
 					
 					//Get promotion result
-					for (PromotionCus pCus : promotionCuss) {
+					for (String customerCode : customerCodes) {
+						PromotionCus pCus = mapResult.get(customerCode);
 						PromotionRegister promotionRegister = isRegister(pCus, promotionRegisters);
 						if(promotionRegister != null){
 							//Get customer register
@@ -161,14 +164,20 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 										paramRegisterProducts(listRegisterProducts));
 								resultString.append(str).append("; ");
 							}
-							pCus.setResultString(resultString.toString().trim());
+							pCus.setResultPromotion(resultString.toString().trim().replaceAll(";$", ""));
+							if(pCus.isResult()){
+								pCus.setResultString("Đạt");
+							}else{
+								pCus.setResultString("Không đạt");
+							}
 							
 							result.add(pCus);
 						}
 					}
 				}else{
 					//Get promotion result
-					for (PromotionCus pCus : promotionCuss) {
+					for (String customerCode : customerCodes) {
+						PromotionCus pCus = mapResult.get(customerCode);
 						//Duyet trong danh sach qua tang dang ky
 						StringBuilder resultString = new StringBuilder();
 						for (PromotionGift promotionGift : promotionGifts) {
@@ -181,7 +190,12 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 									null);
 							resultString.append(str).append("; ");
 						}
-						pCus.setResultString(resultString.toString().trim());
+						pCus.setResultPromotion(resultString.toString().trim().replaceAll(";$", ""));
+						if(pCus.isResult()){
+							pCus.setResultString("Đạt");
+						}else{
+							pCus.setResultString("Không đạt");
+						}
 						
 						result.add(pCus);
 					}

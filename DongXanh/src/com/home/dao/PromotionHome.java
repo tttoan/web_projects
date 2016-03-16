@@ -10,6 +10,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.naming.InitialContext;
@@ -24,6 +25,7 @@ import org.hibernate.Transaction;
 import org.hibernate.internal.SessionImpl;
 
 import com.home.model.GroupCustomer;
+import com.home.model.Product;
 import com.home.model.Promotion;
 import com.home.model.PromotionCus;
 import com.home.util.StringUtil;
@@ -86,6 +88,7 @@ public class PromotionHome {
 		} finally{
 			try {
 				if(session != null){
+					session.flush();
 					session.close();
 				}
 			} catch (Exception e) {
@@ -111,6 +114,7 @@ public class PromotionHome {
 		} finally{
 			try {
 				if(session != null){
+					session.flush();
 					session.close();
 				}
 			} catch (Exception e) {
@@ -146,6 +150,7 @@ public class PromotionHome {
 		} finally{
 			try {
 				if(session != null){
+					session.flush();
 					session.close();
 				}
 			} catch (Exception e) {
@@ -188,6 +193,7 @@ public class PromotionHome {
 		} finally{
 			try {
 				if(session != null){
+					session.flush();
 					session.close();
 				}
 			} catch (Exception e) {
@@ -229,6 +235,7 @@ public class PromotionHome {
 		} finally{
 			try {
 				if(session != null){
+					session.flush();
 					session.close();
 				}
 			} catch (Exception e) {
@@ -256,6 +263,7 @@ public class PromotionHome {
 		} finally{
 			try {
 				if(session != null){
+					session.flush();
 					session.close();
 				}
 			} catch (Exception e) {
@@ -302,6 +310,7 @@ public class PromotionHome {
 		} finally{
 			try {
 				if(session != null){
+					session.flush();
 					session.close();
 				}
 			} catch (Exception e) {
@@ -324,6 +333,7 @@ public class PromotionHome {
 		} finally{
 			try {
 				if(session != null){
+					session.flush();
 					session.close();
 				}
 			} catch (Exception e) {
@@ -331,10 +341,9 @@ public class PromotionHome {
 		}
 	}
 	
-	public List<PromotionCus> listPromotionCusResult(Date start, Date end) throws Exception{
+	public LinkedHashMap<String, PromotionCus> listPromotionCusResult(Date start, Date end) throws Exception{
 		log.debug("retrieve list PromotionCus");
 		Session session = null;
-		Transaction tx = null;
 		try {
 			session = sessionFactory.openSession();
 			SessionImpl sessionImpl = (SessionImpl) session;
@@ -348,14 +357,14 @@ public class PromotionHome {
 					+ "JOIN `user` u ON u.id=s.user_id "
 					+ "Where date_received >= ? And date_received <= ? "
 					+ "Group By c2.customer_code, c2.business_name, u.user_name, p.product_code, p.product_type, p.product_name "
-					+ "Order By c2.customer_code");
+					+ "Order By c2.customer_code, p.product_code");
 			
 			pre.setDate(1, start);
 			pre.setDate(2, end);
 			//System.out.println(pre.toString());
 			ResultSet rs = pre.executeQuery();
-			List<PromotionCus> results = new ArrayList<PromotionCus>();
-			int idx = 0;
+			LinkedHashMap<String, PromotionCus> results = new LinkedHashMap<>();
+			int idx = 1;
 			while(rs.next()){
 				PromotionCus pc = new PromotionCus();
 				pc.setRow_index(idx++);
@@ -369,7 +378,28 @@ public class PromotionHome {
 				pc.setQuality(rs.getLong("quantity"));
 				pc.setTotaPrice(rs.getBigDecimal("total"));
 				//pc.setTotaPoint((long)((Object[])obj)[8]);
-				results.add(pc);
+				
+				Product product = new Product();
+				product.setProductCode(StringUtil.notNull(rs.getString("product_code")));
+				product.setProductType(StringUtil.notNull(rs.getString("product_type")));
+				product.setProductName(StringUtil.notNull(rs.getString("product_name")));
+				product.setMinQuantity((int)rs.getLong("total_box"));
+				product.setMaxQuantity((int)rs.getLong("quantity"));
+				product.setUnitPrice(rs.getBigDecimal("total"));
+				
+				if(results.containsKey(pc.getCustomerCode())){
+					PromotionCus pcOld = results.get(pc.getCustomerCode());
+					pcOld.getProducts().add(product);
+					pcOld.setTotalBox(pcOld.getTotalBox() + pc.getTotalBox());
+					pcOld.setQuality(pcOld.getQuality() + pc.getQuality());
+					pcOld.setTotaPrice(pcOld.getTotaPrice().add(pc.getTotaPrice()));
+					pcOld.setTotalProduct(pcOld.getProducts().size());
+				}else{
+					results.put(pc.getCustomerCode(), pc);
+					pc.getProducts().add(product);
+					pc.setTotalProduct(1);
+				}
+				
 			}
 			rs.close();
 			log.debug("retrieve list PromotionCus successful, result size: " + results.size());
@@ -381,6 +411,7 @@ public class PromotionHome {
 		} finally{
 			try {
 				if(session != null){
+					session.flush();
 					session.close();
 				}
 			} catch (Exception e) {
