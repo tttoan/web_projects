@@ -50,6 +50,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	private HashMap<Integer, Integer> mapProductPoint = new HashMap<Integer, Integer>();
 	private InputStream inputStream;
 	private String reportFile;
+	private String filenameDownload = "Kết quả khuyến mãi.xls";
 
 	@Override
 	public void setServletRequest(HttpServletRequest request) {
@@ -116,6 +117,8 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			//			}
 
 			promotionCuss = accessPromotionResult(mapResult, promotion);
+			ActionContext.getContext().getSession().put("promotionCuss", promotionCuss);
+			setFilenameDownload(promotion.getPromotionName() + ".xls");
 			return SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -145,7 +148,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 
 				//Process customer registered yes or no
 				Set<String> customerCodes = mapResult.keySet();
-				if(promotion.getCustomerRegist() == 1){
+				if(promotion.getCustomerRegist() != null && promotion.getCustomerRegist() == 1){
 
 					//Get promotion result
 					for (String customerCode : customerCodes) {
@@ -169,6 +172,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 										promotionRegister.getTotalBox(), 
 										promotionRegister.getTotalPoint(), 
 										paramRegisterGifts(listRegisterGifts), 
+										registerGift.getPromotionGift().getGift().getGiftName(),
 										paramRegisterProducts(listRegisterProducts));
 								resultString.append(str).append("; ");
 							}
@@ -195,6 +199,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 									0, 
 									0, 
 									null, 
+									promotionGift.getGift().getGiftName(),
 									null);
 							resultString.append(str).append("; ");
 						}
@@ -234,7 +239,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 
 	private PromotionRegister isRegister(PromotionCus pCus, Set<PromotionRegister>  promotionRegisters){
 		for (PromotionRegister promotionRegister : promotionRegisters) {
-			System.out.println(promotionRegister.getCustomer().getCustomerCode());
+			//System.out.println(promotionRegister.getCustomer().getCustomerCode());
 			if(/*pCus.getCustomerId() == promotionRegister.getCustomer_id() ||
 					pCus.getCustomerId() == promotionRegister.getCustomer().getId() ||*/
 					pCus.getCustomerCode().equalsIgnoreCase(promotionRegister.getCustomer().getCustomerCode())){
@@ -248,7 +253,8 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			PromotionCus pCus, 
 			int total_box_regist, 
 			int total_point_regist, 
-			Object[] gift_regist, 
+			Object[] gift_regist,
+			String gift,
 			Object[][] product_regist) throws Exception{
 		try {
 			ScriptEngine engine  = SystemUtil.compileScript(generateScriptFunction(script));
@@ -256,7 +262,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			engine.put(Params.BOX_REGIST, total_box_regist);
 			engine.put(Params.CUSTOMER, pCus.getCustomerCode());
 			engine.put(Params.GIFT_REGIST, gift_regist);
-			engine.put(Params.GIFT_DONE, "quà thực hiện");
+			engine.put(Params.GIFT, gift);
 			engine.put(Params.POINT_DONE, pCus.getTotaPoint(mapProductPoint));// Sum (sam pham * diem)
 			engine.put(Params.POINT_REGIST, total_point_regist);
 			engine.put(Params.PRODUCT_DONE, pCus.paramProducts());
@@ -314,7 +320,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		str.append("var ").append(Params.BOX_REGIST).append(";\n");
 		str.append("var ").append(Params.CUSTOMER).append(";\n");
 		str.append("var ").append(Params.GIFT_REGIST).append(";\n");
-		str.append("var ").append(Params.GIFT_DONE).append(";\n");
+		str.append("var ").append(Params.GIFT).append(";\n");
 		str.append("var ").append(Params.POINT_DONE).append(";\n");
 		str.append("var ").append(Params.POINT_REGIST).append(";\n");
 		str.append("var ").append(Params.PRODUCT_DONE).append(";\n");
@@ -328,32 +334,15 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	
 	public String exportPromotionReport() throws Exception {
 		try {
-			/*PromotionHome promotionHome = new PromotionHome(HibernateUtil.getSessionFactory());
-
-			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
-			promotion_id = Integer.parseInt(request.getParameter("id"));
-
-			//Get promotion setting
-			Promotion promotion = promotionHome.findById(promotion_id);
-
-			Date start = new Date(promotion.getStartDate().getTime());
-			Date end = new Date(promotion.getEndDate().getTime());
-			LinkedHashMap<String, PromotionCus> mapResult = promotionHome.listPromotionCusResult(start, end);
-			//			for (PromotionCus promotionCus : promotionCuss) {
-			//				System.out.println("--------->" + promotionCus.getCustomerCode());
-			//				System.out.println("--------->" + promotionCus.getCustomerName());
-			//			}
-
-			promotionCuss = accessPromotionResult(mapResult, promotion);
-			*/
+			if(promotionCuss == null || promotionCuss.isEmpty()){
+				promotionCuss = (List<PromotionCus>) ActionContext.getContext().getSession().get("promotionCuss");
+			}
 			try {
 				//Init data
-				String[] sheetNames = new String[]{"Ket qua"};
+				String[] sheetNames = new String[]{"Kết quả"};
 	            List<String[]> headerColumns = new ArrayList<>();
 	            headerColumns.add( new String[]{"No","Mã khách hàng","Tên khách hàng","NVTT","Số mặt hàng","Số thùng","Số lượng","Kết quả","Báo cáo"});
-	            List<List<String[]>> listAllData = new ArrayList<>();
-	            listAllData.add(headerColumns);
-	            listAllData.add(headerColumns);
+	            List<List<String[]>> listAllData = createExportContent(headerColumns.get(0));
 	            
 				ExcelUtil excelUtil = new ExcelUtil();
 				HSSFWorkbook myWorkBook = excelUtil.createWorkbook(sheetNames, headerColumns, listAllData, true);
@@ -370,6 +359,32 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			e.printStackTrace();
 			return ERROR;
 		}
+	}
+	
+	private List<List<String[]>> createExportContent(String[] header) throws Exception{
+		 List<List<String[]>> listAllData = new ArrayList<>();
+		try {
+			List<String[]> data = new ArrayList<>();
+			int no = 1;
+			for (PromotionCus pc : promotionCuss) {
+				data.add(new String[]{
+						"" + (no++),
+						pc.getCustomerCode(),
+						pc.getCustomerName(),
+						pc.getSellMan(),
+						"" + pc.getTotalProduct(),
+						"" + pc.getTotalBox(),
+						"" + pc.getQuality(),
+						pc.getResultString(),
+						pc.getResultPromotion()
+				});
+			}
+			listAllData.add(data);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return listAllData;
 	}
 
 	public HttpServletRequest getRequest() {
@@ -418,5 +433,13 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 
 	public void setInputStream(InputStream inputStream) {
 		this.inputStream = inputStream;
+	}
+	
+	public String getFilenameDownload() {
+		return filenameDownload;
+	}
+
+	public void setFilenameDownload(String filenameDownload) {
+		this.filenameDownload = filenameDownload;
 	}
 }

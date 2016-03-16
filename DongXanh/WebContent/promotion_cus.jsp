@@ -16,7 +16,9 @@ pageEncoding="UTF-8"%>
 					<span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
 					<s:url id="fileDownload" namespace="/" action="promotionResultDownload"></s:url>
 						Download file -
-						<s:a href="%{fileDownload}"><i class="fa fa-paperclip"></i>Kết quả khuyến mãi.xls</s:a>
+						<b>
+						<s:a href="%{fileDownload}"><i class="fa fa-paperclip"></i><s:property value="filenameDownload" /></s:a>
+						</b>
 				</p>
 				
 				<div class="x_panel">
