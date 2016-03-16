@@ -2,8 +2,16 @@ package com.home.util;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -56,5 +64,250 @@ public class ExcelUtil {
 		}
 		return value;
 	}
+	
+	/**
+	 * @param sheetNames
+	 * @param headerColumns
+	 * @param listAllData
+	 * @param isHeader
+	 * @return
+	 * @throws Exception
+	 */
+    public HSSFWorkbook createWorkbook(
+    		String[] sheetNames,
+            List<String[]> headerColumns,
+            List<List<String[]>> listAllData,
+            boolean isHeader
+            ) throws Exception{
+        
+    	HSSFWorkbook wb = new HSSFWorkbook();
+        try {
+        	//Create font style
+            creatFontStyle(wb);
+            //Create sheet
+            HSSFSheet sheets[] = new HSSFSheet[sheetNames.length];
+            for (int i = 0; i < sheetNames.length; i++) {
+                if("".equals(StringUtil.notNull(sheetNames[i]))){
+                    sheetNames[i] = "Sheet" + (i+1);
+                }
+                sheets[i] = wb.createSheet(removeInvalidChar(sheetNames[i]));
+            }
+            //Create content
+            creatWbBody(wb, sheets, headerColumns, listAllData, isHeader);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw  e;
+        }
+        return wb;
+    }
+    
+    
+    
+    /**
+     * @author tttoan
+     * @param wb
+     */
+    private void creatFontStyle(HSSFWorkbook wb) throws Exception{
+        // Create font
+        HSSFFont font01Bold = wb.createFont();
+        font01Bold.setFontHeightInPoints((short) 12);
+        font01Bold.setFontName("Arial");
+        font01Bold.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        
+        HSSFFont font01Normal = wb.createFont();
+        font01Normal.setFontHeightInPoints((short) 12);
+        font01Normal.setFontName("Arial");
+        font01Normal.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+        
+        HSSFCellStyle cellstyleTblLeft = wb.createCellStyle();
+        cellstyleTblLeft.setFont(font01Normal);
+        cellstyleTblLeft.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+    }
+    
+    /**
+     * @author tttoan
+     *
+     * @param HSSFSheet[] styleSheetNames
+     * @param List<String[]> HeaderColumns
+     * @param List<List<String[]>> allData
+     */
+    private void creatWbBody(HSSFWorkbook wb, HSSFSheet[] styleSheetNames, List<String[]> HeaderColumns, List<List<String[]>> allData, boolean isHeader) throws Exception {
+        
+        for (int i = 0; i < styleSheetNames.length; i++) {
+            if(isHeader){
+                creatHeader(wb, styleSheetNames[i], HeaderColumns.get(i));
+                creatSheetBody(wb, styleSheetNames[i], allData.get(i), 1);
+            }else{
+                creatSheetBody(wb, styleSheetNames[i], allData.get(i), 0);
+            }
+        }
+    }
+    
+    
+    /**
+     * @author tttoan
+     * @param wb
+     * @param styleSheetName
+     * @param columnNames
+     */
+    private void creatHeader(HSSFWorkbook wb, HSSFSheet styleSheetName, String[] columnNames) throws Exception{
+        
+        HSSFRow rowHeader;
+        HSSFCell cellHeader;
+        
+        // menge cell
+        //styleSheetName.addMergedRegion(new Region((short)0,(short)0,(short)0,(short)7));
+        
+        // Create font
+        HSSFFont font01Bold = wb.createFont();
+        font01Bold.setFontHeightInPoints((short) 12);
+        font01Bold.setFontName("Arial");
+        font01Bold.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+        font01Bold.setColor(HSSFColor.BLACK.index);
+        
+        //Create type
+        HSSFCellStyle cell_style = wb.createCellStyle();
+        cell_style.setFont(font01Bold);
+        
+        cell_style.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        cell_style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+        cell_style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+        cell_style.setBorderRight(HSSFCellStyle.BORDER_THIN);
+        cell_style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        
+        cell_style.setFillForegroundColor(HSSFColor.PALE_BLUE.index);
+        cell_style.setFillBackgroundColor(HSSFColor.PALE_BLUE.index);
+        cell_style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        
+        HSSFCellStyle font_cellHeader_day = wb.createCellStyle();
+        font_cellHeader_day.setFont(font01Bold);
+        font_cellHeader_day.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        
+        rowHeader = styleSheetName.createRow((int) 0);
+        for (int i = 0; i < columnNames.length; i++) {
+            
+            cellHeader = rowHeader.createCell(i);
+            //cellHeader.setEncoding(cellHeader.ENCODING_UTF_16);
+            cellHeader.setCellValue(new HSSFRichTextString(columnNames[i]));
+            cellHeader.setCellStyle(cell_style);
+            
+            int colNum = cellHeader.getColumnIndex();
+            styleSheetName.setColumnWidth(colNum, (styleSheetName.getColumnWidth(colNum) + 3000));
+            
+        }
+        
+    }
+    //
+    
+    /**
+     * @author tttoan
+     *
+     * Tao body cho 1 stylesheet trong workbook
+     * @param styleSheetName
+     * @param oneTable
+     */
+    private void creatSheetBody(HSSFWorkbook wb, HSSFSheet styleSheetName, List<String[]> oneTable, int startRow) throws Exception{
+        
+        org.apache.poi.hssf.usermodel.HSSFCell cellContent;
+        org.apache.poi.hssf.usermodel.HSSFRow rowContent;
+        
+        int len = oneTable.size();
+        int lenOfData;
+        
+        // Create font
+        HSSFFont font01Bold = wb.createFont();
+        font01Bold.setFontHeightInPoints((short) 14);
+        font01Bold.setFontName("Arial");
+        font01Bold.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+        font01Bold.setColor(HSSFColor.BLACK.index);
+        
+        HSSFFont cell_font = wb.createFont();
+        cell_font.setFontHeightInPoints((short) 11);
+        cell_font.setFontName("Arial");
+        cell_font.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+        
+        //
+        HSSFCellStyle cell_styleL = wb.createCellStyle();
+        cell_styleL.setFont(cell_font);
+        cell_styleL.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+        
+        HSSFCellStyle cell_styleR = wb.createCellStyle();
+        cell_styleR.setFont(cell_font);
+        cell_styleR.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
+        
+        
+        //
+        HSSFFont cell_fontL = wb.createFont();
+        cell_fontL.setFontHeightInPoints((short) 11);
+        cell_fontL.setFontName("Arial");
+        cell_fontL.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+        cell_fontL.setColor(HSSFColor.BLUE.index);
+        
+        
+        //
+        HSSFCellStyle cell_styleLink = wb.createCellStyle();
+        cell_styleLink.setFont(cell_fontL);
+        cell_styleLink.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        
+        String value;
+        for (int i = 0; i < len; i++) {
+            
+            lenOfData = oneTable.get(i).length;
+            
+            rowContent = styleSheetName.createRow((int) i + startRow);
+            
+            for (int k = 0; k < lenOfData; k++) {
+                cellContent = rowContent.createCell(k);
+                value = oneTable.get(i)[k];
+                
+                //if (isNum(value)) {
+                //   cellContent.setCellStyle(cell_styleR);
+                //    cellContent.setCellValue(Double.parseDouble(value));
+                //} else {
+                cellContent.setCellStyle(cell_styleL);
+                cellContent.setCellValue(new HSSFRichTextString(value));
+                // }
+                
+            }
+            
+        }
+        
+    }
+    
+    /**
+     * @To do: remove any invalid char for make file name
+     * @param strC
+     * @return
+     * @throws Exception
+     */
+    public static String removeInvalidChar(String strC) throws Exception{
+        try {
+            strC = StringUtil.notNull(strC);
+            if (strC.length() > 0) {
+                
+                strC = strC.replace("\n", " ").replace("\r", " ").replace("\t", " ");
+                while (strC.contains("  ")) {
+                    strC = strC.replace("  ", " ");
+                }
+                
+                strC = strC.replace("<", "");
+                strC = strC.replace(">", "");
+                strC = strC.replace(":", "");
+                strC = strC.replace("\"", "");
+                strC = strC.replace("\\", "");
+                strC = strC.replace("/", "");
+                strC = strC.replace("|", "");
+                strC = strC.replace("?", "");
+                strC = strC.replace("*", "");
+            }
+            
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        
+        return strC;
+    }
 
 }

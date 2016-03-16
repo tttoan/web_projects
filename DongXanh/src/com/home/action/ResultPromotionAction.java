@@ -1,4 +1,8 @@
 package com.home.action;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +14,7 @@ import javax.script.ScriptEngine;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.util.ServletContextAware;
@@ -26,6 +31,7 @@ import com.home.model.PromotionProduct;
 import com.home.model.PromotionRegister;
 import com.home.model.RegisterGift;
 import com.home.model.RegisterProduct;
+import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
 import com.home.util.SystemUtil;
@@ -42,6 +48,8 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	private HashMap<Integer, String> groupCustomers ;
 	private Integer promotion_id;
 	private HashMap<Integer, Integer> mapProductPoint = new HashMap<Integer, Integer>();
+	private InputStream inputStream;
+	private String reportFile;
 
 	@Override
 	public void setServletRequest(HttpServletRequest request) {
@@ -57,7 +65,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	public String execute() throws Exception {
 		return SUCCESS;
 	}
-	
+
 	public static void main(String[] args) {
 		try {
 			new ResultPromotionAction().listPromotionActive();
@@ -65,12 +73,12 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			e.printStackTrace();
 		}
 	}
-	
+
 	public String listPromotionActive() throws Exception {
 		try {
 			PromotionHome promotionHome = new PromotionHome(HibernateUtil.getSessionFactory());
 			promotions = promotionHome.getListPromotionActive();
-			
+
 			GroupCustomerHome groupCustomerHome = new GroupCustomerHome(HibernateUtil.getSessionFactory());
 			groupCustomers = groupCustomerHome.getListGroupCustomer();
 			int idx = 1;
@@ -88,25 +96,25 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			return ERROR;
 		}
 	}
-	
+
 	public String listPromotionCusResult() throws Exception {
 		try {
 			PromotionHome promotionHome = new PromotionHome(HibernateUtil.getSessionFactory());
-			
+
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
 			promotion_id = Integer.parseInt(request.getParameter("id"));
-			
+
 			//Get promotion setting
 			Promotion promotion = promotionHome.findById(promotion_id);
 
 			Date start = new Date(promotion.getStartDate().getTime());
 			Date end = new Date(promotion.getEndDate().getTime());
 			LinkedHashMap<String, PromotionCus> mapResult = promotionHome.listPromotionCusResult(start, end);
-//			for (PromotionCus promotionCus : promotionCuss) {
-//				System.out.println("--------->" + promotionCus.getCustomerCode());
-//				System.out.println("--------->" + promotionCus.getCustomerName());
-//			}
-			
+			//			for (PromotionCus promotionCus : promotionCuss) {
+			//				System.out.println("--------->" + promotionCus.getCustomerCode());
+			//				System.out.println("--------->" + promotionCus.getCustomerName());
+			//			}
+
 			promotionCuss = accessPromotionResult(mapResult, promotion);
 			return SUCCESS;
 		} catch (Exception e) {
@@ -114,7 +122,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			return ERROR;
 		}
 	}
-	
+
 	private List<PromotionCus> accessPromotionResult(LinkedHashMap<String, PromotionCus> mapResult, Promotion promotion) throws Exception{
 		List<PromotionCus> result = new ArrayList<>();
 		PromotionRegistHome promotionRegistHome = new PromotionRegistHome(HibernateUtil.getSessionFactory());
@@ -124,7 +132,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 				Set<PromotionGift> promotionGifts = promotion.getPromotionGifts();
 				Set<PromotionProduct> promotionProducts = promotion.getPromotionProducts();
 				mapProductPoint = promotionRegistHome.getMapProductsRegister(promotion_id);
-				
+
 				if(promotionRegisters == null){
 					//Get from DB again nha ku
 				}
@@ -134,11 +142,11 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 				if(promotionProducts == null){
 					//Get from DB again nha ku
 				}
-				
+
 				//Process customer registered yes or no
 				Set<String> customerCodes = mapResult.keySet();
 				if(promotion.getCustomerRegist() == 1){
-					
+
 					//Get promotion result
 					for (String customerCode : customerCodes) {
 						PromotionCus pCus = mapResult.get(customerCode);
@@ -146,12 +154,12 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 						if(promotionRegister != null){
 							//Get customer register
 							//PromotionRegister promotionRegister = promotionRegistHome.getPromotionRegister(promotion_id, pCus.getCustomerId());
-							
+
 							//Get list gifts register
 							List<RegisterGift> listRegisterGifts = promotionRegistHome.getRegisterGifts(promotionRegister.getId(), promotion_id);
 							//Get list product register
 							List<RegisterProduct> listRegisterProducts = promotionRegistHome.getRegisterProducts(promotionRegister.getId(), promotion_id);
-							
+
 							//Duyet trong danh sach qua tang dang ky
 							StringBuilder resultString = new StringBuilder();
 							for (RegisterGift registerGift : listRegisterGifts) {
@@ -170,7 +178,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 							}else{
 								pCus.setResultString("Không đạt");
 							}
-							
+
 							result.add(pCus);
 						}
 					}
@@ -196,7 +204,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 						}else{
 							pCus.setResultString("Không đạt");
 						}
-						
+
 						result.add(pCus);
 					}
 				}
@@ -207,7 +215,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		}
 		return result;
 	}
-	
+
 	private String[] paramRegisterGifts(List<RegisterGift> listRegisterGifts){
 		String[] arrGifts = new String[listRegisterGifts.size()];
 		for (int i = 0; i < listRegisterGifts.size(); i++) {
@@ -215,7 +223,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		}
 		return arrGifts;
 	}
-	
+
 	private Object[][] paramRegisterProducts(List<RegisterProduct> listRegisterProducts){
 		Object[][] arrProducts = new Object[listRegisterProducts.size()][3];
 		for (int i = 0; i < listRegisterProducts.size(); i++) {
@@ -223,7 +231,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		}
 		return arrProducts;
 	}
-	
+
 	private PromotionRegister isRegister(PromotionCus pCus, Set<PromotionRegister>  promotionRegisters){
 		for (PromotionRegister promotionRegister : promotionRegisters) {
 			System.out.println(promotionRegister.getCustomer().getCustomerCode());
@@ -235,7 +243,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		}
 		return null;
 	}
-	
+
 	private String getPromotionResult(String script, 
 			PromotionCus pCus, 
 			int total_box_regist, 
@@ -252,10 +260,10 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			engine.put(Params.POINT_REGIST, total_point_regist);
 			engine.put(Params.PRODUCT_DONE, pCus.paramProducts());
 			engine.put(Params.PRODUCT_REGIST, product_regist);
-			
+
 			Object objDescription = engine.eval(Params.FUNCION1);
 			Object objResult = engine.eval(Params.FUNCION2);
-			
+
 			if(!pCus.isResult()){
 				if(objResult == null){
 					pCus.setResult(false);
@@ -282,17 +290,17 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 							pCus.setResult(false);
 						}
 					}
-					
+
 				}
 			}
-			
+
 			return StringUtil.notNull(objDescription);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}
 	}
-	
+
 	private String generateScriptFunction(String script) throws Exception{
 		StringBuilder str = new StringBuilder("function ");
 		str.append(Params.FUNCION1).append("{\n");
@@ -308,13 +316,59 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		str.append("var ").append(Params.POINT_REGIST).append(";\n");
 		str.append("var ").append(Params.PRODUCT_DONE).append(";\n");
 		str.append("var ").append(Params.PRODUCT_REGIST).append(";\n");
-		
+
 		str.append("var ").append(Params.RESULT).append("=false;\n");
 		str.append("function ").append(Params.FUNCION2).append("{return ").append(Params.RESULT).append(";}\n");
-		
+
 		return str.toString();
 	}
 	
+	public String exportPromotionReport() throws Exception {
+		try {
+			PromotionHome promotionHome = new PromotionHome(HibernateUtil.getSessionFactory());
+
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			promotion_id = Integer.parseInt(request.getParameter("id"));
+
+			//Get promotion setting
+			Promotion promotion = promotionHome.findById(promotion_id);
+
+			Date start = new Date(promotion.getStartDate().getTime());
+			Date end = new Date(promotion.getEndDate().getTime());
+			LinkedHashMap<String, PromotionCus> mapResult = promotionHome.listPromotionCusResult(start, end);
+			//			for (PromotionCus promotionCus : promotionCuss) {
+			//				System.out.println("--------->" + promotionCus.getCustomerCode());
+			//				System.out.println("--------->" + promotionCus.getCustomerName());
+			//			}
+
+			promotionCuss = accessPromotionResult(mapResult, promotion);
+			
+			try {
+				//Init data
+				String[] sheetNames = new String[]{"Ket qua"};
+	            List<String[]> headerColumns = new ArrayList<>();
+	            headerColumns.add( new String[]{"No","Mã khách hàng","Tên khách hàng","NVTT","Số mặt hàng","Số thùng","Số lượng","Kết quả","Báo cáo"});
+	            List<List<String[]>> listAllData = new ArrayList<>();
+	            listAllData.add(headerColumns);
+	            listAllData.add(headerColumns);
+	            
+				ExcelUtil excelUtil = new ExcelUtil();
+				HSSFWorkbook myWorkBook = excelUtil.createWorkbook(sheetNames, headerColumns, listAllData, true);
+				//Write file to download
+				ByteArrayOutputStream boas = new ByteArrayOutputStream();
+				myWorkBook.write(boas);
+				setInputStream(new ByteArrayInputStream(boas.toByteArray()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			return SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+	}
+
 	public HttpServletRequest getRequest() {
 		return request;
 	}
@@ -345,5 +399,21 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 
 	public void setGroupCustomers(HashMap<Integer, String> groupCustomers) {
 		this.groupCustomers = groupCustomers;
+	}
+
+	public String getReportFile() {
+		return reportFile;
+	}
+
+	public void setReportFile(String reportFile) {
+		this.reportFile = reportFile;
+	}
+
+	public InputStream getInputStream() {
+		return inputStream;
+	}
+
+	public void setInputStream(InputStream inputStream) {
+		this.inputStream = inputStream;
 	}
 }

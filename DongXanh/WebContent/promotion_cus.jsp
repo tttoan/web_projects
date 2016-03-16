@@ -17,6 +17,12 @@ pageEncoding="UTF-8"%>
 					<a href="#"><i class="fa fa-paperclip"></i> Download </a>
 				</p>
 
+				<s:url id="fileDownload" namespace="/" action="download"></s:url>
+				<h4>
+					Download file -
+					<s:a href="%{fileDownload}">Ket qua khuyen mai.xls</s:a>
+				</h4>
+
 				<div class="x_panel">
 					<div class="x_content">
 						<table id="example"
