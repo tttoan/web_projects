@@ -93,13 +93,13 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			PromotionHome promotionHome = new PromotionHome(HibernateUtil.getSessionFactory());
 			
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
-			promotion_id = Integer.parseInt(request.getParameter("promotion_id"));
+			promotion_id = Integer.parseInt(request.getParameter("id"));
 			
 			//Get promotion setting
 			Promotion promotion = promotionHome.findById(promotion_id);
 
-			Date start = promotion.getStartDate();
-			Date end = promotion.getEndDate();
+			Date start = new Date(promotion.getStartDate().getTime());
+			Date end = new Date(promotion.getEndDate().getTime());
 			promotionCuss = promotionHome.listPromotionCusResult(start, end);
 //			for (PromotionCus promotionCus : promotionCuss) {
 //				System.out.println("--------->" + promotionCus.getCustomerCode());
@@ -212,8 +212,9 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	
 	private PromotionRegister isRegister(PromotionCus pCus, Set<PromotionRegister>  promotionRegisters){
 		for (PromotionRegister promotionRegister : promotionRegisters) {
-			if(pCus.getCustomerId() == promotionRegister.getCustomer_id() ||
-					pCus.getCustomerId() == promotionRegister.getCustomer().getId() ||
+			System.out.println(promotionRegister.getCustomer().getCustomerCode());
+			if(/*pCus.getCustomerId() == promotionRegister.getCustomer_id() ||
+					pCus.getCustomerId() == promotionRegister.getCustomer().getId() ||*/
 					pCus.getCustomerCode().equalsIgnoreCase(promotionRegister.getCustomer().getCustomerCode())){
 				return promotionRegister;
 			}

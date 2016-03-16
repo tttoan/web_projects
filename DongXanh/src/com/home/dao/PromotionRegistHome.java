@@ -281,9 +281,11 @@ public class PromotionRegistHome {
 			SessionImpl sessionImpl = (SessionImpl) session;
 			Connection conn = sessionImpl.connection();
 
-			ResultSet rs = conn.createStatement().executeQuery(
-					"SELECT * FROM `register_gift` rg JOIN `promotion_gift` pg ON rg.p_gift_id=pg.id JOIN `gift` g ON g.id=pg.gift_id"
-					+ "WHERE promotion_id="+promotion_id+" AND register_id="+register_id+" ORDER BY pg.id, rg.id");
+			String sql = "SELECT * FROM `register_gift` rg JOIN `promotion_gift` pg ON rg.p_gift_id=pg.id "
+					+ "JOIN `gift` g ON g.id=pg.gift_id "
+					+ "WHERE pg.promotion_id="+promotion_id+" AND rg.register_id="+register_id+" ORDER BY pg.id, rg.id";
+			System.out.println(sql);
+			ResultSet rs = conn.createStatement().executeQuery(sql);
 			while(rs.next()){
 				RegisterGift registerGift = new RegisterGift();
 				PromotionGift promotionGift = new PromotionGift();
@@ -328,7 +330,7 @@ public class PromotionRegistHome {
 			Connection conn = sessionImpl.connection();
 
 			ResultSet rs = conn.createStatement().executeQuery(
-					"SELECT * FROM `register_product` rg JOIN  `promotion_product` pg ON rg.p_product_id=pg.id JOIN `product` p ON p.id=pg.product_id"
+					"SELECT * FROM `register_product` rg JOIN  `promotion_product` pg ON rg.p_product_id=pg.id JOIN `product` p ON p.id=pg.product_id "
 					+ "WHERE promotion_id="+promotion_id+" AND register_id="+register_id+" ORDER BY pg.id, rg.id");
 			while(rs.next()){
 				RegisterProduct registerProduct = new RegisterProduct();

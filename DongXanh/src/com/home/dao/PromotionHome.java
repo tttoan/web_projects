@@ -7,6 +7,7 @@ import static org.hibernate.criterion.Example.create;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ import org.hibernate.internal.SessionImpl;
 import com.home.model.GroupCustomer;
 import com.home.model.Promotion;
 import com.home.model.PromotionCus;
+import com.home.util.StringUtil;
 
 /**
  * Home object for domain model class Promotion.
@@ -335,38 +337,45 @@ public class PromotionHome {
 		Transaction tx = null;
 		try {
 			session = sessionFactory.openSession();
-			tx = session.beginTransaction();
-			Query query  = session.createQuery(
-					"Select  customerNameLevel2, userId, productCode, categoryName, productName, sum(totalBox),sum(quantiy),sum(unitPrice),sum(total) "
-					+ "From Statistic "
-					+ "Where dateReceived >= :start And dateReceived <= :end "
-					+ "Group By customerNameLevel2, userId, productCode, categoryName, productName "
-					+ "Order By customerNameLevel2");
-			query.setParameter("start", start);
-			query.setParameter("end", end);
-			List lists = query.list();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			PreparedStatement pre = conn.prepareStatement(
+					"Select  c2.customer_code, c2.business_name, u.user_name, p.product_code, p.product_type, p.product_name, sum(total_box) as total_box,sum(quantity) as quantity,sum(total) as total "
+					+ "From `statistic` s "//JOIN Customer c1 ON s.customerByCustomerCodeLevel1=c1.id "
+					+ "JOIN `customer` c2 ON s.customer_code_level2=c2.id "
+					+ "JOIN `product` p ON p.id=s.product_id "
+					+ "JOIN `user` u ON u.id=s.user_id "
+					+ "Where date_received >= ? And date_received <= ? "
+					+ "Group By c2.customer_code, c2.business_name, u.user_name, p.product_code, p.product_type, p.product_name "
+					+ "Order By c2.customer_code");
+			
+			pre.setDate(1, start);
+			pre.setDate(2, end);
+			//System.out.println(pre.toString());
+			ResultSet rs = pre.executeQuery();
 			List<PromotionCus> results = new ArrayList<PromotionCus>();
-			int idx = 1;
-			for (Object obj : lists) {
+			int idx = 0;
+			while(rs.next()){
 				PromotionCus pc = new PromotionCus();
 				pc.setRow_index(idx++);
-				pc.setCustomerCode(((Object[])obj)[0].toString());
-				pc.setCustomerName(((Object[])obj)[0].toString());
-				pc.setUserId((int)((Object[])obj)[1]);
-				pc.setProductCode(((Object[])obj)[2].toString());
-				pc.setCategoryName(((Object[])obj)[3].toString());
-				pc.setProductName(((Object[])obj)[4].toString());
-				pc.setTotalBox((long)((Object[])obj)[5]);
-				pc.setQuality((long)((Object[])obj)[6]);
-				pc.setTotaPrice((BigDecimal)((Object[])obj)[7]);
+				pc.setCustomerCode(StringUtil.notNull(rs.getString("customer_code")));
+				pc.setCustomerName(StringUtil.notNull(rs.getString("business_name")));
+				pc.setSellMan(StringUtil.notNull(rs.getString("user_name")));
+				pc.setProductCode(StringUtil.notNull(rs.getString("product_code")));
+				pc.setCategoryName(StringUtil.notNull(rs.getString("product_type")));
+				pc.setProductName(StringUtil.notNull(rs.getString("product_name")));
+				pc.setTotalBox(rs.getLong("total_box"));
+				pc.setQuality(rs.getLong("quantity"));
+				pc.setTotaPrice(rs.getBigDecimal("total"));
 				//pc.setTotaPoint((long)((Object[])obj)[8]);
 				results.add(pc);
-		    }
-			tx.commit();
+			}
+			rs.close();
 			log.debug("retrieve list PromotionCus successful, result size: " + results.size());
 			return results;
 		} catch (Exception re) {
-			if (tx!=null) tx.rollback();
+			re.printStackTrace();
 			log.error("retrieve list PromotionCus failed", re);
 			throw re;
 		} finally{

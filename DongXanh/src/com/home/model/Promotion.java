@@ -1,9 +1,9 @@
 package com.home.model;
 
-import java.sql.Date;
 
 // Generated Feb 24, 2016 9:17:27 PM by Hibernate Tools 4.3.1
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 

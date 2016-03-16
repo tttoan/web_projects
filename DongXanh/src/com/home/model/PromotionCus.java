@@ -23,7 +23,6 @@ public class PromotionCus {
 	private boolean result;
 	private String resultString;
 	private int row_index;
-	private int userId;
 	private String productCode;
 	private String categoryName;
 	private String productName;
@@ -127,12 +126,6 @@ public class PromotionCus {
 	}
 	public void setRow_index(int row_index) {
 		this.row_index = row_index;
-	}
-	public int getUserId() {
-		return userId;
-	}
-	public void setUserId(int userId) {
-		this.userId = userId;
 	}
 	public String getProductCode() {
 		return productCode;

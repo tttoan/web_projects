@@ -8,10 +8,10 @@
             <column name="id" />
             <generator class="identity" />
         </id>
-        <many-to-one name="customer" class="com.home.model.Customer" fetch="select">
+        <many-to-one name="customer" class="com.home.model.Customer" fetch="join">
             <column name="customer_id" not-null="true" />
         </many-to-one>
-        <many-to-one name="promotion" class="com.home.model.Promotion" fetch="select">
+        <many-to-one name="promotion" class="com.home.model.Promotion" fetch="join">
             <column name="promotion_id" not-null="true" />
         </many-to-one>
         <property name="totalPoint" type="java.lang.Integer">

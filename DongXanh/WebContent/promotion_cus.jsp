@@ -32,7 +32,7 @@ pageEncoding="UTF-8"%>
 									<th>Số thùng</th>
 									<th>Số lượng</th>
 									<th>Kết quả</th>
-									<th>Thong bao</th>
+									<th>Thông báo</th>
 								</tr>
 							</thead>
 
