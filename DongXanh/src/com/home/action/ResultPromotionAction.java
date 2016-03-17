@@ -16,6 +16,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.util.ServletContextAware;
@@ -121,7 +122,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			promotionCuss = accessPromotionResult(mapResult, promotion);
 			ActionContext.getContext().getSession().put("promotionCuss", promotionCuss);
 			ActionContext.getContext().getSession().put("promotion", promotion);
-			setFilenameDownload(promotion.getPromotionName() + ".xls");
+			setFilenameDownload(ExcelUtil.removeInvalidChar(promotion.getPromotionName()) + ".xls");
 			return SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -326,6 +327,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	}
 	
 	public String exportPromotionReport() throws Exception {
+		ExcelUtil excelUtil = new ExcelUtil();
 		try {
 			Promotion promotion = (Promotion) ActionContext.getContext().getSession().get("promotion");
 			if(promotionCuss == null || promotionCuss.isEmpty()){
@@ -335,10 +337,9 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 				//Init data
 				String[] sheetNames = new String[]{"Kết quả"};
 	            List<String[]> headerColumns = new ArrayList<>();
-	            headerColumns.add(createHeaderReport(promotion));
+	            headerColumns.add(createHeaderReport(promotion, excelUtil));
 	            List<List<String[]>> listAllData = createExportContent(headerColumns.get(0), promotion);
 	            
-				ExcelUtil excelUtil = new ExcelUtil();
 				HSSFWorkbook myWorkBook = excelUtil.createWorkbook(sheetNames, headerColumns, listAllData, true);
 				//Write file to download
 				ByteArrayOutputStream boas = new ByteArrayOutputStream();
@@ -355,7 +356,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		}
 	}
 	
-	private String[] createHeaderReport(Promotion promotion){
+	private String[] createHeaderReport(Promotion promotion, ExcelUtil excelUtil){
 		List<String> list = new ArrayList<>();
 		list.add("No");
 		list.add("Mã khách hàng");
@@ -370,10 +371,12 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		Set<PromotionGift> promotionGifts = promotion.getPromotionGifts();
 		for (PromotionGift promotionGift : promotionGifts) {
 			list.add(promotionGift.getGift().getGiftName());
+			excelUtil.getMapColor().put(promotionGift.getGift().getGiftName(), HSSFColor.YELLOW.index);
 		}
 		Set<PromotionProduct> promotionProducts = promotion.getPromotionProducts();
 		for (PromotionProduct promotionProduct : promotionProducts) {
 			list.add(promotionProduct.getProduct().getProductName());
+			excelUtil.getMapColor().put(promotionProduct.getProduct().getProductName(), HSSFColor.ORANGE.index);
 		}
 		return (String[])list.toArray(new String[0]);
 	}
@@ -429,8 +432,8 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 					list.add(pc.getCustomerCode());
 					list.add(pc.getCustomerName());
 					list.add(pc.getSellMan());
-					list.add("" + pc.getTotalProduct() + "/" + pc.getPromotionRegister().getRegisterProducts().size());
-					list.add("" + pc.getTotalBox() + "/" + pc.getPromotionRegister().getTotalBox());
+					list.add("" + pc.getTotalProduct());
+					list.add("" + pc.getTotalBox());
 					list.add("" + pc.getQuality());
 					list.add("" + pc.getTotaPrice());
 					list.add(pc.getResultString());

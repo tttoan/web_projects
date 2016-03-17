@@ -2,6 +2,7 @@ package com.home.util;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -19,6 +20,16 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelUtil {
 
+	private HashMap<String, Short> mapColor = new HashMap<String, Short>();
+	
+	public HashMap<String, Short> getMapColor() {
+		return mapColor;
+	}
+
+	public void setMapColor(HashMap<String, Short> mapColor) {
+		this.mapColor = mapColor;
+	}
+
 	public Workbook getWorkbook(FileInputStream fis, String type) throws IOException {
 		Workbook wb = null;
 		if (type.equalsIgnoreCase("xls")) {
@@ -28,7 +39,7 @@ public class ExcelUtil {
 		}
 		return wb;
 	}
-
+	
 	public Object getValue(Cell cell) throws Exception {
 		Object value = "";
 		switch (cell.getCellType()) {
@@ -111,12 +122,12 @@ public class ExcelUtil {
         // Create font
         HSSFFont font01Bold = wb.createFont();
         font01Bold.setFontHeightInPoints((short) 12);
-        font01Bold.setFontName("Arial");
+        font01Bold.setFontName("Calibri");
         font01Bold.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
         
         HSSFFont font01Normal = wb.createFont();
         font01Normal.setFontHeightInPoints((short) 12);
-        font01Normal.setFontName("Arial");
+        font01Normal.setFontName("Calibri");
         font01Normal.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
         
         HSSFCellStyle cellstyleTblLeft = wb.createCellStyle();
@@ -140,7 +151,14 @@ public class ExcelUtil {
             }else{
                 creatSheetBody(wb, styleSheetNames[i], allData.get(i), 0);
             }
+            resizeColumn(styleSheetNames[i], HeaderColumns.get(i));
         }
+    }
+    
+    private void resizeColumn(HSSFSheet styleSheetName, String[] columnNames){
+    	 for (int i = 0; i < columnNames.length; i++) {
+    		 styleSheetName.autoSizeColumn(i);
+    	 }
     }
     
     
@@ -161,39 +179,57 @@ public class ExcelUtil {
         // Create font
         HSSFFont font01Bold = wb.createFont();
         font01Bold.setFontHeightInPoints((short) 12);
-        font01Bold.setFontName("Arial");
-        font01Bold.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+        font01Bold.setFontName("Calibri");
+        font01Bold.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
         font01Bold.setColor(HSSFColor.BLACK.index);
         
         //Create type
-        HSSFCellStyle cell_style = wb.createCellStyle();
-        cell_style.setFont(font01Bold);
+//        HSSFCellStyle cell_style = wb.createCellStyle();
+//        cell_style.setFont(font01Bold);
+//        
+//        cell_style.setBorderTop(HSSFCellStyle.BORDER_THIN);
+//        cell_style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+//        cell_style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+//        cell_style.setBorderRight(HSSFCellStyle.BORDER_THIN);
+//        cell_style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
         
-        cell_style.setBorderTop(HSSFCellStyle.BORDER_THIN);
-        cell_style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-        cell_style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        cell_style.setBorderRight(HSSFCellStyle.BORDER_THIN);
-        cell_style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+//        cell_style.setFillForegroundColor(HSSFColor.PALE_BLUE.index);
+//        cell_style.setFillBackgroundColor(HSSFColor.PALE_BLUE.index);
+//        cell_style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
         
-        cell_style.setFillForegroundColor(HSSFColor.PALE_BLUE.index);
-        cell_style.setFillBackgroundColor(HSSFColor.PALE_BLUE.index);
-        cell_style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-        
-        HSSFCellStyle font_cellHeader_day = wb.createCellStyle();
-        font_cellHeader_day.setFont(font01Bold);
-        font_cellHeader_day.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+//        HSSFCellStyle font_cellHeader_day = wb.createCellStyle();
+//        font_cellHeader_day.setFont(font01Bold);
+//        font_cellHeader_day.setAlignment(HSSFCellStyle.ALIGN_CENTER);
         
         rowHeader = styleSheetName.createRow((int) 0);
         for (int i = 0; i < columnNames.length; i++) {
-            
+        	
+        	 HSSFCellStyle cell_style = wb.createCellStyle();
+             cell_style.setFont(font01Bold);
+             
+             cell_style.setBorderTop(HSSFCellStyle.BORDER_THIN);
+             cell_style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+             cell_style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+             cell_style.setBorderRight(HSSFCellStyle.BORDER_THIN);
+             cell_style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        	if(mapColor.containsKey(columnNames[i])){
+        		cell_style.setFillForegroundColor(mapColor.get(columnNames[i]));
+        		cell_style.setFillBackgroundColor(mapColor.get(columnNames[i]));
+        		cell_style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        	}else{
+        		cell_style.setFillForegroundColor(HSSFColor.PALE_BLUE.index);
+        		cell_style.setFillBackgroundColor(HSSFColor.PALE_BLUE.index);
+        		cell_style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        	}
+
             cellHeader = rowHeader.createCell(i);
             //cellHeader.setEncoding(cellHeader.ENCODING_UTF_16);
             cellHeader.setCellValue(new HSSFRichTextString(columnNames[i]));
             cellHeader.setCellStyle(cell_style);
             
-            int colNum = cellHeader.getColumnIndex();
-            styleSheetName.setColumnWidth(colNum, (styleSheetName.getColumnWidth(colNum) + 3000));
-            styleSheetName.autoSizeColumn(i);
+//            int colNum = cellHeader.getColumnIndex();
+//            styleSheetName.setColumnWidth(colNum, (styleSheetName.getColumnWidth(colNum) + 3000));
+//            styleSheetName.autoSizeColumn(i);
         }
         
     }
@@ -217,13 +253,13 @@ public class ExcelUtil {
         // Create font
         HSSFFont font01Bold = wb.createFont();
         font01Bold.setFontHeightInPoints((short) 14);
-        font01Bold.setFontName("Arial");
+        font01Bold.setFontName("Calibri");
         font01Bold.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
         font01Bold.setColor(HSSFColor.BLACK.index);
         
         HSSFFont cell_font = wb.createFont();
         cell_font.setFontHeightInPoints((short) 11);
-        cell_font.setFontName("Arial");
+        cell_font.setFontName("Calibri");
         cell_font.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
         
         //
@@ -239,7 +275,7 @@ public class ExcelUtil {
         //
         HSSFFont cell_fontL = wb.createFont();
         cell_fontL.setFontHeightInPoints((short) 11);
-        cell_fontL.setFontName("Arial");
+        cell_fontL.setFontName("Calibri");
         cell_fontL.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
         cell_fontL.setColor(HSSFColor.BLUE.index);
         
@@ -300,7 +336,6 @@ public class ExcelUtil {
                 strC = strC.replace("?", "");
                 strC = strC.replace("*", "");
             }
-            
             
         } catch (Exception e) {
             e.printStackTrace();
