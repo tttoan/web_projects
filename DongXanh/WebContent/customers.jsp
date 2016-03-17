@@ -31,7 +31,7 @@
 										<td class=""><s:property value="businessName" /></td>
 										<td class=""><s:property value="directorMobile" /></td>
 										<td class=""> 
-											<a class="btn btn-primary btn-xs"><s:property value="%{groupCustomer.id}" /></a> 
+											<a class="btn btn-primary btn-xs"><s:property value="%{groupCustomer.groupName}" /></a> 
 										</td>
 										<td class=""><s:property value="email" /></td>
 										<td class="last"> 
