@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +25,7 @@ import com.home.dao.GroupCustomerHome;
 import com.home.dao.PromotionHome;
 import com.home.dao.PromotionRegistHome;
 import com.home.model.GroupCustomer;
+import com.home.model.Product;
 import com.home.model.Promotion;
 import com.home.model.PromotionCus;
 import com.home.model.PromotionGift;
@@ -118,6 +120,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 
 			promotionCuss = accessPromotionResult(mapResult, promotion);
 			ActionContext.getContext().getSession().put("promotionCuss", promotionCuss);
+			ActionContext.getContext().getSession().put("promotion", promotion);
 			setFilenameDownload(promotion.getPromotionName() + ".xls");
 			return SUCCESS;
 		} catch (Exception e) {
@@ -163,6 +166,9 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 							//Get list product register
 							List<RegisterProduct> listRegisterProducts = promotionRegistHome.getRegisterProducts(promotionRegister.getId(), promotion_id);
 
+							if(!listRegisterGifts.isEmpty()){
+								pCus.setResult(true);
+							}
 							//Duyet trong danh sach qua tang dang ky
 							StringBuilder resultString = new StringBuilder();
 							for (RegisterGift registerGift : listRegisterGifts) {
@@ -182,6 +188,9 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 							}else{
 								pCus.setResultString("Không đạt");
 							}
+							pCus.setListRegisterGifts(listRegisterGifts);
+							pCus.setListRegisterProducts(listRegisterProducts);
+							pCus.setPromotionRegister(promotionRegister);
 
 							result.add(pCus);
 						}
@@ -190,6 +199,9 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 					//Get promotion result
 					for (String customerCode : customerCodes) {
 						PromotionCus pCus = mapResult.get(customerCode);
+						if(!promotionGifts.isEmpty()){
+							pCus.setResult(true);
+						}
 						//Duyet trong danh sach qua tang dang ky
 						StringBuilder resultString = new StringBuilder();
 						for (PromotionGift promotionGift : promotionGifts) {
@@ -269,37 +281,18 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			engine.put(Params.PRODUCT_REGIST, product_regist);
 
 			Object objDescription = engine.eval(Params.FUNCION1);
-			Object objResult = engine.eval(Params.FUNCION2);
+			boolean objResult = (boolean)engine.eval(Params.FUNCION2);
 
-			if(!pCus.isResult()){
-				if(objResult == null){
+			if(Params.DEBT.equalsIgnoreCase(gift)){
+				if(objResult){
 					pCus.setResult(false);
-				}else{
-					if(objResult instanceof String){
-						try {
-							pCus.setResult(Boolean.getBoolean(StringUtil.notNull(objResult)));
-						} catch (Exception e) {
-							e.printStackTrace();
-							if("đạt".equalsIgnoreCase(StringUtil.notNull(objResult)) ||
-									"dat".equalsIgnoreCase(StringUtil.notNull(objResult))){
-								pCus.setResult(true);
-							}
-						}	
-					}
-					else if(objResult instanceof Boolean){
-						pCus.setResult((boolean)objResult);
-					}
-					else if(objResult instanceof Integer){
-						int intRs = (Integer)objResult;
-						if(intRs > 0){
-							pCus.setResult(true);
-						}else{
-							pCus.setResult(false);
-						}
-					}
-
+				}
+			}else{
+				if(pCus.isResult()){
+					pCus.setResult(objResult);
 				}
 			}
+			pCus.getMapGifts().put(gift, objResult);
 
 			return StringUtil.notNull(objDescription);
 		} catch (Exception e) {
@@ -334,6 +327,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	
 	public String exportPromotionReport() throws Exception {
 		try {
+			Promotion promotion = (Promotion) ActionContext.getContext().getSession().get("promotion");
 			if(promotionCuss == null || promotionCuss.isEmpty()){
 				promotionCuss = (List<PromotionCus>) ActionContext.getContext().getSession().get("promotionCuss");
 			}
@@ -341,8 +335,8 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 				//Init data
 				String[] sheetNames = new String[]{"Kết quả"};
 	            List<String[]> headerColumns = new ArrayList<>();
-	            headerColumns.add( new String[]{"No","Mã khách hàng","Tên khách hàng","NVTT","Số mặt hàng","Số thùng","Số lượng","Kết quả","Báo cáo"});
-	            List<List<String[]>> listAllData = createExportContent(headerColumns.get(0));
+	            headerColumns.add(createHeaderReport(promotion));
+	            List<List<String[]>> listAllData = createExportContent(headerColumns.get(0), promotion);
 	            
 				ExcelUtil excelUtil = new ExcelUtil();
 				HSSFWorkbook myWorkBook = excelUtil.createWorkbook(sheetNames, headerColumns, listAllData, true);
@@ -361,23 +355,102 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		}
 	}
 	
-	private List<List<String[]>> createExportContent(String[] header) throws Exception{
+	private String[] createHeaderReport(Promotion promotion){
+		List<String> list = new ArrayList<>();
+		list.add("No");
+		list.add("Mã khách hàng");
+		list.add("Tên khách hàng");
+		list.add("NVTT");
+		list.add("Số mặt hàng");
+		list.add("Số thùng");
+		list.add("Số lượng");
+		list.add("Tổng tiền");
+		list.add("Kết quả");
+		list.add("Báo cáo");
+		Set<PromotionGift> promotionGifts = promotion.getPromotionGifts();
+		for (PromotionGift promotionGift : promotionGifts) {
+			list.add(promotionGift.getGift().getGiftName());
+		}
+		Set<PromotionProduct> promotionProducts = promotion.getPromotionProducts();
+		for (PromotionProduct promotionProduct : promotionProducts) {
+			list.add(promotionProduct.getProduct().getProductName());
+		}
+		return (String[])list.toArray(new String[0]);
+	}
+	
+	private List<List<String[]>> createExportContent(String[] header, Promotion promotion) throws Exception{
 		 List<List<String[]>> listAllData = new ArrayList<>();
 		try {
 			List<String[]> data = new ArrayList<>();
 			int no = 1;
-			for (PromotionCus pc : promotionCuss) {
-				data.add(new String[]{
-						"" + (no++),
-						pc.getCustomerCode(),
-						pc.getCustomerName(),
-						pc.getSellMan(),
-						"" + pc.getTotalProduct(),
-						"" + pc.getTotalBox(),
-						"" + pc.getQuality(),
-						pc.getResultString(),
-						pc.getResultPromotion()
-				});
+			if(promotion.getCustomerRegist() != null && promotion.getCustomerRegist() == 1){
+				for (PromotionCus pc : promotionCuss) {
+					//Get list gifts register
+					//List<RegisterGift> listRegisterGifts = pc.getListRegisterGifts();
+					//Get list product register
+					List<RegisterProduct> listRegisterProducts = pc.getListRegisterProducts();
+					
+					List<String> list = new ArrayList<>();
+					list.add("" + (no++));
+					list.add(pc.getCustomerCode());
+					list.add(pc.getCustomerName());
+					list.add(pc.getSellMan());
+					list.add("" + pc.getTotalProduct() + "/" + pc.getPromotionRegister().getRegisterProducts().size());
+					list.add("" + pc.getTotalBox() + "/" + pc.getPromotionRegister().getTotalBox());
+					list.add("" + pc.getQuality());
+					list.add("" + pc.getTotaPrice());
+					list.add(pc.getResultString());
+					list.add(pc.getResultPromotion());
+					//Set gift
+					int g_len = 10+promotion.getPromotionGifts().size();
+					for (int i = 10; i < g_len; i++) {
+						if(pc.getMapGifts().containsKey(header[i])){
+							list.add("X");
+						}else{
+							list.add("");
+						}
+					}
+					//Set product
+					int p_len = g_len+promotion.getPromotionProducts().size();
+					for (int i = g_len; i < p_len; i++) {
+						for (RegisterProduct registerProduct : listRegisterProducts) {
+							if(header[i].equalsIgnoreCase(registerProduct.getPromotionProduct().getProduct().getProductName())){
+								list.add(getProductBoxDone(header[i], pc.getProducts()) + "/" +registerProduct.getBox());
+								break;
+							}
+						}
+					}
+					data.add((String[])list.toArray(new String[0]));
+				}
+			}else{
+				for (PromotionCus pc : promotionCuss) {
+					List<String> list = new ArrayList<>();
+					list.add("" + (no++));
+					list.add(pc.getCustomerCode());
+					list.add(pc.getCustomerName());
+					list.add(pc.getSellMan());
+					list.add("" + pc.getTotalProduct() + "/" + pc.getPromotionRegister().getRegisterProducts().size());
+					list.add("" + pc.getTotalBox() + "/" + pc.getPromotionRegister().getTotalBox());
+					list.add("" + pc.getQuality());
+					list.add("" + pc.getTotaPrice());
+					list.add(pc.getResultString());
+					list.add(pc.getResultPromotion());
+					//Set gift
+					int g_len = 10+promotion.getPromotionGifts().size();
+					for (int i = 10; i < g_len; i++) {
+						if(pc.getMapGifts().containsKey(header[i])){
+							list.add("X");
+						}else{
+							list.add("");
+						}
+					}
+					//Set product
+					int p_len = g_len+promotion.getPromotionProducts().size();
+					for (int i = g_len; i < p_len; i++) {
+						list.add(""+getProductBoxDone(header[i], pc.getProducts()));
+					}
+					data.add((String[])list.toArray(new String[0]));
+				}
 			}
 			listAllData.add(data);
 		} catch (Exception e) {
@@ -385,6 +458,15 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			throw e;
 		}
 		return listAllData;
+	}
+	
+	private int getProductBoxDone(String productName, Set<Product> products){
+		for (Product product : products) {
+			if(productName.equalsIgnoreCase(product.getProductName())){
+				return product.getMinQuantity();
+			}
+		}
+		return 0;
 	}
 
 	public HttpServletRequest getRequest() {

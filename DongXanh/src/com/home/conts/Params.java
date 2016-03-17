@@ -54,4 +54,9 @@ public class Params {
 	 */
 	public static final String GIFT = "$qua";
 	
+	/**
+	 * No cong ty phai tra lai
+	 */
+	public static final String DEBT = "Nợ công ty";
+	
 }

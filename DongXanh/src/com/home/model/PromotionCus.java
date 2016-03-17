@@ -4,11 +4,11 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.home.util.StringUtil;
 
-import antlr.collections.List;
 
 public class PromotionCus {
 	private String promotionName;
@@ -32,8 +32,21 @@ public class PromotionCus {
 	private  long totalPoint;
 	private BigDecimal totaPrice;
 	private Set<Product> products = new HashSet<Product>(0);
-	private Set<PromotionGift> promotionGifts = new HashSet<PromotionGift>(0);
+	//Get customer register
+	private PromotionRegister promotionRegister;
+	//Get list gifts register
+	private List<RegisterGift> listRegisterGifts = new ArrayList<>();
+	//Get list product register
+	private List<RegisterProduct> listRegisterProducts = new ArrayList<>();
+	//Gift
+	private HashMap<String, Boolean> mapGifts = new HashMap<>();
 	
+	public HashMap<String, Boolean> getMapGifts() {
+		return mapGifts;
+	}
+	public void setMapGifts(HashMap<String, Boolean> mapGifts) {
+		this.mapGifts = mapGifts;
+	}
 	public String getResultPromotion() {
 		return resultPromotion;
 	}
@@ -53,12 +66,6 @@ public class PromotionCus {
 	}
 	public void setResultString(String resultString) {
 		this.resultString = resultString;
-	}
-	public Set<PromotionGift> getPromotionGifts() {
-		return promotionGifts;
-	}
-	public void setPromotionGifts(Set<PromotionGift> promotionGifts) {
-		this.promotionGifts = promotionGifts;
 	}
 	public int getCustomerId() {
 		return customerId;
@@ -196,4 +203,22 @@ public class PromotionCus {
 		return values;
 	}
 	
+	public List<RegisterGift> getListRegisterGifts() {
+		return listRegisterGifts;
+	}
+	public void setListRegisterGifts(List<RegisterGift> listRegisterGifts) {
+		this.listRegisterGifts = listRegisterGifts;
+	}
+	public List<RegisterProduct> getListRegisterProducts() {
+		return listRegisterProducts;
+	}
+	public void setListRegisterProducts(List<RegisterProduct> listRegisterProducts) {
+		this.listRegisterProducts = listRegisterProducts;
+	}
+	public PromotionRegister getPromotionRegister() {
+		return promotionRegister;
+	}
+	public void setPromotionRegister(PromotionRegister promotionRegister) {
+		this.promotionRegister = promotionRegister;
+	}
 }

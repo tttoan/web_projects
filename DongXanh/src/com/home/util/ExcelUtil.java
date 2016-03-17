@@ -193,7 +193,7 @@ public class ExcelUtil {
             
             int colNum = cellHeader.getColumnIndex();
             styleSheetName.setColumnWidth(colNum, (styleSheetName.getColumnWidth(colNum) + 3000));
-            
+            styleSheetName.autoSizeColumn(i);
         }
         
     }
