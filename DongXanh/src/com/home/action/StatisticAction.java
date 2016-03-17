@@ -115,9 +115,9 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	@Override
 	public void validate() {
-		// loadLookupEmployee();
-		// loadLookupCustomer();
-		// loadLookupProduct();
+		 loadLookupEmployee();
+		 loadLookupCustomer();
+		 loadLookupProduct();
 	}
 
 	public SessionFactory getSessionFactory() {

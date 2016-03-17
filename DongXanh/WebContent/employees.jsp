@@ -22,7 +22,7 @@
 									<th>Email</th>
 									<th>Ngày sinh</th>
 									<th>Điện thoại</th>
-									<th>Nhóm</th>
+									<th>Nhóm quyền</th>
 									<th class=" no-link last"><span class="nobr"></span></th>
 								</tr>
 							</thead>

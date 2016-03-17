@@ -19,7 +19,7 @@
 									<th>Mã khách hàng</th>
 									<th>Tên cửa hàng</th>
 									<th>Số điện thoại</th>
-									<th>Nhóm Cấp</th>
+									<th>Nhóm cấp</th>
 									<th>Email</th>
 									<th class=" no-link last"><span class="nobr"></span></th>
 								</tr>
