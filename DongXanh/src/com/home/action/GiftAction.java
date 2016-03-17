@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.util.ServletContextAware;
 
+import com.home.conts.Params;
 import com.home.dao.GiftHome;
 import com.home.model.Gift;
 import com.home.util.HibernateUtil;
@@ -103,6 +104,9 @@ public class GiftAction implements ServletContextAware{
 	public String update() throws Exception {
 		try {
 			Gift record = new Gift();
+			if(id == 0){
+				giftName = Params.GIFT_DEBT;
+			}
 			record.setId(id);
 			record.setGiftName(giftName);
 			System.out.println(giftName);
@@ -120,10 +124,12 @@ public class GiftAction implements ServletContextAware{
 
 	public String delete() throws Exception {
 		try {
-			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
-			GiftHome giftHome = new GiftHome(HibernateUtil.getSessionFactory());
-			Gift record = giftHome.findById(id);
-			giftHome.delete(record);
+			if(id != 0){
+				//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
+				GiftHome giftHome = new GiftHome(HibernateUtil.getSessionFactory());
+				Gift record = giftHome.findById(id);
+				giftHome.delete(record);
+			}
 			result = "OK";
 		} catch (Exception e){
 			result = "ERROR";

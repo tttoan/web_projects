@@ -57,6 +57,6 @@ public class Params {
 	/**
 	 * No cong ty phai tra lai
 	 */
-	public static final String DEBT = "Nợ công ty";
+	public static final String GIFT_DEBT = "Nợ công ty";
 	
 }

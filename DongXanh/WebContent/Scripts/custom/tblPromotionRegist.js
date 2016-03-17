@@ -128,6 +128,13 @@ $(document).ready(function() {
         										return giftOptions = options; //Cache results and return options
         									}
         								},
+        								applyAll: {
+        									title: 'Ap dung tat ca khach hang',
+        									list: false,
+        									type: 'checkbox',
+        				                    values: { 'false': 'Khong ap dung', 'true': 'Ap dung' },
+        				                    defaultValue: 'false'
+        								}
                                     },
                                     loadingRecords: function (event, data) {
                             			GiftNumber = 0;

@@ -283,7 +283,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			Object objDescription = engine.eval(Params.FUNCION1);
 			boolean objResult = (boolean)engine.eval(Params.FUNCION2);
 
-			if(Params.DEBT.equalsIgnoreCase(gift)){
+			if(Params.GIFT_DEBT.equalsIgnoreCase(gift)){
 				if(objResult){
 					pCus.setResult(false);
 				}

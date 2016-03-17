@@ -39,6 +39,8 @@ public class RegisterGiftAction implements ServletContextAware{
 	private Integer register_id;
 	private Integer p_gift_id;
 	private Integer promotion_id;
+	private boolean applyAll;
+
 
 	public static void main(String[] args) {
 		try {
@@ -103,6 +105,9 @@ public class RegisterGiftAction implements ServletContextAware{
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
 			register_id = Integer.parseInt(request.getParameter("register_id"));
 			
+			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
+			RegisterGiftHome registerGiftHome = new RegisterGiftHome(HibernateUtil.getSessionFactory());
+			
 			record = new RegisterGift();
 			record.setId(id);
 			
@@ -110,13 +115,18 @@ public class RegisterGiftAction implements ServletContextAware{
 			promotionGift.setId(p_gift_id);
 			record.setPromotionGift(promotionGift);
 			
-			PromotionRegister promotionRegister = new PromotionRegister();
-			promotionRegister.setId(register_id);
-			record.setPromotionRegister(promotionRegister);
+			if(applyAll){
+				PromotionRegister promotionRegister = new PromotionRegister();
+				promotionRegister.setId(register_id);
+				record.setPromotionRegister(promotionRegister);
+				registerGiftHome.attachDirty(record);
+			}else{
+				PromotionRegister promotionRegister = new PromotionRegister();
+				promotionRegister.setId(register_id);
+				record.setPromotionRegister(promotionRegister);
+				registerGiftHome.attachDirty(record);
+			}
 			
-			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
-			RegisterGiftHome registerGiftHome = new RegisterGiftHome(HibernateUtil.getSessionFactory());
-			registerGiftHome.attachDirty(record);
 			result = "OK";
 		} catch (Exception e) {
 			result = "ERROR";
@@ -131,6 +141,9 @@ public class RegisterGiftAction implements ServletContextAware{
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
 			register_id = Integer.parseInt(request.getParameter("register_id"));
 			
+			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
+			RegisterGiftHome registerGiftHome = new RegisterGiftHome(HibernateUtil.getSessionFactory());
+			
 			RegisterGift record = new RegisterGift();
 			record.setId(id);
 			
@@ -138,13 +151,22 @@ public class RegisterGiftAction implements ServletContextAware{
 			promotionGift.setId(p_gift_id);
 			record.setPromotionGift(promotionGift);
 			
-			PromotionRegister promotionRegister = new PromotionRegister();
-			promotionRegister.setId(register_id);
-			record.setPromotionRegister(promotionRegister);
 			
-			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
-			RegisterGiftHome registerGiftHome = new RegisterGiftHome(HibernateUtil.getSessionFactory());
-			registerGiftHome.update(record);
+			
+			if(applyAll){
+				PromotionRegister promotionRegister = new PromotionRegister();
+				promotionRegister.setId(register_id);
+				record.setPromotionRegister(promotionRegister);
+				
+				registerGiftHome.update(record);
+			}else{
+				PromotionRegister promotionRegister = new PromotionRegister();
+				promotionRegister.setId(register_id);
+				record.setPromotionRegister(promotionRegister);
+				
+				registerGiftHome.update(record);
+			}
+			
 			result = "OK";
 		} catch (Exception e) {
 			result = "ERROR";
@@ -274,5 +296,11 @@ public class RegisterGiftAction implements ServletContextAware{
 		this.promotion_id = promotion_id;
 	}
 
+	public boolean getApplyAll() {
+		return applyAll;
+	}
 
+	public void setApplyAll(boolean applyAll) {
+		this.applyAll = applyAll;
+	}
 }
