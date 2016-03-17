@@ -212,7 +212,7 @@
 		<action name="promotionResultDownload" method="exportPromotionReport"
 			class="com.home.action.ResultPromotionAction">
 	        <result name="success" type="stream">
-	                <param name="contentDisposition">attachment;filename=${reportFile}</param>
+	                <param name="contentDisposition">attachment;filename=${filenameDownload}</param>
 	                <param name="contentType">application/vnd.ms-excel</param>
 	                <param name="inputName">inputStream</param>
 	                <param name="bufferSize">1024</param>

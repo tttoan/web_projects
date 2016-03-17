@@ -52,7 +52,6 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	private Integer promotion_id;
 	private HashMap<Integer, Integer> mapProductPoint = new HashMap<Integer, Integer>();
 	private InputStream inputStream;
-	private String reportFile;
 	private String filenameDownload = "Kết quả khuyến mãi.xls";
 
 	@Override
@@ -123,6 +122,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			ActionContext.getContext().getSession().put("promotionCuss", promotionCuss);
 			ActionContext.getContext().getSession().put("promotion", promotion);
 			setFilenameDownload(ExcelUtil.removeInvalidChar(promotion.getPromotionName()) + ".xls");
+			ActionContext.getContext().getSession().put("filenameDownload", getFilenameDownload());
 			return SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -139,6 +139,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 				Set<PromotionGift> promotionGifts = promotion.getPromotionGifts();
 				Set<PromotionProduct> promotionProducts = promotion.getPromotionProducts();
 				mapProductPoint = promotionRegistHome.getMapProductsRegister(promotion_id);
+				ActionContext.getContext().getSession().put("mapProductPoint", mapProductPoint);
 
 				if(promotionRegisters == null){
 					//Get from DB again nha ku
@@ -330,9 +331,9 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		ExcelUtil excelUtil = new ExcelUtil();
 		try {
 			Promotion promotion = (Promotion) ActionContext.getContext().getSession().get("promotion");
-			if(promotionCuss == null || promotionCuss.isEmpty()){
-				promotionCuss = (List<PromotionCus>) ActionContext.getContext().getSession().get("promotionCuss");
-			}
+			mapProductPoint = (HashMap) ActionContext.getContext().getSession().get("mapProductPoint");
+			promotionCuss = (List<PromotionCus>) ActionContext.getContext().getSession().get("promotionCuss");
+			filenameDownload = "Result_"+SystemUtil.getCurrentDateYYYY_MM_DD()+".xls";//(String) ActionContext.getContext().getSession().get("filenameDownload");
 			try {
 				//Init data
 				String[] sheetNames = new String[]{"Kết quả"};
@@ -366,6 +367,9 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		list.add("Số thùng");
 		list.add("Số lượng");
 		list.add("Tổng tiền");
+		if(promotion.getCustomerRegist() != null && promotion.getCustomerRegist() == 1){
+			list.add("Số điểm");
+		}
 		list.add("Kết quả");
 		list.add("Báo cáo");
 		Set<PromotionGift> promotionGifts = promotion.getPromotionGifts();
@@ -402,13 +406,18 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 					list.add("" + pc.getTotalBox() + "/" + pc.getPromotionRegister().getTotalBox());
 					list.add("" + pc.getQuality());
 					list.add("" + pc.getTotaPrice());
+					list.add("" + pc.getTotaPoint(mapProductPoint) + "/" + pc.getPromotionRegister().getTotalPoint());
 					list.add(pc.getResultString());
 					list.add(pc.getResultPromotion());
 					//Set gift
-					int g_len = 10+promotion.getPromotionGifts().size();
-					for (int i = 10; i < g_len; i++) {
+					int g_len = 11+promotion.getPromotionGifts().size();
+					for (int i = 11; i < g_len; i++) {
 						if(pc.getMapGifts().containsKey(header[i])){
-							list.add("X");
+							if(pc.getMapGifts().get(header[i])){
+								list.add("ok");
+							}else{
+								list.add("not ok");
+							}
 						}else{
 							list.add("");
 						}
@@ -416,11 +425,16 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 					//Set product
 					int p_len = g_len+promotion.getPromotionProducts().size();
 					for (int i = g_len; i < p_len; i++) {
+						boolean flag = true;
 						for (RegisterProduct registerProduct : listRegisterProducts) {
 							if(header[i].equalsIgnoreCase(registerProduct.getPromotionProduct().getProduct().getProductName())){
 								list.add(getProductBoxDone(header[i], pc.getProducts()) + "/" +registerProduct.getBox());
+								flag = false;
 								break;
 							}
+						}
+						if(flag){
+							list.add("");
 						}
 					}
 					data.add((String[])list.toArray(new String[0]));
@@ -442,7 +456,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 					int g_len = 10+promotion.getPromotionGifts().size();
 					for (int i = 10; i < g_len; i++) {
 						if(pc.getMapGifts().containsKey(header[i])){
-							list.add("X");
+							list.add("x");
 						}else{
 							list.add("");
 						}
@@ -504,13 +518,6 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		this.groupCustomers = groupCustomers;
 	}
 
-	public String getReportFile() {
-		return reportFile;
-	}
-
-	public void setReportFile(String reportFile) {
-		this.reportFile = reportFile;
-	}
 
 	public InputStream getInputStream() {
 		return inputStream;

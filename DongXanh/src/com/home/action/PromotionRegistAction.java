@@ -42,7 +42,8 @@ public class PromotionRegistAction implements ServletContextAware{
 
 	public static void main(String[] args) {
 		try {
-			new PromotionRegistAction().list();
+			PromotionRegistHome promotionRegistHome = new PromotionRegistHome(HibernateUtil.getSessionFactory());
+			promotionRegistHome.getListPromotionRegister(3);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

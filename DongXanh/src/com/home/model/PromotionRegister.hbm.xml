@@ -20,13 +20,13 @@
         <property name="totalBox" type="java.lang.Integer">
             <column name="total_box" />
         </property>
-        <set name="registerGifts" table="register_gift" inverse="true" lazy="true" fetch="select">
+        <set name="registerGifts" table="register_gift" inverse="true" fetch="join">
             <key>
                 <column name="register_id" not-null="true" />
             </key>
             <one-to-many class="com.home.model.RegisterGift" />
         </set>
-        <set name="registerProducts" table="register_product" inverse="true" lazy="true" fetch="select">
+        <set name="registerProducts" table="register_product" inverse="true" fetch="join">
             <key>
                 <column name="register_id" not-null="true" />
             </key>

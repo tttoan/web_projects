@@ -11,6 +11,7 @@ import org.apache.struts2.util.ServletContextAware;
 
 import com.home.dao.GiftHome;
 import com.home.dao.PromotionGiftHome;
+import com.home.dao.PromotionRegistHome;
 import com.home.dao.RegisterGiftHome;
 import com.home.model.PromotionGift;
 import com.home.model.PromotionRegister;
@@ -104,6 +105,7 @@ public class RegisterGiftAction implements ServletContextAware{
 		try {
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
 			register_id = Integer.parseInt(request.getParameter("register_id"));
+			promotion_id = Integer.parseInt(request.getParameter("promotion_id"));
 			
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
 			RegisterGiftHome registerGiftHome = new RegisterGiftHome(HibernateUtil.getSessionFactory());
@@ -116,10 +118,12 @@ public class RegisterGiftAction implements ServletContextAware{
 			record.setPromotionGift(promotionGift);
 			
 			if(applyAll){
-				PromotionRegister promotionRegister = new PromotionRegister();
-				promotionRegister.setId(register_id);
-				record.setPromotionRegister(promotionRegister);
-				registerGiftHome.attachDirty(record);
+				PromotionRegistHome promotionRegistHome = new PromotionRegistHome(HibernateUtil.getSessionFactory());
+				List<PromotionRegister> list = promotionRegistHome.getListPromotionRegister(promotion_id);
+				for (PromotionRegister pr : list) {
+					record.setPromotionRegister(pr);
+					registerGiftHome.attachDirty(record);
+				}
 			}else{
 				PromotionRegister promotionRegister = new PromotionRegister();
 				promotionRegister.setId(register_id);
@@ -140,6 +144,7 @@ public class RegisterGiftAction implements ServletContextAware{
 		try {
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
 			register_id = Integer.parseInt(request.getParameter("register_id"));
+			promotion_id = Integer.parseInt(request.getParameter("promotion_id"));
 			
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
 			RegisterGiftHome registerGiftHome = new RegisterGiftHome(HibernateUtil.getSessionFactory());
@@ -151,19 +156,17 @@ public class RegisterGiftAction implements ServletContextAware{
 			promotionGift.setId(p_gift_id);
 			record.setPromotionGift(promotionGift);
 			
-			
-			
 			if(applyAll){
-				PromotionRegister promotionRegister = new PromotionRegister();
-				promotionRegister.setId(register_id);
-				record.setPromotionRegister(promotionRegister);
-				
-				registerGiftHome.update(record);
+				PromotionRegistHome promotionRegistHome = new PromotionRegistHome(HibernateUtil.getSessionFactory());
+				List<PromotionRegister> list = promotionRegistHome.getListPromotionRegister(promotion_id);
+				for (PromotionRegister pr : list) {
+					record.setPromotionRegister(pr);
+					registerGiftHome.update(record);
+				}
 			}else{
 				PromotionRegister promotionRegister = new PromotionRegister();
 				promotionRegister.setId(register_id);
 				record.setPromotionRegister(promotionRegister);
-				
 				registerGiftHome.update(record);
 			}
 			

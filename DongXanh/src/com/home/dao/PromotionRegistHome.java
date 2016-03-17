@@ -344,8 +344,8 @@ public class PromotionRegistHome {
 				
 				Product product = new Product();
 				product.setId(rs.getInt("product_id"));
-				product.setProductCode("product_code");
-				product.setProductName("product_name");
+				product.setProductCode(rs.getString("product_code"));
+				product.setProductName(rs.getString("product_name"));
 				promotionProduct.setProduct(product);
 				
 				results.add(registerProduct);
@@ -369,18 +369,31 @@ public class PromotionRegistHome {
 	public List<PromotionRegister> getListPromotionRegister(int promotion_id) throws Exception{
 		log.debug("retrieve list PromotionRegister");
 		Session session = null;
-		Transaction tx = null;
+		List<PromotionRegister> results = new ArrayList<PromotionRegister>();
 		try {
 			session = sessionFactory.openSession();
-			tx = session.beginTransaction();
-			Query query  = session.createQuery("From PromotionRegister Where promotion = :promotion Order By id");
-			query.setParameter("promotion", promotion_id);
-			List<PromotionRegister> results =  query.list();
-			tx.commit();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			ResultSet rs = conn.createStatement().executeQuery(
+					"SELECT * FROM `promotion_register`"
+					+ "WHERE promotion_id="+promotion_id+" ORDER BY id");
+			while(rs.next()){
+				PromotionRegister promotionRegister = new PromotionRegister();
+				promotionRegister.setId(rs.getInt("id"));
+				promotionRegister.setCustomer_id(rs.getInt("customer_id"));
+				Customer cus = new Customer();
+				cus.setId(rs.getInt("customer_id"));
+				promotionRegister.setCustomer(cus);
+				promotionRegister.setTotalBox(rs.getInt("total_box"));
+				promotionRegister.setTotalPoint(rs.getInt("total_point"));
+				promotionRegister.setPromotion_id(promotion_id);
+				results.add(promotionRegister);
+			}
+			rs.close();
 			log.debug("retrieve list PromotionRegister successful, result size: " + results.size());
 			return results;
 		} catch (Exception re) {
-			if (tx!=null) tx.rollback();
 			log.error("retrieve list PromotionRegister failed", re);
 			throw re;
 		} finally{

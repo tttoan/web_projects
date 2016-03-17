@@ -129,10 +129,10 @@ $(document).ready(function() {
         									}
         								},
         								applyAll: {
-        									title: 'Ap dung tat ca khach hang',
+        									title: 'Áp dụng cho tất cả khách hàng',
         									list: false,
         									type: 'checkbox',
-        				                    values: { 'false': 'Khong ap dung', 'true': 'Ap dung' },
+        				                    values: { 'false': 'Không áp dụng', 'true': 'Áp dụng' },
         				                    defaultValue: 'false'
         								}
                                     },

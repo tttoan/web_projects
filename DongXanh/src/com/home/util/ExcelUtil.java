@@ -251,11 +251,11 @@ public class ExcelUtil {
         int lenOfData;
         
         // Create font
-        HSSFFont font01Bold = wb.createFont();
-        font01Bold.setFontHeightInPoints((short) 14);
-        font01Bold.setFontName("Calibri");
-        font01Bold.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
-        font01Bold.setColor(HSSFColor.BLACK.index);
+//        HSSFFont font01Bold = wb.createFont();
+//        font01Bold.setFontHeightInPoints((short) 14);
+//        font01Bold.setFontName("Calibri");
+//        font01Bold.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+//        font01Bold.setColor(HSSFColor.BLACK.index);
         
         HSSFFont cell_font = wb.createFont();
         cell_font.setFontHeightInPoints((short) 11);
@@ -266,24 +266,29 @@ public class ExcelUtil {
         HSSFCellStyle cell_styleL = wb.createCellStyle();
         cell_styleL.setFont(cell_font);
         cell_styleL.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+        cell_styleL.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        cell_styleL.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+        cell_styleL.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+        cell_styleL.setBorderRight(HSSFCellStyle.BORDER_THIN);
+        cell_styleL.setAlignment(HSSFCellStyle.ALIGN_CENTER);
         
-        HSSFCellStyle cell_styleR = wb.createCellStyle();
-        cell_styleR.setFont(cell_font);
-        cell_styleR.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
-        
-        
-        //
-        HSSFFont cell_fontL = wb.createFont();
-        cell_fontL.setFontHeightInPoints((short) 11);
-        cell_fontL.setFontName("Calibri");
-        cell_fontL.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
-        cell_fontL.setColor(HSSFColor.BLUE.index);
-        
-        
-        //
-        HSSFCellStyle cell_styleLink = wb.createCellStyle();
-        cell_styleLink.setFont(cell_fontL);
-        cell_styleLink.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+//        HSSFCellStyle cell_styleR = wb.createCellStyle();
+//        cell_styleR.setFont(cell_font);
+//        cell_styleR.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
+//        
+//        
+//        //
+//        HSSFFont cell_fontL = wb.createFont();
+//        cell_fontL.setFontHeightInPoints((short) 11);
+//        cell_fontL.setFontName("Calibri");
+//        cell_fontL.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+//        cell_fontL.setColor(HSSFColor.BLUE.index);
+//        
+//        
+//        //
+//        HSSFCellStyle cell_styleLink = wb.createCellStyle();
+//        cell_styleLink.setFont(cell_fontL);
+//        cell_styleLink.setAlignment(HSSFCellStyle.ALIGN_CENTER);
         
         String value;
         for (int i = 0; i < len; i++) {
