@@ -16,7 +16,7 @@
 					<sx:div label="Bảng kê Cấp 1 ">
 						<div class="x_panel">
 							<div class="x_content">
-								<s:form action="import_statistic_level1" method="post"
+								<s:form action="import_statistic_level_one" namespace="/" method="post"
 									theme="bootstrap" enctype="multipart/form-data"
 									cssClass="form-horizontal form-label-left">
 									<s:if test="hasActionErrors()">
@@ -52,7 +52,7 @@
 					<sx:div label="Bảng kê Cấp 2 ">
 						<div class="x_panel">
 							<div class="x_content">
-								<s:form action="import_statistic_level2" method="post"
+								<s:form action="import_statistic_level_two" namespace="/" method="post"
 									theme="bootstrap" enctype="multipart/form-data"
 									cssClass="form-horizontal form-label-left">
 									<s:if test="hasActionErrors()">

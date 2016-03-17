@@ -97,7 +97,7 @@
 			<result name="success" type="redirectAction">list_statistic</result>
 		</action>
 
-		<action name="import_statistic_level1" method="importStatisticLevel1"
+		<action name="import_statistic_level_one" method="importStatisticLevelOne"
 			class="com.home.action.StatisticAction">
 			<interceptor-ref name="defaultStack" />
 			<interceptor-ref name="fileUpload">
@@ -114,21 +114,20 @@
 			<result name="success">/import_statistic.jsp</result>
 		</action>
 
-		<action name="import_statistic_level2" method="importStatisticLevel2"
+		<action name="import_statistic_level_two" method="importStatisticLevelTwo"
 			class="com.home.action.StatisticAction">
 			<interceptor-ref name="defaultStack" />
 			<interceptor-ref name="fileUpload">
 				<param name="allowedTypes">application/ms-excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
 			</interceptor-ref>
 			<interceptor-ref name="execAndWait">
-				<!-- override delay and delaySleepInterval parameters of execAndWait 
-					to 500ms -->
 				<param name="delay">1000</param>
 				<param name="delaySleepInterval">1000</param>
 			</interceptor-ref>
 			<result name="wait">/waiting.jsp</result>
 			<result name="success">/import_statistic.jsp</result>
 		</action>
+		
 		<action name="import_customer" method="importCustomer"
 			class="com.home.action.CustomerAction">
 			<interceptor-ref name="defaultStack" />
