@@ -19,7 +19,7 @@
 									<th>Mã khách hàng</th>
 									<th>Tên cửa hàng</th>
 									<th>Số điện thoại</th>
-									<th>Nhóm</th>
+									<th>Nhóm Cấp</th>
 									<th>Email</th>
 									<th class=" no-link last"><span class="nobr"></span></th>
 								</tr>
@@ -31,7 +31,7 @@
 										<td class=""><s:property value="businessName" /></td>
 										<td class=""><s:property value="directorMobile" /></td>
 										<td class=""> 
-											<a class="btn btn-success btn-xs"><s:property value="%{groupCustomer.groupName}" /></a> 
+											<a class="btn btn-primary btn-xs"><s:property value="%{groupCustomer.id}" /></a> 
 										</td>
 										<td class=""><s:property value="email" /></td>
 										<td class="last"> 

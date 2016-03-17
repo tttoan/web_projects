@@ -23,7 +23,7 @@
         <many-to-one name="customerByCustomer1Level1Id" class="com.home.model.Customer" fetch="join">
             <column name="customer1_level1_id" />
         </many-to-one>
-        <many-to-one name="groupCustomer" class="com.home.model.GroupCustomer" fetch="join">
+        <many-to-one name="groupCustomer" class="com.home.model.GroupCustomer" fetch="select">
             <column name="group_customer_id" />
         </many-to-one>
         <many-to-one name="user" class="com.home.model.User" fetch="join">

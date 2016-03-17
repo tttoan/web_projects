@@ -68,6 +68,7 @@
 		</action>
 		<action name="list_customer" class="com.home.action.CustomerAction">
 			<result name="success">/customers.jsp</result>
+			<result name="error">/index.jsp</result>
 		</action>
 		<action name="delete_customer" method="deleteCustomerById"
 			class="com.home.action.CustomerAction">
@@ -98,20 +99,10 @@
 
 		<action name="import_statistic_level1" method="importStatisticLevel1"
 			class="com.home.action.StatisticAction">
-			<interceptor-ref name="exception" />
-			<interceptor-ref name="i18n" />
+			<interceptor-ref name="defaultStack" />
 			<interceptor-ref name="fileUpload">
 				<param name="allowedTypes">application/ms-excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
 				<param name="maximumSize">10240</param>
-			</interceptor-ref>
-			<interceptor-ref name="params">
-				<param name="excludeParams">dojo\..*,^struts\..*</param>
-			</interceptor-ref>
-			<interceptor-ref name="validation">
-				<param name="excludeMethods">input,back,cancel,browse</param>
-			</interceptor-ref>
-			<interceptor-ref name="workflow">
-				<param name="excludeMethods">input,back,cancel,browse</param>
 			</interceptor-ref>
 				<interceptor-ref name="execAndWait">
 				<!-- override delay and delaySleepInterval parameters of execAndWait 

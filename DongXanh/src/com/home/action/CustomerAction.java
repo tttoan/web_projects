@@ -41,6 +41,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private int custId = 0;
 	private Customer cust = new Customer();
 	public List<String> listLookupEmployeeForCus = new ArrayList<>();
+	private List<Customer> customers = new ArrayList<>();
 	private int grpCusId;
 	private ServletContext ctx;
 	private HttpServletRequest request;
@@ -229,6 +230,16 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	}
 
+	public String findAllCustomer() {
+		try {
+			CustomerHome cusHome = new CustomerHome(getSessionFactory());
+			customers = cusHome.findAll();
+			return SUCCESS;
+		} catch (Exception e) {
+			return ERROR;
+		}
+	}
+	
 	public String findCustomer() {
 		try {
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
@@ -519,6 +530,14 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	public void setCustId(int custId) {
 		this.custId = custId;
+	}
+
+	public List<Customer> getCustomers() {
+		return customers;
+	}
+
+	public void setCustomers(List<Customer> customers) {
+		this.customers = customers;
 	}
 
 }
