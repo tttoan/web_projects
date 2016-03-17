@@ -239,18 +239,27 @@ public class UserHome {
 
 	public User getUserByFullName(String fullName) {
 		log.debug("finding User instance by full name");
+		Transaction tx = null;
+		Session session = null;
 		try {
-			Session session = sessionFactory.openSession();
-			Transaction tx = session.beginTransaction();
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
 			Query query = session.createQuery("from User where full_name=:fullName");
 			query.setString("fullName", fullName);
 			User results = (User) query.uniqueResult();
 			tx.commit();
-			session.close();
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by full name failed", re);
 			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 	}

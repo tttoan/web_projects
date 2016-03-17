@@ -164,6 +164,40 @@ public class ProductHome {
 		}
 	}
 
+	public Product findProductByCode(String productCode) throws Exception {
+		log.debug("getting Product instance with code: " + productCode);
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Query quey = session.createQuery("from Product where product_code=:productCode");
+			quey.setString("productCode", productCode);
+			Product instance = (Product) quey.uniqueResult();
+			tx.commit();
+			if (instance == null) {
+				log.debug("get successful, no instance found");
+				throw new Exception("get Product successful, no instance found");
+			} else {
+				log.debug("get successful, instance found");
+			}
+			return instance;
+		} catch (Exception re) {
+			if (tx!=null) tx.rollback();
+			log.error("get failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.error("get failed", e);
+			}
+		}
+	}
+	
 	public Product findById(java.lang.Integer id) throws Exception{
 		log.debug("getting Product instance with id: " + id);
 		Transaction tx = null;
@@ -366,4 +400,6 @@ public class ProductHome {
 			}
 		}
 	}
+
+
 }

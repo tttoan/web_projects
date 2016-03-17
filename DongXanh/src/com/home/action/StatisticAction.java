@@ -2,26 +2,23 @@ package com.home.action;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
-
 import com.home.conts.InvoiceTable;
 import com.home.dao.CustomerHome;
 import com.home.dao.ProductHome;
@@ -56,12 +53,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	private Customer cusLevel2 = new Customer();
 	private User emp = new User();
 
-	
 	private Product pro = new Product();
-	
-	public File getUpload() {
-		return upload;
-	}
 
 	public String getUploadContentType() {
 		return uploadContentType;
@@ -69,10 +61,6 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	public String getUploadFileName() {
 		return uploadFileName;
-	}
-
-	public void setUpload(File upload) {
-		this.upload = upload;
 	}
 
 	public void setUploadContentType(String uploadContentType) {
@@ -127,9 +115,9 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	@Override
 	public void validate() {
-		loadLookupEmployee();
-		loadLookupCustomer();
-		loadLookupProduct();
+		// loadLookupEmployee();
+		// loadLookupCustomer();
+		// loadLookupProduct();
 	}
 
 	public SessionFactory getSessionFactory() {
@@ -191,7 +179,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 			stat.setCustomerByCustomerCodeLevel2(cusLevel2);
 			stat.setProduct(pro);
 			StatisticHome sttHome = new StatisticHome(HibernateUtil.getSessionFactory());
-			if(stat.getId() == 0)
+			if (stat.getId() == 0)
 				sttHome.attachDirty(stat);
 			else
 				sttHome.updateDirty(stat);
@@ -202,42 +190,180 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		}
 	}
 
-	public String importStatisticLevel1() throws Exception {
-		File theFile = new File(this.getUploadFileName());
-		FileUtils.copyFile(upload, theFile);
-		try (FileInputStream fis = new FileInputStream(theFile)) {
-			ExcelUtil xls = new ExcelUtil();
-			UserHome userHome = new UserHome(getSessionFactory());
-			workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
-			Sheet sheet = workbook.getSheetAt(0);
-			Iterator<Row> rowIterator = sheet.iterator();
-			rowIterator.next();
-			while (rowIterator.hasNext()) {
-				Row row = rowIterator.next();
-				setStat(new Statistic());
-				getStat().setDateReceived((Date) xls.getValue(row.getCell(InvoiceTable.dateReceived.value())));
-				// statistic.setCustomerCodeLevel2((String)
-				// xls.getValue(row.getCell(InvoiceTable.customerCodeLevel2.value())));
-				// statistic.setCustomerCodeLevel1((String)
-				// xls.getValue(row.getCell(InvoiceTable.customerCodeLevel1.value())));
-				// getStat().setProductCode((String)
-				// xls.getValue(row.getCell(InvoiceTable.productCode.value())));
-				// getStat().setCategoryName((String)
-				// xls.getValue(row.getCell(InvoiceTable.categoryName.value())));
-				// getStat().setProductName((String)
-				// xls.getValue(row.getCell(InvoiceTable.productName.value())));
-				// getStat().setTotalBox(((Double)
-				// xls.getValue(row.getCell(InvoiceTable.totalBox.value()))).intValue());
-				getStat().setQuantity(((Double) xls.getValue(row.getCell(InvoiceTable.quantiy.value()))).intValue());
-				getStat().setTotal(BigDecimal.valueOf((Double) xls.getValue(row.getCell(InvoiceTable.total.value()))));
-				// statistic.setUser(userHome.getUserByFullName((String)xls.getValue(row.getCell(InvoiceTable.userFullName.value()))));
-				addStatistic();
-				setStat(null);
+	public String importStatisticLevel1() {
+		try {
+			StringBuilder logDuplicate = new StringBuilder();
+			File theFile = new File(getUploadFileName());
+			FileUtils.copyFile(getUpload(), theFile);
+			Cell cell = null;
+			Object value = null;
+			try (FileInputStream fis = new FileInputStream(theFile)) {
+				ExcelUtil xls = new ExcelUtil();
+				StatisticHome sttHome = new StatisticHome(getSessionFactory());
+				CustomerHome custHome = new CustomerHome(getSessionFactory());
+				ProductHome proHome = new ProductHome(getSessionFactory());
+				UserHome userHome = new UserHome(getSessionFactory());
+				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
+				Sheet sheet = workbook.getSheetAt(0);
+				Iterator<Row> rowIterator = sheet.iterator();
+				rowIterator.next();
+				while (rowIterator.hasNext()) {
+					Row row = rowIterator.next();
+					cell = row.getCell(1);
+					value = xls.getValue(cell);
+					System.out.println(value);
+					setStat(new Statistic());
+//					// -------------dateReceived--------------
+//					cell = row.getCell(InvoiceTable.dateReceived.value());
+//					value = xls.getValue(cell);
+//					getStat().setDateReceived((Date) value);
+//					// ---------------------------
+//					// -------------customerCodeLevel2--------------
+//					cell = row.getCell(InvoiceTable.customerCodeLevel2.value());
+//					value = xls.getValue(cell);
+//					Customer cust = custHome.findCustomerByCode((String) value);
+//					getStat().setCustomerByCustomerCodeLevel2(cust);
+//					// ---------------------------
+//					// -------------customerCodeLevel1--------------
+//					cell = row.getCell(InvoiceTable.customerCodeLevel1.value());
+//					value = xls.getValue(cell);
+//					cust = custHome.findCustomerByCode((String) value);
+//					getStat().setCustomerByCustomerCodeLevel1(cust);
+//					// ---------------------------
+//					// -------------productCode--------------
+//					cell = row.getCell(InvoiceTable.productCode.value());
+//					value = xls.getValue(cell);
+//					Product pro = proHome.findProductByCode((String) value);
+//					getStat().setProduct(pro);
+//					// ---------------------------
+//					// -------------totalBox--------------
+//					cell = row.getCell(InvoiceTable.totalBox.value());
+//					value = xls.getValue(cell);
+//					getStat().setTotalBox(((Double) value).intValue());
+//					// ---------------------------
+//					// -------------quantiy--------------
+//					cell = row.getCell(InvoiceTable.quantiy.value());
+//					value = xls.getValue(cell);
+//					getStat().setQuantity(((Double) value).intValue());
+//					// ---------------------------
+//					// -------------total--------------
+//					cell = row.getCell(InvoiceTable.total.value());
+//					value = xls.getValue(cell);
+//					getStat().setTotal(BigDecimal.valueOf((Double) value));
+//					// ---------------------------
+//					// -------------total--------------
+//					cell = row.getCell(InvoiceTable.userFullName.value());
+//					value = xls.getValue(cell);
+//					User user = userHome.getUserByFullName((String) value);
+//					getStat().setUser(user);
+//					// ---------------------------
+//					
+//					boolean isDuplicated = sttHome.isStatictisDuplicate(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1().getId(), getStat().getCustomerByCustomerCodeLevel2().getId(), 
+//							getStat().getProduct().getId(), getStat().getUser().getId());
+//					if(!isDuplicated)
+//						sttHome.attachDirty(getStat());
+//					else
+//						logDuplicate.append("<li>Warning: Row "+cell.getRowIndex()+ " duplicated</li>");
+					setStat(new Statistic());
+				}
+				addActionMessage("<h3>Import complete!</h3><ul>"+logDuplicate+"<ul>");
+			} catch (Exception e) {
+				addActionError("Error: " + e.getMessage() + " with Row: " + cell.getRowIndex() + "; Column: " + cell.getColumnIndex() + "; Value: " + value);
+			} finally {
+				if (theFile.exists())
+					FileUtils.deleteQuietly(theFile);
 			}
-		} catch (Exception e) {
-			throw e;
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			addActionError("Error: "+e1.getMessage());
 		}
-		FileUtils.deleteQuietly(theFile);
+		return SUCCESS;
+	}
+
+	public String importStatisticLevel2() {
+		try {
+			StringBuilder logDuplicate = new StringBuilder();
+			File theFile = new File(getUploadFileName());
+			FileUtils.copyFile(getUpload(), theFile);
+			Cell cell = null;
+			Object value = null;
+			try (FileInputStream fis = new FileInputStream(theFile)) {
+				ExcelUtil xls = new ExcelUtil();
+				StatisticHome sttHome = new StatisticHome(getSessionFactory());
+				CustomerHome custHome = new CustomerHome(getSessionFactory());
+				ProductHome proHome = new ProductHome(getSessionFactory());
+				UserHome userHome = new UserHome(getSessionFactory());
+				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
+				Sheet sheet = workbook.getSheetAt(0);
+				Iterator<Row> rowIterator = sheet.iterator();
+				rowIterator.next();
+				while (rowIterator.hasNext()) {
+					Row row = rowIterator.next();
+					setStat(new Statistic());
+					// -------------dateReceived--------------
+					cell = row.getCell(InvoiceTable.dateReceived.value());
+					value = xls.getValue(cell);
+					getStat().setDateReceived((Date) value);
+					// ---------------------------
+					// -------------customerCodeLevel2--------------
+					cell = row.getCell(InvoiceTable.customerCodeLevel2.value());
+					value = xls.getValue(cell);
+					Customer cust = custHome.findCustomerByCode((String) value);
+					getStat().setCustomerByCustomerCodeLevel2(cust);
+					// ---------------------------
+					// -------------customerCodeLevel1--------------
+					cell = row.getCell(InvoiceTable.customerCodeLevel1.value());
+					value = xls.getValue(cell);
+					cust = custHome.findCustomerByCode((String) value);
+					getStat().setCustomerByCustomerCodeLevel1(cust);
+					// ---------------------------
+					// -------------productCode--------------
+					cell = row.getCell(InvoiceTable.productCode.value());
+					value = xls.getValue(cell);
+					Product pro = proHome.findProductByCode((String) value);
+					getStat().setProduct(pro);
+					// ---------------------------
+					// -------------totalBox--------------
+					cell = row.getCell(InvoiceTable.totalBox.value());
+					value = xls.getValue(cell);
+					getStat().setTotalBox(((Double) value).intValue());
+					// ---------------------------
+					// -------------quantiy--------------
+					cell = row.getCell(InvoiceTable.quantiy.value());
+					value = xls.getValue(cell);
+					getStat().setQuantity(((Double) value).intValue());
+					// ---------------------------
+					// -------------total--------------
+					cell = row.getCell(InvoiceTable.total.value());
+					value = xls.getValue(cell);
+					getStat().setTotal(BigDecimal.valueOf((Double) value));
+					// ---------------------------
+					// -------------total--------------
+					cell = row.getCell(InvoiceTable.userFullName.value());
+					value = xls.getValue(cell);
+					User user = userHome.getUserByFullName((String) value);
+					getStat().setUser(user);
+					// ---------------------------
+					
+					boolean isDuplicated = sttHome.isStatictisDuplicate(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1().getId(), getStat().getCustomerByCustomerCodeLevel2().getId(), 
+							getStat().getProduct().getId(), getStat().getUser().getId());
+					if(!isDuplicated)
+						sttHome.attachDirty(getStat());
+					else
+						logDuplicate.append("<li>Warning: Row "+cell.getRowIndex()+ " duplicated</li>");
+					setStat(new Statistic());
+				}
+				addActionMessage("<h3>Import complete!</h3><ul>"+logDuplicate+"<ul>");
+			} catch (Exception e) {
+				addActionError("Error: " + e.getMessage() + " with Row: " + cell.getRowIndex() + "; Column: " + cell.getColumnIndex() + "; Value: " + value);
+			} finally {
+				if (theFile.exists())
+					FileUtils.deleteQuietly(theFile);
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			addActionError("Error: "+e1.getMessage());
+		}
 		return SUCCESS;
 	}
 
@@ -357,5 +483,12 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		this.districts = districts;
 	}
 
-	
+	public File getUpload() {
+		return upload;
+	}
+
+	public void setUpload(File upload) {
+		this.upload = upload;
+	}
+
 }

@@ -51,7 +51,6 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private User emp = new User();
 	public int yearNow = (Calendar.getInstance()).get(Calendar.YEAR);
 	private List<Customer> listCustomer = new ArrayList<>();
-	private List<Customer> customers = new ArrayList<>();
 	private List<User> listEmployee = new ArrayList<>();
 	private List<GroupCustomer> listGrpCus = new ArrayList<>();
 	private GroupCustomer grpCustomer = new GroupCustomer();
@@ -195,15 +194,6 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			loadLookupGrpCustomer();
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-	}
-
-	public String listCustomer() {
-		try {
-			customers = listCustomer;
-			return SUCCESS;
-		} catch (Exception e) {
-			return ERROR;
 		}
 	}
 
@@ -531,11 +521,4 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		this.custId = custId;
 	}
 
-	public List<Customer> getCustomers() {
-		return customers;
-	}
-
-	public void setCustomers(List<Customer> customers) {
-		this.customers = customers;
-	}
 }

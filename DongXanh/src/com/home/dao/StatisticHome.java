@@ -4,11 +4,13 @@ package com.home.dao;
 
 import static org.hibernate.criterion.Example.create;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -143,6 +145,45 @@ public class StatisticHome {
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
 			throw re;
+		}
+	}
+
+	public boolean isStatictisDuplicate(Date dateReceived, Integer customerCodeLevel1, Integer custLevel2Id, Integer productId, Integer userId) {
+		log.debug("Checking Statistic duplicate with: ");
+		Transaction tx = null;
+		Session session = null;
+		try {
+
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Query query = session.createQuery("FROM Statistic where date_received=:dateReceived and customer_code_level1=:customerCodeLevel1"
+					+ " and customer_code_level2=:customerCodeLevel2 and product_id=:productId and user_id=:userId");
+			query.setDate("dateReceived", dateReceived);
+			query.setInteger("customerCodeLevel1", customerCodeLevel1);
+			query.setInteger("customerCodeLevel2", custLevel2Id);
+			query.setInteger("productId", productId);
+			query.setInteger("userId", userId);
+			Statistic instance = (Statistic) query.uniqueResult();
+			tx.commit();
+			if (instance == null) {
+				log.debug("get successful, no instance found");
+				return false;
+			} else {
+				log.debug("get successful, instance found");
+				
+			}
+			return true;
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

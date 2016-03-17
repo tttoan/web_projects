@@ -24,16 +24,14 @@
 									<th class=" no-link last"><span class="nobr"></span></th>
 								</tr>
 							</thead>
-
 							<tbody>
-
-								<s:iterator value="customers">
+								<s:iterator value="listCustomer">
 									<tr class="even pointer">
 										<td class=""><s:property value="customerCode" /></td>
 										<td class=""><s:property value="businessName" /></td>
 										<td class=""><s:property value="directorMobile" /></td>
 										<td class=""> 
-											<a class="btn btn-success btn-xs"><i class="fa"></i><s:property value="groupCustomer.groupName" /></a> 
+											<a class="btn btn-success btn-xs"><s:property value="%{groupCustomer.groupName}" /></a> 
 										</td>
 										<td class=""><s:property value="email" /></td>
 										<td class="last"> 

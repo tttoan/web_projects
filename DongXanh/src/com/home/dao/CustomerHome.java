@@ -195,7 +195,38 @@ public class CustomerHome {
 			throw re;
 		}
 	}
-
+	public Customer findCustomerByCode(String customerCode) throws Exception {
+		log.debug("getting Customer instance with code: " + customerCode);
+		Transaction tx = null;
+		Session session=null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Query query = session.createQuery("from Customer where customer_code =:customerCode");
+			query.setString("customerCode", customerCode);
+			Customer instance = (Customer) query.uniqueResult();
+			tx.commit();
+			if (instance == null) {
+				log.debug("get Customer successful, no instance found");
+				throw new Exception("get Customer successful, no instance found");
+			} else {
+				log.debug("get successful, instance found");
+			}
+			return instance;
+		} catch (Exception re) {
+			log.error("get failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.error("get failed", e);
+			}
+		}
+	}
 	public Customer findById(java.lang.Integer id) {
 		log.debug("getting Customer instance with id: " + id);
 		Transaction tx = null;

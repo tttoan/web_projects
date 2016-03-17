@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%-- Using Struts2 Tags in JSP --%>
 <%@ taglib uri="/struts-tags" prefix="s"%>
+<%@ taglib uri="/struts-jquery-tags" prefix="sj"%>
 <%@ include file="header.jsp"%>
 <%@ include file="user_profile.jsp"%>
 <%@ include file="menu.jsp"%>
@@ -12,40 +13,72 @@
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<sx:tabbedpanel id="tabContainer">
-					<sx:div label="Cấp 1 ">
+					<sx:div label="Bảng kê Cấp 1 ">
 						<div class="x_panel">
 							<div class="x_content">
 								<s:form action="import_statistic_level1" method="post"
-									enctype="multipart/form-data"
+									theme="bootstrap" enctype="multipart/form-data"
 									cssClass="form-horizontal form-label-left">
+									<s:if test="hasActionErrors()">
+										<div class="errors">
+											<s:actionerror escape="false" />
+										</div>
+									</s:if>
+									<s:elseif test="hasActionMessages()">
+										<div class="message">
+											<s:actionmessage escape="false" />
+										</div>
+									</s:elseif>
 									<div class="item form-group">
-										<div class="col-md-6 col-sm-6 col-xs-12">
-											<s:file name="upload"></s:file>
+										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+											for="uploadLevel1">Chọn bảng kê <span
+											class="required"></span></label>
+										<div class="col-md-5 col-sm-6 col-xs-12">
+											<input id="uploadLevel1" type="file" name="upload"
+												required="required" class="form-control col-md-7 col-xs-12">
 										</div>
 									</div>
-									<div class="item form-group">
+									<div class="ln_solid"></div>
+									<div class="form-group">
 										<div class="col-md-6 col-md-offset-3">
-											<s:submit id="sends" value="Submit" class="btn btn-success" />
+											<button id="send1" type="submit" class="btn btn-warning">Cập
+												nhật bảng kê Cấp 1</button>
 										</div>
 									</div>
 								</s:form>
 							</div>
 						</div>
 					</sx:div>
-					<sx:div label="Cấp 2 ">
+					<sx:div label="Bảng kê Cấp 2 ">
 						<div class="x_panel">
 							<div class="x_content">
 								<s:form action="import_statistic_level2" method="post"
-									enctype="multipart/form-data"
+									theme="bootstrap" enctype="multipart/form-data"
 									cssClass="form-horizontal form-label-left">
+									<s:if test="hasActionErrors()">
+										<div class="errors">
+											<s:actionerror escape="false" />
+										</div>
+									</s:if>
+									<s:elseif test="hasActionMessages()">
+										<div class="message">
+											<s:actionmessage escape="false" />
+										</div>
+									</s:elseif>
 									<div class="item form-group">
-										<div class="col-md-6 col-sm-6 col-xs-12">
-											<s:file name="upload"></s:file>
+										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+											for="uploadLevel2">Chọn bảng kê <span
+											class="required"></span></label>
+										<div class="col-md-5 col-sm-6 col-xs-12">
+											<input id="uploadLevel2" type="file" name="upload"
+												required="required" class="form-control col-md-7 col-xs-12">
 										</div>
 									</div>
-									<div class="item form-group">
+									<div class="ln_solid"></div>
+									<div class="form-group">
 										<div class="col-md-6 col-md-offset-3">
-											<s:submit id="sends" value="Submit" class="btn btn-info" />
+											<button id="send2" type="submit" class="btn btn-primary">Cập
+												nhật bảng kê Cấp 2</button>
 										</div>
 									</div>
 								</s:form>
