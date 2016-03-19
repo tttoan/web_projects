@@ -2,6 +2,8 @@ package com.home.util;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,7 +41,15 @@ public class ExcelUtil {
 		}
 		return wb;
 	}
-	
+	public boolean isDateReceived(String value, SimpleDateFormat dateFormat) {
+		dateFormat.setLenient(false);
+		try {
+			dateFormat.parse(value.trim());
+		} catch (ParseException pe) {
+			return false;
+		}
+		return true;
+	}
 	public Object getValue(Cell cell) throws Exception {
 		Object value = "";
 		switch (cell.getCellType()) {

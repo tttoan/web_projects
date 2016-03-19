@@ -12,27 +12,29 @@
 		<div class="clearfix"></div>
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
-				<sx:tabbedpanel id="tabContainer">
-					<sx:div label="Bảng kê Cấp 1 ">
+				<s:set name="importType" value="%{importLevel}" />
+				<sx:tabbedpanel id="tabContainer" selectedTab="%{importLevel}" >
+					<sx:div label="Bảng kê Cấp 1" id="tab1">
 						<div class="x_panel">
 							<div class="x_content">
-								<s:form action="import_statistic_level_one" namespace="/" method="post"
-									theme="bootstrap" enctype="multipart/form-data"
+								<s:form action="import_statistic_level_one" namespace="/"
+									method="post" theme="bootstrap" enctype="multipart/form-data"
 									cssClass="form-horizontal form-label-left">
-									<s:if test="hasActionErrors()">
-										<div class="errors">
-											<s:actionerror escape="false" />
-										</div>
+									<s:if test="%{#importType=='tab1'}">
+										<s:if test="hasActionErrors()">
+											<div class="errors">
+												<s:actionerror escape="false" />
+											</div>
+										</s:if>
+										<s:elseif test="hasActionMessages()">
+											<div class="message">
+												<s:actionmessage escape="false" />
+											</div>
+										</s:elseif>
 									</s:if>
-									<s:elseif test="hasActionMessages()">
-										<div class="message">
-											<s:actionmessage escape="false" />
-										</div>
-									</s:elseif>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="uploadLevel1">Chọn bảng kê <span
-											class="required"></span></label>
+											for="uploadLevel1">Chọn bảng kê <span class="required"></span></label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
 											<input id="uploadLevel1" type="file" name="upload"
 												required="required" class="form-control col-md-7 col-xs-12">
@@ -49,22 +51,25 @@
 							</div>
 						</div>
 					</sx:div>
-					<sx:div label="Bảng kê Cấp 2 ">
+					<sx:div label="Bảng kê Cấp 2" id="tab2" >
 						<div class="x_panel">
 							<div class="x_content">
-								<s:form action="import_statistic_level_two" namespace="/" method="post"
-									theme="bootstrap" enctype="multipart/form-data"
+								<s:form action="import_statistic_level_two" namespace="/"
+									method="post" theme="bootstrap" enctype="multipart/form-data"
 									cssClass="form-horizontal form-label-left">
-									<s:if test="hasActionErrors()">
-										<div class="errors">
-											<s:actionerror escape="false" />
-										</div>
+									<s:if test="%{#importType=='tab2'}">
+										<s:if test="hasActionErrors()">
+											<div class="errors">
+												<s:actionerror escape="false" />
+											</div>
+										</s:if>
+										<s:elseif test="hasActionMessages()">
+											<div class="message">
+												<s:actionmessage escape="false" />
+											</div>
+										</s:elseif>
 									</s:if>
-									<s:elseif test="hasActionMessages()">
-										<div class="message">
-											<s:actionmessage escape="false" />
-										</div>
-									</s:elseif>
+
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
 											for="uploadLevel2">Chọn bảng kê <span

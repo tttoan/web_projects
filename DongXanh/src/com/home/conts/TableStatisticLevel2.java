@@ -1,6 +1,6 @@
 package com.home.conts;
 
-public enum InvoiceTable {
+public enum TableStatisticLevel2 {
 	month(0), 
 	dateReceived(1), 
 	customerCodeLevel2(2), 
@@ -17,7 +17,7 @@ public enum InvoiceTable {
 	userFullName(13);
 	
 	private int value;
-	private InvoiceTable(int value){
+	private TableStatisticLevel2(int value){
 		this.value = value;
 	}
 	public int value(){

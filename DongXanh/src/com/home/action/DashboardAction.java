@@ -81,6 +81,8 @@ public class DashboardAction  implements ServletContextAware{
 			birthdayCustomers = new ArrayList<Customer>();
 			List<Customer> cuss = cusHome.findAll();
 			for (Customer customer : cuss) {
+				if(customer.getDirectorBirthday() == null)
+					continue;
 				Calendar birthday = Calendar.getInstance();
 				birthday.set(Calendar.HOUR_OF_DAY, 0);
 				birthday.set(Calendar.MINUTE, 0);

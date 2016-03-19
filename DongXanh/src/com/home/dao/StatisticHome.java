@@ -148,7 +148,44 @@ public class StatisticHome {
 		}
 	}
 
-	public boolean isStatictisDuplicate(Date dateReceived, Integer customerCodeLevel1, Integer custLevel2Id, Integer productId, Integer userId) {
+	public boolean isStatictisDuplicateLevel1(Date dateReceived, Integer customerCodeLevel1, Integer productId) {
+		log.debug("Checking Statistic duplicate with: ");
+		Transaction tx = null;
+		Session session = null;
+		try {
+
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Query query = session.createQuery("FROM Statistic where date_received=:dateReceived and customer_code_level1=:customerCodeLevel1"
+					+ " and product_id=:productId");
+			query.setDate("dateReceived", dateReceived);
+			query.setInteger("customerCodeLevel1", customerCodeLevel1);
+			query.setInteger("productId", productId);
+			Statistic instance = (Statistic) query.uniqueResult();
+			tx.commit();
+			if (instance == null) {
+				log.debug("get successful, no instance found");
+				return false;
+			} else {
+				log.debug("get successful, instance found");
+				
+			}
+			return true;
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public boolean isStatictisDuplicateLevel2(Date dateReceived, Integer customerCodeLevel1, Integer custLevel2Id, Integer productId, Integer userId) {
 		log.debug("Checking Statistic duplicate with: ");
 		Transaction tx = null;
 		Session session = null;
