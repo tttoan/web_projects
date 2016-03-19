@@ -419,4 +419,43 @@ public class PromotionHome {
 			}
 		}
 	}
+	
+	public int[] totalStatisticPromotions() throws Exception{
+		log.debug("retrieve list promotion");
+		Session session = null;
+		int[] results = new int[5];
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			String sql = "SELECT " +
+					"(SELECT count(*)  FROM `promotion` WHERE status=1 AND start_date<=CURDATE() AND end_date >= CURDATE()) as sl1, " +
+					"(SELECT count(*)  FROM `promotion` WHERE status=1 AND start_date>CURDATE() AND end_date > CURDATE()) as sl2, " +
+					"(SELECT count(*)  FROM `promotion` WHERE end_date<CURDATE() AND end_date >= CURDATE()-7) as sl3, " +
+					"(SELECT count(*)  FROM `promotion` WHERE end_date<CURDATE()-7) as sl4"; 
+			ResultSet rs = conn.createStatement().executeQuery(sql);
+			if(rs.next()){
+				results[0] = rs.getInt("sl1");
+				results[1] = rs.getInt("sl2");
+				results[2] = rs.getInt("sl3");
+				results[3] = rs.getInt("sl4");
+				results[4] = results[0]+results[1]+results[2]+results[3];
+			}
+			rs.close();
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list totalStatisticPromotions failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
 }

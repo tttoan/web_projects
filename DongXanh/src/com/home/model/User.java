@@ -11,6 +11,13 @@ import java.util.Set;
  */
 public class User implements java.io.Serializable {
 
+	public User(Integer id, String userName, String fullName) {
+		super();
+		this.id = id;
+		this.userName = userName;
+		this.fullName = fullName;
+	}
+
 	private Integer id;
 	private Role role;
 	private String userName;

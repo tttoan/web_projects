@@ -20,6 +20,13 @@ public class SystemUtil {
 		temp = d.format(pDate);
 		return temp;
 	}
+	
+	public static String convertDateToString(Date pDate, String pattern) {
+		String temp = "";
+		SimpleDateFormat d = new SimpleDateFormat(pattern);
+		temp = d.format(pDate);
+		return temp;
+	}
 
 	/**
 	 * @todo get current date as format: yyyy-MM-dd

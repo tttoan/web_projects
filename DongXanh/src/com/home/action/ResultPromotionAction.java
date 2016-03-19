@@ -336,7 +336,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			filenameDownload = "Result_"+SystemUtil.getCurrentDateYYYY_MM_DD()+".xls";//(String) ActionContext.getContext().getSession().get("filenameDownload");
 			try {
 				//Init data
-				String[] sheetNames = new String[]{"Kết quả"};
+				String[] sheetNames = new String[]{(String) ActionContext.getContext().getSession().get("filenameDownload")};
 	            List<String[]> headerColumns = new ArrayList<>();
 	            headerColumns.add(createHeaderReport(promotion, excelUtil));
 	            List<List<String[]>> listAllData = createExportContent(headerColumns.get(0), promotion);

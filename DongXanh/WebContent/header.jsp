@@ -31,6 +31,7 @@
 	media="print">
 <script src="js/jquery.min.js"></script>
 <link href="css/calendar/fullcalendar.css" rel="stylesheet">
+<script src="Scripts/custom/profileUser.js"></script>
 
 <!-- <link rel="stylesheet" href="css/jquery-ui.css"> -->
 <%-- <script src="js/jquery-1.10.2.js" type="text/javascript"></script> --%>

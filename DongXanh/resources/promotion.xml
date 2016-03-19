@@ -198,6 +198,18 @@
 			method="getRegisterProducts">
 			<result type="json" />
 		</action>
+		<action name="statisticPromotions" method="getStatisticPromotions"
+			class="com.home.action.DashboardAction">
+			<result type="json" />
+		</action>
+		<action name="listCustomerByBirthday1" method="getListCustomerByBirthday"
+			class="com.home.action.DashboardAction">
+			<result type="json" />
+		</action>
+		<action name="currentUserLogin" method="getCurrentUser"
+			class="com.home.action.DashboardAction">
+			<result type="json" />
+		</action>
 	</package>
 	
 	<package name="promotion-result" namespace="/" extends="struts-default">

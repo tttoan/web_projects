@@ -77,6 +77,7 @@ public class LoginAction extends ActionSupport implements Action, ModelDriven<Us
 			setSession(ActionContext.getContext().getSession());
 			getSession().put("logined", "true");
 			getSession().put("context", new Date());
+			getSession().put(MyConts.LOGIN_SESSION, new User(user.getId(), user.getUserName(), user.getFullName()));
 		}
 	}
 

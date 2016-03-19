@@ -8,7 +8,7 @@
 	</div>
 	<div class="profile_info">
 		<span>Xin chào,</span>
-		<h2><s:property value="%{user.fullName}" /> </h2>
+		<h2 id="profile_fullname"><s:property value="%{user.fullName}" /> </h2>
 	</div>
 </div>
 <!-- /menu prile quick info -->

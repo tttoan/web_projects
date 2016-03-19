@@ -78,7 +78,7 @@
 				<a id="menu_toggle"><i class="fa fa-bars"></i></a>
 			</div>
 			<ul class="nav navbar-nav navbar-right">
-				<li class=""><a href="javascript:;"
+				<li class=""><a href="javascript:;" id="profile_username"
 					class="user-profile dropdown-toggle" data-toggle="dropdown"
 					aria-expanded="false"> <img src="images/user.png" alt=""><s:property value="%{user.userName}" />
 						<span class=" fa fa-angle-down"></span>

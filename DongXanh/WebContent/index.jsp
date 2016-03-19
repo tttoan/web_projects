@@ -17,7 +17,7 @@
 					<div class="icon">
 						<i class="fa fa-check-square-o"></i>
 					</div>
-					<div class="count">3</div>
+					<div id="statistic1_p" class="count">0</div>
 
 					<h3>Khuyến mãi đang diễn ra</h3>
 					<p>
@@ -30,7 +30,7 @@
 					<div class="icon">
 						<i class="fa fa-caret-square-o-right"></i>
 					</div>
-					<div class="count">1</div>
+					<div id="statistic2_p" class="count">0</div>
 
 					<h3>Khuyến mãi sắp diễn ra</h3>
 					<p>
@@ -43,7 +43,7 @@
 					<div class="icon">
 						<i class="fa fa-sort-amount-desc"></i>
 					</div>
-					<div class="count">2</div>
+					<div id="statistic3_p" class="count">0</div>
 
 					<h3>Khuyến mãi vừa kết thúc</h3>
 					<p>
@@ -56,7 +56,7 @@
 					<div class="icon">
 						<i class="fa fa-sort-amount-desc"></i>
 					</div>
-					<div class="count">179</div>
+					<div id="statistic4_p" class="count">0</div>
 
 					<h3>Khuyến mãi đã kết thúc</h3>
 					<p>
@@ -128,81 +128,19 @@
 
 						<div class="col-md-3 col-sm-12 col-xs-12">
 							<div>
-								<div class="x_title">
-									<h2>Cham sóc khách hàng</h2>
+								<div id="divCussBirthday" class="x_title">
+									<h2>Chăm sóc khách hàng</h2>
 									<div class="clearfix"></div>
 								</div>
-								<ul class="list-unstyled top_profiles scroll-view">
-									<li class="media event"><a
-										class="pull-left border-aero profile_thumb"> <i
-											class="fa fa-user aero"></i>
+								<ul id="ulCussBirthday" class="list-unstyled top_profiles scroll-view">
+									
+									<li class='media event'><a
+										class='pull-left border-aero profile_thumb'> <i
+											class='fa fa-user aero'></i>
 									</a>
-										<div class="media-body">
-											<a class="title" href="#">Ms. Phu?ng</a>
-											<p>
-												<strong>Ngay sinh nhat: 20/01/2016 </strong>
-											</p>
-											<p>Nhom khach han VIP</p>
-											<p>
-												<small>Con 12 ngay nua</small>
-											</p>
-										</div></li>
-									<li class="media event"><a
-										class="pull-left border-green profile_thumb"> <i
-											class="fa fa-user green"></i>
-									</a>
-										<div class="media-body">
-											<a class="title" href="#">Ms. Phu?ng</a>
-											<p>
-												<strong>Ngay sinh nhat: 20/01/2016 </strong>
-											</p>
-											<p>Nhom khach han VIP</p>
-											<p>
-												<small>Con 12 ngay nua</small>
-											</p>
-										</div></li>
-									<li class="media event"><a
-										class="pull-left border-blue profile_thumb"> <i
-											class="fa fa-user blue"></i>
-									</a>
-										<div class="media-body">
-											<a class="title" href="#">Ms. Phu?ng</a>
-											<p>
-												<strong>Ngay sinh nhat: 20/01/2016 </strong>
-											</p>
-											<p>Nhom khach han VIP</p>
-											<p>
-												<small>Con 12 ngay nua</small>
-											</p>
-										</div></li>
-									<li class="media event"><a
-										class="pull-left border-aero profile_thumb"> <i
-											class="fa fa-user aero"></i>
-									</a>
-										<div class="media-body">
-											<a class="title" href="#">Ms. Phu?ng</a>
-											<p>
-												<strong>Ngay sinh nhat: 20/01/2016 </strong>
-											</p>
-											<p>Nhom khach han VIP</p>
-											<p>
-												<small>Con 12 ngay nua</small>
-											</p>
-										</div></li>
-									<li class="media event"><a
-										class="pull-left border-green profile_thumb"> <i
-											class="fa fa-user green"></i>
-									</a>
-										<div class="media-body">
-											<a class="title" href="#">Ms. Phu?ng</a>
-											<p>
-												<strong>Ngay sinh nhat: 20/01/2016 </strong>
-											</p>
-											<p>Nhom khach han VIP</p>
-											<p>
-												<small>Con 12 ngay nua</small>
-											</p>
-										</div></li>
+										Không có dữ liệu
+									</li>
+									
 								</ul>
 							</div>
 						</div>
@@ -258,6 +196,8 @@
 <script type="text/javascript" src="js/flot/jquery.flot.resize.js"></script>
 <!-- pace -->
 <script src="js/pace/pace.min.js"></script>
+
+<script src="Scripts/custom/dashboard.js"></script>
 
 </body>
 
