@@ -19,14 +19,14 @@
 								<tr class="headings">
 									<th>Ngày nhận</th>
 									<th>Tên cấp 2</th>
-									<th>Tên Cấp 1</th>
-									<th>Sản Phẩm</th>
-									<th>Số Thùng</th>
-									<th>Số Lượng</th>
-									<th>Giá có điểm+Ko điểm</th>
-									<th>Thành Tiền</th>
+									<th>Tên cấp 1</th>
+									<th>Sản phẩm</th>
+									<th>Đơn giá</th>
+									<th>Số thùng</th>
+									<th>Số lượng</th>
+									<th>Thành tiền</th>
 									<th>NVTT</th>
-									<th class=" no-link last"><span class="nobr"></span></th>
+									<th class="no-link last"><span class="nobr"></span></th>
 								</tr>
 							</thead>
 
@@ -41,10 +41,10 @@
 										<td class=""><s:property
 												value="customerByCustomerCodeLevel2.director" /></td>
 										<td class=""><s:property value="product.productName" /></td>
-										<td class=""><s:property value="totalBox" /></td>
-										<td class=""><s:property value="quantity" /></td>
-										<td class=""><s:property value="unitPrice" /></td>
-										<td class=""><s:property value="total" /></td>
+										<td class=""><s:property value="%{getText('format.money',{product.unitPrice})}" /></td>
+										<td class=""><s:property value="%{getText('format.number',{totalBox})}" /></td>
+										<td class=""><s:property value="%{getText('format.number',{quantity})}" /></td>
+										<td class=""><s:property value="%{getText('format.money',{total})}" /></td>
 										<td class=""><s:property value="user.fullName" /></td>
 										<td class="last"><s:url action="move_to_add_statistic"
 												var="editURL">

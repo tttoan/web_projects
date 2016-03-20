@@ -6,8 +6,8 @@
 		class="fa fa-chevron-down"></span></a>
 	<ul class="nav child_menu" style="display: none">
 		<li><s:url action="list_employee" var="leURL" /> <s:a
-				href="%{leURL}" theme="bootstrap"> Danh Sách </s:a></li>
+				href="%{leURL}" theme="bootstrap"> Danh sách </s:a></li>
 		<li><s:url action="move_to_add_employee" var="maeURL"></s:url> <s:a
-				href="%{maeURL}"> Tạo Và Chỉnh Sửa </s:a></li>
+				href="%{maeURL}"> Thêm và chỉnh sửa </s:a></li>
 	</ul></li>
 

@@ -28,18 +28,18 @@
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
 					<li><s:url action="list_customer.action" var="lcURL" /> <s:a
-							href="%{lcURL}" theme="bootstrap"> Danh Sách </s:a></li>
+							href="%{lcURL}" theme="bootstrap"> Danh sách </s:a></li>
 					<li><s:url action="move_to_add_customer" var="macURL"></s:url>
-						<s:a href="%{macURL}"> Tạo Và Chỉnh Sửa </s:a></li>
+						<s:a href="%{macURL}"> Thêm và chỉnh Sửa </s:a></li>
 				</ul></li>
 			<li><a><i class="fa fa-table"></i> Bảng Kê <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
 					<li><s:url action="list_statistic" var="liURL" /> <s:a
-							href="%{liURL}" theme="bootstrap"> Danh Sách </s:a></li>
+							href="%{liURL}" theme="bootstrap"> Danh sách </s:a></li>
 					<li><s:url action="move_to_add_statistic.action" var="maiURL">
-						</s:url> <s:a href="%{maiURL}"> Thêm Và Chỉnh Sửa </s:a></li>
-					<li><a href="import_statistic.jsp">Thao tác Excel</a></li>
+						</s:url> <s:a href="%{maiURL}"> Thêm và chỉnh sửa </s:a></li>
+					<li><a href="import_statistic.jsp">Thao tác excel</a></li>
 				</ul></li>
 			<li><a><i class="fa fa-calendar"></i> Lịch công tác <span
 					class="fa fa-chevron-down"></span></a>

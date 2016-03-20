@@ -13,7 +13,7 @@
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<s:set name="importType" value="%{importLevel}" />
-				<sx:tabbedpanel id="tabContainer" selectedTab="%{importLevel}" >
+				<sx:tabbedpanel id="tabContainer" selectedTab="%{importLevel}"  >
 					<sx:div label="Bảng kê Cấp 1" id="tab1">
 						<div class="x_panel">
 							<div class="x_content">
@@ -32,12 +32,13 @@
 											</div>
 										</s:elseif>
 									</s:if>
+									<div class="ln_solid"></div>
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+										<label class="col-md-3 col-sm-3 col-xs-12" style="text-align: right;"
 											for="uploadLevel1">Chọn bảng kê <span class="required"></span></label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
 											<input id="uploadLevel1" type="file" name="upload"
-												required="required" class="form-control col-md-7 col-xs-12">
+												required="required" class="col-md-7 col-xs-12">
 										</div>
 									</div>
 									<div class="ln_solid"></div>
@@ -69,14 +70,14 @@
 											</div>
 										</s:elseif>
 									</s:if>
-
+									<div class="ln_solid"></div>
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+										<label class="col-md-3 col-sm-3 col-xs-12" style="text-align: right;"
 											for="uploadLevel2">Chọn bảng kê <span
 											class="required"></span></label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
 											<input id="uploadLevel2" type="file" name="upload"
-												required="required" class="form-control col-md-7 col-xs-12">
+												required="required" class="col-md-7 col-xs-12">
 										</div>
 									</div>
 									<div class="ln_solid"></div>
