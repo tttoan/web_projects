@@ -26,6 +26,7 @@ import com.home.model.Product;
 
 /**
  * Home object for domain model class Category.
+ * 
  * @see com.home.dao.Category
  * @author Hibernate Tools
  */
@@ -34,16 +35,17 @@ public class CategoryHome {
 	private static final Log log = LogFactory.getLog(CategoryHome.class);
 
 	private SessionFactory sessionFactory;
+
 	public CategoryHome(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
+
 	protected SessionFactory getSessionFactory() {
 		try {
 			return sessionFactory;
 		} catch (Exception e) {
 			log.error("Could not locate SessionFactory in JNDI", e);
-			throw new IllegalStateException(
-					"Could not locate SessionFactory in JNDI");
+			throw new IllegalStateException("Could not locate SessionFactory in JNDI");
 		}
 	}
 
@@ -94,8 +96,7 @@ public class CategoryHome {
 	public Category merge(Category detachedInstance) {
 		log.debug("merging Category instance");
 		try {
-			Category result = (Category) sessionFactory.openSession()
-					.merge(detachedInstance);
+			Category result = (Category) sessionFactory.openSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -106,9 +107,13 @@ public class CategoryHome {
 
 	public Category findById(java.lang.Integer id) {
 		log.debug("getting Category instance with id: " + id);
+		Transaction tx = null;
+		Session session = null;
 		try {
-			Category instance = (Category) sessionFactory.openSession()
-					.get("com.home.dao.Category", id);
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Category instance = (Category) session.get(Category.class, id);
+			tx.commit();
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -118,6 +123,14 @@ public class CategoryHome {
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
 			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -125,46 +138,44 @@ public class CategoryHome {
 	public List<Category> findByExample(Category instance) {
 		log.debug("finding Category instance by example");
 		try {
-			List<Category> results = (List<Category>) sessionFactory
-					.openSession()
-					.createCriteria("com.home.dao.Category")
-					.add(create(instance)).list();
-			log.debug("find by example successful, result size: "
-					+ results.size());
+			List<Category> results = (List<Category>) sessionFactory.openSession().createCriteria("com.home.dao.Category").add(create(instance)).list();
+			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
 			throw re;
 		}
+
 	}
-	
-//	public List<Category> getListCategory() {
-//		log.debug("retrieve list Category");
-//		Transaction tx = null;
-//		Session session = null;
-//		try {
-//			session = sessionFactory.openSession();
-//			tx = session.beginTransaction();
-//			List<Category> results = session.createCriteria(Category.class).list();
-//			tx.commit();
-//			session.close();
-//			log.debug("retrieve list Customer successful, result size: " + results.size());
-//			return results;
-//		} catch (Exception re) {
-//			re.printStackTrace();
-//			log.error("retrieve list Product failed", re);
-//			throw re;
-//		} finally{
-//			try {
-//				if(session != null){
-//					session.close();
-//				}
-//			} catch (Exception e) {
-//			}
-//		}
-//	}
-	
-	public HashMap<Integer, String> getListCategory() throws Exception{
+
+	// public List<Category> getListCategory() {
+	// log.debug("retrieve list Category");
+	// Transaction tx = null;
+	// Session session = null;
+	// try {
+	// session = sessionFactory.openSession();
+	// tx = session.beginTransaction();
+	// List<Category> results = session.createCriteria(Category.class).list();
+	// tx.commit();
+	// session.close();
+	// log.debug("retrieve list Customer successful, result size: " +
+	// results.size());
+	// return results;
+	// } catch (Exception re) {
+	// re.printStackTrace();
+	// log.error("retrieve list Product failed", re);
+	// throw re;
+	// } finally{
+	// try {
+	// if(session != null){
+	// session.close();
+	// }
+	// } catch (Exception e) {
+	// }
+	// }
+	// }
+
+	public HashMap<Integer, String> getListCategory() throws Exception {
 		log.debug("retrieve list Category");
 		Session session = null;
 		HashMap<Integer, String> results = new HashMap<Integer, String>();
@@ -174,7 +185,7 @@ public class CategoryHome {
 			Connection conn = sessionImpl.connection();
 
 			ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM `category`");
-			while(rs.next()){
+			while (rs.next()) {
 				results.put(rs.getInt("id"), rs.getString("category_name"));
 			}
 			rs.close();
@@ -184,9 +195,9 @@ public class CategoryHome {
 			re.printStackTrace();
 			log.error("retrieve list Category failed", re);
 			throw re;
-		} finally{
+		} finally {
 			try {
-				if(session != null){
+				if (session != null) {
 					session.close();
 				}
 			} catch (Exception e) {

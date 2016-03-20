@@ -6,15 +6,16 @@
 
 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
 	<div class="menu_section">
-		<hr/><hr/>
+		<hr />
+		<hr />
 		<ul class="nav side-menu">
 			<li><a href="index.jsp"><i class="fa fa-home"></i> Trang Chủ
 			</a></li>
 			<li><a><i class="fa fa-desktop"></i> Khuyến Mãi <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
-					<li><s:url action="promotionResultAction" var="prURL" /> 
-						<s:a href="%{prURL}" theme="bootstrap"> Kết quả </s:a></li>
+					<li><s:url action="promotionResultAction" var="prURL" /> <s:a
+							href="%{prURL}" theme="bootstrap"> Kết quả </s:a></li>
 					<li><a href="promotion.jsp"> Danh sách </a></li>
 					<li><a href="gift.jsp"> Quà tặng </a></li>
 					<li><a href="product.jsp"> Sản phẩm </a></li>
@@ -39,7 +40,8 @@
 							href="%{liURL}" theme="bootstrap"> Danh sách </s:a></li>
 					<li><s:url action="move_to_add_statistic.action" var="maiURL">
 						</s:url> <s:a href="%{maiURL}"> Thêm và chỉnh sửa </s:a></li>
-					<li><a href="import_statistic.jsp">Thao tác excel</a></li>
+					<li><s:url action="move_to_accept_statistic" var="masURL">
+						</s:url> <s:a href="%{masURL}">Thao tác excel</s:a></li>
 				</ul></li>
 			<li><a><i class="fa fa-calendar"></i> Lịch công tác <span
 					class="fa fa-chevron-down"></span></a>
@@ -80,8 +82,9 @@
 			<ul class="nav navbar-nav navbar-right">
 				<li class=""><a href="javascript:;" id="profile_username"
 					class="user-profile dropdown-toggle" data-toggle="dropdown"
-					aria-expanded="false"> <img src="images/user.png" alt=""><s:property value="%{user.userName}" />
-						<span class=" fa fa-angle-down"></span>
+					aria-expanded="false"> <img src="images/user.png" alt="">
+						<s:property value="%{user.userName}" /> <span
+						class=" fa fa-angle-down"></span>
 				</a>
 					<ul
 						class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">
@@ -110,11 +113,12 @@
 									<span class="image"> <img src="images/img.jpg"
 										alt="Profile Image" />
 									</span>
-									<span> <span><s:property value="%{director}" /></span> <span
-										class="time">hôm nay</span>
+									<span> <span><s:property value="%{director}" /></span>
+										<span class="time">hôm nay</span>
 									</span>
-									<span class="message"> Hôm nay là sinh nhật của <s:property value="%{director}" />, hãy
-										gửi lời chúc mừng tới họ nhé. </span>
+									<span class="message"> Hôm nay là sinh nhật của <s:property
+											value="%{director}" />, hãy gửi lời chúc mừng tới họ nhé.
+									</span>
 								</s:a></li>
 						</s:iterator>
 					</ul></li>

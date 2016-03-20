@@ -1,8 +1,11 @@
 package com.home.action;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,22 +16,28 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.catalina.startup.HomesUserDatabase;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.poi.poifs.crypt.dsig.services.TSPTimeStampService;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
 
 import com.home.conts.TableStatisticLevel1;
 import com.home.conts.TableStatisticLevel2;
+import com.home.dao.CategoryHome;
 import com.home.dao.CustomerHome;
 import com.home.dao.ProductHome;
 import com.home.dao.StatisticHome;
 import com.home.dao.UserHome;
+import com.home.entities.StatisticCustom;
+import com.home.model.Category;
 import com.home.model.Customer;
 import com.home.model.Product;
 import com.home.model.Statistic;
@@ -42,25 +51,28 @@ import com.opensymphony.xwork2.ModelDriven;
 public class StatisticAction extends ActionSupport implements Action, ModelDriven<Statistic>, ServletContextAware, ServletRequestAware {
 	private static final long serialVersionUID = 1L;
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	public List<Statistic> statistics = new ArrayList<Statistic>();
+	private Statistic stat = new Statistic();
+	private List<User> listEmployee = new ArrayList<>();
+	private List<Customer> listCustomer = new ArrayList<>();
+	private List<Product> listProduct = new ArrayList<>();
+	private ArrayList<String> districts = new ArrayList<>();
+	private Customer cusLevel1 = new Customer();
+	private Customer cusLevel2 = new Customer();
+	private Product pro = new Product();
+	private User emp = new User();
+	private StatisticCustom sttCustom = new StatisticCustom();
 	private boolean edit = false;
 	private HttpServletRequest request;
 	private File upload;
 	private String uploadContentType;
 	private String uploadFileName;
-	public List<Statistic> statistics = new ArrayList<Statistic>();
-	private Statistic stat = new Statistic();
+	private int statId;
+	private String chooseTab = "";
+	private String chooseSubTab = "";
+	private InputStream fileInputStream;
 	private ServletContext ctx;
 	private Workbook workbook;
-	private List<User> listEmployee = new ArrayList<>();
-	private List<Customer> listCustomer = new ArrayList<>();
-	private List<Product> listProduct = new ArrayList<>();
-	private int statId;
-	private ArrayList<String> districts = new ArrayList<>();
-	private Customer cusLevel1 = new Customer();
-	private Customer cusLevel2 = new Customer();
-	private User emp = new User();
-	private String importLevel = "";
-	private Product pro = new Product();
 
 	public String getUploadContentType() {
 		return uploadContentType;
@@ -110,6 +122,8 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	@Override
 	public void validate() {
+		// Default today for date Received value
+		getStat().setDateReceived(new Date());
 		loadLookupEmployee();
 		loadLookupCustomer();
 		loadLookupProduct();
@@ -177,7 +191,8 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	public String importStatisticLevelOne() {
 		try {
-			importLevel= "tab1";
+			chooseTab = "tab1";
+			chooseSubTab = "subtab1_1";
 			StringBuilder logDuplicate = new StringBuilder();
 			File theFile = new File(getUploadFileName());
 			FileUtils.copyFile(getUpload(), theFile);
@@ -197,19 +212,19 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 					Row row = rowIterator.next();
 					cell = row.getCell(TableStatisticLevel1.customerCodeLevel1.value());
 					value = xls.getValue(cell);
-					if(((String)value).isEmpty())
+					if (((String) value).isEmpty())
 						continue;
 					if (((String) value).toLowerCase().trim().startsWith("mã khách hàng")) {
 						setStat(new Statistic());
 						String customerCode = ((String) value).split(":")[1].trim();
 						// Remove 2 first character
 						cust = custHome.findCustomerByCode(customerCode.substring(2));
-						
+
 					} else if (xls.isDateReceived(((String) value), sdf) && cust != null) {
 						// -------------Check data valid--------------
 						cell = row.getCell(TableStatisticLevel1.total.value());
 						value = xls.getValue(cell);
-						if(((String)value).isEmpty())
+						if (((String) value).isEmpty())
 							continue;
 						// ---------------------------
 						setStat(new Statistic());
@@ -230,24 +245,25 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 						// -------------quantiy--------------
 						cell = row.getCell(TableStatisticLevel1.quantiy.value());
 						value = xls.getValue(cell);
-						getStat().setQuantity(Integer.parseInt(((String)value).replace(".", "")));
+						getStat().setQuantity(Integer.parseInt(((String) value).replace(".", "")));
 						// ---------------------------
 						// -------------total--------------
 						cell = row.getCell(TableStatisticLevel1.total.value());
 						value = xls.getValue(cell);
-						getStat().setTotal(new BigDecimal(((String)value).replace(".", "")));
+						getStat().setTotal(new BigDecimal(((String) value).replace(".", "")));
 						// ---------------------------
 						boolean isDuplicated = sttHome.isStatictisDuplicateLevel1(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1().getId(), getStat().getProduct().getId());
 						if (!isDuplicated)
 							sttHome.attachDirty(getStat());
 						else
-							logDuplicate.append("<li>Cảnh báo: Dữ liệu dòng " + (cell.getRowIndex()+1) + " đã được cập nhật rồi!</li>");
+							logDuplicate.append("<li>Cảnh báo: Dữ liệu dòng " + (cell.getRowIndex() + 1) + " đã được cập nhật rồi!</li>");
 						setStat(new Statistic());
 					}
 				}
 				addActionMessage("<h3>Cập nhật hoàn thành</h3><ul>" + logDuplicate + "</ul>");
 			} catch (Exception e) {
-				addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + e.getMessage() + " ở dòng: " + (cell.getRowIndex()+1) + ", cột: " + (cell.getColumnIndex()+1) + ", giá trị: " + value + "</li></ul>");
+				addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + e.getMessage() + " ở dòng: " + (cell.getRowIndex() + 1) + ", cột: " + (cell.getColumnIndex() + 1) + ", giá trị: " + value
+						+ "</li></ul>");
 			} finally {
 				if (theFile.exists())
 					FileUtils.deleteQuietly(theFile);
@@ -261,7 +277,8 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	public String importStatisticLevelTwo() {
 		try {
-			importLevel= "tab2";
+			chooseTab = "tab2";
+			chooseSubTab = "subtab2_1";
 			StringBuilder logDuplicate = new StringBuilder();
 			String filePath = request.getSession().getServletContext().getRealPath("/");
 			File theFile = new File(filePath, getUploadFileName());
@@ -307,12 +324,12 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 					// -------------totalBox--------------
 					cell = row.getCell(TableStatisticLevel2.totalBox.value());
 					value = xls.getValue(cell);
-					getStat().setTotalBox(((Double)value).intValue());
+					getStat().setTotalBox(((Double) value).intValue());
 					// ---------------------------
 					// -------------quantiy--------------
 					cell = row.getCell(TableStatisticLevel2.quantiy.value());
 					value = xls.getValue(cell);
-					getStat().setQuantity(((Double)value).intValue());
+					getStat().setQuantity(((Double) value).intValue());
 					// ---------------------------
 					// -------------total--------------
 					cell = row.getCell(TableStatisticLevel2.total.value());
@@ -326,17 +343,18 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 					getStat().setUser(user);
 					// ---------------------------
 
-					boolean isDuplicated = sttHome.isStatictisDuplicateLevel2(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1().getId(), getStat().getCustomerByCustomerCodeLevel2()
-							.getId(), getStat().getProduct().getId(), getStat().getUser().getId());
+					boolean isDuplicated = sttHome.isStatictisDuplicateLevel2(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1().getId(), getStat()
+							.getCustomerByCustomerCodeLevel2().getId(), getStat().getProduct().getId(), getStat().getUser().getId());
 					if (!isDuplicated)
 						sttHome.attachDirty(getStat());
 					else
-						logDuplicate.append("<li>Cảnh báo: Dữ liệu dòng " + (cell.getRowIndex()+1) + " đã được cập nhật rồi!</li>");
+						logDuplicate.append("<li>Cảnh báo: Dữ liệu dòng " + (cell.getRowIndex() + 1) + " đã được cập nhật rồi!</li>");
 					setStat(new Statistic());
 				}
 				addActionMessage("<h3>Cập nhật hoàn thành</h3><ul>" + logDuplicate + "</ul>");
 			} catch (Exception e) {
-				addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + e.getMessage() + " ở dòng: " + (cell.getRowIndex()+1) + ", cột: " + (cell.getColumnIndex()+1) + ", giá trị: " + value + "</li></ul>");
+				addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + e.getMessage() + " ở dòng: " + (cell.getRowIndex() + 1) + ", cột: " + (cell.getColumnIndex() + 1) + ", giá trị: " + value
+						+ "</li></ul>");
 			} finally {
 				if (theFile.exists())
 					FileUtils.deleteQuietly(theFile);
@@ -344,6 +362,50 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		} catch (IOException ex) {
 			ex.printStackTrace();
 			addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + ex.getMessage() + "</ul></li>");
+		}
+		return SUCCESS;
+	}
+
+	public String exportStatistic() {
+		try {
+			chooseTab = "tab2";
+			chooseSubTab = "subtab2_2";
+			statistics.clear();
+			ServletContext servletContext = ServletActionContext.getServletContext();
+			String pathname = servletContext.getRealPath("/WEB-INF/template/excel/blank.xlsx");
+			File theFile = new File(pathname);
+			ExcelUtil xls = new ExcelUtil();
+			CategoryHome catHome = new CategoryHome(getSessionFactory());
+			StatisticHome sttHome = new StatisticHome(getSessionFactory());
+			statistics = sttHome.getListExportStatisticLevel2(sttCustom);
+			try (FileInputStream fis = new FileInputStream(theFile)) {
+				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
+				Sheet sheet = workbook.getSheetAt(0);
+				int startIndexRow = 0;
+				int startIndexCell = 0;
+				xls.addRowData(sheet, startIndexRow, startIndexCell, "Tháng", "Ngày nhận", "Mã Cấp 2", "Tên cấp 2", "Mã Cấp 1", "Tên Cấp 1", "Mã Hàng", "Mặt Hàng", "Tên Hàng", "Số Thùng", "Số Lượng",
+						"Giá có điểm+Ko điểm", "Thành Tiền", "NVTT");
+				startIndexRow++;
+				for (Statistic entry : statistics) {
+					Category cat = catHome.findById(entry.getProduct().getCategory().getId());
+					xls.addRowData(sheet, startIndexRow, startIndexCell, entry.getDateReceived().getMonth() + "", sdf.format(entry.getDateReceived()), entry.getCustomerByCustomerCodeLevel2()
+							.getCustomerCode(), entry.getCustomerByCustomerCodeLevel2().getDirector(), entry.getCustomerByCustomerCodeLevel1().getCustomerCode(), entry
+							.getCustomerByCustomerCodeLevel1().getDirector(), entry.getProduct().getProductCode(), cat.getCategoryCode(), entry.getProduct().getProductName(),
+							entry.getTotalBox() + "", entry.getQuantity() + "", entry.getProduct().getUnitPrice() + "", entry.getTotal() + "", entry.getUser().getFullName());
+					startIndexRow++;
+				}
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				workbook.write(baos);
+				fileInputStream = new ByteArrayInputStream(baos.toByteArray());
+				if (statistics.size() <= 0)
+					addActionMessage("Không tìm thấy dữ liệu!");
+				else
+					addActionMessage("Kết xuất hoàn thành!");
+			}
+
+		} catch (Exception e) {
+			addActionError(e.getMessage());
+			e.printStackTrace();
 		}
 		return SUCCESS;
 	}
@@ -472,12 +534,36 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		this.upload = upload;
 	}
 
-	public String getImportLevel() {
-		return importLevel;
+	public InputStream getFileInputStream() {
+		return fileInputStream;
 	}
 
-	public void setImportLevel(String importLevel) {
-		this.importLevel = importLevel;
+	public void setFileInputStream(InputStream fileInputStream) {
+		this.fileInputStream = fileInputStream;
+	}
+
+	public StatisticCustom getSttCustom() {
+		return sttCustom;
+	}
+
+	public void setSttCustom(StatisticCustom sttCustom) {
+		this.sttCustom = sttCustom;
+	}
+
+	public String getChooseTab() {
+		return chooseTab;
+	}
+
+	public void setChooseTab(String chooseTab) {
+		this.chooseTab = chooseTab;
+	}
+
+	public String getChooseSubTab() {
+		return chooseSubTab;
+	}
+
+	public void setChooseSubTab(String chooseSubTab) {
+		this.chooseSubTab = chooseSubTab;
 	}
 
 }

@@ -15,8 +15,12 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.format.CellTextFormatter;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -86,6 +90,16 @@ public class ExcelUtil {
 		return value;
 	}
 	
+	public void addRowData(Sheet sheet, int startIndexRow, int startIndexCell, String... valPerCells) throws Exception{
+		Row row = sheet.createRow(startIndexRow);
+		for (int i = 0; i<valPerCells.length;i++) {
+			Cell cell = row.createCell(startIndexCell + i);
+			cell.setCellType(Cell.CELL_TYPE_STRING);
+			cell.setCellValue(valPerCells[i]);
+			sheet.autoSizeColumn(startIndexCell + i);
+		}
+	}
+	
 	/**
 	 * @param sheetNames
 	 * @param headerColumns
@@ -121,8 +135,6 @@ public class ExcelUtil {
         }
         return wb;
     }
-    
-    
     
     /**
      * @author tttoan

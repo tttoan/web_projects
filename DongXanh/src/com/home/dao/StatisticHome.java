@@ -7,6 +7,8 @@ import static org.hibernate.criterion.Example.create;
 import java.util.Date;
 import java.util.List;
 
+import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
@@ -14,13 +16,16 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
+import com.home.entities.StatisticCustom;
 import com.home.model.Statistic;
 
 /**
  * Home object for domain model class Statistic.
  * 
- * @see com.home.dao.Statistic
+ * @see com.home.dao.StatisticCustom
  * @author Hibernate Tools
  */
 public class StatisticHome {
@@ -156,8 +161,7 @@ public class StatisticHome {
 
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			Query query = session.createQuery("FROM Statistic where date_received=:dateReceived and customer_code_level1=:customerCodeLevel1"
-					+ " and product_id=:productId");
+			Query query = session.createQuery("FROM Statistic where date_received=:dateReceived and customer_code_level1=:customerCodeLevel1" + " and product_id=:productId");
 			query.setDate("dateReceived", dateReceived);
 			query.setInteger("customerCodeLevel1", customerCodeLevel1);
 			query.setInteger("productId", productId);
@@ -168,7 +172,7 @@ public class StatisticHome {
 				return false;
 			} else {
 				log.debug("get successful, instance found");
-				
+
 			}
 			return true;
 		} catch (RuntimeException re) {
@@ -184,7 +188,7 @@ public class StatisticHome {
 			}
 		}
 	}
-	
+
 	public boolean isStatictisDuplicateLevel2(Date dateReceived, Integer customerCodeLevel1, Integer custLevel2Id, Integer productId, Integer userId) {
 		log.debug("Checking Statistic duplicate with: ");
 		Transaction tx = null;
@@ -207,7 +211,7 @@ public class StatisticHome {
 				return false;
 			} else {
 				log.debug("get successful, instance found");
-				
+
 			}
 			return true;
 		} catch (RuntimeException re) {
@@ -262,6 +266,34 @@ public class StatisticHome {
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
 			throw re;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Statistic> getListExportStatisticLevel2(StatisticCustom sttCustom) {
+		log.debug("retrieve list Statistic");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			List<Statistic> results = session.createCriteria(Statistic.class).add(Restrictions.between("dateReceived", sttCustom.getFromDate(), sttCustom.getToDate()))
+					.add(Restrictions.eq("customerByCustomerCodeLevel2.id", sttCustom.getCustLevel2Id())).add(Restrictions.eq("customerByCustomerCodeLevel1.id", sttCustom.getCustLevel1Id()))
+					.add(Restrictions.eq("user.id", sttCustom.getEmpId())).addOrder(Order.asc("dateReceived")).list();
+			tx.commit();
+			log.debug("retrieve list Statistic successful, result size: " + results.size());
+			return results;
+		} catch (RuntimeException re) {
+			log.error("retrieve list Statistic failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

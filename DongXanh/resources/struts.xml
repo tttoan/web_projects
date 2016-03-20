@@ -104,14 +104,26 @@
 				<param name="allowedTypes">application/ms-excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
 				<param name="maximumSize">10240</param>
 			</interceptor-ref>
-				<interceptor-ref name="execAndWait">
+			<interceptor-ref name="execAndWait">
 				<!-- override delay and delaySleepInterval parameters of execAndWait 
 					to 500ms -->
-				<param name="delay">1000</param>
-				<param name="delaySleepInterval">1000</param>
+				<param name="delay">3000</param>
+				<param name="delaySleepInterval">3000</param>
 			</interceptor-ref>
 			<result name="wait">/waiting.jsp</result>
 			<result name="success">/import_statistic.jsp</result>
+		</action>
+		<action name="move_to_accept_statistic" class="com.home.action.StatisticAction">
+			<result name="success">/import_statistic.jsp</result>
+			<result name="error">/index.jsp</result>
+		</action>
+		<action name="export_statistic" method="exportStatistic"
+			class="com.home.action.StatisticAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename="export.xlsx"</param>
+			</result>
 		</action>
 
 		<action name="import_statistic_level_two" method="importStatisticLevelTwo"
@@ -121,13 +133,13 @@
 				<param name="allowedTypes">application/ms-excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
 			</interceptor-ref>
 			<interceptor-ref name="execAndWait">
-				<param name="delay">1000</param>
-				<param name="delaySleepInterval">1000</param>
+				<param name="delay">3000</param>
+				<param name="delaySleepInterval">3000</param>
 			</interceptor-ref>
 			<result name="wait">/waiting.jsp</result>
 			<result name="success">/import_statistic.jsp</result>
 		</action>
-		
+
 		<action name="import_customer" method="importCustomer"
 			class="com.home.action.CustomerAction">
 			<interceptor-ref name="defaultStack" />
