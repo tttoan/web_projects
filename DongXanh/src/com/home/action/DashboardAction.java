@@ -38,13 +38,25 @@ public class DashboardAction  implements ServletContextAware{
 		new DashboardAction().getListCustomerByBirthday();
 	}
 	
+	private void checkPromotionResult() throws Exception {
+		try {
+			PromotionHome promotionHome = new PromotionHome(HibernateUtil.getSessionFactory());
+			promotionHome.setFinish();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public String getCurrentUser() throws Exception {
 		try {
 			user = (User) ActionContext.getContext().getSession().get(MyConts.LOGIN_SESSION);
 			if(user == null){
 				user = new User();
-				user.setUserName("username");
+				user.setUserName("user");
 				user.setFullName("user");
+				//return Action.LOGIN; 
+			}else{
+				ActionContext.getContext().getSession().put(MyConts.LOGIN_SESSION, user);
 			}
 			return Action.SUCCESS;
 		} catch (Exception e) {
@@ -56,6 +68,9 @@ public class DashboardAction  implements ServletContextAware{
 
 	public String getStatisticPromotions() throws Exception {
 		try {
+			//Check promotion status
+			checkPromotionResult();
+			//Get list
 			PromotionHome promotionHome = new PromotionHome(HibernateUtil.getSessionFactory());
 			int[] arr = promotionHome.totalStatisticPromotions();
 			dashboard = new Dashboard();

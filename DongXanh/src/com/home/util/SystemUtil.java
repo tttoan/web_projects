@@ -9,11 +9,29 @@ import javax.script.ScriptEngineManager;
 
 public class SystemUtil {
 
+	public static void main(String[] args) {
+		System.out.println(getCurrentDate().toString());
+	}
+	
 	public static String getUserDir() {
 		String userDir = System.getProperty("user.dir").replace("\\", "/");
 		return userDir;
 	}
+	
+	public static Date getCurrentDate() {
+		return convertStringDateToDate(convertDateToString(new Date()), "yyyy-MM-dd");
+	}
 
+	public static Date convertStringDateToDate(String strDate, String pattern) {
+		try {
+			SimpleDateFormat format =  new SimpleDateFormat(pattern);
+			return strDate != null ? format.parse(strDate) : null;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public static String convertDateToString(Date pDate) {
 		String temp = "";
 		SimpleDateFormat d = new SimpleDateFormat("yyyy-MM-dd");

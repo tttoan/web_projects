@@ -55,6 +55,17 @@ public class PromotionAction implements ServletContextAware{
 	public void setServletContext(ServletContext ctx) {
 		this.ctx = ctx;
 	}
+	
+//	public String checkPromotionResult() throws Exception {
+//		try {
+//			PromotionHome promotionHome = new PromotionHome(HibernateUtil.getSessionFactory());
+//			promotionHome.setFinish();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return Action.ERROR;
+//		}
+//		return Action.SUCCESS;
+//	}
 
 	public String list() throws Exception {
 		try {

@@ -29,6 +29,7 @@ import com.home.model.Product;
 import com.home.model.Promotion;
 import com.home.model.PromotionCus;
 import com.home.util.StringUtil;
+import com.home.util.SystemUtil;
 
 /**
  * Home object for domain model class Promotion.
@@ -258,6 +259,89 @@ public class PromotionHome {
 			return results;
 		} catch (Exception re) {
 			if (tx!=null) tx.rollback();
+			log.error("retrieve list Promotion failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public List<Promotion> getListPromotionActive(int type) throws Exception{
+		log.debug("retrieve list Promotion");
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Query query = null;
+			String sql ;
+			switch (type) {
+			case 1:
+				sql = "From Promotion Where status=true AND startDate <= :CURDATE AND endDate >= :CURDATE Order By startDate Desc" ;
+				query  = session.createQuery(sql);
+				query.setParameter("CURDATE", new Date(new java.util.Date().getTime()));
+				break;
+			case 2:
+				sql = "From Promotion Where status=true AND startDate > :CURDATE AND endDate > :CURDATE Order By startDate Desc" ;
+				query  = session.createQuery(sql);
+				query.setParameter("CURDATE", new Date(new java.util.Date().getTime()));
+				break;
+			case 3:
+				sql = "From Promotion Where endDate < :CURDATE AND endDate >= :CURDATE1 Order By startDate Desc" ;
+				query  = session.createQuery(sql);
+				query.setParameter("CURDATE", new Date(new java.util.Date().getTime()));
+				query.setParameter("CURDATE1", new Date(SystemUtil.getCurrentDate().getTime()-(7*1000*60*60*24)));
+				break;
+			case 4:
+				sql = "From Promotion Where startDate < :CURDATE1 AND endDate < :CURDATE1 Order By startDate Desc" ; 
+				query  = session.createQuery(sql);
+				query.setParameter("CURDATE1", new Date(SystemUtil.getCurrentDate().getTime()-(7*1000*60*60*24)));
+				break;
+			default:
+				sql = "From Promotion Where startDate <= :CURDATE Order By startDate Desc"; 
+				query  = session.createQuery(sql);
+				query.setParameter("CURDATE", new Date(new java.util.Date().getTime()));
+				break;
+			}
+			List<Promotion> results =  query.list();
+			tx.commit();
+			log.debug("retrieve list Promotion successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			if (tx!=null) tx.rollback();
+			log.error("retrieve list Promotion failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public void setFinish() throws Exception{
+		Session session = null;
+		try {
+			String sql = "UPDATE `promotion` SET status=0 WHERE start_date<? AND end_date<?";
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			PreparedStatement pre = conn.prepareStatement(sql);
+			pre.setDate(1, new Date(SystemUtil.getCurrentDate().getTime()));
+			pre.setDate(2, new Date(SystemUtil.getCurrentDate().getTime()));
+			pre.executeUpdate();
+			conn.commit();
+		} catch (Exception re) {
+			re.printStackTrace();
 			log.error("retrieve list Promotion failed", re);
 			throw re;
 		} finally{

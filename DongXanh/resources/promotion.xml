@@ -208,12 +208,17 @@
 		</action>
 		<action name="currentUserLogin" method="getCurrentUser"
 			class="com.home.action.DashboardAction">
-			<result type="json" />
+			<result type="json" name="success"/>
+			<result type="redirect" name="login">/login.jsp</result>
 		</action>
 	</package>
 	
 	<package name="promotion-result" namespace="/" extends="struts-default">
 		<action name="promotionResultAction" method="listPromotionActive"
+			class="com.home.action.ResultPromotionAction">
+			<result name="success">/promotion_result.jsp</result>
+		</action>
+		<action name="listPromotionResultAction" method="listPromotionResult"
 			class="com.home.action.ResultPromotionAction">
 			<result name="success">/promotion_result.jsp</result>
 		</action>

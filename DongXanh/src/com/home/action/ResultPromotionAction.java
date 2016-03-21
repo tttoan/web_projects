@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
@@ -53,6 +52,15 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	private HashMap<Integer, Integer> mapProductPoint = new HashMap<Integer, Integer>();
 	private InputStream inputStream;
 	private String filenameDownload = "Kết quả khuyến mãi.xls";
+	private int type;
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
 
 	@Override
 	public void setServletRequest(HttpServletRequest request) {
@@ -71,7 +79,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 
 	public static void main(String[] args) {
 		try {
-			new ResultPromotionAction().listPromotionActive();
+			new ResultPromotionAction().listPromotionResult();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -81,9 +89,9 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		try {
 			PromotionHome promotionHome = new PromotionHome(HibernateUtil.getSessionFactory());
 			promotions = promotionHome.getListPromotionActive();
-
 			GroupCustomerHome groupCustomerHome = new GroupCustomerHome(HibernateUtil.getSessionFactory());
 			groupCustomers = groupCustomerHome.getListGroupCustomer();
+			type = 0;
 			int idx = 1;
 			for (Promotion p : promotions) {
 				//System.out.println(p.getGroupCustomer().getId());
@@ -99,6 +107,44 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			return ERROR;
 		}
 	}
+	
+	public String listPromotionResult() throws Exception {
+		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			type = Integer.parseInt(request.getParameter("type"));
+			
+			PromotionHome promotionHome = new PromotionHome(HibernateUtil.getSessionFactory());
+			List<Promotion> list = promotionHome.getListPromotionActive(type);
+
+			GroupCustomerHome groupCustomerHome = new GroupCustomerHome(HibernateUtil.getSessionFactory());
+			groupCustomers = groupCustomerHome.getListGroupCustomer();
+			promotions = new ArrayList<Promotion>();
+			int idx = 1;
+			for (Promotion p : list) {
+				//System.out.println(p.getGroupCustomer().getId());
+				GroupCustomer group = new GroupCustomer();
+				group.setId(p.getGroupCustomer().getId());
+				group.setGroupName(groupCustomers.get(group.getId()));
+				//p.setGroupCustomer(group);
+				//p.setRow_index(idx++);
+				
+				Promotion promotion = new Promotion();
+				promotion.setId(p.getId());
+				promotion.setPromotionName(p.getPromotionName());
+				promotion.setStartDate(p.getStartDate());
+				promotion.setEndDate(p.getEndDate());
+				promotion.setRemarks(p.getRemarks());
+				promotion.setGroupCustomer(group);
+				promotion.setRow_index(idx++);
+				promotions.add(promotion);
+			}
+			return SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+	}
+	
 
 	public String listPromotionCusResult() throws Exception {
 		try {
@@ -486,13 +532,13 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		return 0;
 	}
 
-	public HttpServletRequest getRequest() {
-		return request;
-	}
-
-	public void setRequest(HttpServletRequest request) {
-		this.request = request;
-	}
+//	public HttpServletRequest getRequest() {
+//		return request;
+//	}
+//
+//	public void setRequest(HttpServletRequest request) {
+//		this.request = request;
+//	}
 
 	public List<Promotion> getPromotions() {
 		return promotions;

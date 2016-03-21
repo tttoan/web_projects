@@ -11,6 +11,17 @@ pageEncoding="UTF-8"%>
 		<div class="clearfix"></div>
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
+
+				<s:form name="promotionTypeForm" class="form-horizontal form-label-left">
+					<div class="form-group">
+							<s:select id="cboPromotionStatus" class="select2_group form-control" onchange="onTypeChange()"
+								headerKey="-1" headerValue="Hiển thị danh sách khuyến mãi"
+								list="#{'0':'+ Tất cả', '1':'+ Đang diễn ra', '2':'+ Sắp diễn ra', '3':'+ Đã kết thúc trong vòng 7 ngày', '4':'+ Đã kết thúc quá 7 ngày'}" 
+								value='%{type}' 
+								required="true"/>
+					</div>
+				</s:form>
+
 				<div class="x_panel">
 					<div class="x_content">
 						<table id="example"
@@ -40,7 +51,7 @@ pageEncoding="UTF-8"%>
 											<s:url id="resultURL" action="promotionCusResultAction">
 												<s:param name="id" value="%{id}"></s:param>
 											</s:url>
-											<s:a href="%{resultURL}" class="btn btn-info btn-xs"> Xem </s:a>
+											<s:a href="%{resultURL}" class="btn btn-info btn-xs"> Xem... </s:a>
 										</td>
 									</tr>
 								</s:iterator>
@@ -86,6 +97,17 @@ pageEncoding="UTF-8"%>
 <!-- Datatables -->
 <script src="js/datatables/js/jquery.dataTables.js"></script>
 <!--<script src="js/datatables/tools/js/dataTables.tableTools.js"></script>-->
+
+<script type="text/javascript">
+	function onTypeChange() {
+		var type = "listPromotionResultAction?type="+document.getElementById('cboPromotionStatus').value;
+		//alert(type);
+		document.promotionTypeForm.action = type;
+		document.promotionTypeForm.submit();
+	}
+	
+</script>
+
 <script>
 	$(document).ready(function() {
 		$('input.tableflat').iCheck({

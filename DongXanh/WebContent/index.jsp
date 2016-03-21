@@ -21,7 +21,10 @@
 
 					<h3>Khuyến mãi đang diễn ra</h3>
 					<p>
-						<a href='#'>Xem chi tiết...</a>
+						<s:url id="resultURL1" action="listPromotionResultAction">
+							<s:param name="type" value="1"></s:param>
+						</s:url>
+						<s:a href="%{resultURL1}" class="btn btn-info btn-xs"> Xem chi tiết... </s:a>
 					</p>
 				</div>
 			</div>
@@ -34,7 +37,10 @@
 
 					<h3>Khuyến mãi sắp diễn ra</h3>
 					<p>
-						<a href='#'>Xem chi tiết...</a>
+						<s:url id="resultURL2" action="listPromotionResultAction">
+							<s:param name="type" value="2"></s:param>
+						</s:url>
+						<s:a href="%{resultURL2}" class="btn btn-info btn-xs"> Xem chi tiết... </s:a>
 					</p>
 				</div>
 			</div>
@@ -47,7 +53,10 @@
 
 					<h3>Khuyến mãi vừa kết thúc</h3>
 					<p>
-						<a href='#'>Xem chi tiết...</a>
+						<s:url id="resultURL3" action="listPromotionResultAction">
+							<s:param name="type" value="3"></s:param>
+						</s:url>
+						<s:a href="%{resultURL3}" class="btn btn-info btn-xs"> Xem chi tiết... </s:a>
 					</p>
 				</div>
 			</div>
@@ -60,7 +69,10 @@
 
 					<h3>Khuyến mãi đã kết thúc</h3>
 					<p>
-						<a href='#'>Xem chi tiết...</a>
+						<s:url id="resultURL4" action="listPromotionResultAction">
+							<s:param name="type" value="4"></s:param>
+						</s:url>
+						<s:a href="%{resultURL4}" class="btn btn-info btn-xs"> Xem chi tiết... </s:a>
 					</p>
 				</div>
 			</div>
