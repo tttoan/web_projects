@@ -5,10 +5,13 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.Row;
@@ -17,6 +20,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
+
 import com.home.conts.CustomerTable;
 import com.home.dao.CustomerHome;
 import com.home.dao.GroupCustomerHome;
@@ -197,6 +201,16 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		try {
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
 			listCustomer = cusHome.getListCustomer();
+			GroupCustomerHome groupCusHome = new GroupCustomerHome(HibernateUtil.getSessionFactory());
+			HashMap<Integer, String> groups = groupCusHome.getListGroupCustomer();
+			for (Customer customer : listCustomer) {
+				if(customer.getGroupCustomer() != null){
+					GroupCustomer g = new GroupCustomer();
+					g.setId(customer.getGroupCustomer().getId());
+					g.setGroupName(groups.get(customer.getGroupCustomer().getId()));
+					customer.setGroupCustomer(g);
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			addActionError("Error: load lookup customers. Exception: " + e.getMessage());
