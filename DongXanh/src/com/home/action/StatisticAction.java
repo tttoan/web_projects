@@ -68,7 +68,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	private String uploadContentType;
 	private String uploadFileName;
 	private int statId;
-	private String chooseTab = "vvvvvv";
+	private String chooseTab = "";
 	private String chooseSubTab = "";
 	private InputStream fileInputStream;
 	private ServletContext ctx;

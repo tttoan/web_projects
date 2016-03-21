@@ -150,6 +150,7 @@
 									<input type=text id="total" name="total" required="required"
 										readonly data-validate-minmax="1,100000000"
 										value="${stat.total}" class="form-control col-md-7 col-xs-12">
+							
 								</div>
 							</div>
 
