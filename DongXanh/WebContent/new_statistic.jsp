@@ -27,11 +27,21 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
-						<s:form action="add_statistic" theme="bootstrap" method="post"
+						<s:form action="add_statistic" theme="bootstrap" method="get"
 							cssClass="form-horizontal form-label-left">
 							<s:hidden name="stat.id" value="%{statId}"></s:hidden>
 							<s:hidden name="edit" value="%{edit}"></s:hidden>
 							<span class="section"></span>
+												<s:if test="hasActionErrors()">
+													<div class="errors">
+														<s:actionerror escape="false" />
+													</div>
+												</s:if>
+												<s:elseif test="hasActionMessages()">
+													<div class="message">
+														<s:actionmessage escape="false" />
+													</div>
+												</s:elseif>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="dateReceived">Ngày nhận <span class="required">*</span>
@@ -50,7 +60,7 @@
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<s:select id="emp_id" name="emp.id"
 										cssClass="form-control col-md-7 col-xs-12" headerKey="-1"
-										headerValue="-- Chọn nhân viên thị trường --"
+										headerValue="---"
 										showDownArrow="false" autoComplete="true" list="listEmployee"
 										value="%{stat.user.id}" listKey="id"
 										listValue="fullName +' - '+ userName" />
@@ -63,7 +73,7 @@
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<s:url id="url" value="/add_statistic.action" />
 									<s:select id="cusLevel2.id" name="cusLevel2.id" headerKey="-1"
-										headerValue="-- Chọn khách hàng cấp 2 --"
+										headerValue="---"
 										cssClass="form-control col-md-7 col-xs-12"
 										value="%{stat.customerByCustomerCodeLevel2.id}"
 										showDownArrow="false" autoComplete="true" list="listCustomer"
@@ -80,7 +90,7 @@
 										value="%{stat.customerByCustomerCodeLevel1.id}"
 										cssClass="form-control col-md-7 col-xs-12" list="listCustomer"
 										listKey="id" headerKey="-1"
-										headerValue="-- Chọn khách hàng cấp 1 --"
+										headerValue="---"
 										listValue="director +' - '+ customerCode" />
 								</div>
 							</div>
@@ -93,7 +103,7 @@
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<s:select id="pro_id" name="pro.id" value="%{stat.product.id}"
 										cssClass="form-control col-md-7 col-xs-12" list="listProduct"
-										headerKey="-1" headerValue="-- Chọn sản phẩm --" listKey="id"
+										headerKey="-1" headerValue="---" listKey="id"
 										listValue="productName +' - '+ productCode" />
 								</div>
 							</div>

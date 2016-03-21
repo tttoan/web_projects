@@ -92,7 +92,7 @@
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="gender">Giới tính <span class="required">*</span>
 								</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
+								<div class="col-md-2 col-sm-6 col-xs-12">
 									<select id="gender" name="gender" required="required"
 										class="form-control col-md-7 col-xs-12">
 										<option selected="selected">Nam</option>
@@ -129,7 +129,7 @@
 										autoComplete="true" value="%{user.role.roleId}"
 										cssClass="form-control col-md-7 col-xs-12" list="listRole"
 										listKey="roleId" headerKey="-1"
-										headerValue="-- Chọn phân quyền --" listValue="roleName" />
+										headerValue="---" listValue="roleName" />
 								</div>
 							</div>
 							<div class="ln_solid"></div>

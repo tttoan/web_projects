@@ -68,7 +68,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	private String uploadContentType;
 	private String uploadFileName;
 	private int statId;
-	private String chooseTab = "";
+	private String chooseTab = "vvvvvv";
 	private String chooseSubTab = "";
 	private InputStream fileInputStream;
 	private ServletContext ctx;
@@ -159,6 +159,17 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		listEmployee = userHome.getListUser();
 	}
 
+	public String testStatistic() throws Exception {
+		try {
+			Thread.sleep(2000);
+			System.out.println("asdasdasdasdasdasd");
+			return SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+	}
+	
 	public String deleteStatistic() throws Exception {
 		try {
 			StatisticHome sttHome = new StatisticHome(getSessionFactory());
@@ -178,15 +189,23 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 			stat.setCustomerByCustomerCodeLevel2(cusLevel2);
 			stat.setProduct(pro);
 			StatisticHome sttHome = new StatisticHome(HibernateUtil.getSessionFactory());
-			if (stat.getId() == 0)
-				sttHome.attachDirty(stat);
-			else
+			if (stat.getId() == 0) {
+				boolean isDuplicated = sttHome.isStatictisDuplicateLevel2(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1().getId(), getStat().getCustomerByCustomerCodeLevel2()
+						.getId(), getStat().getProduct().getId(), getStat().getUser().getId());
+				if (!isDuplicated)
+					sttHome.attachDirty(getStat());
+				else {
+					addActionMessage("Dữ liệu đã được cập nhật rồi!");
+					return INPUT;
+				}
+			} else {
 				sttHome.updateDirty(stat);
-			return SUCCESS;
+			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			return ERROR;
+			addActionError(e.getMessage());
+			return INPUT;
 		}
+		return SUCCESS;
 	}
 
 	public String importStatisticLevelOne() {

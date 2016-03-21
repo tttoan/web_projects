@@ -2460,7 +2460,7 @@ legend {
 
 .form-horizontal .form-group {
     margin-right: 0;
-    margin-left: 0;
+    margin-left: -10px;
 }
 
 .form-control-feedback {

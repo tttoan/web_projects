@@ -19,6 +19,11 @@
 			</interceptor-stack>
 		</interceptors>
 
+		<action name="test_statistic" method="testStatistic"
+			class="com.home.action.StatisticAction">
+			<result name="success">/test.jsp</result>
+		</action>
+
 		<!-- home link action -->
 		<action name="homeAction" class="com.home.action.LoginAction"
 			method="execute">
@@ -90,7 +95,7 @@
 		<action name="add_statistic" method="addStatistic"
 			class="com.home.action.StatisticAction">
 			<result name="success" type="redirectAction">list_statistic</result>
-			<result name="error" type="redirectAction">move_to_add_statistic</result>
+			<result name="input">/new_statistic.jsp</result>
 		</action>
 		<action name="delete_statistic" method="deleteStatistic"
 			class="com.home.action.StatisticAction">

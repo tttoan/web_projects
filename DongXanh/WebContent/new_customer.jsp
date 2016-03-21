@@ -57,14 +57,14 @@
 									for="customerCode">Mã khách hàng (<%=yearNow%>) <span
 									class="required">*</span>
 								</label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
+								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="customerCode" type="text" name="customerCode"
 										data-validate-length-range="0,20" value="${cust.customerCode}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 
-							<div class="item form-group">
+							<div class="item form-group" >
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="emp_id">Nhân viên TT <span class="required">*</span>
 								</label>
@@ -72,7 +72,7 @@
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<s:select id="emp_id" name="emp.id"
 										cssClass="form-control col-md-7 col-xs-12" headerKey="-1"
-										headerValue="-- Chọn nhân viên thị trường --"
+										headerValue="---"
 										showDownArrow="false" autoComplete="true" list="listEmployee"
 										listKey="id" listValue="fullName +' - '+ userName"
 										value="%{cust.user.id}" />
@@ -85,7 +85,7 @@
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<s:select id="grpCustomer_id" name="grpCustomer.id"
-										headerKey="-1" headerValue="-- Chọn nhóm khách hàng --"
+										headerKey="-1" headerValue="---"
 										cssClass="form-control col-md-7 col-xs-12" list="listGrpCus"
 										listKey="id" listValue="groupName"
 										value="%{cust.groupCustomer.id}" />
@@ -345,7 +345,7 @@
 										value="%{cust.customerByCustomer1Level1Id.id}"
 										cssClass="form-control col-md-7 col-xs-12" list="listCustomer"
 										listKey="id" headerKey="-1"
-										headerValue="-- Chọn khách hàng cấp 1 --"
+										headerValue="---"
 										listValue="director +' - '+ customerCode" />
 								</div>
 							</div>
@@ -382,7 +382,7 @@
 										value="%{cust.customerByCustomer2Level1Id.id}"
 										cssClass="form-control col-md-7 col-xs-12" list="listCustomer"
 										listKey="id" headerKey="-1"
-										headerValue="-- Chọn khách hàng cấp 1 --"
+										headerValue="---"
 										listValue="director +' - '+ customerCode" />
 								</div>
 							</div>
@@ -419,7 +419,7 @@
 										value="%{cust.customerByCustomer3Level1Id.id}"
 										cssClass="form-control col-md-7 col-xs-12" list="listCustomer"
 										listKey="id" headerKey="-1"
-										headerValue="-- Chọn khách hàng cấp 1 --"
+										headerValue="---"
 										listValue="director +' - '+ customerCode" />
 								</div>
 							</div>
@@ -456,7 +456,7 @@
 										value="%{cust.customerByCustomer4Level1Id.id}"
 										cssClass="form-control col-md-7 col-xs-12" list="listCustomer"
 										listKey="id" headerKey="-1"
-										headerValue="-- Chọn khách hàng cấp 1 --"
+										headerValue="---"
 										listValue="director +' - '+ customerCode" />
 								</div>
 							</div>
@@ -493,7 +493,7 @@
 										value="%{cust.customerByCustomer5Level1Id.id}"
 										cssClass="form-control col-md-7 col-xs-12" list="listCustomer"
 										listKey="id" headerKey="-1"
-										headerValue="-- Chọn khách hàng cấp 1 --"
+										headerValue="---"
 										listValue="director +' - '+ customerCode" />
 								</div>
 							</div>
