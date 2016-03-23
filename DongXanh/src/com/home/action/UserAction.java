@@ -31,7 +31,9 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 	private List<Role> listRole = new ArrayList<>();
 	private HttpServletRequest request;
 	private ServletContext ctx;
-
+	public String genUserName = "sss";
+	
+	
 	@Override
 	public User getModel() {
 		user = new User();
@@ -84,6 +86,18 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 		}
 	}
 
+	public String testUser() throws Exception {
+		try {
+			System.out.println(getGenUserName());
+			setGenUserName("ok men");
+			System.out.println(genUserName);
+			return SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+	}
+	
 	public String findAllRole() throws Exception {
 		try {
 			RoleHome roleHome = new RoleHome(getSessionFactory());
@@ -171,5 +185,13 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 
 	public void setEdit(boolean edit) {
 		this.edit = edit;
+	}
+
+	public String getGenUserName() {
+		return genUserName;
+	}
+
+	public void setGenUserName(String genUserName) {
+		this.genUserName = genUserName;
 	}
 }

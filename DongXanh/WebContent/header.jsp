@@ -3,15 +3,11 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="sx" uri="/struts-dojo-tags"%>
-<%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
 <s:include value="loginCheck.jsp" />
 <html>
 <head>
 <s:head />
 <sx:head />
-<sj:head jqueryui="true" />
-
-
 <!-- Meta, title, CSS, favicons, etc. -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -50,7 +46,6 @@
 
 
 <body class="nav-md">
-
 	<div class="container body">
 		<div class="main_container">
 			<div class="col-md-3 left_col">

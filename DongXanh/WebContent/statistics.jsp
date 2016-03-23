@@ -17,6 +17,7 @@
 							class="table table-striped responsive-utilities jambo_table">
 							<thead>
 								<tr class="headings">
+								<th>STT</th>
 									<th>Ngày nhận</th>
 									<th>Tên cấp 2</th>
 									<th>Tên cấp 1</th>
@@ -32,8 +33,10 @@
 
 							<tbody>
 
-								<s:iterator value="statistics">
+								<s:iterator value="statistics" status="rowStatus">
 									<tr class="even pointer">
+									<td class=""><s:property
+												value="#rowStatus.count" /></td>
 										<td class=""><s:property
 												value="%{getText('format.date',{dateReceived})}" /></td>
 										<td class=""><s:property

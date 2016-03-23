@@ -129,7 +129,7 @@
 										autoComplete="true" value="%{user.role.roleId}"
 										cssClass="form-control col-md-7 col-xs-12" list="listRole"
 										listKey="roleId" headerKey="-1"
-										headerValue="---" listValue="roleName" />
+										headerValue="-- Chọn phân quyền --" listValue="roleName" />
 								</div>
 							</div>
 							<div class="ln_solid"></div>

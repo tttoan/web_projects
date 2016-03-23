@@ -16,6 +16,7 @@
 						<table id="example" class="table table-striped responsive-utilities jambo_table">
 							<thead>
 								<tr class="headings">
+									<th>STT</th>
 									<th>Mã khách hàng</th>
 									<th>Tên cửa hàng</th>
 									<th>Số điện thoại</th>
@@ -25,8 +26,9 @@
 								</tr>
 							</thead>
 							<tbody>
-								<s:iterator value="listCustomer">
+								<s:iterator value="listCustomer" status="rowStatus">
 									<tr class="even pointer">
+										<td class=""><s:property value="#rowStatus.count" /></td>
 										<td class=""><s:property value="customerCode" /></td>
 										<td class=""><s:property value="businessName" /></td>
 										<td class=""><s:property value="directorMobile" /></td>

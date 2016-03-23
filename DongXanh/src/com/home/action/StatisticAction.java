@@ -161,8 +161,8 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	public String testStatistic() throws Exception {
 		try {
-			Thread.sleep(2000);
 			System.out.println("asdasdasdasdasdasd");
+			chooseTab = "asdasdasdasda11111sdasd";
 			return SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();

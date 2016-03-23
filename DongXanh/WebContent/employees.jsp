@@ -17,6 +17,7 @@
 							class="table table-striped responsive-utilities jambo_table">
 							<thead>
 								<tr class="headings">
+									<th>STT</th>
 									<th>Họ và tên</th>
 									<th>Tên tài khoản</th>
 									<th>Email</th>
@@ -28,8 +29,9 @@
 							</thead>
 
 							<tbody>
-								<s:iterator value="listEmployee">
+								<s:iterator value="listEmployee" status="rowStatus">
 									<tr class="even pointer">
+										<td class=""><s:property value="#rowStatus.count" /></td>
 										<td class=""><s:property value="fullName" /></td>
 										<td class=""><s:property value="userName" /></td>
 										<td class=""><s:property value="email" /></td>
