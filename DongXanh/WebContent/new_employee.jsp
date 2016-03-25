@@ -1,12 +1,11 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%-- Using Struts2 Tags in JSP --%>
 <%@ taglib uri="/struts-tags" prefix="s"%>
+<%@ taglib uri="/struts-dojo-tags" prefix="sx"%>
 <%@ include file="header.jsp"%>
 <%@ include file="user_profile.jsp"%>
 <%@ include file="menu.jsp"%>
-<%@ taglib uri="/struts-dojo-tags" prefix="sd"%>
 <!-- page content -->
 <div class="right_col" role="main">
 
@@ -35,9 +34,14 @@
 							<s:hidden name="edit" value="%{edit}"></s:hidden>
 							<s:if test="hasActionErrors()">
 								<div class="errors">
-									<s:actionerror />
+									<s:actionerror escape="true" />
 								</div>
 							</s:if>
+							<s:elseif test="hasActionMessages()">
+								<div class="message">
+									<s:actionmessage escape="true" />
+								</div>
+							</s:elseif>
 							<span class="section"></span>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
@@ -46,7 +50,7 @@
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<input id="fullName" type="text" name="fullName"
 										data-validate-length-range="5,20" value="${user.fullName}"
-										class="optional form-control col-md-7 col-xs-12">
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
@@ -54,9 +58,9 @@
 									for="userName">Tên tài khoản <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<input id="userName" type="text" name="userName"
-										data-validate-length-range="5,20" value="${user.userName}"
-										class="optional form-control col-md-7 col-xs-12">
+									<input id="userName" type="text" name="userName" readonly
+										data-validate-length-range="2,20" value="${user.userName}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
@@ -82,7 +86,7 @@
 									for="birthDate">Ngày sinh <span class="required">*</span>
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
-									<sd:datetimepicker id="birthDate" name="birthDate"
+									<sx:datetimepicker id="birthDate" name="birthDate"
 										value="%{user.birthDate}"
 										cssClass="form-control col-md-7 col-xs-12"
 										displayFormat="dd-MM-yyyy" />
@@ -179,6 +183,26 @@
 <!-- form validation -->
 <script src="js/validator/validator.js"></script>
 <script>
+	$(document).ready(function() {
+		$('#fullName').change(function() {
+			var varFullName = {
+				"varFullName" : $("#fullName").val()
+			};
+			$.ajax({
+				url : "generateEmpUserName",
+				data : JSON.stringify(varFullName),
+				dataType : 'json',
+				contentType : 'application/json',
+				type : 'POST',
+				async : true,
+				success : function(res) {
+					$('#userName').val(res);
+				}
+			});
+		});
+	});
+</script>
+<script>
 	// initialize the validator function
 	validator.message['date'] = 'not a real date';
 
@@ -207,17 +231,6 @@
 			this.submit();
 		return false;
 	});
-
-	/* FOR DEMO ONLY */
-	$('#vfields').change(function() {
-		$('form').toggleClass('mode2');
-	}).prop('checked', false);
-
-	$('#alerts').change(function() {
-		validator.defaults.alerts = (this.checked) ? false : true;
-		if (this.checked)
-			$('form .alert').remove();
-	}).prop('checked', false);
 </script>
 
 </body>

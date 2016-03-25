@@ -32,7 +32,7 @@
 							Calendar d = Calendar.getInstance();
 							int yearNow = d.get(Calendar.YEAR);
 						%>
-						<s:form action="add_customer" method="get"
+						<s:form action="add_customer" method="post"
 							cssClass="form-horizontal form-label-left" theme="bootstrap">
 							<s:hidden name="id" value="%{custId}"></s:hidden>
 							<s:hidden name="edit" value="%{edit}"></s:hidden>

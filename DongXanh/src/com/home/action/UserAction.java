@@ -3,20 +3,17 @@ package com.home.action;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
-
 import com.home.dao.RoleHome;
 import com.home.dao.UserHome;
 import com.home.model.Role;
 import com.home.model.User;
 import com.home.util.HibernateUtil;
-import com.mysql.jdbc.jdbc2.optional.SuspendableXAConnection;
+import com.home.util.StringUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
@@ -24,6 +21,8 @@ import com.opensymphony.xwork2.ModelDriven;
 public class UserAction extends ActionSupport implements Action, ModelDriven<User>, ServletContextAware, ServletRequestAware {
 	private static final long serialVersionUID = 1L;
 	private boolean edit = false;
+	private String varFullName;
+	private String varUserName;
 	public int userId;
 	public int roleId;
 	public User user = new User();
@@ -93,13 +92,26 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 			System.out.println(getGenUserName());
 			setGenUserName("ok men");
 			System.out.println(genUserName);
-			return SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ERROR;
 		}
+		return SUCCESS;
 	}
 	
+	public String generateUserName(){
+		try {
+			UserHome userHome = new UserHome(getSessionFactory());
+			varUserName = StringUtil.generateUserName(varFullName).toLowerCase();
+			int count = userHome.countUserByUserName(varUserName);
+			if(count > 0)
+				varUserName += "_"+(count++);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+		return SUCCESS;
+	}
 	public String findAllRole() throws Exception {
 		try {
 			RoleHome roleHome = new RoleHome(getSessionFactory());
@@ -125,24 +137,26 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 		try {
 			UserHome userHome = new UserHome(getSessionFactory());
 			if(!edit){
-				boolean exist = userHome.checkUsernameExist(user.getUserName());
-				if (exist) {
-					addActionError("Username already exists");
-					return INPUT;
-				}
+				int count = userHome.countUserByUserName(user.getUserName());
+				if(count == 1)
+					throw new Exception("Tên tài khoản đã tồn tại!");
 			}
 			Role rl = new Role();
 			rl.setRoleId(getRoleId());
 			user.setRole(rl);
-			if(user.getId() == 0)
+			if(user.getId() == 0){
 				userHome.attachDirty(user);
-			else
+				addActionMessage("Tạo thành công");
+				getModel();
+			}
+			else{
 				userHome.updateDirty(user);
-			return SUCCESS;
+				return SUCCESS;
+			}
 		} catch (Exception e) {
 			addActionError(e.getMessage());
-			return INPUT;
 		}
+		return INPUT;
 	}
 
 	public String deleteEmployeeById() throws Exception {
@@ -195,5 +209,21 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 
 	public void setGenUserName(String genUserName) {
 		this.genUserName = genUserName;
+	}
+
+	public String getVarFullName() {
+		return varFullName;
+	}
+
+	public void setVarFullName(String varFullName) {
+		this.varFullName = varFullName;
+	}
+
+	public String getVarUserName() {
+		return varUserName;
+	}
+
+	public void setVarUserName(String varUserName) {
+		this.varUserName = varUserName;
 	}
 }

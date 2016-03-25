@@ -13,6 +13,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 
 import com.home.model.Statistic;
 import com.home.model.User;
@@ -42,24 +43,20 @@ public class UserHome {
 		}
 	}
 
-	public boolean checkUsernameExist(String userName) throws Exception {
-		log.debug("persisting User instance");
+	@SuppressWarnings("unchecked")
+	public int countUserByUserName(String userName) throws Exception {
+		log.debug("Retrieve User instance");
 		Transaction tx = null;
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			Query query = session.createQuery("from User where user_name=:userName");
-			query.setString("userName", userName);
-			User results = (User) query.uniqueResult();
+			List<User> results = session.createCriteria(User.class).add(Restrictions.like("userName", userName+"%")).list();
 			tx.commit();
-			log.debug("persist successful");
-			if (results != null)
-				return true;
-			else
-				return false;
+			log.debug("Retrieve successful");
+			return results.size();
 		} catch (RuntimeException re) {
-			log.error("persist failed", re);
+			log.error("Retrieve failed", re);
 			throw re;
 		} finally {
 			if (session != null) {
@@ -87,6 +84,7 @@ public class UserHome {
 			throw re;
 		}
 	}
+
 	public void updateDirty(User instance) {
 		log.debug("attaching dirty User instance");
 		Transaction tx = null;
@@ -111,6 +109,7 @@ public class UserHome {
 			}
 		}
 	}
+
 	public void attachDirty(User instance) {
 		log.debug("attaching dirty User instance");
 		Transaction tx = null;

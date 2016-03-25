@@ -6,8 +6,8 @@
 <struts>
 	<package name="employee" namespace="/" extends="struts-default">
 		<action name="add_employee" method="addEmployee" class="com.home.action.UserAction">
-			<result name="success" type="redirectAction">list_employee</result>
 			<result name="input">/new_employee.jsp</result>
+			<result name="success" type="redirectAction">list_employee</result>
 		</action>
 		<action name="list_employee" method="listEmployee"
 			class="com.home.action.UserAction">
@@ -20,11 +20,26 @@
 		</action>
 		<action name="move_to_add_employee" class="com.home.action.UserAction">
 			<result name="success">/new_employee.jsp</result>
-			<result name="error">/employees.jsp</result>
 		</action>
 		<action name="test_user" method="testUser"
 			class="com.home.action.UserAction">
-			<result name="success" type="redirectAction">${genUserName}</result>
+			<result name="success" type="redirectAction">list_employee</result>
+		</action>
+	</package>
+	<package name="employeeJson" namespace="/" extends="json-default">
+		<interceptors>
+			<interceptor-stack name="defaultStack">
+				<interceptor-ref name="json">
+					<param name="enableSMD">true</param>
+				</interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="defaultStack" />
+		<action name="generateEmpUserName" class="com.home.action.UserAction"
+			method="generateUserName">
+			<result type="json">
+				<param name="root">varUserName</param>
+			</result>
 		</action>
 	</package>
 </struts>
