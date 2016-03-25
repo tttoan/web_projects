@@ -402,13 +402,63 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 				Sheet sheet = workbook.getSheetAt(0);
 				int startIndexRow = 0;
 				int startIndexCell = 0;
-				xls.addRowData(sheet, startIndexRow, startIndexCell, "Tháng", "Ngày nhận", "Mã Cấp 2", "Tên cấp 2", "Mã Cấp 1", "Tên Cấp 1", "Mã Hàng", "Mặt Hàng", "Tên Hàng", "Số Thùng", "Số Lượng",
+				xls.addRowData(sheet, startIndexRow, startIndexCell, "Tháng", "Ngày nhận","Mã Cấp 2", "Tên cấp 2", "Mã Cấp 1", "Tên Cấp 1", "Mã Hàng", "Mặt Hàng", "Tên Hàng", "Số Thùng", "Số Lượng",
 						"Giá có điểm+Ko điểm", "Thành Tiền", "NVTT");
 				startIndexRow++;
 				for (Statistic entry : statistics) {
 					Category cat = catHome.findById(entry.getProduct().getCategory().getId());
-					xls.addRowData(sheet, startIndexRow, startIndexCell, entry.getDateReceived().getMonth() + "", sdf.format(entry.getDateReceived()), entry.getCustomerByCustomerCodeLevel2()
-							.getCustomerCode(), entry.getCustomerByCustomerCodeLevel2().getDirector(), entry.getCustomerByCustomerCodeLevel1().getCustomerCode(), entry
+					xls.addRowData(sheet, startIndexRow, startIndexCell,
+							entry.getDateReceived().getMonth() + "", 
+							sdf.format(entry.getDateReceived()), 
+							entry.getCustomerByCustomerCodeLevel2().getCustomerCode(), 
+							entry.getCustomerByCustomerCodeLevel2().getDirector(), entry.getCustomerByCustomerCodeLevel1().getCustomerCode(), entry
+							.getCustomerByCustomerCodeLevel1().getDirector(), entry.getProduct().getProductCode(), cat.getCategoryCode(), entry.getProduct().getProductName(),
+							entry.getTotalBox() + "", entry.getQuantity() + "", entry.getProduct().getUnitPrice() + "", entry.getTotal() + "", entry.getUser().getFullName());
+					startIndexRow++;
+				}
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				workbook.write(baos);
+				fileInputStream = new ByteArrayInputStream(baos.toByteArray());
+				if (statistics.size() <= 0)
+					addActionMessage("Không tìm thấy dữ liệu!");
+				else
+					addActionMessage("Kết xuất hoàn thành!");
+			}
+
+		} catch (Exception e) {
+			addActionError(e.getMessage());
+			e.printStackTrace();
+		}
+		return SUCCESS;
+	}
+	
+	public String compareStatistic() {
+		try {
+			chooseTab = "tab2";
+			chooseSubTab = "subtab2_2";
+			statistics.clear();
+			ServletContext servletContext = ServletActionContext.getServletContext();
+			String pathname = servletContext.getRealPath("/WEB-INF/template/excel/blank.xlsx");
+			File theFile = new File(pathname);
+			ExcelUtil xls = new ExcelUtil();
+			CategoryHome catHome = new CategoryHome(getSessionFactory());
+			StatisticHome sttHome = new StatisticHome(getSessionFactory());
+			statistics = sttHome.getListExportStatisticLevel2(sttCustom);
+			try (FileInputStream fis = new FileInputStream(theFile)) {
+				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
+				Sheet sheet = workbook.getSheetAt(0);
+				int startIndexRow = 0;
+				int startIndexCell = 0;
+				xls.addRowData(sheet, startIndexRow, startIndexCell, "Tháng", "Ngày nhận","Mã Cấp 2", "Tên cấp 2", "Mã Cấp 1", "Tên Cấp 1", "Mã Hàng", "Mặt Hàng", "Tên Hàng", "Số Thùng", "Số Lượng",
+						"Giá có điểm+Ko điểm", "Thành Tiền", "NVTT");
+				startIndexRow++;
+				for (Statistic entry : statistics) {
+					Category cat = catHome.findById(entry.getProduct().getCategory().getId());
+					xls.addRowData(sheet, startIndexRow, startIndexCell,
+							entry.getDateReceived().getMonth() + "", 
+							sdf.format(entry.getDateReceived()), 
+							entry.getCustomerByCustomerCodeLevel2().getCustomerCode(), 
+							entry.getCustomerByCustomerCodeLevel2().getDirector(), entry.getCustomerByCustomerCodeLevel1().getCustomerCode(), entry
 							.getCustomerByCustomerCodeLevel1().getDirector(), entry.getProduct().getProductCode(), cat.getCategoryCode(), entry.getProduct().getProductName(),
 							entry.getTotalBox() + "", entry.getQuantity() + "", entry.getProduct().getUnitPrice() + "", entry.getTotal() + "", entry.getUser().getFullName());
 					startIndexRow++;

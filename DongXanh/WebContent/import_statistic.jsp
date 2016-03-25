@@ -110,7 +110,7 @@
 											<div class="x_panel">
 												<div class="x_content">
 													<s:url var="fileDownload" action="export_statistic"></s:url>
-													<s:form action="export_statistic" theme="bootstrap"
+													<s:form id="formExport" action="export_statistic" theme="bootstrap"
 														method="post" cssClass="form-horizontal form-label-left">
 														<s:if test="%{#importType=='subtab2_2'}">
 															<s:if test="hasActionErrors()">
@@ -196,6 +196,7 @@
 														<div class="ln_solid"></div>
 														<div class="form-group">
 															<div class="col-md-6 col-md-offset-3">
+																<img id="loadingImage" src="images/loading.gif" style="display: none" />
 																<button type="reset" class="btn btn-success">Reset</button>
 																<button id="send" type="submit" class="btn btn-primary">Kết xuất bảng kê Cấp II</button>
 															</div>

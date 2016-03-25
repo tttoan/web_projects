@@ -24,7 +24,7 @@
 		</action>
 		<action name="test_user" method="testUser"
 			class="com.home.action.UserAction">
-			<result name="success" type="redirectAction">move_to_add_employee</result>
+			<result name="success" type="redirectAction">${genUserName}</result>
 		</action>
 	</package>
 </struts>

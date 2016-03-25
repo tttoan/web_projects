@@ -27,6 +27,7 @@
 	media="print">
 <script src="js/jquery.min.js"></script>
 <link href="css/calendar/fullcalendar.css" rel="stylesheet">
+<link href="css/jquery.dataTables.min.css" rel="stylesheet">
 <script src="Scripts/custom/profileUser.js"></script>
 
 <!-- <link rel="stylesheet" href="css/jquery-ui.css"> -->

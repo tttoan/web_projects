@@ -16,6 +16,7 @@ import com.home.dao.UserHome;
 import com.home.model.Role;
 import com.home.model.User;
 import com.home.util.HibernateUtil;
+import com.mysql.jdbc.jdbc2.optional.SuspendableXAConnection;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
@@ -57,6 +58,7 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 	@Override
 	public void setServletContext(ServletContext sc) {
 		this.setCtx(sc);
+	
 	}
 
 	public SessionFactory getSessionFactory() {
