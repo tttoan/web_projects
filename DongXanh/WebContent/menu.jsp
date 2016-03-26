@@ -22,7 +22,7 @@
 				</ul></li>
 			<s:include value="menu_employee.jsp">
 				<s:param name="role_id">
-					<s:property value="%{user.role.id}" />
+					<s:property value="%{userSes.role.roleId}" />
 				</s:param>
 			</s:include>
 			<li><a><i class="fa fa-edit"></i> Khách Hàng <span
@@ -83,14 +83,16 @@
 				<li class=""><a href="javascript:;" id="profile_username"
 					class="user-profile dropdown-toggle" data-toggle="dropdown"
 					aria-expanded="false"> <img src="images/user.png" alt="">
-						<s:property value="%{user.userName}" /> <span
+						<s:property value="%{userSes.userName}" /> <span
 						class=" fa fa-angle-down"></span>
 				</a>
 					<ul
 						class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">
-						<li><a href="profile.html"> Thông tin cá nhân</a></li>
-						<li><a href="login.jsp"><i
-								class="fa fa-sign-out pull-right"></i> Đăng xuất</a></li>
+						<li><a href="#"> Thông tin cá nhân</a></li>
+						<s:url action="logout_wanted.action" var="loURL"></s:url>
+						<li><s:a href="%{loURL}">
+								<i class="fa fa-sign-out pull-right"></i> Đăng xuất
+						</s:a></li>
 					</ul></li>
 
 				<!-- /customer notice -->

@@ -2,15 +2,10 @@ package com.home.action;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts2.interceptor.ServletRequestAware;
-import org.apache.struts2.util.ServletContextAware;
+import org.apache.struts2.interceptor.SessionAware;
 import org.hibernate.SessionFactory;
 
 import com.home.conts.MyConts;
@@ -20,40 +15,20 @@ import com.home.model.Customer;
 import com.home.model.User;
 import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
-public class LoginAction extends ActionSupport implements Action, ModelDriven<User>, ServletContextAware, ServletRequestAware {
+public class LoginAction extends ActionSupport implements Action, ModelDriven<User>, SessionAware {
 	private static final long serialVersionUID = 1L;
-	public User user = new User();
+	public User userSes = new User();
 	public List<Customer> listCustomer = new ArrayList<>();
 	public List<Customer> listBirthCus = new ArrayList<>();
-	private HttpServletRequest request;
-	private ServletContext ctx;
 	private Map<String, Object> session;
+
 	@Override
 	public User getModel() {
-		user = new User();
-		return user;
-	}
-
-	@Override
-	public void setServletRequest(HttpServletRequest request) {
-		this.setRequest(request);
-	}
-
-	public HttpServletRequest getRequest() {
-		return request;
-	}
-
-	public void setRequest(HttpServletRequest request) {
-		this.request = request;
-	}
-
-	@Override
-	public void setServletContext(ServletContext sc) {
-		this.ctx = sc;
+		userSes = new User();
+		return userSes;
 	}
 
 	public SessionFactory getSessionFactory() {
@@ -61,24 +36,48 @@ public class LoginAction extends ActionSupport implements Action, ModelDriven<Us
 	}
 
 	@Override
-	public String execute() throws Exception {
-		return SUCCESS;
+	public String execute() {
+		try {
+			UserHome userHome = new UserHome(getSessionFactory());
+			userSes = userHome.getUserByCredentials(userSes.getUserName(), userSes.getPassword());
+			if (userSes == null) {
+				getModel();
+				addActionError(getText("error.login"));
+			} else {
+				getSession().put(MyConts.LOGIN_SESSION, userSes);
+				return SUCCESS;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			addActionError(e.getMessage());
+		}
+		return INPUT;
+	}
 
+	public String logOutWanted() throws Exception {
+		try {
+			session.remove(MyConts.LOGIN_SESSION);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return SUCCESS;
 	}
 
 	@Override
 	public void validate() {
-		UserHome userHome = new UserHome(getSessionFactory());
-		User userDB = userHome.getUserByCredentials(user.getUserName(), user.getPassword());
-		if (userDB == null) {
-			addActionError(getText("error.login"));
-		} else {
-			user = userDB;
-			setSession(ActionContext.getContext().getSession());
-			getSession().put("logined", "true");
-			getSession().put("context", new Date());
-			getSession().put(MyConts.LOGIN_SESSION, new User(user.getId(), user.getUserName(), user.getFullName()));
-		}
+		// UserHome userHome = new UserHome(getSessionFactory());
+		// User userDB = userHome.getUserByCredentials(user.getUserName(),
+		// user.getPassword());
+		// if (userDB == null) {
+		// addActionError(getText("error.login"));
+		// } else {
+		// user = userDB;
+		// setSession(ActionContext.getContext().getSession());
+		// getSession().put("logined", "true");
+		// getSession().put("context", new Date());
+		// getSession().put(MyConts.LOGIN_SESSION, new User(user.getId(),
+		// user.getUserName(), user.getFullName()));
+		// }
 	}
 
 	public String getListCustomerByBirthday() {

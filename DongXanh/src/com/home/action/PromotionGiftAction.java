@@ -11,9 +11,11 @@ import org.apache.struts2.util.ServletContextAware;
 
 import com.home.dao.GiftHome;
 import com.home.dao.PromotionGiftHome;
+import com.home.entities.UserAware;
 import com.home.model.Gift;
 import com.home.model.Promotion;
 import com.home.model.PromotionGift;
+import com.home.model.User;
 import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
@@ -22,7 +24,7 @@ import com.opensymphony.xwork2.ActionContext;
  * @author USER
  *
  */
-public class PromotionGiftAction implements ServletContextAware{
+public class PromotionGiftAction implements ServletContextAware, UserAware {
 
 	private ServletContext ctx;
 
@@ -41,6 +43,8 @@ public class PromotionGiftAction implements ServletContextAware{
 	private String unit;
 	private String formula;
 
+	private User userSes;
+
 	public static void main(String[] args) {
 		try {
 			PromotionGiftAction action = new PromotionGiftAction();
@@ -57,7 +61,13 @@ public class PromotionGiftAction implements ServletContextAware{
 	public void setServletContext(ServletContext ctx) {
 		this.ctx = ctx;
 	}
-
+	public User getUserSes() {
+		return userSes;
+	}
+	@Override
+	public void setUserSes(User user) {
+		this.userSes = user;
+	}
 	private int getTotalProducts(){
 		PromotionGiftHome productHome = new PromotionGiftHome(HibernateUtil.getSessionFactory());
 		try {

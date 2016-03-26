@@ -12,9 +12,11 @@ import org.apache.struts2.util.ServletContextAware;
 import com.home.dao.ProductHome;
 import com.home.dao.PromotionProductHome;
 import com.home.dao.RegisterProductHome;
+import com.home.entities.UserAware;
 import com.home.model.PromotionProduct;
 import com.home.model.PromotionRegister;
 import com.home.model.RegisterProduct;
+import com.home.model.User;
 import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
@@ -23,7 +25,7 @@ import com.opensymphony.xwork2.ActionContext;
  * @author USER
  *
  */
-public class RegisterProductAction implements ServletContextAware{
+public class RegisterProductAction implements ServletContextAware, UserAware{
 
 	private ServletContext ctx;
 
@@ -42,6 +44,8 @@ public class RegisterProductAction implements ServletContextAware{
 	private Integer product_id;
 	private Integer promotion_id;
 
+	private User userSes;
+
 
 	public static void main(String[] args) {
 		try {
@@ -59,7 +63,13 @@ public class RegisterProductAction implements ServletContextAware{
 	public void setServletContext(ServletContext ctx) {
 		this.ctx = ctx;
 	}
-
+	public User getUserSes() {
+		return userSes;
+	}
+	@Override
+	public void setUserSes(User user) {
+		this.userSes = user;
+	}
 	private int getTotalProducts(){
 		PromotionProductHome productHome = new PromotionProductHome(HibernateUtil.getSessionFactory());
 		try {

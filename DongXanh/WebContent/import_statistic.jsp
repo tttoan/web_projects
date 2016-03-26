@@ -211,6 +211,7 @@
 						</div>
 					</sx:div>
 				</sx:tabbedpanel>
+			
 			</div>
 		</div>
 	</div>

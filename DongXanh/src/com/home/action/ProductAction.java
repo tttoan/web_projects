@@ -13,8 +13,10 @@ import org.apache.struts2.util.ServletContextAware;
 
 import com.home.dao.CategoryHome;
 import com.home.dao.ProductHome;
+import com.home.entities.UserAware;
 import com.home.model.Category;
 import com.home.model.Product;
+import com.home.model.User;
 import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
@@ -23,7 +25,7 @@ import com.opensymphony.xwork2.ActionContext;
  * @author USER
  *
  */
-public class ProductAction implements Action, ServletContextAware{
+public class ProductAction implements Action, ServletContextAware, UserAware {
 
 	private ServletContext ctx;
 
@@ -47,6 +49,8 @@ public class ProductAction implements Action, ServletContextAware{
 	private Date exportDate;
 	private Date launchDate;
 
+	private User userSes;
+
 	public static void main(String[] args) {
 		try {
 			ProductAction action = new ProductAction();
@@ -59,6 +63,13 @@ public class ProductAction implements Action, ServletContextAware{
 		}
 	}
 
+	public User getUserSes() {
+		return userSes;
+	}
+	@Override
+	public void setUserSes(User user) {
+		this.userSes = user;
+	}
 	@Override
 	public void setServletContext(ServletContext ctx) {
 		this.ctx = ctx;

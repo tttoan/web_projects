@@ -37,6 +37,7 @@ import com.home.dao.ProductHome;
 import com.home.dao.StatisticHome;
 import com.home.dao.UserHome;
 import com.home.entities.StatisticCustom;
+import com.home.entities.UserAware;
 import com.home.model.Category;
 import com.home.model.Customer;
 import com.home.model.Product;
@@ -48,7 +49,7 @@ import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
-public class StatisticAction extends ActionSupport implements Action, ModelDriven<Statistic>, ServletContextAware, ServletRequestAware {
+public class StatisticAction extends ActionSupport implements Action, ModelDriven<Statistic>,UserAware {
 	private static final long serialVersionUID = 1L;
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	public List<Statistic> statistics = new ArrayList<Statistic>();
@@ -73,6 +74,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	private InputStream fileInputStream;
 	private ServletContext ctx;
 	private Workbook workbook;
+	private User userSes;
 
 	public String getUploadContentType() {
 		return uploadContentType;
@@ -95,17 +97,13 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		stat = new Statistic();
 		return stat;
 	}
-
-	@Override
-	public void setServletContext(ServletContext sc) {
-		this.setCtx(sc);
+	public User getUserSes() {
+		return userSes;
 	}
-
 	@Override
-	public void setServletRequest(HttpServletRequest request) {
-		this.setRequest(request);
+	public void setUserSes(User user) {
+		this.userSes = user;
 	}
-
 	@Override
 	public String execute() throws Exception {
 		if (statId != 0) {

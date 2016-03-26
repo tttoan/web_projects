@@ -252,7 +252,7 @@
 				"proId" : $("#pro_id").val()
 			};
 			$.ajax({
-				url : "readDistricts",
+				url : "readInfoStatistic",
 				data : JSON.stringify(proId),
 				dataType : 'json',
 				contentType : 'application/json',

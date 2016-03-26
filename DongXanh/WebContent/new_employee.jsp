@@ -18,9 +18,7 @@
 				<s:else>
 					<h3>Thêm nhân viên</h3>
 				</s:else>
-
 			</div>
-
 		</div>
 		<div class="clearfix"></div>
 
@@ -132,8 +130,7 @@
 									<s:select id="roleId" name="roleId" showDownArrow="false"
 										autoComplete="true" value="%{user.role.roleId}"
 										cssClass="form-control col-md-7 col-xs-12" list="listRole"
-										listKey="roleId" headerKey="-1"
-										headerValue="-- Chọn phân quyền --" listValue="roleName" />
+										listKey="roleId" listValue="roleName" />
 								</div>
 							</div>
 							<div class="ln_solid"></div>

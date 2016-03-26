@@ -13,8 +13,11 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
-						<table id="example"
-							class="jambo_table display nowrap" style="width: 100%" >
+						<s:set var="rId">
+							<s:property value="%{userSes.role.roleId}" />
+						</s:set>
+						<table id="example" class="jambo_table display nowrap"
+							style="width: 100%">
 							<thead>
 								<tr class="headings">
 									<th>STT</th>
@@ -27,7 +30,9 @@
 									<th>Số lượng</th>
 									<th>Thành tiền</th>
 									<th>NVTT</th>
-									<th class="no-link last"><span class="nobr"></span></th>
+									<s:if test="%{#rId == 1}">
+										<th class="no-link last"><span class="nobr"></span></th>
+									</s:if>
 								</tr>
 							</thead>
 
@@ -35,8 +40,7 @@
 
 								<s:iterator value="statistics" status="rowStatus">
 									<tr class="even pointer">
-									<td class=""><s:property
-												value="#rowStatus.count" /></td>
+										<td class=""><s:property value="#rowStatus.count" /></td>
 										<td class=""><s:property
 												value="%{getText('format.date',{dateReceived})}" /></td>
 										<td class=""><s:property
@@ -44,20 +48,26 @@
 										<td class=""><s:property
 												value="customerByCustomerCodeLevel2.director" /></td>
 										<td class=""><s:property value="product.productName" /></td>
-										<td class=""><s:property value="%{getText('format.money',{product.unitPrice})}" /></td>
-										<td class=""><s:property value="%{getText('format.number',{totalBox})}" /></td>
-										<td class=""><s:property value="%{getText('format.number',{quantity})}" /></td>
-										<td class=""><s:property value="%{getText('format.money',{total})}" /></td>
+										<td class=""><s:property
+												value="%{getText('format.money',{product.unitPrice})}" /></td>
+										<td class=""><s:property
+												value="%{getText('format.number',{totalBox})}" /></td>
+										<td class=""><s:property
+												value="%{getText('format.number',{quantity})}" /></td>
+										<td class=""><s:property
+												value="%{getText('format.money',{total})}" /></td>
 										<td class=""><s:property value="user.fullName" /></td>
-										<td class="last"><s:url action="move_to_add_statistic"
-												var="editURL">
-												<s:param name="statId" value="%{id}"></s:param>
-											</s:url> <s:a href="%{editURL}" class="btn btn-info btn-xs">
-												<i class="fa fa-pencil"></i> Sửa </s:a> <s:url
-												action="delete_statistic" var="deleteURL">
-												<s:param name="statId" value="%{id}"></s:param>
-											</s:url> <s:a href="%{deleteURL}" class="btn btn-danger btn-xs">
-												<i class="fa fa-trash-o"></i> Xóa </s:a></td>
+										<s:if test="%{#rId == 1}">
+											<td class="last"><s:url action="move_to_add_statistic"
+													var="editURL">
+													<s:param name="statId" value="%{id}"></s:param>
+												</s:url> <s:a href="%{editURL}" class="btn btn-info btn-xs">
+													<i class="fa fa-pencil"></i> Sửa </s:a> <s:url
+													action="delete_statistic" var="deleteURL">
+													<s:param name="statId" value="%{id}"></s:param>
+												</s:url> <s:a href="%{deleteURL}" class="btn btn-danger btn-xs">
+													<i class="fa fa-trash-o"></i> Xóa </s:a></td>
+										</s:if>
 									</tr>
 								</s:iterator>
 							</tbody>
@@ -102,11 +112,11 @@
 <!-- Datatables -->
 <script src="js/jquery.dataTables.min.js"></script>
 <script>
-$(document).ready(function() {
-    $('#example').DataTable( {
-        "scrollX": true
-    } );
-} );
+	$(document).ready(function() {
+		$('#example').DataTable({
+			"scrollX" : true
+		});
+	});
 </script>
 </body>
 

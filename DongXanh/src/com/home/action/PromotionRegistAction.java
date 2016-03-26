@@ -11,9 +11,11 @@ import org.apache.struts2.util.ServletContextAware;
 
 import com.home.dao.GroupCustomerHome;
 import com.home.dao.PromotionRegistHome;
+import com.home.entities.UserAware;
 import com.home.model.Customer;
 import com.home.model.Promotion;
 import com.home.model.PromotionRegister;
+import com.home.model.User;
 import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
@@ -22,7 +24,7 @@ import com.opensymphony.xwork2.ActionContext;
  * @author USER
  *
  */
-public class PromotionRegistAction implements ServletContextAware{
+public class PromotionRegistAction implements ServletContextAware, UserAware{
 
 	private ServletContext ctx;
 	private PromotionRegister record ;
@@ -38,6 +40,7 @@ public class PromotionRegistAction implements ServletContextAware{
 	private Integer totalPoint;
 	private Integer totalBox;
 	private Integer promotion_id;
+	private User userSes;
 
 
 	public static void main(String[] args) {
@@ -54,7 +57,13 @@ public class PromotionRegistAction implements ServletContextAware{
 	public void setServletContext(ServletContext ctx) {
 		this.ctx = ctx;
 	}
-
+	public User getUserSes() {
+		return userSes;
+	}
+	@Override
+	public void setUserSes(User user) {
+		this.userSes = user;
+	}
 	public String list() throws Exception {
 		try {
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);

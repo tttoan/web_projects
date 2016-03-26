@@ -219,19 +219,25 @@ public class UserHome {
 
 	public User getUserByCredentials(String userName, String password) {
 		log.debug("finding User instance by credentials");
+		Transaction tx = null;
+		Session session = null;
 		try {
-			Session session = sessionFactory.openSession();
-			Transaction tx = session.beginTransaction();
-			Query query = session.createQuery("from User where user_name=:userName and password=:password");
-			query.setString("userName", userName);
-			query.setString("password", password);
-			User results = (User) query.uniqueResult();
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			User result = (User) session.createCriteria(User.class).add(Restrictions.eq("userName", userName)).add(Restrictions.eq("password", password)).uniqueResult();
 			tx.commit();
-			session.close();
-			return results;
+			return result;
 		} catch (RuntimeException re) {
 			log.error("find by credentials failed", re);
 			throw re;
+		}finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 	}

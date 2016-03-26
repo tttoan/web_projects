@@ -13,9 +13,11 @@ import com.home.dao.GiftHome;
 import com.home.dao.PromotionGiftHome;
 import com.home.dao.PromotionRegistHome;
 import com.home.dao.RegisterGiftHome;
+import com.home.entities.UserAware;
 import com.home.model.PromotionGift;
 import com.home.model.PromotionRegister;
 import com.home.model.RegisterGift;
+import com.home.model.User;
 import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
@@ -24,7 +26,7 @@ import com.opensymphony.xwork2.ActionContext;
  * @author USER
  *
  */
-public class RegisterGiftAction implements ServletContextAware{
+public class RegisterGiftAction implements ServletContextAware, UserAware {
 
 	private ServletContext ctx;
 
@@ -41,6 +43,8 @@ public class RegisterGiftAction implements ServletContextAware{
 	private Integer p_gift_id;
 	private Integer promotion_id;
 	private boolean applyAll;
+
+	private User userSes;
 
 
 	public static void main(String[] args) {
@@ -59,7 +63,13 @@ public class RegisterGiftAction implements ServletContextAware{
 	public void setServletContext(ServletContext ctx) {
 		this.ctx = ctx;
 	}
-
+	public User getUserSes() {
+		return userSes;
+	}
+	@Override
+	public void setUserSes(User user) {
+		this.userSes = user;
+	}
 	private int getTotalProducts(){
 		PromotionGiftHome productHome = new PromotionGiftHome(HibernateUtil.getSessionFactory());
 		try {

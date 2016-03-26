@@ -25,6 +25,7 @@ import com.home.conts.CustomerTable;
 import com.home.dao.CustomerHome;
 import com.home.dao.GroupCustomerHome;
 import com.home.dao.UserHome;
+import com.home.entities.UserAware;
 import com.home.model.Customer;
 import com.home.model.GroupCustomer;
 import com.home.model.User;
@@ -34,7 +35,7 @@ import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
-public class CustomerAction extends ActionSupport implements Action, ModelDriven<Customer>, ServletContextAware, ServletRequestAware {
+public class CustomerAction extends ActionSupport implements Action, ModelDriven<Customer>, UserAware {
 	private static final long serialVersionUID = 1L;
 	private boolean edit = false;
 	private int custId = 0;
@@ -65,7 +66,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private int cus4Level1Id;
 	private int cus5Level1Id;
 	private String commonCusPhone = "";
-
+	private User userSes;
 	public String retrievePhoneById() throws Exception {
 		int commonCusId = 0;
 		if (cus1Level1Id != 0)
@@ -155,17 +156,6 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	public Customer getModel() {
 		cust = new Customer();
 		return cust;
-	}
-
-	@Override
-	public void setServletContext(ServletContext sc) {
-		this.setCtx(sc);
-	}
-
-	@Override
-	public void setServletRequest(HttpServletRequest request) {
-		this.setRequest(request);
-
 	}
 
 	public SessionFactory getSessionFactory() {
@@ -547,6 +537,14 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	public void setCustomers(List<Customer> customers) {
 		this.customers = customers;
+	}
+
+	public User getUserSes() {
+		return userSes;
+	}
+	@Override
+	public void setUserSes(User user) {
+		this.userSes = user;
 	}
 
 }

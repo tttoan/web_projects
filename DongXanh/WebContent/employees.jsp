@@ -13,8 +13,11 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
-						<table id="example"
-							class="jambo_table display nowrap"  style="width: 100%;" >
+						<s:set var="rId">
+							<s:property value="%{userSes.role.roleId}" />
+						</s:set>
+						<table id="example" class="jambo_table display nowrap"
+							style="width: 100%;">
 							<thead>
 								<tr class="headings">
 									<th>STT</th>
@@ -24,7 +27,9 @@
 									<th>Ngày sinh</th>
 									<th>Điện thoại</th>
 									<th>Nhóm quyền</th>
-									<th class=" no-link last"><span class="nobr"></span></th>
+									<s:if test="%{#rId == 1}">
+										<th class=" no-link last"><span class="nobr"></span></th>
+									</s:if>
 								</tr>
 							</thead>
 
@@ -40,15 +45,18 @@
 										<td class=""><s:property value="mobilePhone" /></td>
 										<td class=""><a class="btn btn-success btn-xs"><i
 												class="fa"></i> <s:property value="%{role.roleName}" /> </a></td>
-										<td class="last"><s:url action="move_to_add_employee"
-												var="editURL">
-												<s:param name="userId" value="%{id}"></s:param>
-											</s:url> <s:a href="%{editURL}" class="btn btn-info btn-xs">
-												<i class="fa fa-pencil"></i> Sửa </s:a> <s:url
-												action="delete_employee" var="deleteURL">
-												<s:param name="userId" value="%{id}"></s:param>
-											</s:url> <s:a href="%{deleteURL}" class="btn btn-danger btn-xs">
-												<i class="fa fa-trash-o"></i> Xóa </s:a></td>
+
+										<s:if test="%{#rId == 1}">
+											<td class="last"><s:url action="move_to_add_employee"
+													var="editURL">
+													<s:param name="userId" value="%{id}"></s:param>
+												</s:url> <s:a href="%{editURL}" class="btn btn-info btn-xs">
+													<i class="fa fa-pencil"></i> Sửa </s:a> <s:url
+													action="delete_employee" var="deleteURL">
+													<s:param name="userId" value="%{id}"></s:param>
+												</s:url> <s:a href="%{deleteURL}" class="btn btn-danger btn-xs">
+													<i class="fa fa-trash-o"></i> Xóa </s:a></td>
+										</s:if>
 									</tr>
 								</s:iterator>
 							</tbody>

@@ -13,6 +13,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
 
 import com.home.model.Role;
 
@@ -145,7 +146,7 @@ public class RoleHome {
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			List<Role> results = session.createCriteria(Role.class).list();
+			List<Role> results = session.createCriteria(Role.class).addOrder(Order.desc("roleId")).list();
 			tx.commit();
 			log.debug("find by example successful, result size: "
 					+ results.size());

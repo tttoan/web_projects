@@ -14,6 +14,7 @@ import com.home.conts.MyConts;
 import com.home.dao.CustomerHome;
 import com.home.dao.GroupCustomerHome;
 import com.home.dao.PromotionHome;
+import com.home.entities.UserAware;
 import com.home.model.Customer;
 import com.home.model.Dashboard;
 import com.home.model.GroupCustomer;
@@ -23,17 +24,26 @@ import com.home.util.SystemUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 
-public class DashboardAction  implements ServletContextAware{
+public class DashboardAction  implements ServletContextAware, UserAware {
 	private ServletContext ctx;
 	private Dashboard dashboard ;
 	public List<Customer> birthdayCustomers;
 	public User user;
+	private User userSes;
 
 	@Override
 	public void setServletContext(ServletContext sc) {
 		this.ctx = sc;
 	}
 
+	public User getUserSes() {
+		return userSes;
+	}
+	@Override
+	public void setUserSes(User user) {
+		this.userSes = user;
+	}
+	
 	public static void main(String[] args) {
 		new DashboardAction().getListCustomerByBirthday();
 	}
