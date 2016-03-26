@@ -58,7 +58,7 @@
 									class="required">*</span>
 								</label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<input id="customerCode" type="text" name="customerCode"
+									<input id="customerCode" type="text" name="customerCode" readonly
 										data-validate-length-range="0,20" value="${cust.customerCode}"
 										class="form-control col-md-7 col-xs-12">
 								</div>

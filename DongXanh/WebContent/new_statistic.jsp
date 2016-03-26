@@ -116,7 +116,7 @@
 										value="%{stat.product.unitPrice}"></s:hidden>
 									<input type="text" id="unitPriceFm" name="unitPriceFm" readonly
 										required="required" data-validate-minmax="1,1000000000"
-										value="${stat.product.unitPrice}"
+										value="0"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -147,9 +147,11 @@
 									for="total">Thành tiền <span class="required">*</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
-									<input type=text id="total" name="total" required="required"
+									<s:hidden id="total" name="total"
+										value="%{stat.total}"></s:hidden>
+									<input type=text id="totalFm" name="totalFm" required="required"
 										readonly data-validate-minmax="1,100000000"
-										value="${stat.total}" class="form-control col-md-7 col-xs-12">
+										value="0" class="form-control col-md-7 col-xs-12">
 							
 								</div>
 							</div>
@@ -229,16 +231,7 @@
 		return false;
 	});
 
-	/* FOR DEMO ONLY */
-	$('#vfields').change(function() {
-		$('form').toggleClass('mode2');
-	}).prop('checked', false);
 
-	$('#alerts').change(function() {
-		validator.defaults.alerts = (this.checked) ? false : true;
-		if (this.checked)
-			$('form .alert').remove();
-	}).prop('checked', false);
 </script>
 
 <script>
@@ -247,6 +240,7 @@
 			var unitPrice = $("#unitPrice").val();
 			var quantity = $("#quantity").val();
 			$('#total').val((unitPrice * quantity));
+			$('#totalFm').val(((unitPrice * quantity)+"").replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
 		});
 	});
 </script>
@@ -266,9 +260,10 @@
 				async : true,
 				success : function(res) {
 					$('#unitPrice').val(res);
-					$('#unitPriceFm').val(res);
+					$('#unitPriceFm').val((res+"").replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
 					var quantity = $("#quantity").val();
-					$('#total').val((res * quantity));
+					$('#total').val(res * quantity);
+					$('#totalFm').val(((res * quantity)+"").replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
 					// 															for (var i = 0; i < res.length; i++) {
 					// 																$('#district')
 					// 																		.append(
