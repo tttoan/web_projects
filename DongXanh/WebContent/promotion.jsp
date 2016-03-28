@@ -122,6 +122,11 @@
         {
             min-width: 200px;
         }
+        .jtable-dialog-form select
+        {
+            min-width: 200px;
+            font-weight: bold;
+        }
         .promotion-status
         {
             font-weight: bold;

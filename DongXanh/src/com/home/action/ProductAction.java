@@ -13,10 +13,8 @@ import org.apache.struts2.util.ServletContextAware;
 
 import com.home.dao.CategoryHome;
 import com.home.dao.ProductHome;
-import com.home.entities.UserAware;
 import com.home.model.Category;
 import com.home.model.Product;
-import com.home.model.User;
 import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
@@ -25,7 +23,7 @@ import com.opensymphony.xwork2.ActionContext;
  * @author USER
  *
  */
-public class ProductAction implements Action, ServletContextAware, UserAware {
+public class ProductAction implements Action, ServletContextAware{
 
 	private ServletContext ctx;
 
@@ -40,16 +38,11 @@ public class ProductAction implements Action, ServletContextAware, UserAware {
 	private Integer proId;
 	private Integer category_id;
 	private String productCode;
-	private String productType;
 	private String productName;
 	private String description;
 	private BigDecimal unitPrice;
-	private Integer minQuantity;
-	private Integer maxQuantity;
-	private Date exportDate;
-	private Date launchDate;
-
-	private User userSes;
+	private Integer quantity;
+	private Integer point;
 
 	public static void main(String[] args) {
 		try {
@@ -63,13 +56,6 @@ public class ProductAction implements Action, ServletContextAware, UserAware {
 		}
 	}
 
-	public User getUserSes() {
-		return userSes;
-	}
-	@Override
-	public void setUserSes(User user) {
-		this.userSes = user;
-	}
 	@Override
 	public void setServletContext(ServletContext ctx) {
 		this.ctx = ctx;
@@ -116,15 +102,13 @@ public class ProductAction implements Action, ServletContextAware, UserAware {
 			record = new Product();
 			record.setId(id);
 			record.setProductCode(productCode);
-			record.setProductType(getCategoryName());
 			record.setProductName(productName);
 			record.setDescription(description);
 			record.setCategory(category);
 			record.setUnitPrice(unitPrice);
-			record.setMinQuantity(minQuantity);
-			record.setMaxQuantity(maxQuantity);
-			record.setExportDate(exportDate);
-			record.setLaunchDate(new Date());
+			record.setQuantity(quantity);
+			record.setPoint(point);
+			record.setExportDate(new Date());
 
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
 			ProductHome productHome = new ProductHome(HibernateUtil.getSessionFactory());
@@ -145,15 +129,13 @@ public class ProductAction implements Action, ServletContextAware, UserAware {
 			Product record = new Product();
 			record.setId(id);
 			record.setProductCode(productCode);
-			record.setProductType(getCategoryName());
 			record.setProductName(productName);
 			record.setDescription(description);
 			record.setCategory(category);
 			record.setUnitPrice(unitPrice);
-			record.setMinQuantity(minQuantity);
-			record.setMaxQuantity(maxQuantity);
-			record.setExportDate(exportDate);
-			record.setLaunchDate(launchDate);
+			record.setQuantity(quantity);
+			record.setPoint(point);
+			record.setExportDate(new Date());
 
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
 			ProductHome productHome = new ProductHome(HibernateUtil.getSessionFactory());
@@ -196,16 +178,6 @@ public class ProductAction implements Action, ServletContextAware, UserAware {
 		return Action.SUCCESS;
 	}
 	
-	private String getCategoryName(){
-		try {
-			if(categories != null && categories.containsKey(category_id)){
-				return categories.get(category_id);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return productType;
-	}
 	public String retrieveUnitPriceById()  throws Exception {
 		ProductHome productHome = new ProductHome(HibernateUtil.getSessionFactory());
 		Product record = productHome.findById(proId);
@@ -272,13 +244,6 @@ public class ProductAction implements Action, ServletContextAware, UserAware {
 		this.productCode = productCode;
 	}
 
-	public String getProductType() {
-		return productType;
-	}
-
-	public void setProductType(String productType) {
-		this.productType = productType;
-	}
 
 	public String getProductName() {
 		return productName;
@@ -304,38 +269,6 @@ public class ProductAction implements Action, ServletContextAware, UserAware {
 		this.unitPrice = unitPrice;
 	}
 
-	public Integer getMinQuantity() {
-		return minQuantity;
-	}
-
-	public void setMinQuantity(Integer minQuantity) {
-		this.minQuantity = minQuantity;
-	}
-
-	public Integer getMaxQuantity() {
-		return maxQuantity;
-	}
-
-	public void setMaxQuantity(Integer maxQuantity) {
-		this.maxQuantity = maxQuantity;
-	}
-
-	public Date getExportDate() {
-		return exportDate;
-	}
-
-	public void setExportDate(Date exportDate) {
-		this.exportDate = exportDate;
-	}
-
-	public Date getLaunchDate() {
-		return launchDate;
-	}
-
-	public void setLaunchDate(Date launchDate) {
-		this.launchDate = launchDate;
-	}
-	
 	public HashMap<Integer, String> getCategories() {
 		return categories;
 	}
@@ -363,6 +296,21 @@ public class ProductAction implements Action, ServletContextAware, UserAware {
 
 	public void setProId(Integer proId) {
 		this.proId = proId;
+	}
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+
+	public Integer getPoint() {
+		return point;
+	}
+
+	public void setPoint(Integer point) {
+		this.point = point;
 	}
 
 

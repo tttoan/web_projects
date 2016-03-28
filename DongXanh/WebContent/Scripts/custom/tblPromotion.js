@@ -159,10 +159,12 @@ $(document).ready(function() {
         								maxQuantity: {
         									title: 'Số thùng phải đạt',
         									width: '10%',
+        									inputClass: 'validate[custom[integer]]'
         								},
         								maxPoint: {
         									title: 'Số điểm phải đạt',
         									width: '10%',
+        									inputClass: 'validate[custom[integer]]'
         								},
         								formula: {
         									title: 'Công thức',
@@ -172,6 +174,21 @@ $(document).ready(function() {
         									list: false
         								}
                                     },
+                                    //Initialize validation logic when a form is created
+                            		formCreated: function (event, data) {
+                            			data.form.validationEngine();
+                            		},
+                            		//Validate form when it is being submitted
+                            		formSubmitting: function (event, data) {
+                            			//alert("formSubmitting! " + data);
+                            			return data.form.validationEngine('validate');
+                            		},
+                            		//Dispose validation logic when form is closed
+                            		formClosed: function (event, data) {
+                            			//alert("formClosed! " + data);
+                            			data.form.validationEngine('hide');
+                            			data.form.validationEngine('detach');
+                            		},
                                     loadingRecords: function (event, data) {
                             			GiftNumber = 0;
                             		},
@@ -267,10 +284,26 @@ $(document).ready(function() {
 //                                        width: '20%',
 //                                    },
                                     maxPoint: {
-                                        title: 'Điểm cho mỗi thùng (sản phẩm)',
+                                        title: 'Điểm cho mỗi thùng',
                                         width: '20%',
+                                        inputClass: 'validate[custom[integer]]'
                                     }
                                 },
+                              //Initialize validation logic when a form is created
+                        		formCreated: function (event, data) {
+                        			data.form.validationEngine();
+                        		},
+                        		//Validate form when it is being submitted
+                        		formSubmitting: function (event, data) {
+                        			//alert("formSubmitting! " + data);
+                        			return data.form.validationEngine('validate');
+                        		},
+                        		//Dispose validation logic when form is closed
+                        		formClosed: function (event, data) {
+                        			//alert("formClosed! " + data);
+                        			data.form.validationEngine('hide');
+                        			data.form.validationEngine('detach');
+                        		},
                                 loadingRecords: function (event, data) {
                         			ProductNumber = 0;
                         		},

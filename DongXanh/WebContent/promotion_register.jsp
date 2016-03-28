@@ -14,7 +14,7 @@
 
 		<p class="url">
 			<span class="fs1" aria-hidden="true" data-icon="?"></span> <a
-				href="promotion.jsp" data-original-title="">Quay lại ..</a>
+				href="promotion.jsp" data-original-title=""><b>Quay lại ..</b></a>
 		</p>
 
 		<div class="row">
@@ -130,6 +130,11 @@
         .jtable-dialog-form input[type="text"]
         {
             min-width: 200px;
+        }
+        .jtable-dialog-form select
+        {
+            min-width: 200px;
+            font-weight: bold;
         }
         .promotion-status
         {

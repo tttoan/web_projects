@@ -92,31 +92,35 @@ $(document).ready(function() {
 				edit : true,
 				inputClass: 'validate[required]'
 			},
+			quantity : {
+				title : 'Số lượng/thùng',
+				width : '10%',
+				edit : true,
+				defaultValue:0,
+				inputClass: 'validate[custom[integer]]'
+			},
+			point : {
+				title : 'Điểm/thùng',
+				width : '10%',
+				edit : true,
+				defaultValue:0,
+				inputClass: 'validate[custom[integer]]'
+			},
+			unitPrice : {
+				title : 'Giá đề xuất',
+				width : '10%',
+				edit : true,
+				defaultValue:0,
+				inputClass: 'validate[custom[number]]'
+			},
 			description : {
 				title : 'Đặc tả',
 				width : '30%',
 				edit : true,
 				type: 'textarea',
+				list: false
 			},
-			unitPrice : {
-				title : 'Đơn giá',
-				width : '10%',
-				edit : true,
-				defaultValue:0
-			},
-			minQuantity : {
-				title : 'Số lượng',
-				width : '10%',
-				edit : true,
-				defaultValue:0
-			},
-			exportDate : {
-				title : 'Hạn dùng',
-				width : '10%',
-				edit : true,
-				type: 'date',
-				displayFormat: 'dd-mm-yy',
-			},
+			
 		},
 		//Initialize validation logic when a form is created
 		formCreated: function (event, data) {

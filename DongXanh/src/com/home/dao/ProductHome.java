@@ -288,7 +288,6 @@ public class ProductHome {
 				Product p = new Product();
 				p.setId(rs.getInt("id"));
 				p.setProductCode(rs.getString("product_code"));
-				p.setProductType(rs.getString("product_type"));
 				p.setProductName(rs.getString("product_name"));
 				p.setDescription(rs.getString("description"));
 				Category category = new Category();
@@ -296,10 +295,9 @@ public class ProductHome {
 				p.setCategory(category);
 				p.setCategory_id(category.getId());
 				p.setUnitPrice(rs.getBigDecimal("unit_price"));
-				p.setMinQuantity(rs.getInt("min_quantity"));
-				p.setMaxQuantity(rs.getInt("max_quantity"));
+				p.setQuantity(rs.getInt("quantity"));
+				p.setPoint(rs.getInt("point"));
 				p.setExportDate(rs.getDate("export_date"));
-				p.setLaunchDate(rs.getDate("launch_date"));
 				results.add(p);
 			}
 			rs.close();

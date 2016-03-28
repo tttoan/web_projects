@@ -24,7 +24,6 @@ import com.home.conts.Params;
 import com.home.dao.GroupCustomerHome;
 import com.home.dao.PromotionHome;
 import com.home.dao.PromotionRegistHome;
-import com.home.entities.UserAware;
 import com.home.model.GroupCustomer;
 import com.home.model.Product;
 import com.home.model.Promotion;
@@ -34,7 +33,6 @@ import com.home.model.PromotionProduct;
 import com.home.model.PromotionRegister;
 import com.home.model.RegisterGift;
 import com.home.model.RegisterProduct;
-import com.home.model.User;
 import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
@@ -43,7 +41,7 @@ import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
-public class ResultPromotionAction extends ActionSupport implements Action, ServletContextAware, ServletRequestAware, UserAware {
+public class ResultPromotionAction extends ActionSupport implements Action, ServletContextAware, ServletRequestAware {
 
 	private ServletContext ctx;
 	private HttpServletRequest request;
@@ -55,7 +53,6 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	private InputStream inputStream;
 	private String filenameDownload = "Kết quả khuyến mãi.xls";
 	private int type;
-	private User userSes;
 
 	public int getType() {
 		return type;
@@ -64,13 +61,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	public void setType(int type) {
 		this.type = type;
 	}
-	public User getUserSes() {
-		return userSes;
-	}
-	@Override
-	public void setUserSes(User user) {
-		this.userSes = user;
-	}
+
 	@Override
 	public void setServletRequest(HttpServletRequest request) {
 		this.request = request;
@@ -535,7 +526,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	private int getProductBoxDone(String productName, Set<Product> products){
 		for (Product product : products) {
 			if(productName.equalsIgnoreCase(product.getProductName())){
-				return product.getMinQuantity();
+				return product.getQuantity();
 			}
 		}
 		return 0;

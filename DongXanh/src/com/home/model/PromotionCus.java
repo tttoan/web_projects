@@ -177,7 +177,7 @@ public class PromotionCus {
 			int total_p = 0;
 			for (Product product : products) {
 				if(mapProductPoint.containsKey(product.getId())){
-					total_p += (product.getMinQuantity()/*so thung*/ * mapProductPoint.get(product.getId()));
+					total_p += (product.getTotalBox()/*so thung*/ * mapProductPoint.get(product.getId()));
 				}
 			}
 			totalPoint = total_p;
@@ -198,7 +198,7 @@ public class PromotionCus {
 		Object[][]values = new Object[products.size()][3];
 		int i = 0;
 		for (Product product : products) {
-			values[i++] = new Object[]{product.getProductCode(), product.getMaxQuantity()};
+			values[i++] = new Object[]{product.getProductCode(), product.getQuantity()};
 		}
 		return values;
 	}

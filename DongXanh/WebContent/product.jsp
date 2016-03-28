@@ -96,5 +96,20 @@
 <!-- User defined Jtable js file -->
 <script src="Scripts/custom/tblProduct.js" type="text/javascript"></script>
 
+<style>
+        .jtable-dialog-form
+        {
+            min-width: 250px;
+        }
+        .jtable-dialog-form input[type="text"]
+        {
+            min-width: 200px;
+        }
+        .jtable-dialog-form select
+        {
+            min-width: 200px;
+            font-weight: bold;
+        }
+</style>
 </body>
 </html>

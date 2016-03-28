@@ -434,13 +434,14 @@ public class PromotionHome {
 			Connection conn = sessionImpl.connection();
 
 			PreparedStatement pre = conn.prepareStatement(
-					"Select  c2.customer_code, c2.business_name, u.user_name, p.id as product_id, p.product_code, p.product_type, p.product_name, sum(total_box) as total_box,sum(quantity) as quantity,sum(total) as total "
+					"Select  c2.customer_code, c2.business_name, u.user_name, p.id as product_id, ct.category_name, p.product_code, p.product_name, sum(s.total_box) as total_box,sum(s.quantity) as quantity,sum(s.total) as total "
 					+ "From `statistic` s "//JOIN Customer c1 ON s.customerByCustomerCodeLevel1=c1.id "
 					+ "JOIN `customer` c2 ON s.customer_code_level2=c2.id "
 					+ "JOIN `product` p ON p.id=s.product_id "
+					+ "JOIN `category` ct ON ct.id=p.category_id "
 					+ "JOIN `user` u ON u.id=s.user_id "
 					+ "Where date_received >= ? And date_received <= ? "
-					+ "Group By c2.customer_code, c2.business_name, u.user_name, product_id, p.product_code, p.product_type, p.product_name "
+					+ "Group By c2.customer_code, c2.business_name, u.user_name, product_id, ct.category_name, p.product_code, p.product_name "
 					+ "Order By c2.customer_code, p.product_code");
 			
 			pre.setDate(1, start);
@@ -456,7 +457,7 @@ public class PromotionHome {
 				pc.setCustomerName(StringUtil.notNull(rs.getString("business_name")));
 				pc.setSellMan(StringUtil.notNull(rs.getString("user_name")));
 				pc.setProductCode(StringUtil.notNull(rs.getString("product_code")));
-				pc.setCategoryName(StringUtil.notNull(rs.getString("product_type")));
+				pc.setCategoryName(StringUtil.notNull(rs.getString("category_name")));
 				pc.setProductName(StringUtil.notNull(rs.getString("product_name")));
 				pc.setTotalBox(rs.getLong("total_box"));
 				pc.setQuality(rs.getLong("quantity"));
@@ -466,10 +467,9 @@ public class PromotionHome {
 				Product product = new Product();
 				product.setId(rs.getInt("product_id"));
 				product.setProductCode(StringUtil.notNull(rs.getString("product_code")));
-				product.setProductType(StringUtil.notNull(rs.getString("product_type")));
 				product.setProductName(StringUtil.notNull(rs.getString("product_name")));
-				product.setMinQuantity((int)rs.getLong("total_box"));
-				product.setMaxQuantity((int)rs.getLong("quantity"));
+				product.setTotalBox((int)rs.getLong("total_box"));
+				product.setQuantity((int)rs.getLong("quantity"));
 				product.setUnitPrice(rs.getBigDecimal("total"));
 				
 				if(results.containsKey(pc.getCustomerCode())){

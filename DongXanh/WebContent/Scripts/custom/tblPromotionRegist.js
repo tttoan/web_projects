@@ -229,12 +229,30 @@ $(document).ready(function() {
                                     point: {
                                         title: 'Số điểm đăng ký',
                                         width: '20%',
+                                        inputClass: 'validate[custom[integer]]'
                                     },
                                     box: {
                                         title: 'Số thùng đăng ký',
                                         width: '20%',
+                                        inputClass: 'validate[custom[integer]]'
                                     }
                                 },
+                                //Initialize validation logic when a form is created
+                        		formCreated: function (event, data) {
+                        			//alert("formCreated! " + data); 
+                        			data.form.validationEngine();
+                        		},
+                        		//Validate form when it is being submitted
+                        		formSubmitting: function (event, data) {
+                        			//alert("formSubmitting! " + data);
+                        			return data.form.validationEngine('validate');
+                        		},
+                        		//Dispose validation logic when form is closed
+                        		formClosed: function (event, data) {
+                        			//alert("formClosed! " + data);
+                        			data.form.validationEngine('hide');
+                        			data.form.validationEngine('detach');
+                        		},
                                 loadingRecords: function (event, data) {
                         			ProductNumber = 0;
                         		},
@@ -289,12 +307,14 @@ $(document).ready(function() {
 				width : '20%',
 				create: true,
 				edit: true,
+				inputClass: 'validate[custom[integer]]'
 			},
 			totalBox : {
 				title : 'Tổng số thùng đăng ký',
 				width : '20%',
 				create: true,
 				edit: true,
+				inputClass: 'validate[custom[integer]]'
 			},
 			
 		},

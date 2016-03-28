@@ -2033,7 +2033,7 @@ THE SOFTWARE.
                 show: self.options.dialogShowEffect,
                 hide: self.options.dialogHideEffect,
                 width: 'auto',
-                minWidth: '300',
+                minWidth: '310',
                 modal: true,
                 title: self.options.messages.addNewRecord,
                 buttons:
@@ -2388,7 +2388,7 @@ THE SOFTWARE.
                 show: self.options.dialogShowEffect,
                 hide: self.options.dialogHideEffect,
                 width: 'auto',
-                minWidth: '300',
+                minWidth: '310',
                 modal: true,
                 title: self.options.messages.editRecord,
                 buttons:

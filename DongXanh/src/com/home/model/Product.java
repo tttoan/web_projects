@@ -15,32 +15,29 @@ public class Product implements java.io.Serializable {
 	private Integer id;
 	private Category category;
 	private String productCode;
-	private String productType;
 	private String productName;
 	private String description;
 	private BigDecimal unitPrice;
-	private Integer minQuantity;
-	private Integer maxQuantity;
+	private Integer quantity;
+	private Integer point;
 	private Date exportDate;
-	private Date launchDate;
 	private Integer category_id;
 	private Set<PromotionProduct> promotionProducts = new HashSet<PromotionProduct>(0);
-
+	private Integer totalBox;
+	
 	public Product() {
 	}
 
-	public Product(Category category, String productCode, String productType, String productName, String description, BigDecimal unitPrice, Integer minQuantity, Integer maxQuantity, Date exportDate,
-			Date launchDate, Set<PromotionProduct> promotionProducts) {
+	public Product(Category category, String productCode, String productName, String description, BigDecimal unitPrice, Integer quantity, Integer point, Date exportDate,
+			Set<PromotionProduct> promotionProducts) {
 		this.category = category;
 		this.productCode = productCode;
-		this.productType = productType;
 		this.productName = productName;
 		this.description = description;
 		this.unitPrice = unitPrice;
-		this.minQuantity = minQuantity;
-		this.maxQuantity = maxQuantity;
+		this.quantity = quantity;
+		this.point = point;
 		this.exportDate = exportDate;
-		this.launchDate = launchDate;
 		this.promotionProducts = promotionProducts;
 	}
 
@@ -68,14 +65,6 @@ public class Product implements java.io.Serializable {
 		this.productCode = productCode;
 	}
 
-	public String getProductType() {
-		return this.productType;
-	}
-
-	public void setProductType(String productType) {
-		this.productType = productType;
-	}
-
 	public String getProductName() {
 		return this.productName;
 	}
@@ -100,21 +89,6 @@ public class Product implements java.io.Serializable {
 		this.unitPrice = unitPrice;
 	}
 
-	public Integer getMinQuantity() {
-		return this.minQuantity;
-	}
-
-	public void setMinQuantity(Integer minQuantity) {
-		this.minQuantity = minQuantity;
-	}
-
-	public Integer getMaxQuantity() {
-		return this.maxQuantity;
-	}
-
-	public void setMaxQuantity(Integer maxQuantity) {
-		this.maxQuantity = maxQuantity;
-	}
 
 	public Date getExportDate() {
 		return this.exportDate;
@@ -122,14 +96,6 @@ public class Product implements java.io.Serializable {
 
 	public void setExportDate(Date exportDate) {
 		this.exportDate = exportDate;
-	}
-
-	public Date getLaunchDate() {
-		return this.launchDate;
-	}
-
-	public void setLaunchDate(Date launchDate) {
-		this.launchDate = launchDate;
 	}
 
 	public Set<PromotionProduct> getPromotionProducts() {
@@ -146,5 +112,26 @@ public class Product implements java.io.Serializable {
 
 	public void setCategory_id(Integer category_id) {
 		this.category_id = category_id;
+	}
+	public Integer getPoint() {
+		return point;
+	}
+
+	public void setPoint(Integer point) {
+		this.point = point;
+	}
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+	public Integer getTotalBox() {
+		return totalBox;
+	}
+
+	public void setTotalBox(Integer totalBox) {
+		this.totalBox = totalBox;
 	}
 }
