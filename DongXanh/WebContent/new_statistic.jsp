@@ -114,9 +114,10 @@
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<s:hidden id="unitPrice" name="unitPrice"
 										value="%{stat.product.unitPrice}"></s:hidden>
+										<s:set var="varUnitPrice" value="%{getText('format.money',{stat.product.unitPrice})}" ></s:set>
 									<input type="text" id="unitPriceFm" name="unitPriceFm" readonly
 										required="required" data-validate-minmax="1,1000000000"
-										value="0"
+										value="${varUnitPrice}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -127,7 +128,7 @@
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input type="number" id="totalBox" name="totalBox"
 										value="${stat.totalBox}" required="required"
-										data-validate-minmax="1,1000"
+										data-validate-minmax="0,100000"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -138,7 +139,7 @@
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input type="number" id="quantity" name="quantity"
 										value="${stat.quantity}" required="required"
-										data-validate-minmax="1,1000"
+										data-validate-minmax="0,100000"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -149,9 +150,10 @@
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<s:hidden id="total" name="total"
 										value="%{stat.total}"></s:hidden>
-									<input type=text id="totalFm" name="totalFm" required="required"
-										readonly data-validate-minmax="1,100000000"
-										value="0" class="form-control col-md-7 col-xs-12">
+										<s:set var="varTotal" value="%{getText('format.money',{stat.total})}" ></s:set>
+									<input type=text id="totalFm" name="totalFm" required="required" value="${varTotal}" 
+										readonly data-validate-minmax="0,1000000000"
+										class="form-control col-md-7 col-xs-12">
 							
 								</div>
 							</div>
@@ -159,7 +161,7 @@
 							<div class="ln_solid"></div>
 							<div class="form-group">
 								<div class="col-md-6 col-md-offset-3">
-									<button type="reset" class="btn btn-primary">Reset</button>
+									<button type="reset" class="btn btn-primary">Reset </button>
 									<button id="send" type="submit" class="btn btn-success">Save</button>
 								</div>
 							</div>

@@ -95,6 +95,11 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	@Override
 	public Statistic getModel() {
 		stat = new Statistic();
+		stat.setDateReceived(new Date());
+		stat.setQuantity(0);
+		stat.setTotalBox(0);
+		stat.setTotal(new BigDecimal(0));
+	
 		return stat;
 	}
 	public User getUserSes() {
@@ -121,7 +126,6 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	@Override
 	public void validate() {
 		// Default today for date Received value
-		getStat().setDateReceived(new Date());
 		loadLookupEmployee();
 		loadLookupCustomer();
 		loadLookupProduct();

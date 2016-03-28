@@ -16,9 +16,9 @@ public class Statistic implements java.io.Serializable {
 	private Product product;
 	private User user;
 	private Date dateReceived;
-	private Integer totalBox = 0;
-	private Integer quantity =0;
-	private BigDecimal total = new BigDecimal(0);
+	private Integer totalBox;
+	private Integer quantity;
+	private BigDecimal total;
 
 	public Statistic() {
 	}

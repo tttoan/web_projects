@@ -163,9 +163,11 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		cust.setFarmProduct1((float)0);
 		cust.setFarmProduct2((float)0);
 		cust.setFarmProduct3((float)0);
+		cust.setFarmProduct4((float)0);
 		cust.setFarmProduct1Session("");
 		cust.setFarmProduct2Session("");
 		cust.setFarmProduct3Session("");
+		cust.setFarmProduct4Session("");
 		return cust;
 	}
 
@@ -324,6 +326,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 				cusHome.updateDirty(getCust());
 			return SUCCESS;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return INPUT;
 		}
 	}
