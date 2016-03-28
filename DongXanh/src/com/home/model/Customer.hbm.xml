@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Mar 15, 2016 10:27:35 PM by Hibernate Tools 4.3.1 -->
+<!-- Generated Mar 28, 2016 10:31:24 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="com.home.model.Customer" table="customer" catalog="db_promotion" optimistic-lock="version">
         <id name="id" type="java.lang.Integer">
@@ -46,6 +46,9 @@
         </property>
         <property name="businessName" type="string">
             <column name="business_name" length="200" />
+        </property>
+        <property name="statisticName" type="string">
+            <column name="statistic_name" length="200" />
         </property>
         <property name="budgetRegister" type="big_decimal">
             <column name="budget_register" precision="12" />

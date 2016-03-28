@@ -1,6 +1,6 @@
 package com.home.model;
 
-// Generated Mar 15, 2016 10:27:34 PM by Hibernate Tools 4.3.1
+// Generated Mar 28, 2016 10:31:23 PM by Hibernate Tools 4.3.1
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -26,6 +26,7 @@ public class Customer implements java.io.Serializable {
 	private String certificateAddress;
 	private String taxNumber;
 	private String businessName;
+	private String statisticName;
 	private BigDecimal budgetRegister;
 	private String telefone;
 	private String fax;
@@ -84,30 +85,19 @@ public class Customer implements java.io.Serializable {
 	private Set<Customer> customersForCustomer1Level1Id = new HashSet<Customer>(0);
 
 	public Customer() {
-		this.budgetRegister = new BigDecimal(0);
-		this.budgetOriginal = 0;
-		this.customer1Percent = new Float(0);
-		this.customer2Percent= new Float(0);
-		this.customer3Percent= new Float(0);
-		this.customer4Percent= new Float(0);
-		this.customer5Percent= new Float(0);
-		this.farmProduct1= new Float(0);
-		this.farmProduct2= new Float(0);
-		this.farmProduct3= new Float(0);
-		this.farmProduct4= new Float(0);
-		this.totalVipCustomer = 0;
 	}
 
 	public Customer(Customer customerByCustomer5Level1Id, Customer customerByCustomer4Level1Id, Customer customerByCustomer2Level1Id, Customer customerByCustomer3Level1Id,
 			Customer customerByCustomer1Level1Id, GroupCustomer groupCustomer, User user, Date createTime, String certificateNumber, Date certificateDate, String certificateAddress, String taxNumber,
-			String businessName, BigDecimal budgetRegister, String telefone, String fax, String email, String socialAddress, String businessAddress, String lawyer, String adviser, String director,
-			String directorMobile, Date directorBirthday, Boolean directorBirthdayNotify, String customerCode, String directorDomicile, String sellMan, String sellManMobile, Integer budgetOriginal,
-			String otherBusiness, Float customer1Percent, Float customer2Percent, Float customer3Percent, Float customer4Percent, Float customer5Percent, BigDecimal revenue1, BigDecimal revenue2,
-			BigDecimal revenueExpect1, BigDecimal revenueExpect2, BigDecimal revenueExpect3, String percentProvide1, String percentProvide2, String percentProvide3, String percentProvide4,
-			String productSell, String product1Hot, String product2Hot, String product3Hot, String product4Hot, String product5Hot, String product6Hot, Float farmProduct1, String farmProduct1Session,
-			Float farmProduct2, String farmProduct2Session, Float farmProduct3, String farmProduct3Session, Float farmProduct4, String farmProduct4Session, Integer totalVipCustomer,
-			Set<PromotionRegister> promotionRegisters, Set<Customer> customersForCustomer5Level1Id, Set<Statistic> statisticsForCustomerCodeLevel1, Set<Statistic> statisticsForCustomerCodeLevel2,
-			Set<Customer> customersForCustomer4Level1Id, Set<Customer> customersForCustomer2Level1Id, Set<Customer> customersForCustomer3Level1Id, Set<Customer> customersForCustomer1Level1Id) {
+			String businessName, String statisticName, BigDecimal budgetRegister, String telefone, String fax, String email, String socialAddress, String businessAddress, String lawyer,
+			String adviser, String director, String directorMobile, Date directorBirthday, Boolean directorBirthdayNotify, String customerCode, String directorDomicile, String sellMan,
+			String sellManMobile, Integer budgetOriginal, String otherBusiness, Float customer1Percent, Float customer2Percent, Float customer3Percent, Float customer4Percent, Float customer5Percent,
+			BigDecimal revenue1, BigDecimal revenue2, BigDecimal revenueExpect1, BigDecimal revenueExpect2, BigDecimal revenueExpect3, String percentProvide1, String percentProvide2,
+			String percentProvide3, String percentProvide4, String productSell, String product1Hot, String product2Hot, String product3Hot, String product4Hot, String product5Hot, String product6Hot,
+			Float farmProduct1, String farmProduct1Session, Float farmProduct2, String farmProduct2Session, Float farmProduct3, String farmProduct3Session, Float farmProduct4,
+			String farmProduct4Session, Integer totalVipCustomer, Set<PromotionRegister> promotionRegisters, Set<Customer> customersForCustomer5Level1Id,
+			Set<Statistic> statisticsForCustomerCodeLevel1, Set<Statistic> statisticsForCustomerCodeLevel2, Set<Customer> customersForCustomer4Level1Id, Set<Customer> customersForCustomer2Level1Id,
+			Set<Customer> customersForCustomer3Level1Id, Set<Customer> customersForCustomer1Level1Id) {
 		this.customerByCustomer5Level1Id = customerByCustomer5Level1Id;
 		this.customerByCustomer4Level1Id = customerByCustomer4Level1Id;
 		this.customerByCustomer2Level1Id = customerByCustomer2Level1Id;
@@ -121,6 +111,7 @@ public class Customer implements java.io.Serializable {
 		this.certificateAddress = certificateAddress;
 		this.taxNumber = taxNumber;
 		this.businessName = businessName;
+		this.statisticName = statisticName;
 		this.budgetRegister = budgetRegister;
 		this.telefone = telefone;
 		this.fax = fax;
@@ -289,6 +280,14 @@ public class Customer implements java.io.Serializable {
 
 	public void setBusinessName(String businessName) {
 		this.businessName = businessName;
+	}
+
+	public String getStatisticName() {
+		return this.statisticName;
+	}
+
+	public void setStatisticName(String statisticName) {
+		this.statisticName = statisticName;
 	}
 
 	public BigDecimal getBudgetRegister() {

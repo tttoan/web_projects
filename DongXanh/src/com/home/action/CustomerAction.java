@@ -172,6 +172,9 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			} catch (Exception e) {
 				throw e;
 			}
+		}else{
+			getModel();
+			cust.setCustomerCode(generateCustomerCode());
 		}
 		return SUCCESS;
 	}
@@ -262,6 +265,19 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		}
 	}
 
+	private String generateCustomerCode() throws Exception{
+		try {
+			CustomerHome cusHome = new CustomerHome(getSessionFactory());
+			String sId = cusHome.getMaxId()+"";
+			for (int i = sId.length(); i<3;i++) {
+				sId = "0"+sId;
+			}
+			return sId;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
 	public String notifyListCutomer() throws Exception {
 		try {
 			// CustomerHome cusHome = new CustomerHome(getSessionFactory());

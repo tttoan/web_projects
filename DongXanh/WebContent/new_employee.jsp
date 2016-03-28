@@ -47,7 +47,7 @@
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<input id="fullName" type="text" name="fullName"
-										data-validate-length-range="5,20" value="${user.fullName}"
+										data-validate-length-range="1,100" value="${user.fullName}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -57,7 +57,7 @@
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<input id="userName" type="text" name="userName" readonly
-										data-validate-length-range="2,20" value="${user.userName}"
+										data-validate-length-range="1,20" value="${user.userName}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -66,7 +66,7 @@
 									khẩu </label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<input id="password" type="password" name="password"
-										data-validate-length="6,8" value="${user.password}"
+										data-validate-length="6,100" value="${user.password}"
 										class="form-control col-md-7 col-xs-12" required="required">
 								</div>
 							</div>
@@ -76,7 +76,7 @@
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<input type="email" id="email" name="email" required="required"
-										value="${user.email}" class="form-control col-md-7 col-xs-12">
+										data-validate-length="1,100" value="${user.email}" class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="form-group">
@@ -109,7 +109,7 @@
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<input id="mobilePhone" type="text" name="mobilePhone"
 										data-validate-length-range="10,11" value="${user.mobilePhone}"
-										class="optional form-control col-md-7 col-xs-12">
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 

@@ -60,7 +60,6 @@
 			</interceptor-stack>
 		</interceptors>
 		<default-interceptor-ref name="defaultStack" />
-
 		<action name="readInfoCustomer" class="com.home.action.CustomerAction"
 			method="retrievePhoneById">
 			<result type="json">

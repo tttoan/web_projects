@@ -74,19 +74,19 @@
         <property name="isEnabled" type="short">
             <column name="is_enabled" not-null="true" />
         </property>
-        <set name="customers" table="customer" inverse="true" lazy="true" fetch="select">
+        <set name="customers" table="customer" inverse="true" lazy="true" fetch="join">
             <key>
                 <column name="user_id" />
             </key>
             <one-to-many class="com.home.model.Customer" />
         </set>
-        <set name="statistics" table="statistic" inverse="true" lazy="true" fetch="select">
+        <set name="statistics" table="statistic" inverse="true" lazy="true" fetch="join">
             <key>
                 <column name="user_id" />
             </key>
             <one-to-many class="com.home.model.Statistic" />
         </set>
-        <set name="workingPlans" table="working_plan" inverse="true" lazy="true" fetch="select">
+        <set name="workingPlans" table="working_plan" inverse="true" lazy="true" fetch="join">
             <key>
                 <column name="user_id" not-null="true" />
             </key>

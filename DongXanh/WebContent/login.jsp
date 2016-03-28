@@ -52,8 +52,8 @@
 					<s:form action="login" method="post" theme="bootstrap">
 						<h1>ĐỒNG XANH</h1>
 						<s:if test="hasActionErrors()">
-							<div>
-								<s:actionerror />
+							<div class="errors">
+								<s:actionerror escape="true" />
 							</div>
 						</s:if>
 						<div>

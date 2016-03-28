@@ -15,6 +15,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
 
 import com.home.model.Customer;
 import com.home.model.User;
@@ -55,6 +57,31 @@ public class CustomerHome {
 		}
 	}
 
+	public Integer getMaxId() {
+		log.debug("retrieve max id");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Integer max = (Integer) session.createCriteria(Customer.class).setProjection(Projections.max("id")).uniqueResult();
+			tx.commit();
+			log.debug("retrieve max id: " + max);
+			return max;
+		} catch (RuntimeException re) {
+			log.error("retrieve max id", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<Customer> getListCustomer() {
 		log.debug("retrieve list Customer");

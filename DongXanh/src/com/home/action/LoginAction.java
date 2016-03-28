@@ -42,13 +42,12 @@ public class LoginAction extends ActionSupport implements Action, ModelDriven<Us
 			userSes = userHome.getUserByCredentials(userSes.getUserName(), userSes.getPassword());
 			if (userSes == null) {
 				getModel();
-				addActionError(getText("error.login"));
+				addActionError("Tên tài khoản hoặc mật khẩu không chính xác");
 			} else {
 				getSession().put(MyConts.LOGIN_SESSION, userSes);
 				return SUCCESS;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 			addActionError(e.getMessage());
 		}
 		return INPUT;
