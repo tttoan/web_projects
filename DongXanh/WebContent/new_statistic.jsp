@@ -27,21 +27,21 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
-						<s:form action="add_statistic" theme="bootstrap" method="get"
+						<s:form action="add_statistic" theme="bootstrap" method="post"
 							cssClass="form-horizontal form-label-left">
 							<s:hidden name="stat.id" value="%{statId}"></s:hidden>
 							<s:hidden name="edit" value="%{edit}"></s:hidden>
 							<span class="section"></span>
-												<s:if test="hasActionErrors()">
-													<div class="errors">
-														<s:actionerror escape="false" />
-													</div>
-												</s:if>
-												<s:elseif test="hasActionMessages()">
-													<div class="message">
-														<s:actionmessage escape="false" />
-													</div>
-												</s:elseif>
+							<s:if test="hasActionErrors()">
+								<div class="errors">
+									<s:actionerror escape="false" />
+								</div>
+							</s:if>
+							<s:elseif test="hasActionMessages()">
+								<div class="message">
+									<s:actionmessage escape="false" />
+								</div>
+							</s:elseif>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="dateReceived">Ngày nhận <span class="required">*</span>
@@ -60,9 +60,8 @@
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<s:select id="emp_id" name="emp.id"
 										cssClass="form-control col-md-7 col-xs-12" headerKey="-1"
-										headerValue="---"
-										showDownArrow="false" autoComplete="true" list="listEmployee"
-										value="%{stat.user.id}" listKey="id"
+										headerValue="---" showDownArrow="false" autoComplete="true"
+										list="listEmployee" value="%{stat.user.id}" listKey="id"
 										listValue="fullName +' - '+ userName" />
 								</div>
 							</div>
@@ -73,8 +72,7 @@
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<s:url id="url" value="/add_statistic.action" />
 									<s:select id="cusLevel2.id" name="cusLevel2.id" headerKey="-1"
-										headerValue="---"
-										cssClass="form-control col-md-7 col-xs-12"
+										headerValue="---" cssClass="form-control col-md-7 col-xs-12"
 										value="%{stat.customerByCustomerCodeLevel2.id}"
 										showDownArrow="false" autoComplete="true" list="listCustomer"
 										listKey="id" listValue="director +' - '+ customerCode" />
@@ -89,8 +87,7 @@
 										showDownArrow="false" autoComplete="true"
 										value="%{stat.customerByCustomerCodeLevel1.id}"
 										cssClass="form-control col-md-7 col-xs-12" list="listCustomer"
-										listKey="id" headerKey="-1"
-										headerValue="---"
+										listKey="id" headerKey="-1" headerValue="---"
 										listValue="director +' - '+ customerCode" />
 								</div>
 							</div>
@@ -114,7 +111,8 @@
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<s:hidden id="unitPrice" name="unitPrice"
 										value="%{stat.product.unitPrice}"></s:hidden>
-										<s:set var="varUnitPrice" value="%{getText('format.money',{stat.product.unitPrice})}" ></s:set>
+									<s:set var="varUnitPrice"
+										value="%{getText('format.money',{stat.product.unitPrice})}"></s:set>
 									<input type="text" id="unitPriceFm" name="unitPriceFm" readonly
 										required="required" data-validate-minmax="1,1000000000"
 										value="${varUnitPrice}"
@@ -148,20 +146,21 @@
 									for="total">Thành tiền <span class="required">*</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
-									<s:hidden id="total" name="total"
-										value="%{stat.total}"></s:hidden>
-										<s:set var="varTotal" value="%{getText('format.money',{stat.total})}" ></s:set>
-									<input type=text id="totalFm" name="totalFm" required="required" value="${varTotal}" 
-										readonly data-validate-minmax="0,1000000000"
+									<s:hidden id="total" name="total" value="%{stat.total}"></s:hidden>
+									<s:set var="varTotal"
+										value="%{getText('format.money',{stat.total})}"></s:set>
+									<input type=text id="totalFm" name="totalFm"
+										required="required" value="${varTotal}" readonly
+										data-validate-minmax="0,1000000000"
 										class="form-control col-md-7 col-xs-12">
-							
+
 								</div>
 							</div>
 
 							<div class="ln_solid"></div>
 							<div class="form-group">
 								<div class="col-md-6 col-md-offset-3">
-									<button type="reset" class="btn btn-primary">Reset </button>
+									<button type="reset" class="btn btn-primary">Reset</button>
 									<button id="send" type="submit" class="btn btn-success">Save</button>
 								</div>
 							</div>

@@ -326,7 +326,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 				cusHome.updateDirty(getCust());
 			return SUCCESS;
 		} catch (Exception e) {
-			e.printStackTrace();
+			addActionError(e.getMessage());
 			return INPUT;
 		}
 	}

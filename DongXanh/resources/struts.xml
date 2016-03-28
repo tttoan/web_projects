@@ -40,10 +40,6 @@
 			<result name="input">/login.jsp</result>
 		</action>
 
-		
-
-		
-
 		<action name="import_customer" method="importCustomer"
 			class="com.home.action.CustomerAction">
 			<interceptor-ref name="defaultStack" />

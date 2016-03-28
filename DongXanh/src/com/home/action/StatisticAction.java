@@ -72,7 +72,6 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	private String chooseTab = "";
 	private String chooseSubTab = "";
 	private InputStream fileInputStream;
-	private ServletContext ctx;
 	private Workbook workbook;
 	private User userSes;
 
@@ -99,7 +98,6 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		stat.setQuantity(0);
 		stat.setTotalBox(0);
 		stat.setTotal(new BigDecimal(0));
-	
 		return stat;
 	}
 	public User getUserSes() {
@@ -301,7 +299,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 			chooseTab = "tab2";
 			chooseSubTab = "subtab2_1";
 			StringBuilder logDuplicate = new StringBuilder();
-			String filePath = request.getSession().getServletContext().getRealPath("/");
+			String filePath = getRequest().getSession().getServletContext().getRealPath("/");
 			File theFile = new File(filePath, getUploadFileName());
 			FileUtils.copyFile(getUpload(), theFile);
 			Cell cell = null;
@@ -509,18 +507,6 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		return request;
 	}
 
-	public void setRequest(HttpServletRequest request) {
-		this.request = request;
-	}
-
-	public ServletContext getCtx() {
-		return ctx;
-	}
-
-	public void setCtx(ServletContext ctx) {
-		this.ctx = ctx;
-	}
-
 	public List<Product> getListProduct() {
 		return listProduct;
 	}
@@ -635,6 +621,10 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	public void setChooseSubTab(String chooseSubTab) {
 		this.chooseSubTab = chooseSubTab;
+	}
+
+	public void setRequest(HttpServletRequest request) {
+		this.request = request;
 	}
 
 }

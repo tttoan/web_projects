@@ -27,9 +27,8 @@
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
-					<s:set var="product1Session"
-						value="%{cust.farmProduct1Session}" />
-					<jsp:useBean id="product1Session" type="java.lang.String"/>
+					<s:set var="product1Session" value="%{cust.farmProduct1Session}" />
+					<jsp:useBean id="product1Session" type="java.lang.String" />
 					<s:set var="farmProduct2Session"
 						value="%{cust.farmProduct2Session}" />
 					<jsp:useBean id="farmProduct2Session" type="java.lang.String" />
@@ -110,9 +109,14 @@
 							<s:hidden name="edit" value="%{edit}"></s:hidden>
 							<s:if test="hasActionErrors()">
 								<div class="errors">
-									<s:actionerror />
+									<s:actionerror escape="false" />
 								</div>
 							</s:if>
+							<s:elseif test="hasActionMessages()">
+								<div class="message">
+									<s:actionmessage escape="false" />
+								</div>
+							</s:elseif>
 							<span class="section"></span>
 
 							<div class="item form-group">
@@ -817,13 +821,15 @@
 									vụ 1: Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct1Session" name="farmProduct1Session"
-										type="number" value="<%=session1From1 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session1From1%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct1Session" name="farmProduct1Session"
-										type="number" value="<%=session1To1 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session1To1%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -832,13 +838,15 @@
 									vụ 2 : Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct1Session" name="farmProduct1Session"
-										type="number" value="<%=session1From2 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session1From2%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct1Session" name="farmProduct1Session"
-										type="number" value="<%=session1To2 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session1To2%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -847,13 +855,15 @@
 									vụ 3: Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct1Session" name="farmProduct1Session"
-										type="number" value="<%=session1From3 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session1From3%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct1Session" name="farmProduct1Session"
-										type="number" value="<%=session1To3 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session1To3%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -871,13 +881,15 @@
 									vụ 1: Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct2Session" name="farmProduct2Session"
-										type="number" value="<%=session2From1 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session2From1%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct2Session" name="farmProduct2Session"
-										type="number" value="<%=session2To1 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session2To1%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -886,13 +898,15 @@
 									vụ 2 : Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct2Session" name="farmProduct2Session"
-										type="number" value="<%=session2From2 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session2From2%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct2Session" name="farmProduct2Session"
-										type="number" value="<%=session2To2 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session2To2%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -901,13 +915,15 @@
 									vụ 3: Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct2Session" name="farmProduct2Session"
-										type="number" value="<%=session2From3 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session2From3%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct2Session" name="farmProduct2Session"
-										type="number" value="<%=session2To3 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session2To3%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -925,13 +941,15 @@
 									vụ 1: Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct3Session" name="farmProduct3Session"
-										type="number" value="<%=session3From1 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session3From1%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct3Session" name="farmProduct3Session"
-										type="number" value="<%=session3To1 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session3To1%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -940,13 +958,15 @@
 									vụ 2 : Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct3Session" name="farmProduct3Session"
-										type="number" value="<%=session3From2 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session3From2%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct3Session" name="farmProduct3Session"
-										type="number" value="<%=session3To2 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session3To2%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -955,13 +975,15 @@
 									vụ 3: Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct3Session" name="farmProduct3Session"
-										type="number" value="<%=session3From3 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session3From3%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct3Session" name="farmProduct3Session"
-										type="number" value="<%=session3To3 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session3To3%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -979,13 +1001,15 @@
 									vụ 1: Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct4Session" name="farmProduct4Session"
-										type="number" value="<%=session4From1 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session4From1%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct4Session" name="farmProduct4Session"
-										type="number" value="<%=session4To1 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session4To1%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -994,13 +1018,15 @@
 									vụ 2 : Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct4Session" name="farmProduct4Session"
-										type="number" value="<%=session4From2 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session4From2%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct4Session" name="farmProduct4Session"
-										type="number" value="<%=session4To2 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session4To2%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -1009,13 +1035,15 @@
 									vụ 3: Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct4Session" name="farmProduct4Session"
-										type="number" value="<%=session4From3 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session4From3%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct4Session" name="farmProduct4Session"
-										type="number" value="<%=session4To3 %>" data-validate-minmax="0,100"
+										type="number" value="<%=session4To3%>"
+										data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -1200,8 +1228,6 @@
 			});
 		});
 	});
-
-	
 </script>
 </body>
 
