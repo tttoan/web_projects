@@ -155,6 +155,17 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	@Override
 	public Customer getModel() {
 		cust = new Customer();
+		cust.setCustomer1Percent((float)0);
+		cust.setCustomer2Percent((float)0);
+		cust.setCustomer3Percent((float)0);
+		cust.setCustomer4Percent((float)0);
+		cust.setCustomer5Percent((float)0);
+		cust.setFarmProduct1((float)0);
+		cust.setFarmProduct2((float)0);
+		cust.setFarmProduct3((float)0);
+		cust.setFarmProduct1Session("");
+		cust.setFarmProduct2Session("");
+		cust.setFarmProduct3Session("");
 		return cust;
 	}
 

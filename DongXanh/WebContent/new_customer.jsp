@@ -27,11 +27,62 @@
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
-					<s:set var="code" value="%{cust.farmProduct1Session}" />
-					<jsp:useBean id="code" type="java.lang.String" />
+					<s:set var="product1Session"
+						value="%{cust.farmProduct1Session}" />
+					<jsp:useBean id="product1Session" type="java.lang.String"/>
+					<s:set var="farmProduct2Session"
+						value="%{cust.farmProduct2Session}" />
+					<jsp:useBean id="farmProduct2Session" type="java.lang.String" />
+					<s:set var="farmProduct3Session"
+						value="%{cust.farmProduct3Session}" />
+					<jsp:useBean id="farmProduct3Session" type="java.lang.String" />
 					<%
-							Calendar d = Calendar.getInstance();
-							int yearNow = d.get(Calendar.YEAR);
+						String session1From1 = "0";
+						String session1To1 = "0";
+						String session1From2 = "0";
+						String session1To2 = "0";
+						String session1From3 = "0";
+						String session1To3 = "0";
+						if (product1Session.split(",").length == 6) {
+							session1From1 = product1Session.split(",")[0].trim();
+							session1To1 = product1Session.split(",")[1].trim();
+							session1From2 = product1Session.split(",")[2].trim();
+							session1To2 = product1Session.split(",")[3].trim();
+							session1From3 = product1Session.split(",")[4].trim();
+							session1To3 = product1Session.split(",")[5].trim();
+						}
+						//-----------------
+						String session2From1 = "0";
+						String session2To1 = "0";
+						String session2From2 = "0";
+						String session2To2 = "0";
+						String session2From3 = "0";
+						String session2To3 = "0";
+						if (farmProduct2Session.split(",").length == 6) {
+							session2From1 = farmProduct2Session.split(",")[0].trim();
+							session2To1 = farmProduct2Session.split(",")[1].trim();
+							session2From2 = farmProduct2Session.split(",")[2].trim();
+							session2To2 = farmProduct2Session.split(",")[3].trim();
+							session2From3 = farmProduct2Session.split(",")[4].trim();
+							session2To3 = farmProduct2Session.split(",")[5].trim();
+						}
+						//-----------------
+						String session3From1 = "0";
+						String session3To1 = "0";
+						String session3From2 = "0";
+						String session3To2 = "0";
+						String session3From3 = "0";
+						String session3To3 = "0";
+						if (farmProduct3Session.split(",").length == 6) {
+							session3From1 = farmProduct3Session.split(",")[0].trim();
+							session3To1 = farmProduct3Session.split(",")[1].trim();
+							session3From2 = farmProduct3Session.split(",")[2].trim();
+							session3To2 = farmProduct3Session.split(",")[3].trim();
+							session3From3 = farmProduct3Session.split(",")[4].trim();
+							session3To3 = farmProduct3Session.split(",")[5].trim();
+						}
+						Calendar d = Calendar.getInstance();
+						int yearNow = d.get(Calendar.YEAR);
 					%>
 					<div class="x_content">
 
@@ -73,7 +124,6 @@
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<s:select id="grpCustomer_id" name="grpCustomer.id"
-										headerKey="-1" headerValue="---"
 										cssClass="form-control col-md-7 col-xs-12" list="listGrpCus"
 										listKey="id" listValue="groupName"
 										value="%{cust.groupCustomer.id}" />
@@ -749,13 +799,13 @@
 									vụ 1: Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct1Session" name="farmProduct1Session"
-										type="number" value="0" data-validate-minmax="0,100"
+										type="number" value="<%=session1From1 %>" data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct1Session" name="farmProduct1Session"
-										type="number" value="0" data-validate-minmax="0,100"
+										type="number" value="<%=session1To1 %>" data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -764,13 +814,13 @@
 									vụ 2 : Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct1Session" name="farmProduct1Session"
-										type="number" value="0" data-validate-minmax="0,100"
+										type="number" value="<%=session1From2 %>" data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct1Session" name="farmProduct1Session"
-										type="number" value="0" data-validate-minmax="0,100"
+										type="number" value="<%=session1To2 %>" data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -779,13 +829,13 @@
 									vụ 3: Từ tháng </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct1Session" name="farmProduct1Session"
-										type="number" value="0" data-validate-minmax="0,100"
+										type="number" value="<%=session1From3 %>" data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 								<label class="col-md-1 col-sm-3 col-xs-12">đến </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="farmProduct1Session" name="farmProduct1Session"
-										type="number" value="0" data-validate-minmax="0,100"
+										type="number" value="<%=session1To3 %>" data-validate-minmax="0,100"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -1041,97 +1091,99 @@
 	$(document).ready(function() {
 		$('#cus1Level1_id').change(function() {
 			var commonCusId = {
-					"cus1Level1Id" : $("#cus1Level1_id").val()
-				};
-				$.ajax({
-					url : "readInfoCustomer",
-					data : JSON.stringify(commonCusId),
-					dataType : 'json',
-					contentType : 'application/json',
-					type : 'POST',
-					async : true,
-					success : function(res) {
-						$('#cus1Phone').val(res);
-					}
-				});
+				"cus1Level1Id" : $("#cus1Level1_id").val()
+			};
+			$.ajax({
+				url : "readInfoCustomer",
+				data : JSON.stringify(commonCusId),
+				dataType : 'json',
+				contentType : 'application/json',
+				type : 'POST',
+				async : true,
+				success : function(res) {
+					$('#cus1Phone').val(res);
+				}
+			});
 		});
 	});
 
 	$(document).ready(function() {
 		$('#cus2Level1_id').change(function() {
 			var commonCusId = {
-					"cus2Level1Id" : $("#cus2Level1_id").val()
-				};
-				$.ajax({
-					url : "readInfoCustomer",
-					data : JSON.stringify(commonCusId),
-					dataType : 'json',
-					contentType : 'application/json',
-					type : 'POST',
-					async : true,
-					success : function(res) {
-						$('#cus2Phone').val(res);
-					}
-				});
+				"cus2Level1Id" : $("#cus2Level1_id").val()
+			};
+			$.ajax({
+				url : "readInfoCustomer",
+				data : JSON.stringify(commonCusId),
+				dataType : 'json',
+				contentType : 'application/json',
+				type : 'POST',
+				async : true,
+				success : function(res) {
+					$('#cus2Phone').val(res);
+				}
+			});
 		});
 	});
 
 	$(document).ready(function() {
 		$('#cus3Level1_id').change(function() {
 			var commonCusId = {
-					"cus3Level1Id" : $("#cus3Level1_id").val()
-				};
-				$.ajax({
-					url : "readInfoCustomer",
-					data : JSON.stringify(commonCusId),
-					dataType : 'json',
-					contentType : 'application/json',
-					type : 'POST',
-					async : true,
-					success : function(res) {
-						$('#cus3Phone').val(res);
-					}
-				});
+				"cus3Level1Id" : $("#cus3Level1_id").val()
+			};
+			$.ajax({
+				url : "readInfoCustomer",
+				data : JSON.stringify(commonCusId),
+				dataType : 'json',
+				contentType : 'application/json',
+				type : 'POST',
+				async : true,
+				success : function(res) {
+					$('#cus3Phone').val(res);
+				}
+			});
 		});
 	});
 
 	$(document).ready(function() {
 		$('#cus4Level1_id').change(function() {
 			var commonCusId = {
-					"cus4Level1Id" : $("#cus4Level1_id").val()
-				};
-				$.ajax({
-					url : "readInfoCustomer",
-					data : JSON.stringify(commonCusId),
-					dataType : 'json',
-					contentType : 'application/json',
-					type : 'POST',
-					async : true,
-					success : function(res) {
-						$('#cus4Phone').val(res);
-					}
-				});
+				"cus4Level1Id" : $("#cus4Level1_id").val()
+			};
+			$.ajax({
+				url : "readInfoCustomer",
+				data : JSON.stringify(commonCusId),
+				dataType : 'json',
+				contentType : 'application/json',
+				type : 'POST',
+				async : true,
+				success : function(res) {
+					$('#cus4Phone').val(res);
+				}
+			});
 		});
 	});
 
 	$(document).ready(function() {
 		$('#cus5Level1_id').change(function() {
 			var commonCusId = {
-					"cus5Level1Id" : $("#cus5Level1_id").val()
-				};
-				$.ajax({
-					url : "readInfoCustomer",
-					data : JSON.stringify(commonCusId),
-					dataType : 'json',
-					contentType : 'application/json',
-					type : 'POST',
-					async : true,
-					success : function(res) {
-						$('#cus5Phone').val(res);
-					}
-				});
+				"cus5Level1Id" : $("#cus5Level1_id").val()
+			};
+			$.ajax({
+				url : "readInfoCustomer",
+				data : JSON.stringify(commonCusId),
+				dataType : 'json',
+				contentType : 'application/json',
+				type : 'POST',
+				async : true,
+				success : function(res) {
+					$('#cus5Phone').val(res);
+				}
+			});
 		});
 	});
+
+	
 </script>
 </body>
 
