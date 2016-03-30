@@ -9,18 +9,10 @@ $(document).ready(function() {
 		defaultSorting: 'product_name ASC',
 		toolbar: {
 			items: [{
-				icon: '/images/excel.png',
-				text: 'Export to Excel',
+				icon: 'images/import_excel.png',
+				text: 'Import Excel',
 				click: function () {
 					//perform your custom job...
-					alert("Supported not yet!^^")
-				}
-			},{
-				icon: '/images/pdf.png',
-				text: 'Export to Pdf',
-				click: function () {
-					//perform your custom job...
-					alert("Supported not yet!^^")
 				}
 			}]
 		},
