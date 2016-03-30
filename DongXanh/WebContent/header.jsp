@@ -3,7 +3,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="sx" uri="/struts-dojo-tags"%>
-<%-- <s:include value="loginCheck.jsp" /> --%>
 <html>
 <head>
 <s:head />

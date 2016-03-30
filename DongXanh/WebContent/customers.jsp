@@ -26,7 +26,6 @@
 									<th>Số điện thoại</th>
 									<th>Nhóm cấp</th>
 									<th>Email</th>
-
 									<s:if test="%{#rId == 1}">
 										<th class=" no-link last"><span class="nobr"></span></th>
 									</s:if>

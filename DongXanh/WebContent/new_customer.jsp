@@ -38,6 +38,7 @@
 					<s:set var="farmProduct4Session"
 						value="%{cust.farmProduct4Session}" />
 					<jsp:useBean id="farmProduct4Session" type="java.lang.String" />
+					
 					<%
 						String session1From1 = "0";
 						String session1To1 = "0";
@@ -144,6 +145,18 @@
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="cityName">Khu vực <span class="required">*</span>
+								</label>
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<s:select id="cityName" name="varCityCode"
+										cssClass="form-control col-md-7 col-xs-12" list="listCity"
+										headerKey="-1" headerValue="--"
+										listKey="cityCode" listValue="cityName"
+										value="%{varCityCode}" />
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="grpCustomer_id">Nhóm <span class="required">*</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
@@ -171,7 +184,7 @@
 									for="statisticName">Tên bảng kê <span class="required">*</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<input id="statisticName" type="text" name="cust.statisticName"
+									<input id="statisticName" name="cust.statisticName" type="text" 
 										data-validate-length-range="1,500"
 										value="${cust.statisticName}"
 										class="form-control col-md-7 col-xs-12">
@@ -1136,6 +1149,18 @@
 	}).prop('checked', false);
 </script>
 <script>
+$(document).ready(function() {
+	$('#cityName').change(function() {
+		alert("sdsdsdsd");
+		var custCode = $("#customerCode").val();
+		if(custCode.length > 3)
+		 	custCode = custCode.substr(2);
+		var cityCode = $("#cityName").val();
+		
+		$("#customerCode").val(cityCode +""+custCode);
+	});
+});
+
 	$(document).ready(function() {
 		$('#cus1Level1_id').change(function() {
 			var commonCusId = {

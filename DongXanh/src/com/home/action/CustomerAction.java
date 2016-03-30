@@ -22,10 +22,12 @@ import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
 
 import com.home.conts.CustomerTable;
+import com.home.dao.CityHome;
 import com.home.dao.CustomerHome;
 import com.home.dao.GroupCustomerHome;
 import com.home.dao.UserHome;
 import com.home.entities.UserAware;
+import com.home.model.City;
 import com.home.model.Customer;
 import com.home.model.GroupCustomer;
 import com.home.model.User;
@@ -39,6 +41,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private static final long serialVersionUID = 1L;
 	private boolean edit = false;
 	private int custId = 0;
+	private String varCityCode = "";
 	private Customer cust = new Customer();
 	public List<String> listLookupEmployeeForCus = new ArrayList<>();
 	private List<Customer> customers = new ArrayList<>();
@@ -53,6 +56,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	public int yearNow = (Calendar.getInstance()).get(Calendar.YEAR);
 	private List<Customer> listCustomer = new ArrayList<>();
 	private List<User> listEmployee = new ArrayList<>();
+	private List<City> listCity = new ArrayList<>();
 	private List<GroupCustomer> listGrpCus = new ArrayList<>();
 	private GroupCustomer grpCustomer = new GroupCustomer();
 	private Customer cus1Level1 = new Customer();
@@ -67,7 +71,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private int cus5Level1Id;
 	private String commonCusPhone = "";
 	private User userSes;
-	
+
 	public String retrievePhoneById() throws Exception {
 		int commonCusId = 0;
 		if (cus1Level1Id != 0)
@@ -89,86 +93,23 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		return SUCCESS;
 	}
 
-	public Customer getCus1Level1() {
-		return cus1Level1;
-	}
-
-	public void setCus1Level1(Customer cus1Level1) {
-		this.cus1Level1 = cus1Level1;
-	}
-
-	public Customer getCus2Level1() {
-		return cus2Level1;
-	}
-
-	public void setCus2Level1(Customer cus2Level1) {
-		this.cus2Level1 = cus2Level1;
-	}
-
-	public Customer getCus3Level1() {
-		return cus3Level1;
-	}
-
-	public void setCus3Level1(Customer cus3Level1) {
-		this.cus3Level1 = cus3Level1;
-	}
-
-	public Customer getCus4Level1() {
-		return cus4Level1;
-	}
-
-	public void setCus4Level1(Customer cus4Level1) {
-		this.cus4Level1 = cus4Level1;
-	}
-
-	public Customer getCus5Level1() {
-		return cus5Level1;
-	}
-
-	public void setCus5Level1(Customer cus5Level1) {
-		this.cus5Level1 = cus5Level1;
-	}
-
-	public File getUpload() {
-		return upload;
-	}
-
-	public String getUploadContentType() {
-		return uploadContentType;
-	}
-
-	public String getUploadFileName() {
-		return uploadFileName;
-	}
-
-	public void setUpload(File upload) {
-		this.upload = upload;
-	}
-
-	public void setUploadContentType(String uploadContentType) {
-		this.uploadContentType = uploadContentType;
-	}
-
-	public void setUploadFileName(String uploadFileName) {
-		this.uploadFileName = uploadFileName;
-	}
-
 	@Override
 	public Customer getModel() {
 		cust = new Customer();
-		cust.setCustomer1Percent((float)0);
-		cust.setCustomer2Percent((float)0);
-		cust.setCustomer3Percent((float)0);
-		cust.setCustomer4Percent((float)0);
-		cust.setCustomer5Percent((float)0);
-		cust.setFarmProduct1((float)0);
-		cust.setFarmProduct2((float)0);
-		cust.setFarmProduct3((float)0);
-		cust.setFarmProduct4((float)0);
+		cust.setCustomer1Percent((float) 0);
+		cust.setCustomer2Percent((float) 0);
+		cust.setCustomer3Percent((float) 0);
+		cust.setCustomer4Percent((float) 0);
+		cust.setCustomer5Percent((float) 0);
+		cust.setFarmProduct1((float) 0);
+		cust.setFarmProduct2((float) 0);
+		cust.setFarmProduct3((float) 0);
+		cust.setFarmProduct4((float) 0);
 		cust.setFarmProduct1Session("");
 		cust.setFarmProduct2Session("");
 		cust.setFarmProduct3Session("");
 		cust.setFarmProduct4Session("");
+		cust.setCustomerCode("");
 		return cust;
 	}
 
@@ -182,11 +123,12 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			try {
 				CustomerHome cusHome = new CustomerHome(getSessionFactory());
 				setCust(cusHome.findById(custId));
+				varCityCode = getCust().getCustomerCode().substring(0, 2);
 				setEdit(true);
 			} catch (Exception e) {
 				throw e;
 			}
-		}else{
+		} else {
 			getModel();
 			cust.setCustomerCode(generateCustomerCode());
 		}
@@ -199,8 +141,19 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			loadLookupEmployee();
 			loadLookupCustomer();
 			loadLookupGrpCustomer();
+			loadLookupCity();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void loadLookupCity() {
+		try {
+			CityHome cityHome = new CityHome(getSessionFactory());
+			setListCity(cityHome.findAllCity());
+		} catch (Exception e) {
+			e.printStackTrace();
+			addActionError("Error: load lookup citys. Exception: " + e.getMessage());
 		}
 	}
 
@@ -211,7 +164,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			GroupCustomerHome groupCusHome = new GroupCustomerHome(HibernateUtil.getSessionFactory());
 			HashMap<Integer, String> groups = groupCusHome.getListGroupCustomer();
 			for (Customer customer : listCustomer) {
-				if(customer.getGroupCustomer() != null){
+				if (customer.getGroupCustomer() != null) {
 					GroupCustomer g = new GroupCustomer();
 					g.setId(customer.getGroupCustomer().getId());
 					g.setGroupName(groups.get(customer.getGroupCustomer().getId()));
@@ -255,12 +208,11 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			return ERROR;
 		}
 	}
-	
+
 	public String findCustomer() {
 		try {
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
 			setCust(cusHome.findById(custId));
-			System.out.println(getCust().getCustomerCode());
 			return SUCCESS;
 		} catch (Exception e) {
 			return ERROR;
@@ -279,19 +231,19 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		}
 	}
 
-	private String generateCustomerCode() throws Exception{
+	private String generateCustomerCode() throws Exception {
 		try {
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
-			String sId = cusHome.getMaxId()+"";
-			for (int i = sId.length(); i<3;i++) {
-				sId = "0"+sId;
+			String sId = cusHome.getMaxId() + "";
+			for (int i = sId.length(); i < 3; i++) {
+				sId = "0" + sId;
 			}
 			return sId;
 		} catch (Exception e) {
 			throw e;
 		}
 	}
-	
+
 	public String notifyListCutomer() throws Exception {
 		try {
 			// CustomerHome cusHome = new CustomerHome(getSessionFactory());
@@ -306,9 +258,9 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	public String addCustomer() throws Exception {
 		try {
-			if(emp.getId() > 0)
+			if (emp.getId() > 0)
 				getCust().setUser(emp);
-			if(grpCustomer.getId() > 0)
+			if (grpCustomer.getId() > 0)
 				getCust().setGroupCustomer(grpCustomer);
 			if (cus1Level1.getId() > 0)
 				getCust().setCustomerByCustomer1Level1Id(cus1Level1);
@@ -368,24 +320,38 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 				cust.setBudgetOriginal((Integer) xls.getValue(row.getCell(CustomerTable.budgetOriginal.value())));
 				cust.setOtherBusiness((String) xls.getValue(row.getCell(CustomerTable.otherBusiness.value())));
 
-//				cust.setCustomer1Level1((String) xls.getValue(row.getCell(CustomerTable.customer1Level1.value())));
-//				cust.setCustomer1Phone((String) xls.getValue(row.getCell(CustomerTable.customer1Phone.value())));
-//				// cust.setCustomer1Percent((String)xls.getValue(row.getCell(CustomerTable.customer1Percent.value())));
-//
-//				cust.setCustomer2Level1((String) xls.getValue(row.getCell(CustomerTable.customer2Level1.value())));
-//				cust.setCustomer2Phone((String) xls.getValue(row.getCell(CustomerTable.customer2Phone.value())));
-//				// cust.setCustomer2Percent((String)xls.getValue(row.getCell(CustomerTable.customer2Percent.value())));
-//
-//				cust.setCustomer3Level1((String) xls.getValue(row.getCell(CustomerTable.customer3Level1.value())));
-//				cust.setCustomer3Phone((String) xls.getValue(row.getCell(CustomerTable.customer3Phone.value())));
-//				// cust.setCustomer3Percent((String)xls.getValue(row.getCell(CustomerTable.customer3Percent.value())));
-//
-//				cust.setCustomer4Level1((String) xls.getValue(row.getCell(CustomerTable.customer4Level1.value())));
-//				cust.setCustomer4Phone((String) xls.getValue(row.getCell(CustomerTable.customer4Phone.value())));
-//				// cust.setCustomer4Percent((String)xls.getValue(row.getCell(CustomerTable.customer4Percent.value())));
-//
-//				cust.setCustomer5Level1((String) xls.getValue(row.getCell(CustomerTable.customer5Level1.value())));
-//				cust.setCustomer5Phone((String) xls.getValue(row.getCell(CustomerTable.customer5Phone.value())));
+				// cust.setCustomer1Level1((String)
+				// xls.getValue(row.getCell(CustomerTable.customer1Level1.value())));
+				// cust.setCustomer1Phone((String)
+				// xls.getValue(row.getCell(CustomerTable.customer1Phone.value())));
+				// //
+				// cust.setCustomer1Percent((String)xls.getValue(row.getCell(CustomerTable.customer1Percent.value())));
+				//
+				// cust.setCustomer2Level1((String)
+				// xls.getValue(row.getCell(CustomerTable.customer2Level1.value())));
+				// cust.setCustomer2Phone((String)
+				// xls.getValue(row.getCell(CustomerTable.customer2Phone.value())));
+				// //
+				// cust.setCustomer2Percent((String)xls.getValue(row.getCell(CustomerTable.customer2Percent.value())));
+				//
+				// cust.setCustomer3Level1((String)
+				// xls.getValue(row.getCell(CustomerTable.customer3Level1.value())));
+				// cust.setCustomer3Phone((String)
+				// xls.getValue(row.getCell(CustomerTable.customer3Phone.value())));
+				// //
+				// cust.setCustomer3Percent((String)xls.getValue(row.getCell(CustomerTable.customer3Percent.value())));
+				//
+				// cust.setCustomer4Level1((String)
+				// xls.getValue(row.getCell(CustomerTable.customer4Level1.value())));
+				// cust.setCustomer4Phone((String)
+				// xls.getValue(row.getCell(CustomerTable.customer4Phone.value())));
+				// //
+				// cust.setCustomer4Percent((String)xls.getValue(row.getCell(CustomerTable.customer4Percent.value())));
+				//
+				// cust.setCustomer5Level1((String)
+				// xls.getValue(row.getCell(CustomerTable.customer5Level1.value())));
+				// cust.setCustomer5Phone((String)
+				// xls.getValue(row.getCell(CustomerTable.customer5Phone.value())));
 				// cust.setCustomer5Percent((String)xls.getValue(row.getCell(CustomerTable.customer5Percent.value())));
 
 				// cust.setRevenue1((String)xls.getValue(row.getCell(CustomerTable.revenue1.value())));
@@ -573,9 +539,89 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	public User getUserSes() {
 		return userSes;
 	}
+
 	@Override
 	public void setUserSes(User user) {
 		this.userSes = user;
 	}
 
+	public Customer getCus1Level1() {
+		return cus1Level1;
+	}
+
+	public void setCus1Level1(Customer cus1Level1) {
+		this.cus1Level1 = cus1Level1;
+	}
+
+	public Customer getCus2Level1() {
+		return cus2Level1;
+	}
+
+	public void setCus2Level1(Customer cus2Level1) {
+		this.cus2Level1 = cus2Level1;
+	}
+
+	public Customer getCus3Level1() {
+		return cus3Level1;
+	}
+
+	public void setCus3Level1(Customer cus3Level1) {
+		this.cus3Level1 = cus3Level1;
+	}
+
+	public Customer getCus4Level1() {
+		return cus4Level1;
+	}
+
+	public void setCus4Level1(Customer cus4Level1) {
+		this.cus4Level1 = cus4Level1;
+	}
+
+	public Customer getCus5Level1() {
+		return cus5Level1;
+	}
+
+	public void setCus5Level1(Customer cus5Level1) {
+		this.cus5Level1 = cus5Level1;
+	}
+
+	public File getUpload() {
+		return upload;
+	}
+
+	public String getUploadContentType() {
+		return uploadContentType;
+	}
+
+	public String getUploadFileName() {
+		return uploadFileName;
+	}
+
+	public void setUpload(File upload) {
+		this.upload = upload;
+	}
+
+	public void setUploadContentType(String uploadContentType) {
+		this.uploadContentType = uploadContentType;
+	}
+
+	public void setUploadFileName(String uploadFileName) {
+		this.uploadFileName = uploadFileName;
+	}
+
+	public String getVarCityCode() {
+		return varCityCode;
+	}
+
+	public void setVarCityCode(String varCityCode) {
+		this.varCityCode = varCityCode;
+	}
+
+	public List<City> getListCity() {
+		return listCity;
+	}
+
+	public void setListCity(List<City> listCity) {
+		this.listCity = listCity;
+	}
 }

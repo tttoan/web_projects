@@ -239,7 +239,6 @@ public class UserHome {
 				e.printStackTrace();
 			}
 		}
-
 	}
 
 	public User getUserByFullName(String fullName) {
