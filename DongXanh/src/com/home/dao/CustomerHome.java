@@ -266,6 +266,14 @@ public class CustomerHome {
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
+				if(instance.getFarmProduct1Session() == null)
+					instance.setFarmProduct1Session("0");
+				if(instance.getFarmProduct2Session() == null)
+					instance.setFarmProduct2Session("0");
+				if(instance.getFarmProduct3Session() == null)
+					instance.setFarmProduct3Session("0");
+				if(instance.getFarmProduct4Session() == null)
+					instance.setFarmProduct4Session("0");
 				log.debug("get successful, instance found");
 			}
 			return instance;

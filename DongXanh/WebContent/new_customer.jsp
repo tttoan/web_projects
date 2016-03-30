@@ -60,6 +60,8 @@
 						String session2To2 = "0";
 						String session2From3 = "0";
 						String session2To3 = "0";
+						if(farmProduct2Session == null)
+							farmProduct2Session = "";
 						if (farmProduct2Session.split(",").length == 6) {
 							session2From1 = farmProduct2Session.split(",")[0].trim();
 							session2To1 = farmProduct2Session.split(",")[1].trim();

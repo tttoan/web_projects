@@ -67,6 +67,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private int cus5Level1Id;
 	private String commonCusPhone = "";
 	private User userSes;
+	
 	public String retrievePhoneById() throws Exception {
 		int commonCusId = 0;
 		if (cus1Level1Id != 0)
