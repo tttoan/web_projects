@@ -8,6 +8,9 @@
             <column name="id" />
             <generator class="identity" />
         </id>
+         <property name="total" type="java.lang.Integer">
+            <column name="total" />
+        </property>
         <many-to-one name="promotionGift" class="com.home.model.PromotionGift" fetch="select">
             <column name="p_gift_id" not-null="true" />
         </many-to-one>

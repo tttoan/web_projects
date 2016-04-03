@@ -22,6 +22,8 @@
 			</div>
 		</div>
 	</div>
+	
+	<%@ include file="import_product.jsp"%>
 
 	<!-- footer content -->
 	<%@ include file="footer.jsp"%>

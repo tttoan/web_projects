@@ -12,6 +12,15 @@ public class RegisterGift implements java.io.Serializable {
 	private PromotionRegister promotionRegister;
 	private Integer p_gift_id;
 	private boolean applyAll;
+	private Integer total;
+
+	public Integer getTotal() {
+		return total;
+	}
+
+	public void setTotal(Integer total) {
+		this.total = total;
+	}
 
 	public boolean getApplyAll() {
 		return applyAll;

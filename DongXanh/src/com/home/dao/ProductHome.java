@@ -7,7 +7,6 @@ import static org.hibernate.criterion.Example.create;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -24,6 +23,7 @@ import org.hibernate.internal.SessionImpl;
 
 import com.home.model.Category;
 import com.home.model.Product;
+import com.home.model.Statistic;
 
 /**
  * Home object for domain model class Product.
@@ -99,6 +99,36 @@ public class ProductHome {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
 			session.update(instance);
+			tx.commit();
+			log.debug("attach successful");
+		} catch (Exception re) {
+			if (tx!=null) tx.rollback();
+			re.printStackTrace();
+			log.error("attach failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public void updateByProductCode(Product instance) throws Exception{
+		log.debug("attaching dirty Product instance");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Query query = session.createQuery("update Product set quantity=:quantity, point=:point, unitPrice=:unitPrice where productCode=:productCode");
+			query.setInteger("quantity", instance.getQuantity());
+			query.setInteger("point", instance.getPoint());
+			query.setBigDecimal("unitPrice", instance.getUnitPrice());
+			query.setString("productCode", instance.getProductCode());
+			query.executeUpdate();
 			tx.commit();
 			log.debug("attach successful");
 		} catch (Exception re) {
@@ -197,7 +227,7 @@ public class ProductHome {
 			}
 		}
 	}
-	
+
 	public Product findById(java.lang.Integer id) throws Exception{
 		log.debug("getting Product instance with id: " + id);
 		Transaction tx = null;
@@ -241,7 +271,7 @@ public class ProductHome {
 			throw re;
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Product> getListProduct() {
 		log.debug("finding Product instance by example");
@@ -338,7 +368,7 @@ public class ProductHome {
 			}
 		}
 	}
-	
+
 	public LinkedHashMap<Integer, String> getListProducts() throws Exception{
 		log.debug("retrieve list Product");
 		Session session = null;
@@ -368,7 +398,7 @@ public class ProductHome {
 			}
 		}
 	}
-	
+
 	public LinkedHashMap<Integer, String> getListProducts(int promotion_id) throws Exception{
 		log.debug("retrieve list Product");
 		Session session = null;
@@ -395,6 +425,40 @@ public class ProductHome {
 					session.close();
 				}
 			} catch (Exception e) {
+			}
+		}
+	}
+
+
+	public boolean existProduct(Product product) {
+		log.debug("Checking Statistic duplicate with: ");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Query query = session.createQuery("FROM Product where productCode=:productCode");
+			query.setString("productCode", product.getProductCode());
+			Product instance = (Product) query.uniqueResult();
+			tx.commit();
+			if (instance == null) {
+				log.debug("get successful, no instance found");
+				return false;
+			} else {
+				log.debug("get successful, instance found");
+
+			}
+			return true;
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}

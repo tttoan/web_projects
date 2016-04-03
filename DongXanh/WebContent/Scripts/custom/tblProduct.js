@@ -13,6 +13,7 @@ $(document).ready(function() {
 				text: 'Import Excel',
 				click: function () {
 					//perform your custom job...
+					$('#fc_importProduct').click();
 				}
 			}]
 		},
@@ -144,4 +145,5 @@ $(document).ready(function() {
 	});
 	$('#ProductTableContainer').jtable('load');
 });
+
 

@@ -30,6 +30,16 @@
 			method="getAllCategories">
 			<result type="json" />
 		</action>
+		<action name="importProductsAction" class="com.home.action.ProductAction"
+			method="importProducts">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="fileUpload">
+				<param name="allowedTypes">application/ms-excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
+				<param name="maximumSize">10240</param>
+			</interceptor-ref>
+			<result name="wait">/waiting.jsp</result>
+			<result name="success">/product.jsp</result>
+		</action>
 	</package>
 
 	<package name="gift" namespace="/" extends="json-default">

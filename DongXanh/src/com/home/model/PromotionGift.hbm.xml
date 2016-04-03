@@ -26,6 +26,9 @@
         <property name="formula" type="string">
             <column name="formula" length="1000" />
         </property>
+         <property name="price" type="java.lang.Integer">
+            <column name="price" />
+        </property>
         <set name="registerGifts" table="register_gift" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="p_gift_id" not-null="true" />

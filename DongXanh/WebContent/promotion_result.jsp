@@ -12,15 +12,18 @@ pageEncoding="UTF-8"%>
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
 
-				<s:form name="promotionTypeForm" class="form-horizontal form-label-left">
-					<div class="form-group">
-							<s:select id="cboPromotionStatus" class="select2_group form-control" onchange="onTypeChange()"
+				<div class="view_pro">
+					<s:form name="promotionTypeForm"
+						class="form-horizontal form-label-left">
+						<div class="form-group">
+							<s:select id="cboPromotionStatus"
+								class="select2_group form-control" onchange="onTypeChange()"
 								headerKey="-1" headerValue="Hiển thị danh sách khuyến mãi"
-								list="#{'0':'+ Tất cả', '1':'+ Đang diễn ra', '2':'+ Sắp diễn ra', '3':'+ Đã kết thúc trong vòng 7 ngày', '4':'+ Đã kết thúc quá 7 ngày'}" 
-								value='%{type}' 
-								required="true"/>
-					</div>
-				</s:form>
+								list="#{'0':'+ Tất cả', '1':'+ Đang diễn ra', '2':'+ Sắp diễn ra', '3':'+ Đã kết thúc trong vòng 7 ngày', '4':'+ Đã kết thúc quá 7 ngày'}"
+								value='%{type}' required="true" />
+						</div>
+					</s:form>
+				</div>
 
 				<div class="x_panel">
 					<div class="x_content">
@@ -97,6 +100,10 @@ pageEncoding="UTF-8"%>
 <!-- Datatables -->
 <script src="js/datatables/js/jquery.dataTables.js"></script>
 <!--<script src="js/datatables/tools/js/dataTables.tableTools.js"></script>-->
+
+<style>
+       .view_pro { margin: 0px; text-align: left; padding: 0px 0px 10px 10px; border-style: outset;}
+</style>
 
 <script type="text/javascript">
 	function onTypeChange() {
