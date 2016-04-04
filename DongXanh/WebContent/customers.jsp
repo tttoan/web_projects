@@ -72,7 +72,6 @@
 									<th>Khác (%)</th>
 									<th>3 Mùa vụ Khác</th>
 
-
 									<s:if test="%{#rId == 1}">
 										<th class=" no-link last"><span class="nobr"></span></th>
 									</s:if>
@@ -87,7 +86,8 @@
 										<td class=""><s:property
 												value="%{getText('format.date',{createTime})}" /></td>
 										<td class=""><s:property value="customerCode" /></td>
-										<td class=""><s:property value="groupCustomer.groupName" /></td>
+										<td class=""><a class="btn btn-success btn-xs"><i
+												class="fa"></i> <s:property value="groupCustomer.groupName" /> </a></td>
 										<td class=""><s:property value="user.fullName" /></td>
 										<td class=""><s:property value="statisticName" /></td>
 										<td class=""><s:property value="businessName" /></td>
