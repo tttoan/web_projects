@@ -14,20 +14,18 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.struts2.interceptor.ServletRequestAware;
-import org.apache.struts2.util.ServletContextAware;
+import org.apache.struts2.ServletActionContext;
 import org.hibernate.SessionFactory;
-
 import com.home.conts.CustomerTable;
-import com.home.dao.CityHome;
 import com.home.dao.CustomerHome;
 import com.home.dao.GroupCustomerHome;
 import com.home.dao.UserHome;
+import com.home.entities.City;
 import com.home.entities.UserAware;
-import com.home.model.City;
 import com.home.model.Customer;
 import com.home.model.GroupCustomer;
 import com.home.model.User;
@@ -149,8 +147,21 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	public void loadLookupCity() {
 		try {
-			CityHome cityHome = new CityHome(getSessionFactory());
-			setListCity(cityHome.findAllCity());
+			ServletContext servletContext = ServletActionContext.getServletContext();
+			String pathname = servletContext.getRealPath("/WEB-INF/template/excel/country.xlsx");
+			File theFile = new File(pathname);
+			ExcelUtil xls = new ExcelUtil();
+			listCity = new ArrayList<City>();
+			try (FileInputStream fis = new FileInputStream(theFile)) {
+				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
+				Sheet sheet = workbook.getSheet("city");
+				for(int i = 0; i< sheet.getPhysicalNumberOfRows(); i++){
+					Row row = sheet.getRow(i);
+					Cell code = row.getCell(0);
+					Cell name = row.getCell(1);
+					listCity.add(new City(xls.getValue(code).toString(), xls.getValue(name).toString()));
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			addActionError("Error: load lookup citys. Exception: " + e.getMessage());

@@ -1,4 +1,4 @@
-package com.home.model;
+package com.home.entities;
 
 // Generated Mar 30, 2016 10:31:21 PM by Hibernate Tools 4.3.1
 

@@ -40,6 +40,5 @@
         <mapping resource="com/home/model/PromotionRegister.hbm.xml" />
         <mapping resource="com/home/model/RegisterGift.hbm.xml" />
         <mapping resource="com/home/model/RegisterProduct.hbm.xml" />
-        <mapping resource="com/home/model/City.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

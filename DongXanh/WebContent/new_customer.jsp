@@ -105,7 +105,6 @@
 						int yearNow = d.get(Calendar.YEAR);
 					%>
 					<div class="x_content">
-
 						<s:form action="add_customer" method="post"
 							cssClass="form-horizontal form-label-left" theme="bootstrap">
 							<s:hidden name="id" value="%{custId}"></s:hidden>
@@ -138,7 +137,7 @@
 								</label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="customerCode" type="text" name="customerCode"
-										readonly data-validate-length-range="0,20"
+										readonly data-validate-length-range="0,20" required="required"
 										value="${cust.customerCode}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
@@ -186,7 +185,7 @@
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="statisticName" name="cust.statisticName" type="text" 
 										data-validate-length-range="1,500"
-										value="${cust.statisticName}"
+										value="${cust.statisticName}" required="required"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -204,7 +203,7 @@
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="businessName" type="text" name="cust.businessName"
 										data-validate-length-range="1,100"
-										value="${cust.businessName}"
+										value="${cust.businessName}" required="required"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -215,7 +214,7 @@
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="certificateNumber" type="text"
-										name="cust.certificateNumber"
+										name="cust.certificateNumber" required="required"
 										data-validate-length-range="1,100"
 										value="${cust.certificateNumber}"
 										class="form-control col-md-7 col-xs-12">
@@ -240,7 +239,7 @@
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<textarea id="certificateAddress"
-										name="cust.certificateAddress"
+										name="cust.certificateAddress" required="required"
 										class="form-control col-md-7 col-xs-12">${cust.certificateAddress}</textarea>
 								</div>
 							</div>
@@ -249,7 +248,7 @@
 									for="taxNumber">Mã số thuế <span class="required">*</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<input id="taxNumber" type="text" name="cust.taxNumber"
+									<input id="taxNumber" type="text" name="cust.taxNumber" required="required"
 										data-validate-length-range="1,100" value="${cust.taxNumber}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
@@ -262,7 +261,7 @@
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="budgetRegister" type="text"
 										name="cust.budgetRegister" data-validate-length-range="1,100"
-										value="${cust.budgetRegister}"
+										value="${cust.budgetRegister}" required="required"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -271,7 +270,7 @@
 									for="telefone">Điện thoại bàn <span class="required">*</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<input id="telefone" type="text" name="cust.telefone"
+									<input id="telefone" type="text" name="cust.telefone" required="required"
 										data-validate-length-range="1,100" value="${cust.telefone}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
@@ -281,7 +280,7 @@
 									for="fax">Fax <span class="required">*</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<input id="fax" type="text" name="cust.fax"
+									<input id="fax" type="text" name="cust.fax" required="required"
 										data-validate-length-range="1,100" value="${cust.fax}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
@@ -291,7 +290,7 @@
 									for="email">Email <span class="required">*</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<input type="email" id="email" name="cust.email"
+									<input type="email" id="email" name="cust.email" required="required"
 										value="${cust.email}" class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -303,7 +302,7 @@
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="socialAddress" type="text" name="cust.socialAddress"
 										data-validate-length-range="1,1000"
-										value="${cust.socialAddress}"
+										value="${cust.socialAddress}" required="required"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -314,7 +313,7 @@
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="businessAddress" type="text"
-										name="cust.businessAddress"
+										name="cust.businessAddress" required="required"
 										data-validate-length-range="1,1000"
 										value="${cust.socialAddress}"
 										class="form-control col-md-7 col-xs-12">
@@ -328,7 +327,7 @@
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="adviser" type="text" name="cust.adviser"
 										data-validate-length-range="1,50"
-										value="${cust.socialAddress}"
+										value="${cust.socialAddress}" required="required"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -338,7 +337,7 @@
 									class="required">*</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<input id="director" type="text" name="cust.director"
+									<input id="director" type="text" name="cust.director" required="required"
 										data-validate-length-range="1,50" value="${cust.director}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
@@ -350,8 +349,8 @@
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="directorMobile" name="cust.directorMobile"
-										type="text" data-validate-length-range="0,11"
-										value="${cust.directorMobile}"
+										type="text" data-validate-length-range="0,13"
+										value="${cust.directorMobile}" required="required"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -373,7 +372,7 @@
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="directorDomicile" type="text"
-										name="cust.directorDomicile"
+										name="cust.directorDomicile" required="required"
 										data-validate-length-range="0,100"
 										value="${cust.directorDomicile}"
 										class="form-control col-md-7 col-xs-12">
@@ -385,7 +384,7 @@
 									class="required">*</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<input id="sellMan" type="text" name="cust.sellMan"
+									<input id="sellMan" type="text" name="cust.sellMan" required="required"
 										data-validate-length-range="1,100" value="${cust.sellMan}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
@@ -397,7 +396,7 @@
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="sellManMobile" type="text" name="cust.sellManMobile"
-										data-validate-length-range="1,100"
+										data-validate-length-range="1,100" required="required"
 										value="${cust.sellManMobile}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
@@ -409,7 +408,7 @@
 									(Triệu) <span class="required">*</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<input id="budgetOriginal" type="text"
+									<input id="budgetOriginal" type="text" required="required"
 										name="cust.budgetOriginal" data-validate-length-range="1,100"
 										value="${cust.sellManMobile}"
 										class="form-control col-md-7 col-xs-12">
@@ -426,9 +425,9 @@
 									for="otherBusiness">Ngành nghề kinh doanh khác <span
 									class="required">*</span>
 								</label>
-								<div class="col-md-5 col-sm-6 col-xs-12">
+								<div class="col-md-4 col-sm-6 col-xs-12">
 									<input id="otherBusiness" type="text" name="cust.otherBusiness"
-										data-validate-length-range="0,100"
+										data-validate-length-range="0,100" required="required"
 										value="${cust.otherBusiness}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
@@ -456,7 +455,7 @@
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input id="cus1Phone" type="text" readonly name="cus1Phone"
-										data-validate-length-range="1,100"
+										data-validate-length-range="1,100" required="required"
 										value="${cust.customerByCustomer1Level1Id.telefone}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
@@ -1153,9 +1152,8 @@ $(document).ready(function() {
 	$('#cityName').change(function() {
 		var custCode = $("#customerCode").val();
 		if(custCode.length > 3)
-		 	custCode = custCode.substr(2);
+		 	custCode = custCode.substr(custCode.length-3);
 		var cityCode = $("#cityName").val();
-		
 		$("#customerCode").val(cityCode +""+custCode);
 	});
 });
