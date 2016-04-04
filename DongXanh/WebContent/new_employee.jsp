@@ -180,7 +180,7 @@
 <!-- form validation -->
 <script src="js/validator/validator.js"></script>
 <script>
-	$(document).ready(function() {
+	$(document).ready(function() { 
 		$('#fullName').change(function() {
 			var varFullName = {
 				"varFullName" : $("#fullName").val()
@@ -221,6 +221,7 @@
 		var submit = true;
 		// evaluate the form using generic validaing
 		if (!validator.checkAll($(this))) {
+			
 			submit = false;
 		}
 
