@@ -29,6 +29,9 @@
         <property name="customerRegist" type="java.lang.Short">
             <column name="customer_regist" />
         </property>
+         <property name="rule" type="string">
+            <column name="rule" length="1000" />
+        </property>
         <set name="promotionGifts" table="promotion_gift" inverse="true"  fetch="join">
             <key>
                 <column name="promotion_id" not-null="true" />

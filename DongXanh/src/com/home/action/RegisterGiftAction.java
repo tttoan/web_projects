@@ -43,7 +43,7 @@ public class RegisterGiftAction implements ServletContextAware, UserAware {
 	private Integer p_gift_id;
 	private Integer promotion_id;
 	private boolean applyAll;
-
+	private Integer total;
 	private User userSes;
 
 
@@ -122,6 +122,7 @@ public class RegisterGiftAction implements ServletContextAware, UserAware {
 			
 			record = new RegisterGift();
 			record.setId(id);
+			record.setTotal(total);
 			
 			PromotionGift promotionGift = new PromotionGift();
 			promotionGift.setId(p_gift_id);
@@ -161,6 +162,7 @@ public class RegisterGiftAction implements ServletContextAware, UserAware {
 			
 			RegisterGift record = new RegisterGift();
 			record.setId(id);
+			record.setTotal(total);
 			
 			PromotionGift promotionGift = new PromotionGift();
 			promotionGift.setId(p_gift_id);
@@ -316,4 +318,13 @@ public class RegisterGiftAction implements ServletContextAware, UserAware {
 	public void setApplyAll(boolean applyAll) {
 		this.applyAll = applyAll;
 	}
+	
+	public Integer getTotal() {
+		return total;
+	}
+
+	public void setTotal(Integer total) {
+		this.total = total;
+	}
+
 }

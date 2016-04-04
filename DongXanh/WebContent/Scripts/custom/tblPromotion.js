@@ -156,6 +156,11 @@ $(document).ready(function() {
         									title: 'Đơn vị',
         									width: '10%',
         								},
+        								price: {
+        									title: 'Giá tiền',
+        									width: '10%',
+        									inputClass: 'validate[required,custom[number]]'
+        								},
         								maxQuantity: {
         									title: 'Số thùng phải đạt',
         									width: '10%',

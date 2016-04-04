@@ -241,6 +241,7 @@ public class PromotionGiftHome {
 				pp.setMaxPoint(rs.getInt("max_point"));
 				pp.setUnit(rs.getString("unit"));
 				pp.setFormula(rs.getString("formula"));
+				pp.setPrice(rs.getDouble("price"));
 
 				results.add(pp);
 			}

@@ -19,7 +19,7 @@ public class PromotionGift implements java.io.Serializable {
 	private Integer promotion_id;
 	private String unit;
 	private String formula;
-	private Integer price;
+	private Double price;
 	private Set<RegisterGift> registerGifts = new HashSet<RegisterGift>(0);
 
 	public PromotionGift() {
@@ -117,11 +117,11 @@ public class PromotionGift implements java.io.Serializable {
 		this.registerGifts = registerGifts;
 	}
 	
-	public Integer getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(Integer price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 }

@@ -224,6 +224,7 @@ public class RegisterGiftHome {
 			while(rs.next()){
 				RegisterGift pp = new RegisterGift();
 				pp.setId(rs.getInt("id"));
+				pp.setTotal(rs.getInt("total"));
 
 				PromotionGift promotionGift = new PromotionGift();
 				promotionGift.setId(rs.getInt("p_gift_id"));

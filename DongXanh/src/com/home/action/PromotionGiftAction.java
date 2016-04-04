@@ -42,7 +42,7 @@ public class PromotionGiftAction implements ServletContextAware, UserAware {
 	private Integer promotion_id;
 	private String unit;
 	private String formula;
-
+	private Double price;
 	private User userSes;
 
 	public static void main(String[] args) {
@@ -120,6 +120,7 @@ public class PromotionGiftAction implements ServletContextAware, UserAware {
 			record.setMaxQuantity(maxQuantity);
 			record.setFormula(formula);
 			record.setUnit(unit);
+			record.setPrice(price);
 			
 			Gift gift = new Gift();
 			gift.setId(gift_id);		
@@ -152,6 +153,7 @@ public class PromotionGiftAction implements ServletContextAware, UserAware {
 			record.setMaxQuantity(maxQuantity);
 			record.setFormula(formula);
 			record.setUnit(unit);
+			record.setPrice(price);
 			
 			Gift gift = new Gift();
 			gift.setId(gift_id);		
@@ -306,4 +308,13 @@ public class PromotionGiftAction implements ServletContextAware, UserAware {
 	public void setFormula(String formula) {
 		this.formula = formula;
 	}
+	
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
 }

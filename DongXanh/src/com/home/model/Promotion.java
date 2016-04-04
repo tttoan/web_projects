@@ -26,6 +26,15 @@ public class Promotion implements java.io.Serializable {
 	private Set<PromotionRegister>  promotionRegisters = new HashSet<PromotionRegister>(0);
 	private int row_index;
 	private Short customerRegist;
+	private String rule;
+
+	public String getRule() {
+		return rule;
+	}
+
+	public void setRule(String rule) {
+		this.rule = rule;
+	}
 
 	public int getRow_index() {
 		return row_index;
