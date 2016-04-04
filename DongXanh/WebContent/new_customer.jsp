@@ -1151,7 +1151,6 @@
 <script>
 $(document).ready(function() {
 	$('#cityName').change(function() {
-		alert("sdsdsdsd");
 		var custCode = $("#customerCode").val();
 		if(custCode.length > 3)
 		 	custCode = custCode.substr(2);
