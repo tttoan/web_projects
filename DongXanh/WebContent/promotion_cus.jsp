@@ -11,21 +11,54 @@ pageEncoding="UTF-8"%>
 		<div class="clearfix"></div>
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
-				
-				<p class="url">
-					<span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-					<s:url id="fileDownload" namespace="/" action="promotionResultDownload"></s:url>
-						Download file -
-						<b>
-						<s:a href="%{fileDownload}"><i class="fa fa-paperclip"></i><s:property value="filenameDownload" /></s:a>
-						</b>
-				</p>
-				
+
+				<div class="view_pro">
+					<table width="100%">
+						<tr>
+							<td width="120px" valign="bottom"><label>Hiển thị
+									kết quả</label></td>
+							<td><s:form name="promotionTypeForm"
+									class="form-horizontal form-label-left">
+									<div class="form-group">
+
+										<s:select id="cboPromotionStatus"
+											class="select2_group form-control" onchange="onTypeChange()"
+											list="#{'0':'+ Tất cả', '1':'+ Theo NVTT', '2':'+ Theo cấp 1', '3':'+ Theo cấp 2'}"
+											value='%{type}' required="true" />
+									</div>
+								</s:form></td>
+							<td valign="bottom">
+								<input type="radio" name="p_result_status" value="3"> <label>Đạt | </label>
+  								<input type="radio" name="p_result_status" value="2"> <label>Không đạt | </label>
+  								<input type="radio" name="p_result_status" value="1" checked> <label>Tất cả</label>
+							</td>
+							<td>
+							<td align="right" valign="bottom">
+								<p class="url">
+									<span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
+									<s:url id="fileDownload" namespace="/"
+										action="promotionResultDownload"></s:url>
+									Download file - <b> <s:a href="%{fileDownload}">
+											<i class="fa fa-paperclip"></i>
+											<s:property value="filenameDownload" />
+										</s:a>
+									</b>
+								</p>
+							</td>
+						</tr>
+					</table>
+				</div>
+
 				<div class="x_panel">
 					<div class="x_content">
 						<table id="example"
 							class="table table-striped responsive-utilities jambo_table">
 							<thead>
+								<!-- <tr>
+									<th rowspan="2">Name</th>
+									<th colspan="2">HR Information</th>
+									<th colspan="7">Contact</th>
+								</tr> -->
 								<tr class="headings">
 									<th>No</th>
 									<th>Mã khách hàng</th>
@@ -91,6 +124,14 @@ pageEncoding="UTF-8"%>
 
 <script src="js/custom.js"></script>
 
+<style>
+.view_pro {
+	margin: 0px;
+	text-align: left;
+	padding: 0px 10px 10px 10px;
+	border-style: outset;
+}
+</style>
 
 <!-- Datatables -->
 <script src="js/datatables/js/jquery.dataTables.js"></script>
