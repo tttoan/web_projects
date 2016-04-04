@@ -32,20 +32,20 @@
 									</s:if>
 								</tr>
 							</thead>
-
 							<tbody>
 								<s:iterator value="listEmployee" status="rowStatus">
 									<tr class="even pointer">
 										<td class=""><s:property value="#rowStatus.count" /></td>
+										
 										<td class=""><s:property value="fullName" /></td>
 										<td class=""><s:property value="userName" /></td>
 										<td class=""><s:property value="email" /></td>
 										<td class=""><s:property
 												value="%{getText('format.date',{birthDate})}" /></td>
 										<td class=""><s:property value="mobilePhone" /></td>
+										
 										<td class=""><a class="btn btn-success btn-xs"><i
 												class="fa"></i> <s:property value="%{role.roleName}" /> </a></td>
-
 										<s:if test="%{#rId == 1}">
 											<td class="last"><s:url action="move_to_add_employee"
 													var="editURL">
@@ -100,11 +100,11 @@
 <!-- Datatables -->
 <script src="js/jquery.dataTables.min.js"></script>
 <script>
-$(document).ready(function() {
-    $('#example').DataTable( {
-        "scrollX": true
-    } );
-} );
+	$(document).ready(function() {
+		$('#example').DataTable({
+			"scrollX" : true
+		});
+	});
 </script>
 
 </body>

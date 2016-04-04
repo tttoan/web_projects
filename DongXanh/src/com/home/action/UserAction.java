@@ -3,8 +3,11 @@ package com.home.action;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.servlet.ServletContext;
+
 import org.hibernate.SessionFactory;
+
 import com.home.dao.RoleHome;
 import com.home.dao.UserHome;
 import com.home.entities.UserAware;
@@ -31,7 +34,7 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 	private ServletContext ctx;
 	public String genUserName = "sss";
 	private User userSes;
-
+	
 	public User getUserSes() {
 		return userSes;
 	}

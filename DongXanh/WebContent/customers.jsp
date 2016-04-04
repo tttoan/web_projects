@@ -21,11 +21,58 @@
 							<thead>
 								<tr class="headings">
 									<th>STT</th>
+
+									<th>Ngày lập</th>
 									<th>Mã khách hàng</th>
-									<th>Tên cửa hàng</th>
-									<th>Số điện thoại</th>
-									<th>Nhóm cấp</th>
+									<th>Nhóm</th>
+									<th>Nhân viên TT</th>
+									<th>Tên bảng kê</th>
+									<th>Tên doanh nghiệp</th>
+									<th>Giấy phép ĐKKD số</th>
+									<th>Ngày cấp</th>
+									<th>Địa chỉ đăng kí KD</th>
+									<th>Mã số thuế</th>
+									<th>Vốn đăng kí</th>
+									<th>Điện thoại bàn</th>
+									<th>Fax</th>
 									<th>Email</th>
+									<th>Địa chỉ mạng xã hội</th>
+									<th>Địa điểm kinh doanh</th>
+									<th>Người đại diện pháp luật</th>
+									<th>Người quyết định chính công việc</th>
+									<th>ĐTDĐ Người quyết định</th>
+									<th>Ngày sinh</th>
+									<th>Nguyên quán</th>
+									<th>Người bán hàng trực tiếp</th>
+									<th>ĐTDĐ Người bán hàng</th>
+									<th>Ước vốn tự có để kinh doanh</th>
+									<th>Ngành nghề kinh doanh khác</th>
+									<th>Cấp 1 (5)</th>
+									<th>Tỉ lệ nhận (5)</th>
+									<th>Cấp 1 (4)</th>
+									<th>Tỉ lệ nhận (4)</th>
+									<th>Cấp 1 (3)</th>
+									<th>Tỉ lệ nhận (3)</th>
+									<th>Cấp 1 (2)</th>
+									<th>Tỉ lệ nhận (2)</th>
+									<th>Cấp 1 (1)</th>
+									<th>Tỉ lệ nhận (1)</th>
+									<th>3 Sản phẩm thuốc trừ cỏ</th>
+									<th>5 Sản phẩm thuốc trừ sâu</th>
+									<th>3 Sản phẩm thuốc trừ rầy</th>
+									<th>5 Sản phẩm thuốc trừ bệnh</th>
+									<th>3 Sản phẩm kích thích sinh trưởng</th>
+									<th>3 Sản phẩm thuốc trừ ốc</th>
+									<th>Lúa (%)</th>
+									<th>3 Mùa vụ Lúa</th>
+									<th>Rau màu (%)</th>
+									<th>3 Mùa vụ Rau màu</th>
+									<th>Cây ăn trái (%)</th>
+									<th>3 Mùa vụ Cây ăn trái</th>
+									<th>Khác (%)</th>
+									<th>3 Mùa vụ Khác</th>
+
+
 									<s:if test="%{#rId == 1}">
 										<th class=" no-link last"><span class="nobr"></span></th>
 									</s:if>
@@ -36,13 +83,70 @@
 								<s:iterator value="listCustomer" status="rowStatus">
 									<tr class="even pointer">
 										<td class=""><s:property value="#rowStatus.count" /></td>
+
+										<td class=""><s:property
+												value="%{getText('format.date',{createTime})}" /></td>
 										<td class=""><s:property value="customerCode" /></td>
+										<td class=""><s:property value="groupCustomer.groupName" /></td>
+										<td class=""><s:property value="user.fullName" /></td>
+										<td class=""><s:property value="statisticName" /></td>
 										<td class=""><s:property value="businessName" /></td>
-										<td class=""><s:property value="directorMobile" /></td>
-										<td class=""><a class="btn btn-primary btn-xs"><s:property
-													value="%{groupCustomer.groupName}" /></a></td>
+										<td class=""><s:property value="certificateNumber" /></td>
+										<td class=""><s:property
+												value="%{getText('format.date',{certificateDate})}" /></td>
+										<td class=""><s:property value="certificateAddress" /></td>
+										<td class=""><s:property value="taxNumber" /></td>
+										<td class=""><s:property value="budgetRegister" /></td>
+										<td class=""><s:property value="telefone" /></td>
+										<td class=""><s:property value="fax" /></td>
 										<td class=""><s:property value="email" /></td>
-										
+										<td class=""><s:property value="socialAddress" /></td>
+										<td class=""><s:property value="businessAddress" /></td>
+										<td class=""><s:property value="adviser" /></td>
+										<td class=""><s:property value="director" /></td>
+										<td class=""><s:property value="directorMobile" /></td>
+										<td class=""><s:property
+												value="%{getText('format.date',{directorBirthday})}" /></td>
+										<td class=""><s:property value="directorDomicile" /></td>
+										<td class=""><s:property value="sellMan" /></td>
+										<td class=""><s:property value="sellManMobile" /></td>
+										<td class=""><s:property value="budgetOriginal" /></td>
+										<td class=""><s:property value="otherBusiness" /></td>
+										<td class=""><s:property
+												value="customerByCustomer5Level1Id.businessName" /></td>
+										<td class=""><s:property
+												value="%{getText('format.percent',{customer5Percent})}" /></td>
+										<td class=""><s:property
+												value="customerByCustomer4Level1Id.businessName" /></td>
+										<td class=""><s:property
+												value="%{getText('format.percent',{customer4Percent})}" /></td>
+										<td class=""><s:property
+												value="customerByCustomer3Level1Id.businessName" /></td>
+										<td class=""><s:property
+												value="%{getText('format.percent',{customer3Percent})}" /></td>
+										<td class=""><s:property
+												value="customerByCustomer2Level1Id.businessName" /></td>
+										<td class=""><s:property
+												value="%{getText('format.percent',{customer2Percent})}" /></td>
+										<td class=""><s:property
+												value="customerByCustomer1Level1Id.businessName" /></td>
+										<td class=""><s:property
+												value="%{getText('format.percent',{customer1Percent})}" /></td>
+										<td class=""><s:property value="product1Hot" /></td>
+										<td class=""><s:property value="product2Hot" /></td>
+										<td class=""><s:property value="product3Hot" /></td>
+										<td class=""><s:property value="product4Hot" /></td>
+										<td class=""><s:property value="product5Hot" /></td>
+										<td class=""><s:property value="product6Hot" /></td>
+										<td class=""><s:property value="farmProduct1" /></td>
+										<td class=""><s:property value="farmProduct1Session" /></td>
+										<td class=""><s:property value="farmProduct2" /></td>
+										<td class=""><s:property value="farmProduct2Session" /></td>
+										<td class=""><s:property value="farmProduct3" /></td>
+										<td class=""><s:property value="farmProduct3Session" /></td>
+										<td class=""><s:property value="farmProduct4" /></td>
+										<td class=""><s:property value="farmProduct4Session" /></td>
+
 										<s:if test="%{#rId == 1}">
 											<td class="last"><s:url action="move_to_add_customer"
 													var="editURL">
