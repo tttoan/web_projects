@@ -13,7 +13,7 @@ pageEncoding="UTF-8"%>
 			<div class="col-md-12 col-sm-12 col-xs-12">
 
 				<div class="view_pro">
-					<table width="100%">
+					<table style="width: 100%">
 						<tr>
 							<td width="220px" valign="bottom"><label>Hiển thị danh sách khuyến mãi</label></td>
 							<td><s:form name="promotionTypeForm"

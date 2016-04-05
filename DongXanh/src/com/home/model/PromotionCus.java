@@ -38,6 +38,15 @@ public class PromotionCus {
 	private List<RegisterGift> listRegisterGifts = new ArrayList<>();
 	//Get list product register
 	private List<RegisterProduct> listRegisterProducts = new ArrayList<>();
+	
+	private Promotion promotion;
+	
+	public Promotion getPromotion() {
+		return promotion;
+	}
+	public void setPromotion(Promotion promotion) {
+		this.promotion = promotion;
+	}
 	//Gift
 //	private HashMap<String, Boolean> mapGifts = new HashMap<>();
 //	

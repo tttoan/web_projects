@@ -256,6 +256,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 							pCus.setListRegisterGifts(listRegisterGifts);
 							pCus.setListRegisterProducts(listRegisterProducts);
 							pCus.setPromotionRegister(promotionRegister);
+							pCus.setPromotion(promotion);
 
 							result.add(pCus);
 						}
@@ -297,6 +298,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 							pCus.setResultString("Không đạt");
 						}
 
+						pCus.setPromotion(promotion);
 						result.add(pCus);
 					}
 				}
@@ -471,7 +473,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			if(promotion.getCustomerRegist() != null && promotion.getCustomerRegist() == 1){
 				for (PromotionCus pc : promotionCuss) {
 					//Get list gifts register
-					//List<RegisterGift> listRegisterGifts = pc.getListRegisterGifts();
+					List<RegisterGift> listRegisterGifts = pc.getListRegisterGifts();
 					//Get list product register
 					List<RegisterProduct> listRegisterProducts = pc.getListRegisterProducts();
 					
@@ -490,7 +492,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 					//Set gift
 					int g_len = 11+promotion.getPromotionGifts().size();
 					for (int i = 11; i < g_len; i++) {
-						RegisterGift registerGift = getRegisterGift(pc.getListRegisterGifts(), header[i]);
+						RegisterGift registerGift = getRegisterGift(listRegisterGifts, header[i]);
 						if(registerGift != null){
 							list.add("" + registerGift.getTotal());
 						}else{
@@ -500,15 +502,10 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 					//Set product
 					int p_len = g_len+promotion.getPromotionProducts().size();
 					for (int i = g_len; i < p_len; i++) {
-						boolean flag = true;
-						for (RegisterProduct registerProduct : listRegisterProducts) {
-							if(header[i].equalsIgnoreCase(registerProduct.getPromotionProduct().getProduct().getProductName())){
-								list.add(getProductBoxDone(header[i], pc.getProducts()) + "/" +registerProduct.getBox());
-								flag = false;
-								break;
-							}
-						}
-						if(flag){
+						RegisterProduct registerProduct = getRegisterProduct(listRegisterProducts, header[i]);
+						if(registerProduct != null){
+							list.add(getProductBoxDone(pc.getProducts(), header[i]) + "/" +registerProduct.getBox());
+						}else{
 							list.add("");
 						}
 					}
@@ -539,7 +536,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 					//Set product
 					int p_len = g_len+promotion.getPromotionProducts().size();
 					for (int i = g_len; i < p_len; i++) {
-						list.add(""+getProductBoxDone(header[i], pc.getProducts()));
+						list.add(""+getProductBoxDone(pc.getProducts(), header[i]));
 					}
 					data.add((String[])list.toArray(new String[0]));
 				}
@@ -552,13 +549,22 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		return listAllData;
 	}
 	
-	private int getProductBoxDone(String productName, Set<Product> products){
+	private int getProductBoxDone(Set<Product> products, String productName){
 		for (Product product : products) {
 			if(productName.equalsIgnoreCase(product.getProductName())){
 				return product.getQuantity();
 			}
 		}
 		return 0;
+	}
+	
+	public String getProductBoxDoneReport(Set<Product> products, String productName){
+		for (Product product : products) {
+			if(productName.equalsIgnoreCase(product.getProductName())){
+				return "" + product.getQuantity();
+			}
+		}
+		return "";
 	}
 	
 	private RegisterGift getRegisterGift(List<RegisterGift> listRegisterGifts, String giftName){
@@ -570,6 +576,35 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		return null;
 	}
 
+	public String getRegiterGiftTotal(List<RegisterGift> listRegisterGifts, String giftName){
+		if(listRegisterGifts != null){
+			RegisterGift registerGift = getRegisterGift(listRegisterGifts, giftName);
+			if(registerGift != null){
+				return "" + registerGift.getTotal();
+			}
+		}
+		return "";
+	}
+	
+	private RegisterProduct getRegisterProduct(List<RegisterProduct> listRegisterProducts, String productName){
+		for (RegisterProduct registerProduct : listRegisterProducts) {
+			if(productName.equalsIgnoreCase(registerProduct.getPromotionProduct().getProduct().getProductName())){
+				return registerProduct;
+			}
+		}
+		return null;
+	}
+	
+	public String getRegiterProductTotal(List<RegisterProduct> listRegisterProducts, String productName){
+		if(listRegisterProducts != null){
+			RegisterProduct registerProduct = getRegisterProduct(listRegisterProducts, productName);
+			if(registerProduct != null){
+				return "" + registerProduct.getBox();
+			}
+		}
+		return "";
+	}
+	
 //	public HttpServletRequest getRequest() {
 //		return request;
 //	}

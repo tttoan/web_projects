@@ -13,7 +13,7 @@ pageEncoding="UTF-8"%>
 			<div class="col-md-12 col-sm-12 col-xs-12">
 
 				<div class="view_pro">
-					<table width="100%">
+					<table style="width: 100%">
 						<tr>
 							<td width="120px" valign="bottom"><label>Hiển thị
 									kết quả</label></td>
@@ -52,7 +52,7 @@ pageEncoding="UTF-8"%>
 				<div class="x_panel">
 					<div class="x_content">
 						<table id="example"
-							class="table table-striped responsive-utilities jambo_table">
+							class="table table-striped responsive-utilities jambo_table" style="width: 100%">
 							<thead>
 								<!-- <tr>
 									<th rowspan="2">Name</th>
@@ -69,14 +69,15 @@ pageEncoding="UTF-8"%>
 									<th rowspan="2">Số lượng</th>
 									<th rowspan="2">Kết quả</th>
 									<th rowspan="2">Báo cáo</th>
-									<s:iterator value="promotion.promotionGifts">
-										<th rowspan="2"><s:property value="gift.giftName" /></th>
-									</s:iterator>
+									<th colspan=<s:property value="promotion.promotionGifts.size"/> align="center">Quà tặng</th>
 									<s:iterator value="promotion.promotionProducts">
 										<th colspan="2"><s:property value="product.productName" /></th>
 									</s:iterator>
 								</tr>
 								<tr class="headings">
+									<s:iterator value="promotion.promotionGifts">
+										<th><s:property value="gift.giftName" /></th>
+									</s:iterator>
 									<s:iterator value="promotion.promotionProducts">
 										<th >ĐK</th>
 										<th >TH</th>
@@ -96,6 +97,13 @@ pageEncoding="UTF-8"%>
 										<td class=""><s:property value="quality" /></td>
 										<td class=""><s:property value="resultString" /></td>
 										<td class=""><s:property value="resultPromotion" /></td>
+										<s:iterator value="promotion.promotionGifts">
+											<td><s:property value="getRegiterGiftTotal(listRegisterGifts, gift.giftName)" /></td>
+										</s:iterator>
+										<s:iterator value="promotion.promotionProducts">
+											<td><s:property value="getRegiterProductTotal(listRegisterProducts, product.productName)" /></td>
+											<td><s:property value="getProductBoxDoneReport(products, product.productName)" /></td>
+										</s:iterator>
 									</tr>
 								</s:iterator>
 							</tbody>
@@ -148,6 +156,7 @@ pageEncoding="UTF-8"%>
 <!-- Datatables -->
 <script src="js/datatables/js/jquery.dataTables.js"></script>
 <!--<script src="js/datatables/tools/js/dataTables.tableTools.js"></script>-->
+
 <script>
 	$(document).ready(function() {
 		$('input.tableflat').iCheck({

@@ -4,7 +4,7 @@ package com.home.model;
 // Generated Feb 24, 2016 9:17:27 PM by Hibernate Tools 4.3.1
 
 import java.util.Date;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -21,9 +21,9 @@ public class Promotion implements java.io.Serializable {
 	private Boolean status;
 	private Integer group_customer_id;
 	private Integer promotion_id;
-	private Set<PromotionGift> promotionGifts = new HashSet<PromotionGift>(0);
-	private Set<PromotionProduct> promotionProducts = new HashSet<PromotionProduct>(0);
-	private Set<PromotionRegister>  promotionRegisters = new HashSet<PromotionRegister>(0);
+	private Set<PromotionGift> promotionGifts = new LinkedHashSet<PromotionGift>(0);
+	private Set<PromotionProduct> promotionProducts = new LinkedHashSet<PromotionProduct>(0);
+	private Set<PromotionRegister>  promotionRegisters = new LinkedHashSet<PromotionRegister>(0);
 	private int row_index;
 	private Short customerRegist;
 	private String rule;
