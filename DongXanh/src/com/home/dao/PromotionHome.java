@@ -378,6 +378,7 @@ public class PromotionHome {
 				p.setRemarks(rs.getString("remarks"));
 				p.setStatus(rs.getBoolean("status"));
 				p.setCustomerRegist(rs.getShort("customer_regist"));
+				p.setRule(rs.getString("rule"));
 				GroupCustomer g = new GroupCustomer();
 				g.setId(rs.getInt("group_customer_id"));
 				p.setGroupCustomer(g);

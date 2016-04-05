@@ -49,14 +49,4 @@ public class Params {
 	 */
 	public static final String GIFT_REGIST = "$quadk";
 	
-	/**
-	 * Qua tang cai dat trong chuong trinh khuyen mai
-	 */
-	public static final String GIFT = "$qua";
-	
-	/**
-	 * No cong ty phai tra lai
-	 */
-	public static final String GIFT_DEBT = "Nợ công ty";
-	
 }

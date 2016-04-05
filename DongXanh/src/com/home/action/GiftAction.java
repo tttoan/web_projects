@@ -113,9 +113,9 @@ public class GiftAction implements ServletContextAware, UserAware{
 	public String update() throws Exception {
 		try {
 			Gift record = new Gift();
-			if(id == 0){
-				giftName = Params.GIFT_DEBT;
-			}
+//			if(id == 0){
+//				giftName = Params.GIFT_DEBT;
+//			}
 			record.setId(id);
 			record.setGiftName(giftName);
 			System.out.println(giftName);

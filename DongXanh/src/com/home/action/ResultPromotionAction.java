@@ -53,6 +53,15 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	private InputStream inputStream;
 	private String filenameDownload = "Kết quả khuyến mãi.xls";
 	private int type;
+	private Promotion promotion;
+
+	public Promotion getPromotion() {
+		return promotion;
+	}
+
+	public void setPromotion(Promotion promotion) {
+		this.promotion = promotion;
+	}
 
 	public int getType() {
 		return type;
@@ -154,7 +163,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			promotion_id = Integer.parseInt(request.getParameter("id"));
 
 			//Get promotion setting
-			Promotion promotion = promotionHome.findById(promotion_id);
+			promotion = promotionHome.findById(promotion_id);
 
 			Date start = new Date(promotion.getStartDate().getTime());
 			Date end = new Date(promotion.getEndDate().getTime());
@@ -218,19 +227,27 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 								pCus.setResult(true);
 							}
 							//Duyet trong danh sach qua tang dang ky
-							StringBuilder resultString = new StringBuilder();
-							for (RegisterGift registerGift : listRegisterGifts) {
-								String str = getPromotionResult(
-										registerGift.getPromotionGift().getFormula(), 
-										pCus, 
-										promotionRegister.getTotalBox(), 
-										promotionRegister.getTotalPoint(), 
-										paramRegisterGifts(listRegisterGifts), 
-										registerGift.getPromotionGift().getGift().getGiftName(),
-										paramRegisterProducts(listRegisterProducts));
-								resultString.append(str).append("; ");
-							}
-							pCus.setResultPromotion(resultString.toString().trim().replaceAll(";$", ""));
+							//StringBuilder resultString = new StringBuilder();
+//							for (RegisterGift registerGift : listRegisterGifts) {
+//								String str = getPromotionResult(
+//										registerGift.getPromotionGift().getFormula(), 
+//										pCus, 
+//										promotionRegister.getTotalBox(), 
+//										promotionRegister.getTotalPoint(), 
+//										paramRegisterGifts(listRegisterGifts), 
+//										paramRegisterProducts(listRegisterProducts));
+//								resultString.append(str).append("; ");
+//							}
+							
+							String str = getPromotionResult(
+									promotion.getRule(), 
+									pCus, 
+									promotionRegister.getTotalBox(), 
+									promotionRegister.getTotalPoint(), 
+									paramRegisterGifts(listRegisterGifts), 
+									paramRegisterProducts(listRegisterProducts));
+							
+							pCus.setResultPromotion(str);
 							if(pCus.isResult()){
 								pCus.setResultString("Đạt");
 							}else{
@@ -251,19 +268,29 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 							pCus.setResult(true);
 						}
 						//Duyet trong danh sach qua tang dang ky
-						StringBuilder resultString = new StringBuilder();
-						for (PromotionGift promotionGift : promotionGifts) {
-							String str = getPromotionResult(
-									promotionGift.getFormula(), 
-									pCus, 
-									0, 
-									0, 
-									null, 
-									promotionGift.getGift().getGiftName(),
-									null);
-							resultString.append(str).append("; ");
-						}
-						pCus.setResultPromotion(resultString.toString().trim().replaceAll(";$", ""));
+//						StringBuilder resultString = new StringBuilder();
+//						for (PromotionGift promotionGift : promotionGifts) {
+//							String str = getPromotionResult(
+//									promotionGift.getFormula(), 
+//									pCus, 
+//									0, 
+//									0, 
+//									null, 
+//									promotionGift.getGift().getGiftName(),
+//									null);
+//							resultString.append(str).append("; ");
+//						}
+//						pCus.setResultPromotion(resultString.toString().trim().replaceAll(";$", ""));
+						
+						String str = getPromotionResult(
+								promotion.getRule(), 
+								pCus, 
+								0, 
+								0, 
+								null, 
+								null);
+						pCus.setResultPromotion(str);
+						
 						if(pCus.isResult()){
 							pCus.setResultString("Đạt");
 						}else{
@@ -281,10 +308,13 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		return result;
 	}
 
-	private String[] paramRegisterGifts(List<RegisterGift> listRegisterGifts){
-		String[] arrGifts = new String[listRegisterGifts.size()];
+	private Object[][] paramRegisterGifts(List<RegisterGift> listRegisterGifts){
+		Object[][] arrGifts = new Object[listRegisterGifts.size()][2];
 		for (int i = 0; i < listRegisterGifts.size(); i++) {
-			arrGifts[i] = listRegisterGifts.get(i).getPromotionGift().getGift().getGiftName();
+			arrGifts[i] = new Object[]{
+					listRegisterGifts.get(i).getPromotionGift().getGift().getGiftName(),
+					listRegisterGifts.get(i).getPromotionGift().getPrice()
+					};
 		}
 		return arrGifts;
 	}
@@ -292,7 +322,10 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	private Object[][] paramRegisterProducts(List<RegisterProduct> listRegisterProducts){
 		Object[][] arrProducts = new Object[listRegisterProducts.size()][3];
 		for (int i = 0; i < listRegisterProducts.size(); i++) {
-			arrProducts[i] = new Object[]{listRegisterProducts.get(i).getPromotionProduct().getProduct().getProductCode(), listRegisterProducts.get(i).getBox(), listRegisterProducts.get(i).getPoint()};
+			arrProducts[i] = new Object[]{
+					listRegisterProducts.get(i).getPromotionProduct().getProduct().getProductCode(), 
+					listRegisterProducts.get(i).getBox(), 
+					listRegisterProducts.get(i).getPoint()};
 		}
 		return arrProducts;
 	}
@@ -314,7 +347,6 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			int total_box_regist, 
 			int total_point_regist, 
 			Object[] gift_regist,
-			String gift,
 			Object[][] product_regist) throws Exception{
 		try {
 			ScriptEngine engine  = SystemUtil.compileScript(generateScriptFunction(script));
@@ -322,7 +354,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			engine.put(Params.BOX_REGIST, total_box_regist);
 			engine.put(Params.CUSTOMER, pCus.getCustomerCode());
 			engine.put(Params.GIFT_REGIST, gift_regist);
-			engine.put(Params.GIFT, gift);
+//			engine.put(Params.GIFT, gift);
 			engine.put(Params.POINT_DONE, pCus.getTotaPoint(mapProductPoint));// Sum (sam pham * diem)
 			engine.put(Params.POINT_REGIST, total_point_regist);
 			engine.put(Params.PRODUCT_DONE, pCus.paramProducts());
@@ -330,17 +362,17 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 
 			Object objDescription = engine.eval(Params.FUNCION1);
 			boolean objResult = (boolean)engine.eval(Params.FUNCION2);
-
-			if(Params.GIFT_DEBT.equalsIgnoreCase(gift)){
-				if(objResult){
-					pCus.setResult(false);
-				}
-			}else{
-				if(pCus.isResult()){
-					pCus.setResult(objResult);
-				}
-			}
-			pCus.getMapGifts().put(gift, objResult);
+			pCus.setResult(objResult);
+//			if(Params.GIFT_DEBT.equalsIgnoreCase(gift)){
+//				if(objResult){
+//					pCus.setResult(false);
+//				}
+//			}else{
+//				if(pCus.isResult()){
+//					
+//				}
+//			}
+//			pCus.getMapGifts().put(gift, objResult);
 
 			return StringUtil.notNull(objDescription);
 		} catch (Exception e) {
@@ -361,7 +393,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		str.append("var ").append(Params.BOX_REGIST).append(";\n");
 		str.append("var ").append(Params.CUSTOMER).append(";\n");
 		str.append("var ").append(Params.GIFT_REGIST).append(";\n");
-		str.append("var ").append(Params.GIFT).append(";\n");
+//		str.append("var ").append(Params.GIFT).append(";\n");
 		str.append("var ").append(Params.POINT_DONE).append(";\n");
 		str.append("var ").append(Params.POINT_REGIST).append(";\n");
 		str.append("var ").append(Params.PRODUCT_DONE).append(";\n");
@@ -458,12 +490,9 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 					//Set gift
 					int g_len = 11+promotion.getPromotionGifts().size();
 					for (int i = 11; i < g_len; i++) {
-						if(pc.getMapGifts().containsKey(header[i])){
-							if(pc.getMapGifts().get(header[i])){
-								list.add("ok");
-							}else{
-								list.add("not ok");
-							}
+						RegisterGift registerGift = getRegisterGift(pc.getListRegisterGifts(), header[i]);
+						if(registerGift != null){
+							list.add("" + registerGift.getTotal());
 						}else{
 							list.add("");
 						}
@@ -501,11 +530,11 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 					//Set gift
 					int g_len = 10+promotion.getPromotionGifts().size();
 					for (int i = 10; i < g_len; i++) {
-						if(pc.getMapGifts().containsKey(header[i])){
+						//if(pc.getMapGifts().containsKey(header[i])){
 							list.add("x");
-						}else{
-							list.add("");
-						}
+						//}else{
+						//	list.add("");
+						//}
 					}
 					//Set product
 					int p_len = g_len+promotion.getPromotionProducts().size();
@@ -530,6 +559,15 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			}
 		}
 		return 0;
+	}
+	
+	private RegisterGift getRegisterGift(List<RegisterGift> listRegisterGifts, String giftName){
+		for (RegisterGift registerGift : listRegisterGifts) {
+			if(giftName.equalsIgnoreCase(registerGift.getPromotionGift().getGift().getGiftName())){
+				return registerGift;
+			}
+		}
+		return null;
 	}
 
 //	public HttpServletRequest getRequest() {

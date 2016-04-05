@@ -302,6 +302,7 @@ public class PromotionRegistHome {
 				promotionGift.setGift(gift);
 				
 				registerGift.setPromotionGift(promotionGift);
+				registerGift.setTotal(rs.getInt("total"));
 				results.add(registerGift);
 			}
 			rs.close();

@@ -43,7 +43,7 @@ public class PromotionAction implements ServletContextAware, UserAware {
 	private Integer group_customer_id;
 	private Short customerRegist;
 	private User userSes; 
-
+	private String rule;
 
 	public static void main(String[] args) {
 		try {
@@ -113,6 +113,7 @@ public class PromotionAction implements ServletContextAware, UserAware {
 			record.setCustomerRegist(customerRegist);
 			GroupCustomer group = new GroupCustomer();
 			group.setId(group_customer_id);
+			record.setRule(rule);
 			record.setGroupCustomer(group);
 
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
@@ -137,6 +138,7 @@ public class PromotionAction implements ServletContextAware, UserAware {
 			record.setRemarks(remarks);
 			record.setStatus(status);
 			record.setCustomerRegist(customerRegist);
+			record.setRule(rule);
 			GroupCustomer group = new GroupCustomer();
 			group.setId(group_customer_id);
 			record.setGroupCustomer(group);
@@ -318,6 +320,14 @@ public class PromotionAction implements ServletContextAware, UserAware {
 
 	public void setCustomerRegist(Short customerRegist) {
 		this.customerRegist = customerRegist;
+	}
+	
+	public String getRule() {
+		return rule;
+	}
+
+	public void setRule(String rule) {
+		this.rule = rule;
 	}
 
 }

@@ -60,15 +60,27 @@ pageEncoding="UTF-8"%>
 									<th colspan="7">Contact</th>
 								</tr> -->
 								<tr class="headings">
-									<th>No</th>
-									<th>Mã khách hàng</th>
-									<th>Tên khách hàng</th>
-									<th>NVTT</th>
-									<th>Số mặt hàng</th>
-									<th>Số thùng</th>
-									<th>Số lượng</th>
-									<th>Kết quả</th>
-									<th>Báo cáo</th>
+									<th rowspan="2">No</th>
+									<th rowspan="2">Mã khách hàng</th>
+									<th rowspan="2">Tên khách hàng</th>
+									<th rowspan="2">NVTT</th>
+									<th rowspan="2">Số mặt hàng</th>
+									<th rowspan="2">Số thùng</th>
+									<th rowspan="2">Số lượng</th>
+									<th rowspan="2">Kết quả</th>
+									<th rowspan="2">Báo cáo</th>
+									<s:iterator value="promotion.promotionGifts">
+										<th rowspan="2"><s:property value="gift.giftName" /></th>
+									</s:iterator>
+									<s:iterator value="promotion.promotionProducts">
+										<th colspan="2"><s:property value="product.productName" /></th>
+									</s:iterator>
+								</tr>
+								<tr class="headings">
+									<s:iterator value="promotion.promotionProducts">
+										<th >ĐK</th>
+										<th >TH</th>
+									</s:iterator>
 								</tr>
 							</thead>
 

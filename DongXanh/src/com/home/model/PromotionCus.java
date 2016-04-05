@@ -39,14 +39,14 @@ public class PromotionCus {
 	//Get list product register
 	private List<RegisterProduct> listRegisterProducts = new ArrayList<>();
 	//Gift
-	private HashMap<String, Boolean> mapGifts = new HashMap<>();
-	
-	public HashMap<String, Boolean> getMapGifts() {
-		return mapGifts;
-	}
-	public void setMapGifts(HashMap<String, Boolean> mapGifts) {
-		this.mapGifts = mapGifts;
-	}
+//	private HashMap<String, Boolean> mapGifts = new HashMap<>();
+//	
+//	public HashMap<String, Boolean> getMapGifts() {
+//		return mapGifts;
+//	}
+//	public void setMapGifts(HashMap<String, Boolean> mapGifts) {
+//		this.mapGifts = mapGifts;
+//	}
 	public String getResultPromotion() {
 		return resultPromotion;
 	}

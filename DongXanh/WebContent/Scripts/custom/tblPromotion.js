@@ -123,7 +123,7 @@ $(document).ready(function() {
         								},
         								gift_id: {
         									title: 'Quà tặng',
-        									width: '40%',
+        									width: '30%',
         									edit : true,
         									options: function () {
 
@@ -164,20 +164,20 @@ $(document).ready(function() {
         								maxQuantity: {
         									title: 'Số thùng phải đạt',
         									width: '10%',
-        									inputClass: 'validate[custom[integer]]'
+        									inputClass: 'validate[required,custom[integer]]'
         								},
         								maxPoint: {
         									title: 'Số điểm phải đạt',
         									width: '10%',
-        									inputClass: 'validate[custom[integer]]'
+        									inputClass: 'validate[required,custom[integer]]'
         								},
-        								formula: {
-        									title: 'Công thức',
-        									width: '24%',
-        									type: 'textarea',
-        									defaultValue: '$ketqua = ($diemth>=$diemdk); return ($diemth-$diemdk)+" điểm";',
-        									list: false
-        								}
+//        								formula: {
+//        									title: 'Công thức',
+//        									width: '24%',
+//        									type: 'textarea',
+//        									defaultValue: '$ketqua = ($diemth>=$diemdk); return ($diemth-$diemdk)+" điểm";',
+//        									list: false
+//        								}
                                     },
                                     //Initialize validation logic when a form is created
                             		formCreated: function (event, data) {
@@ -291,7 +291,7 @@ $(document).ready(function() {
                                     maxPoint: {
                                         title: 'Điểm cho mỗi thùng',
                                         width: '20%',
-                                        inputClass: 'validate[custom[integer]]'
+                                        inputClass: 'validate[required,custom[integer]]'
                                     }
                                 },
                               //Initialize validation logic when a form is created
@@ -406,7 +406,13 @@ $(document).ready(function() {
  				 edit: true,
  				 //listClass: 'promotion-status',
              },
-			
+             rule: {
+            	 title: 'Công thức',
+            	 type: 'textarea',
+            	 defaultValue: '$ketqua = ($diemth>=$diemdk);',
+            	 list: false,
+            	 inputClass: 'validate[required]'
+             }
 		},
 		//Initialize validation logic when a form is created
 		formCreated: function (event, data) {
