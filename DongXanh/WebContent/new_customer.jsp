@@ -149,7 +149,7 @@
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<s:select id="cityName" name="varCityCode"
 										cssClass="form-control col-md-7 col-xs-12" list="listCity"
-										headerKey="-1" headerValue="--"
+										headerKey="-1" headerValue=""
 										listKey="cityCode" listValue="cityName"
 										value="%{varCityCode}" />
 								</div>
