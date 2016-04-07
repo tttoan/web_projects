@@ -245,7 +245,9 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 									promotionRegister.getTotalBox(), 
 									promotionRegister.getTotalPoint(), 
 									paramRegisterGifts(listRegisterGifts), 
-									paramRegisterProducts(listRegisterProducts));
+									paramRegisterProducts(listRegisterProducts),
+									getAveragePoint2Value(listRegisterGifts)
+									);
 							
 							pCus.setResultPromotion(str);
 							if(pCus.isResult()){
@@ -289,7 +291,8 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 								0, 
 								0, 
 								null, 
-								null);
+								null,
+								getAveragePoint2Value(promotionGifts));
 						pCus.setResultPromotion(str);
 						
 						if(pCus.isResult()){
@@ -315,10 +318,62 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		for (int i = 0; i < listRegisterGifts.size(); i++) {
 			arrGifts[i] = new Object[]{
 					listRegisterGifts.get(i).getPromotionGift().getGift().getGiftName(),
-					listRegisterGifts.get(i).getPromotionGift().getPrice()
+					listRegisterGifts.get(i).getPromotionGift().getMaxQuantity(),
+					listRegisterGifts.get(i).getPromotionGift().getMaxPoint(),
+					listRegisterGifts.get(i).getPromotionGift().getPrice(),
 					};
 		}
 		return arrGifts;
+	}
+	
+	private int getAveragePoint2Value(List<RegisterGift> listRegisterGifts){
+		double avg = 0;
+		int size = listRegisterGifts.size();
+		if(size > 0){
+			int total = 0;
+			for (int i = 0; i < size; i++) {
+				Double price =  listRegisterGifts.get(i).getPromotionGift().getPrice();
+				int point = listRegisterGifts.get(i).getPromotionGift().getMaxPoint();
+				int quantity = listRegisterGifts.get(i).getPromotionGift().getMaxQuantity();
+				if(price != null && price > 0){
+					if(point > 0){
+						avg += price/point;
+						total++;
+					}
+					else if(quantity > 0){
+						avg += price/quantity;
+						total++;
+					}
+				}
+			}
+			avg = avg/total;
+		}
+		return (int)avg;
+	}
+	
+	private int getAveragePoint2Value(Set<PromotionGift> promotionGifts){
+		double avg = 0;
+		int size = promotionGifts.size();
+		if(size > 0){
+			int total = 0;
+			for (PromotionGift promotionGift : promotionGifts) {
+				Double price =  promotionGift.getPrice();
+				int point = promotionGift.getMaxPoint();
+				int quantity = promotionGift.getMaxQuantity();
+				if(price != null && price > 0){
+					if(point > 0){
+						avg += price/point;
+						total++;
+					}
+					else if(quantity > 0){
+						avg += price/quantity;
+						total++;
+					}
+				}
+			}
+			avg = avg/total;
+		}
+		return (int)avg;
 	}
 
 	private Object[][] paramRegisterProducts(List<RegisterProduct> listRegisterProducts){
@@ -348,8 +403,9 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			PromotionCus pCus, 
 			int total_box_regist, 
 			int total_point_regist, 
-			Object[] gift_regist,
-			Object[][] product_regist) throws Exception{
+			Object[][] gift_regist,
+			Object[][] product_regist,
+			int avg_price) throws Exception{
 		try {
 			ScriptEngine engine  = SystemUtil.compileScript(generateScriptFunction(script));
 			engine.put(Params.BOX_DONE, pCus.getTotalBox());
@@ -359,12 +415,15 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 //			engine.put(Params.GIFT, gift);
 			engine.put(Params.POINT_DONE, pCus.getTotaPoint(mapProductPoint));// Sum (sam pham * diem)
 			engine.put(Params.POINT_REGIST, total_point_regist);
-			engine.put(Params.PRODUCT_DONE, pCus.paramProducts());
+			engine.put(Params.PRODUCT_DONE, pCus.paramProducts(mapProductPoint));
 			engine.put(Params.PRODUCT_REGIST, product_regist);
+			engine.put(Params.PRICE, avg_price);
 
 			Object objDescription = engine.eval(Params.FUNCION1);
 			boolean objResult = (boolean)engine.eval(Params.FUNCION2);
 			pCus.setResult(objResult);
+			pCus.setTotalBoxRegist(total_box_regist);
+			pCus.setTotalPointRegist(total_point_regist);
 //			if(Params.GIFT_DEBT.equalsIgnoreCase(gift)){
 //				if(objResult){
 //					pCus.setResult(false);
@@ -400,9 +459,11 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		str.append("var ").append(Params.POINT_REGIST).append(";\n");
 		str.append("var ").append(Params.PRODUCT_DONE).append(";\n");
 		str.append("var ").append(Params.PRODUCT_REGIST).append(";\n");
+		str.append("var ").append(Params.PRICE).append(";\n");
 
 		str.append("var ").append(Params.RESULT).append("=false;\n");
 		str.append("function ").append(Params.FUNCION2).append("{return ").append(Params.RESULT).append(";}\n");
+		str.append("function format(num){var n = num.toString(), p = n.indexOf('.');return n.replace(/\\d(?=(?:\\d{3})+(?:\\.|$))/g, function($0, i){return p<0 || i<p ? ($0+',') : $0; });}");
 
 		return str.toString();
 	}
@@ -552,7 +613,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	private int getProductBoxDone(Set<Product> products, String productName){
 		for (Product product : products) {
 			if(productName.equalsIgnoreCase(product.getProductName())){
-				return product.getQuantity();
+				return product.getTotalBox();
 			}
 		}
 		return 0;
@@ -561,7 +622,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	public String getProductBoxDoneReport(Set<Product> products, String productName){
 		for (Product product : products) {
 			if(productName.equalsIgnoreCase(product.getProductName())){
-				return "" + product.getQuantity();
+				return "" + product.getTotalBox();
 			}
 		}
 		return "";

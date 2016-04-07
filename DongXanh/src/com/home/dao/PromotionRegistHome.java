@@ -295,6 +295,7 @@ public class PromotionRegistHome {
 				promotionGift.setMaxPoint(rs.getInt("max_point"));
 				promotionGift.setUnit(rs.getString("unit"));
 				promotionGift.setFormula(rs.getString("formula"));
+				promotionGift.setPrice(rs.getDouble("price"));
 				
 				Gift gift = new Gift();
 				gift.setId(rs.getInt("gift_id"));

@@ -52,7 +52,7 @@ pageEncoding="UTF-8"%>
 				<div class="x_panel">
 					<div class="x_content">
 						<table id="example"
-							class="table table-striped responsive-utilities jambo_table" style="width: 100%">
+							class="table table-striped responsive-utilities jambo_table display nowrap cell-border" style="width: 100%">
 							<thead>
 								<!-- <tr>
 									<th rowspan="2">Name</th>
@@ -64,9 +64,16 @@ pageEncoding="UTF-8"%>
 									<th rowspan="2">Mã khách hàng</th>
 									<th rowspan="2">Tên khách hàng</th>
 									<th rowspan="2">NVTT</th>
-									<th rowspan="2">Số mặt hàng</th>
-									<th rowspan="2">Số thùng</th>
-									<th rowspan="2">Số lượng</th>
+									<th rowspan="2">Tổng số <br>mặt hàng</th>
+									<th rowspan="2">Tổng số <br>thùng TH</th>
+									<s:if test="%{promotion.customerRegist==1}">
+										<th rowspan="2">Tổng số <br>thùng ĐK</th>
+									</s:if>
+									<th rowspan="2">Tổng số <br>lượng TH</th>
+									<th rowspan="2">Tổng số <br>điểm TH</th>
+									<s:if test="%{promotion.customerRegist==1}">
+										<th rowspan="2">Tổng số <br>điểm ĐK</th>
+									</s:if>
 									<th rowspan="2">Kết quả</th>
 									<th rowspan="2">Báo cáo</th>
 									<th colspan=<s:property value="promotion.promotionGifts.size"/> align="center">Quà tặng</th>
@@ -79,8 +86,8 @@ pageEncoding="UTF-8"%>
 										<th><s:property value="gift.giftName" /></th>
 									</s:iterator>
 									<s:iterator value="promotion.promotionProducts">
-										<th >ĐK</th>
 										<th >TH</th>
+										<th >ĐK</th>
 									</s:iterator>
 								</tr>
 							</thead>
@@ -94,15 +101,22 @@ pageEncoding="UTF-8"%>
 										<td class=""><s:property value="sellMan" /></td>
 										<td class=""><s:property value="totalProduct" /></td>
 										<td class=""><s:property value="totalBox" /></td>
+										<s:if test="%{promotion.customerRegist==1}">
+											<td class=""><s:property value="totalBoxRegist" /></td>
+										</s:if>
 										<td class=""><s:property value="quality" /></td>
+										<td class=""><s:property value="totalPoint" /></td>
+										<s:if test="%{promotion.customerRegist==1}">
+											<td class=""><s:property value="totalPointRegist" /></td>
+										</s:if>
 										<td class=""><s:property value="resultString" /></td>
 										<td class=""><s:property value="resultPromotion" /></td>
 										<s:iterator value="promotion.promotionGifts">
 											<td><s:property value="getRegiterGiftTotal(listRegisterGifts, gift.giftName)" /></td>
 										</s:iterator>
 										<s:iterator value="promotion.promotionProducts">
-											<td><s:property value="getRegiterProductTotal(listRegisterProducts, product.productName)" /></td>
 											<td><s:property value="getProductBoxDoneReport(products, product.productName)" /></td>
+											<td><s:property value="getRegiterProductTotal(listRegisterProducts, product.productName)" /></td>
 										</s:iterator>
 									</tr>
 								</s:iterator>
@@ -154,8 +168,18 @@ pageEncoding="UTF-8"%>
 </style>
 
 <!-- Datatables -->
-<script src="js/datatables/js/jquery.dataTables.js"></script>
+<%-- <script src="js/datatables/js/jquery.dataTables.js"></script> --%>
 <!--<script src="js/datatables/tools/js/dataTables.tableTools.js"></script>-->
+
+<!-- Datatables -->
+<script src="js/jquery.dataTables.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#example').DataTable( {
+        "scrollX": true
+    } );
+} );
+</script>
 
 <script>
 	$(document).ready(function() {

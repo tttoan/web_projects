@@ -409,7 +409,7 @@ $(document).ready(function() {
              rule: {
             	 title: 'Công thức',
             	 type: 'textarea',
-            	 defaultValue: '$ketqua = ($diemth>=$diemdk);',
+            	 defaultValue: '$ketqua = ($diemth>=$diemdk);\nif($ketqua){\n	if($diemth>$diemdk){\n		return "Nợ dư: "+format(($diemth-$diemdk)*$giatien)+ "VNĐ";\n	}\n}else{\n	return "Nợ âm: "+format(($diemdk-$diemth)*$giatien)+ "VNĐ";\n}',
             	 list: false,
             	 inputClass: 'validate[required]'
              }

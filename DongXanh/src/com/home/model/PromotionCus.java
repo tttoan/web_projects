@@ -19,6 +19,7 @@ public class PromotionCus {
 	private long totalProduct;
 	private  long totalPass;
 	private  long totalBox;
+	private  long totalBoxRegist;
 	private  long quality;
 	private  long totalGift;
 	private float percentPass;
@@ -30,6 +31,7 @@ public class PromotionCus {
 	private String categoryName;
 	private String productName;
 	private  long totalPoint;
+	private  long totalPointRegist;
 	private BigDecimal totaPrice;
 	private Set<Product> products = new HashSet<Product>(0);
 	//Get customer register
@@ -40,6 +42,19 @@ public class PromotionCus {
 	private List<RegisterProduct> listRegisterProducts = new ArrayList<>();
 	
 	private Promotion promotion;
+	
+	public long getTotalBoxRegist() {
+		return totalBoxRegist;
+	}
+	public void setTotalBoxRegist(long totalBoxRegist) {
+		this.totalBoxRegist = totalBoxRegist;
+	}
+	public long getTotalPointRegist() {
+		return totalPointRegist;
+	}
+	public void setTotalPointRegist(long totalPointRegist) {
+		this.totalPointRegist = totalPointRegist;
+	}
 	
 	public Promotion getPromotion() {
 		return promotion;
@@ -179,19 +194,17 @@ public class PromotionCus {
 		this.productName = productName;
 	}
 	public long getTotaPoint(HashMap<Integer, Integer> mapProductPoint) {
-		if(totalPoint > 0){
-			return totalPoint;
-		}
-		else{
-			int total_p = 0;
-			for (Product product : products) {
-				if(mapProductPoint.containsKey(product.getId())){
-					total_p += (product.getTotalBox()/*so thung*/ * mapProductPoint.get(product.getId()));
-				}
+		int total_p = 0;
+		for (Product product : products) {
+			if(mapProductPoint.containsKey(product.getId())){
+				total_p += (product.getTotalBox()/*so thung*/ * mapProductPoint.get(product.getId()));
 			}
-			totalPoint = total_p;
-			return totalPoint;
 		}
+		totalPoint = total_p;
+		return totalPoint;
+	}
+	public long getTotalPoint() {
+		return totalPoint;
 	}
 	public void setTotalPoint(long totaPoint) {
 		this.totalPoint = totaPoint;
@@ -203,11 +216,15 @@ public class PromotionCus {
 		this.totaPrice = totaPrice;
 	}
 	
-	public Object[][] paramProducts(){
+	public Object[][] paramProducts(HashMap<Integer, Integer> mapProductPoint){
 		Object[][]values = new Object[products.size()][3];
 		int i = 0;
 		for (Product product : products) {
-			values[i++] = new Object[]{product.getProductCode(), product.getQuantity()};
+			if(mapProductPoint.containsKey(product.getId())){
+				values[i++] = new Object[]{product.getProductCode(), product.getTotalBox(), mapProductPoint.get(product.getId())};
+			}else{
+				values[i++] = new Object[]{product.getProductCode(), product.getTotalBox(), 0};
+			}
 		}
 		return values;
 	}
