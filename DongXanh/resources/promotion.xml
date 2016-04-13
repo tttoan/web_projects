@@ -130,6 +130,10 @@
 			method="getAllGifts">
 			<result type="json" />
 		</action>
+		<action name="promotionFilterValues" method="getFilterValues"
+			class="com.home.action.ResultPromotionAction">
+			<result type="json" />
+		</action>
 	</package>
 	
 	
@@ -245,6 +249,10 @@
 	                <param name="bufferSize">1024</param>
 	        </result>
         </action>
+        <action name="promotionCusFilterAction" method="listPromotionCusFilter"
+			class="com.home.action.ResultPromotionAction">
+			<result name="success">/promotion_cus.jsp</result>
+		</action>
 	</package>
 	
 </struts>

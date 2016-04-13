@@ -10,7 +10,7 @@ import java.util.Set;
 import com.home.util.StringUtil;
 
 
-public class PromotionCus {
+public class PromotionCus implements java.io.Serializable {
 	private String promotionName;
 	private int customerId;
 	private String customerCode;

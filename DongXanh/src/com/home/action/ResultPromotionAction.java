@@ -47,29 +47,16 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	private HttpServletRequest request;
 	private List<Promotion> promotions = new ArrayList<Promotion>();
 	private List<PromotionCus> promotionCuss = new ArrayList<PromotionCus>();
-	private HashMap<Integer, String> groupCustomers ;
+	private LinkedHashMap<Integer, String> groupCustomers ;
 	private Integer promotion_id;
 	private HashMap<Integer, Integer> mapProductPoint = new HashMap<Integer, Integer>();
 	private InputStream inputStream;
 	private String filenameDownload = "Kết quả khuyến mãi.xls";
 	private int type;
+	private String filterValue;
+	private int resultType ;
 	private Promotion promotion;
-
-	public Promotion getPromotion() {
-		return promotion;
-	}
-
-	public void setPromotion(Promotion promotion) {
-		this.promotion = promotion;
-	}
-
-	public int getType() {
-		return type;
-	}
-
-	public void setType(int type) {
-		this.type = type;
-	}
+	private List<String> listFilterValues;
 
 	@Override
 	public void setServletRequest(HttpServletRequest request) {
@@ -154,7 +141,98 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		}
 	}
 	
+	public String getFilterValues() {
+		try {
+			listFilterValues = new ArrayList<String>();
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			type = Integer.parseInt(request.getParameter("type"));
+			switch (type) {
+			case 1:
+				listFilterValues = (List<String>) ActionContext.getContext().getSession().get("listFilterValues");
+				break;
+			case 2:
+				GroupCustomerHome groupCustomerHome = new GroupCustomerHome(HibernateUtil.getSessionFactory());
+				groupCustomers = groupCustomerHome.getListGroupCustomer();
+				Set<Integer> set = groupCustomers.keySet();
+				for (Integer id : set) {
+					if(!listFilterValues.contains(groupCustomers.get(id))){
+						listFilterValues.add(groupCustomers.get(id));
+					}
+				}
+				break;
+			default:
+				listFilterValues.add("");
+				break;
+			}
 
+			return SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+	}
+	
+
+	public String listPromotionCusFilter() throws Exception {
+		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			type = Integer.parseInt(request.getParameter("type"));
+			filterValue = request.getParameter("filterValue");
+			resultType = Integer.parseInt(request.getParameter("resultType"));
+			
+			promotion = (Promotion) ActionContext.getContext().getSession().get("promotion");
+			setFilenameDownload(ExcelUtil.removeInvalidChar(promotion.getPromotionName()) + ".xls");
+			mapProductPoint = (HashMap) ActionContext.getContext().getSession().get("mapProductPoint");
+			List<PromotionCus> list = (List<PromotionCus>) ActionContext.getContext().getSession().get("promotionCuss");
+			promotionCuss = new ArrayList<PromotionCus>();
+			for (PromotionCus pCus : list) {
+				switch (type) {
+				case 1://Filter by NVTT
+					if(pCus.getSellMan().equals(filterValue)){
+						if(isCustomerResult(pCus, resultType)){
+							promotionCuss.add(pCus);
+						}
+					}
+					break;
+				case 2://Filter by Customer group
+					if(isCustomerResult(pCus, resultType)){
+						promotionCuss.add(pCus);
+					}
+					break;
+				default:
+					if(isCustomerResult(pCus, resultType)){
+						promotionCuss.add(pCus);
+					}
+					break;
+				}
+			}
+			
+			return SUCCESS;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+	}
+	
+	private boolean isCustomerResult(PromotionCus pCus, int result){
+		switch (result) {
+		case 3://Đạt
+			if(pCus.isResult()){
+				return true;
+			}
+			break;
+		case 2://Ko Đạt
+			if(!pCus.isResult()){
+				return true;
+			}
+			break;
+		case 1:
+		default:
+			return true;
+		}
+		return false;
+	}
+	
 	public String listPromotionCusResult() throws Exception {
 		try {
 			PromotionHome promotionHome = new PromotionHome(HibernateUtil.getSessionFactory());
@@ -173,17 +251,24 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			//				System.out.println("--------->" + promotionCus.getCustomerName());
 			//			}
 
+			listFilterValues = new ArrayList<String>();
 			promotionCuss = accessPromotionResult(mapResult, promotion);
 			ActionContext.getContext().getSession().put("promotionCuss", promotionCuss);
 			ActionContext.getContext().getSession().put("promotion", promotion);
 			setFilenameDownload(ExcelUtil.removeInvalidChar(promotion.getPromotionName()) + ".xls");
 			ActionContext.getContext().getSession().put("filenameDownload", getFilenameDownload());
+			ActionContext.getContext().getSession().put("listFilterValues", listFilterValues);
+			type = 0;
+			resultType = 1;
+			filterValue = "";
 			return SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ERROR;
 		}
 	}
+	
+	
 
 	private List<PromotionCus> accessPromotionResult(LinkedHashMap<String, PromotionCus> mapResult, Promotion promotion) throws Exception{
 		List<PromotionCus> result = new ArrayList<>();
@@ -259,7 +344,9 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 							pCus.setListRegisterProducts(listRegisterProducts);
 							pCus.setPromotionRegister(promotionRegister);
 							pCus.setPromotion(promotion);
-
+							if(!listFilterValues.contains(pCus.getSellMan())){
+								listFilterValues.add(new String(pCus.getSellMan()));
+							}
 							result.add(pCus);
 						}
 					}
@@ -302,6 +389,9 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 						}
 
 						pCus.setPromotion(promotion);
+						if(!listFilterValues.contains(pCus.getSellMan())){
+							listFilterValues.add(new String(pCus.getSellMan()));
+						}
 						result.add(pCus);
 					}
 				}
@@ -694,7 +784,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 		return groupCustomers;
 	}
 
-	public void setGroupCustomers(HashMap<Integer, String> groupCustomers) {
+	public void setGroupCustomers(LinkedHashMap<Integer, String> groupCustomers) {
 		this.groupCustomers = groupCustomers;
 	}
 
@@ -713,5 +803,45 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 
 	public void setFilenameDownload(String filenameDownload) {
 		this.filenameDownload = filenameDownload;
+	}
+	
+	public List<String> getListFilterValues() {
+		return listFilterValues;
+	}
+
+	public void setListFilterValues(List<String> listFilterValues) {
+		this.listFilterValues = listFilterValues;
+	}
+
+	public Promotion getPromotion() {
+		return promotion;
+	}
+
+	public void setPromotion(Promotion promotion) {
+		this.promotion = promotion;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+	
+	public String getFilterValue() {
+		return filterValue;
+	}
+
+	public void setFilterValue(String filterValue) {
+		this.filterValue = filterValue;
+	}
+
+	public int getResultType() {
+		return resultType;
+	}
+
+	public void setResultType(int resultType) {
+		this.resultType = resultType;
 	}
 }

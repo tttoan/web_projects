@@ -7,6 +7,7 @@ import static org.hibernate.criterion.Example.create;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -159,16 +160,16 @@ public class GroupCustomerHome {
 		}
 	}
 	
-	public HashMap<Integer, String> getListGroupCustomer() throws Exception{
+	public LinkedHashMap<Integer, String> getListGroupCustomer() throws Exception{
 		log.debug("retrieve list GroupCustomer");
 		Session session = null;
-		HashMap<Integer, String> results = new HashMap<Integer, String>();
+		LinkedHashMap<Integer, String> results = new LinkedHashMap<Integer, String>();
 		try {
 			session = sessionFactory.openSession();
 			SessionImpl sessionImpl = (SessionImpl) session;
 			Connection conn = sessionImpl.connection();
 
-			ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM `group_customer`");
+			ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM `group_customer` Order By group_name");
 			while(rs.next()){
 				results.put(rs.getInt("id"), rs.getString("group_name"));
 			}

@@ -21,16 +21,24 @@ pageEncoding="UTF-8"%>
 									class="form-horizontal form-label-left">
 									<div class="form-group">
 
-										<s:select id="cboPromotionStatus"
+										<s:select id="cboPromotionStatus"  style="width: 250px"
 											class="select2_group form-control" onchange="onTypeChange()"
-											list="#{'0':'+ Tất cả', '1':'+ Theo NVTT', '2':'+ Theo cấp 1', '3':'+ Theo cấp 2'}"
+											list="#{'0':'+ Tất cả', '1':'+ Theo NVTT', '2':'+ Theo nhóm khách hàng'}"
 											value='%{type}' required="true" />
 									</div>
 								</s:form></td>
 							<td valign="bottom">
-								<input type="radio" name="p_result_status" value="3"> <label>Đạt | </label>
+								<!-- <input type="radio" name="p_result_status" value="3"> <label>Đạt | </label>
   								<input type="radio" name="p_result_status" value="2"> <label>Không đạt | </label>
-  								<input type="radio" name="p_result_status" value="1" checked> <label>Tất cả</label>
+  								<input type="radio" name="p_result_status" value="1" checked> <label>Tất cả</label> -->
+  								<s:form
+									class="form-horizontal form-label-left">
+									<div class="form-group">
+  								<s:radio id="p_result_status_id" name="p_result_status" 
+  									list="#{'3':' Đạt | ', '2':' Không đạt | ', '1':' Tất cả '}" 
+  									value='%{resultType}' />
+								</div>
+								</s:form>
 							</td>
 							<td>
 							<td align="right" valign="bottom">
@@ -46,6 +54,22 @@ pageEncoding="UTF-8"%>
 								</p>
 							</td>
 						</tr>
+						<tr>
+							<td></td>
+							<td><s:form
+									class="form-horizontal form-label-left">
+									<div class="form-group">
+
+										<s:select id="cboFilterValue"  style="width: 250px"
+											class="select2_group form-control"
+											list="{}"
+											value='%{filterValue}'
+											required="true" />
+									</div>
+								</s:form></td>
+							<td valign="bottom">
+								<button type="button" class="btn btn-primary" id="btnFilter" onclick="btnFilterValues()">Xem kết quả</button></td>
+						</tr>
 					</table>
 				</div>
 
@@ -60,34 +84,53 @@ pageEncoding="UTF-8"%>
 									<th colspan="7">Contact</th>
 								</tr> -->
 								<tr class="headings">
-									<th rowspan="2">No</th>
-									<th rowspan="2">Mã khách hàng</th>
-									<th rowspan="2">Tên khách hàng</th>
-									<th rowspan="2">NVTT</th>
-									<th rowspan="2">Tổng số <br>mặt hàng</th>
-									<th rowspan="2">Tổng số <br>thùng TH</th>
+									<th colspan="4"></th>
+									
 									<s:if test="%{promotion.customerRegist==1}">
-										<th rowspan="2">Tổng số <br>thùng ĐK</th>
+										<th colspan="8"><s:property value="promotion.promotionName" /></th>
 									</s:if>
-									<th rowspan="2">Tổng số <br>lượng TH</th>
-									<th rowspan="2">Tổng số <br>điểm TH</th>
-									<s:if test="%{promotion.customerRegist==1}">
-										<th rowspan="2">Tổng số <br>điểm ĐK</th>
-									</s:if>
-									<th rowspan="2">Kết quả</th>
-									<th rowspan="2">Báo cáo</th>
+									<s:else>
+										<th colspan="6"><s:property value="promotion.promotionName" /></th>
+									</s:else>
+									
 									<th colspan=<s:property value="promotion.promotionGifts.size"/> align="center">Quà tặng</th>
 									<s:iterator value="promotion.promotionProducts">
-										<th colspan="2"><s:property value="product.productName" /></th>
+										<s:if test="%{promotion.customerRegist==1}">
+											<th colspan="2"><s:property value="product.productName" /></th>
+										</s:if>
+										<s:else>
+											<th rowspan="2"><s:property value="product.productName" /></th>
+										</s:else>
 									</s:iterator>
 								</tr>
 								<tr class="headings">
+									
+									<th>No</th>
+									<th>Mã khách hàng</th>
+									<th>Tên khách hàng</th>
+									<th>NVTT</th>
+									
+									<th>Tổng số <br>mặt hàng</th>
+									<th>Tổng số <br>thùng TH</th>
+									<s:if test="%{promotion.customerRegist==1}">
+										<th>Tổng số <br>thùng ĐK</th>
+									</s:if>
+									<th>Tổng số <br>lượng TH</th>
+									<th>Tổng số <br>điểm TH</th>
+									<s:if test="%{promotion.customerRegist==1}">
+										<th>Tổng số <br>điểm ĐK</th>
+									</s:if>
+									<th>Kết quả</th>
+									<th>Báo cáo</th>
+									
 									<s:iterator value="promotion.promotionGifts">
 										<th><s:property value="gift.giftName" /></th>
 									</s:iterator>
 									<s:iterator value="promotion.promotionProducts">
-										<th >TH</th>
-										<th >ĐK</th>
+										<s:if test="%{promotion.customerRegist==1}">
+											<th >TH</th>
+											<th >ĐK</th>
+										</s:if>
 									</s:iterator>
 								</tr>
 							</thead>
@@ -115,8 +158,14 @@ pageEncoding="UTF-8"%>
 											<td><s:property value="getRegiterGiftTotal(listRegisterGifts, gift.giftName)" /></td>
 										</s:iterator>
 										<s:iterator value="promotion.promotionProducts">
-											<td><s:property value="getProductBoxDoneReport(products, product.productName)" /></td>
-											<td><s:property value="getRegiterProductTotal(listRegisterProducts, product.productName)" /></td>
+											<s:if test="%{promotion.customerRegist==1}">
+												<td><s:property value="getProductBoxDoneReport(products, product.productName)" /></td>
+												<td><s:property value="getRegiterProductTotal(listRegisterProducts, product.productName)" /></td>
+											</s:if>
+											<s:else>
+												<td><s:property value="getProductBoxDoneReport(products, product.productName)" /></td>
+											</s:else>
+											
 										</s:iterator>
 									</tr>
 								</s:iterator>
@@ -165,6 +214,11 @@ pageEncoding="UTF-8"%>
 	padding: 0px 10px 10px 10px;
 	border-style: outset;
 }
+
+th {
+	text-align: center;
+	vertical-align: middle;
+}
 </style>
 
 <!-- Datatables -->
@@ -179,6 +233,57 @@ $(document).ready(function() {
         "scrollX": true
     } );
 } );
+</script>
+
+<script type="text/javascript">
+	function onTypeChange() {
+		var type = document.getElementById('cboPromotionStatus').value;
+		//alert(type);
+		if(type == '0'){
+			 document.getElementById("cboFilterValue").disabled = true;
+		}else{
+			 document.getElementById("cboFilterValue").disabled = false;
+		}
+		
+		 $.ajax({ //Not found in cache, get from server
+             url: 'promotionFilterValues?type='+type,
+             type: 'POST',
+             dataType: 'json',
+             async: false,
+             success: function (data) {
+            	 //alert("hiiiii  " + JSON.stringify(data)); 
+            	 var select = $('#cboFilterValue');
+                 select.find('option').remove();
+                 for (var i = 0; i < data.listFilterValues.length; i++) {
+                	 $('<option>').val(data.listFilterValues[i]).text(data.listFilterValues[i]).appendTo(select);
+                 }
+             }
+         });
+	}
+	
+	function btnFilterValues(){
+		var type = document.getElementById('cboPromotionStatus').value; 
+		var filterValue = document.getElementById('cboFilterValue').value;
+		//alert(type + "/" + filterValue); 
+		//var resultType = $('radio[name="p_result_status"]:checked').val();
+		//var resultType = document.getElementsByName('p_result_status').value;
+		//alert(type + "/" + filterValue + "/" + resultType); 
+		
+		var resultType = 1;
+		var moduleNameRadio=document.getElementsByName("p_result_status");
+		for(var i=0;i<moduleNameRadio.length;i++){
+		       if(moduleNameRadio[i].checked){
+		          //alert('Radio button selected' + moduleNameRadio[i].value);
+		    	   resultType = moduleNameRadio[i].value;
+		      }
+		}
+		
+		var actionUrl = "promotionCusFilterAction?type="+type+"&filterValue="+filterValue+"&resultType="+resultType;
+		//alert(type);
+		document.promotionTypeForm.action = actionUrl;
+		document.promotionTypeForm.submit();
+	}
+	
 </script>
 
 <script>
