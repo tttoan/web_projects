@@ -53,6 +53,7 @@ pageEncoding="UTF-8"%>
 									<div class="col-md-4 col-sm-4 col-xs-12">
 										<input type="number" id="number" name="number"
 											required="required" data-validate-minmax="1,1000"
+											value="1"
 											class="form-control col-md-7 col-xs-12">
 									</div>
 								</div>(Triệu VNĐ)
@@ -165,20 +166,36 @@ $(document).ready(function() {
         $(document).ready(function () {
             $('#single_cal1').daterangepicker({
                 singleDatePicker: true,
-                calender_style: "picker_1"
+                calender_style: "picker_2",
+                format: 'DD/MM/YYYY',
+                showDropdowns: true
             }, function (start, end, label) {
                 console.log(start.toISOString(), end.toISOString(), label);
             });
             $('#single_cal2').daterangepicker({
-                singleDatePicker: true,
-                calender_style: "picker_1"
+            	 singleDatePicker: true,
+                 calender_style: "picker_2",
+                 format: 'DD/MM/YYYY',
+                 showDropdowns: true
             }, function (start, end, label) {
                 console.log(start.toISOString(), end.toISOString(), label);
             });
+            
+            var d = new Date();
+            var currDate = d.getDate();
+            if(currDate < 10)currDate = '0'+currDate;
+            var currMonth = d.getMonth()+1;
+            if(currMonth < 10) currMonth = '0'+currMonth;
+            var currYear = d.getFullYear();
+            var startDate = currDate + "/" + currMonth + "/" + currYear;
+            $("#single_cal1").attr("value", startDate);
+            $("#single_cal2").attr("value", startDate);
+
         });
-    </script>
+</script>
     
 <script type="text/javascript">
+
 	function onTypeChange() {
 		var type = document.getElementById('cboPromotionStatus').value;
 		//alert(type);

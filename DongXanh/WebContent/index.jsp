@@ -15,7 +15,7 @@
 			<div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
 				<div class="tile-stats">
 					<div class="icon">
-						<i class="fa fa-check-square-o"></i>
+						<i class="fa fa-check-circle"></i>
 					</div>
 					<div id="statistic1_p" class="count">0</div>
 
@@ -31,7 +31,7 @@
 			<div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
 				<div class="tile-stats">
 					<div class="icon">
-						<i class="fa fa-caret-square-o-right"></i>
+						<i class="fa fa-clock-o"></i>
 					</div>
 					<div id="statistic2_p" class="count">0</div>
 
@@ -47,7 +47,7 @@
 			<div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
 				<div class="tile-stats">
 					<div class="icon">
-						<i class="fa fa-sort-amount-desc"></i>
+						<i class="fa fa-ban"></i>
 					</div>
 					<div id="statistic3_p" class="count">0</div>
 
@@ -63,7 +63,7 @@
 			<div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
 				<div class="tile-stats">
 					<div class="icon">
-						<i class="fa fa-sort-amount-desc"></i>
+						<i class="fa fa-times-circle"></i>
 					</div>
 					<div id="statistic4_p" class="count">0</div>
 

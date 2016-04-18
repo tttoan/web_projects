@@ -150,22 +150,37 @@ $(document).ready(function() {
     <script type="text/javascript" src="js/moment.min2.js"></script>
     <script type="text/javascript" src="js/datepicker/daterangepicker.js"></script>
     
- <script type="text/javascript">
+<script type="text/javascript">
         $(document).ready(function () {
             $('#single_cal1').daterangepicker({
                 singleDatePicker: true,
-                calender_style: "picker_1"
+                calender_style: "picker_2",
+                format: 'DD/MM/YYYY',
+                showDropdowns: true
             }, function (start, end, label) {
                 console.log(start.toISOString(), end.toISOString(), label);
             });
             $('#single_cal2').daterangepicker({
-                singleDatePicker: true,
-                calender_style: "picker_1"
+            	 singleDatePicker: true,
+                 calender_style: "picker_2",
+                 format: 'DD/MM/YYYY',
+                 showDropdowns: true
             }, function (start, end, label) {
                 console.log(start.toISOString(), end.toISOString(), label);
             });
+            
+            var d = new Date();
+            var currDate = d.getDate();
+            if(currDate < 10)currDate = '0'+currDate;
+            var currMonth = d.getMonth()+1;
+            if(currMonth < 10) currMonth = '0'+currMonth;
+            var currYear = d.getFullYear();
+            var startDate = currDate + "/" + currMonth + "/" + currYear;
+            $("#single_cal1").attr("value", startDate);
+            $("#single_cal2").attr("value", startDate);
+
         });
-    </script>
+</script>
     
 <script type="text/javascript">
 	function onTypeChange() {
