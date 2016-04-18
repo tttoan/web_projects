@@ -56,7 +56,7 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 	private String filterValue;
 	private int resultType ;
 	private Promotion promotion;
-	private List<String> listFilterValues;
+	private List<String> listFilterValues = new ArrayList<String>();
 
 	@Override
 	public void setServletRequest(HttpServletRequest request) {
@@ -206,6 +206,8 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 					break;
 				}
 			}
+			
+			getFilterValues();
 			
 			return SUCCESS;
 		} catch (Exception e) {

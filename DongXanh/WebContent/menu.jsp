@@ -11,7 +11,7 @@
 		<ul class="nav side-menu">
 			<li><a href="index.jsp"><i class="fa fa-home"></i> Trang Chủ
 			</a></li>
-			<li><a><i class="fa fa-desktop"></i> Khuyến Mãi <span
+			<li><a><i class="fa fa-cubes"></i> Khuyến Mãi <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
 					<li><s:url action="promotionResultAction" var="prURL" /> <s:a
@@ -25,7 +25,7 @@
 					<s:property value="%{userSes.role.roleId}" />
 				</s:param>
 			</s:include>
-			<li><a><i class="fa fa-edit"></i> Khách Hàng <span
+			<li><a><i class="fa fa-users"></i> Khách Hàng <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
 					<li><s:url action="list_customer.action" var="lcURL" /> <s:a
@@ -33,7 +33,7 @@
 					<li><s:url action="move_to_add_customer" var="macURL"></s:url>
 						<s:a href="%{macURL}"> Tạo và chỉnh Sửa </s:a></li>
 				</ul></li>
-			<li><a><i class="fa fa-table"></i> Bảng Kê <span
+			<li><a><i class="fa fa-book"></i> Bảng Kê <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
 					<li><s:url action="list_statistic" var="liURL" /> <s:a
@@ -43,6 +43,15 @@
 					<li><s:url action="move_to_accept_statistic" var="masURL">
 						</s:url> <s:a href="%{masURL}">Thao tác excel</s:a></li>
 				</ul></li>
+			<li><a><i class="fa fa-bar-chart"></i> Báo cáo <span
+					class="fa fa-chevron-down"></span></a>
+				<ul class="nav child_menu" style="display: none">
+					<li><a href="invoice_comparison.jsp"> So sánh bảng kê</a></li>
+					<li><a href="revenues_comparison.jsp"> So sánh doanh số cùng kỳ </a></li>
+					<li><a href="revenues_cus1.jsp"> Doanh số câp1 </a></li>
+					<li><a href="revenues_cus2.jsp"> Doanh số cấp2</a></li>
+					<li><a href="revenues_sellman.jsp"> Doanh số NVTT</a></li>
+			</ul></li>
 			<li><a><i class="fa fa-calendar"></i> Lịch công tác <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">

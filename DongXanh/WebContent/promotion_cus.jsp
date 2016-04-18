@@ -62,7 +62,7 @@ pageEncoding="UTF-8"%>
 
 										<s:select id="cboFilterValue"  style="width: 250px"
 											class="select2_group form-control"
-											list="{}"
+											list="listFilterValues"
 											value='%{filterValue}'
 											required="true" />
 									</div>
