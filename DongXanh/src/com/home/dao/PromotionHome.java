@@ -488,6 +488,7 @@ public class PromotionHome {
 				
 			}
 			rs.close();
+			pre.close();
 			log.debug("retrieve list PromotionCus successful, result size: " + results.size());
 			return results;
 		} catch (Exception re) {
