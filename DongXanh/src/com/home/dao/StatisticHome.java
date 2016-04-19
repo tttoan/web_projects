@@ -4,11 +4,13 @@ package com.home.dao;
 
 import static org.hibernate.criterion.Example.create;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -23,6 +25,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 
+import com.home.entities.RevenuesComparison;
 import com.home.entities.StatisticCustom;
 import com.home.model.Statistic;
 
@@ -327,32 +330,58 @@ public class StatisticHome {
 		}
 	}
 	
-	public List<Statistic> getListStatistic(java.sql.Date start, java.sql.Date end, float minRevenues) throws Exception{
+	public LinkedHashMap<String, RevenuesComparison> getRevenuesComparison(java.sql.Date start, java.sql.Date end, float minRevenues) throws Exception{
 		log.debug("retrieve list Statistic");
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
 			SessionImpl sessionImpl = (SessionImpl) session;
 			Connection conn = sessionImpl.connection();
-			List<Statistic> results = new ArrayList<Statistic>();
+			LinkedHashMap<String, RevenuesComparison> results = new LinkedHashMap<String, RevenuesComparison>();
 			String sql =
-					"Select  c1.customer_code, c1.business_name, c2.customer_code, c2.business_name, u.user_name, p.id as product_id, ct.category_name, p.product_code, p.product_name, sum(s.total_box) as total_box,sum(s.quantity) as quantity,sum(s.total) as total "
+					"Select  c1.customer_code as customer_code1, c1.business_name as business_name1, c2.customer_code, c2.business_name, c2.business_address, u.user_name, sum(s.total_box) as total_box, sum(s.quantity) as quantity, sum(s.total) as total "
 							+ "From `statistic` s "
 							+ "JOIN `customer` c1 ON s.customer_code_level1=c1.id "
 							+ "JOIN `customer` c2 ON s.customer_code_level2=c2.id "
-							+ "JOIN `product` p ON p.id=s.product_id "
-							+ "JOIN `category` ct ON ct.id=p.category_id "
 							+ "JOIN `user` u ON u.id=s.user_id "
 							+ "Where date_received >= ? And date_received <= ? "
-							+ "Group By c1.customer_code, c1.business_name, c2.customer_code, c2.business_name, u.user_name, product_id, ct.category_name, p.product_code, p.product_name "
-							+ "Order By c2.customer_code, p.product_code";
+							+ "Group By customer_code1, business_name1, c2.customer_code, c2.business_name, c2.business_address, u.user_name "
+							+ "Order By c2.customer_code";
 			System.out.println(sql);
 			PreparedStatement pre = conn.prepareStatement(sql);
 			pre.setDate(1, start);
 			pre.setDate(2, end);
 			ResultSet rs = pre.executeQuery();
 			while(rs.next()){
+				String customer_code1 	= rs.getString("customer_code1");
+				String business_name1 	= rs.getString("business_name1");
+				String customer_code 	= rs.getString("customer_code");
+				String business_name 	= rs.getString("business_name");
+				String business_address = rs.getString("business_address");
+				String user_name 		= rs.getString("user_name");
+				long total_box 			= rs.getLong("total_box");
+				long quantity			= rs.getLong("quantity");
+				BigDecimal total		= rs.getBigDecimal("total");
 				
+				if(results.containsKey(customer_code)){
+					if(!results.get(customer_code).getSellMan().contains(user_name)){
+						results.get(customer_code).setSellMan(results.get(customer_code).getSellMan() + ";" + user_name);
+					}
+					if(!results.get(customer_code).getProvider().contains(business_name1)){
+						results.get(customer_code).setProvider(results.get(customer_code).getProvider() + ";" + business_name1);
+					}
+					results.get(customer_code).setRevenues1(results.get(customer_code).getRevenues1().add(total));
+				}else{
+					RevenuesComparison revenues = new RevenuesComparison();
+					revenues.setCustomerCode(customer_code);
+					revenues.setCustomerName(business_name);
+					revenues.setCustomerGroup("B");
+					revenues.setCustomerLocation(business_address);
+					revenues.setRevenues1(total);
+					revenues.setProvider(business_name1);
+					revenues.setSellMan(user_name);
+					results.put(customer_code, revenues);
+				}
 			}
 			rs.close();
 			pre.close();

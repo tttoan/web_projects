@@ -1,13 +1,15 @@
 package com.home.entities;
 
+import java.math.BigDecimal;
+
 public class RevenuesComparison {
 	private int no;
 	private String customerCode;
 	private String customerName;
 	private String customerLocation;
 	private String customerGroup;
-	private float revenues1;
-	private float revenues2;
+	private BigDecimal revenues1;
+	private BigDecimal revenues2;
 	private boolean decrease30;
 	private boolean increase30;
 	private boolean notBuy;
@@ -46,16 +48,16 @@ public class RevenuesComparison {
 	public void setCustomerGroup(String customerGroup) {
 		this.customerGroup = customerGroup;
 	}
-	public float getRevenues1() {
+	public BigDecimal getRevenues1() {
 		return revenues1;
 	}
-	public void setRevenues1(float revenues1) {
+	public void setRevenues1(BigDecimal revenues1) {
 		this.revenues1 = revenues1;
 	}
-	public float getRevenues2() {
+	public BigDecimal getRevenues2() {
 		return revenues2;
 	}
-	public void setRevenues2(float revenues2) {
+	public void setRevenues2(BigDecimal revenues2) {
 		this.revenues2 = revenues2;
 	}
 	public boolean isDecrease30() {
