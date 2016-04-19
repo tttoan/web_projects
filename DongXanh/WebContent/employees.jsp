@@ -16,11 +16,11 @@
 						<s:set var="rId">
 							<s:property value="%{userSes.role.roleId}" />
 						</s:set>
-						<table id="example" class="jambo_table display nowrap cell-border"
+						<table id="example" class="jambo_table display nowrap"
 							style="width: 100%;">
 							<thead>
 								<tr class="headings">
-									<th>STT</th>
+									<th>STT <s:property value="%{userSes.id}" /> </th>
 									<th>Họ và tên</th>
 									<th>Tên tài khoản</th>
 									<th>Email</th>
@@ -50,7 +50,7 @@
 											<td class="last"><s:url action="move_to_add_employee"
 													var="editURL">
 													<s:param name="userId" value="%{id}"></s:param>
-												</s:url> <s:a href="%{editURL}" class="btn btn-info btn-xs">
+												</s:url> <s:a href="%{editURL}" class="btn btn-info btn-xs" disabled="false"  >
 													<i class="fa fa-pencil"></i> Sửa </s:a> <s:url
 													action="delete_employee" var="deleteURL">
 													<s:param name="userId" value="%{id}"></s:param>
@@ -97,8 +97,7 @@
 <script src="js/custom.js"></script>
 
 
-<!-- Datatables -->
-<script src="js/jquery.dataTables.min.js"></script>
+
 <script>
 	$(document).ready(function() {
 		$('#example').DataTable({

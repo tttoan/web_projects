@@ -38,7 +38,7 @@
 					<s:set var="farmProduct4Session"
 						value="%{cust.farmProduct4Session}" />
 					<jsp:useBean id="farmProduct4Session" type="java.lang.String" />
-					
+
 					<%
 						String session1From1 = "0";
 						String session1To1 = "0";
@@ -106,7 +106,9 @@
 					%>
 					<div class="x_content">
 						<s:form action="add_customer" method="post"
+							enctype="multipart/form-data"
 							cssClass="form-horizontal form-label-left" theme="bootstrap">
+
 							<s:hidden name="id" value="%{custId}"></s:hidden>
 							<s:hidden name="edit" value="%{edit}"></s:hidden>
 							<s:if test="hasActionErrors()">
@@ -130,6 +132,7 @@
 										cssClass="form-control col-md-7 col-xs-12" />
 								</div>
 							</div>
+
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="customerCode">Mã khách hàng (<%=yearNow%>) <span
@@ -137,7 +140,7 @@
 								</label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
 									<input id="customerCode" type="text" name="customerCode"
-										readonly data-validate-length-range="0,20" required="required"
+										readonly data-validate-length-range="0,20"
 										value="${cust.customerCode}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
@@ -149,9 +152,7 @@
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<s:select id="cityName" name="varCityCode"
 										cssClass="form-control col-md-7 col-xs-12" list="listCity"
-										headerKey="-1" headerValue=""
-										listKey="cityCode" listValue="cityName"
-										value="%{varCityCode}" />
+										listKey="cityCode" listValue="cityName" value="%{varCityCode}" />
 								</div>
 							</div>
 							<div class="item form-group">
@@ -169,13 +170,12 @@
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="emp_id">Nhân viên TT <span class="required">*</span>
 								</label>
-
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<s:select id="emp_id" name="emp.id"
-										cssClass="form-control col-md-7 col-xs-12" headerKey="-1"
-										headerValue="---" showDownArrow="false" autoComplete="true"
-										list="listEmployee" listKey="id"
-										listValue="fullName +' - '+ userName" value="%{cust.user.id}" />
+										cssClass="form-control col-md-7 col-xs-12"
+										showDownArrow="false" autoComplete="true" list="listEmployee"
+										listKey="id" listValue="fullName +' - '+ userName"
+										value="%{cust.user.id}" />
 								</div>
 							</div>
 							<div class="item form-group">
@@ -183,10 +183,18 @@
 									for="statisticName">Tên bảng kê <span class="required">*</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<input id="statisticName" name="cust.statisticName" type="text" 
-										data-validate-length-range="1,500"
-										value="${cust.statisticName}" required="required"
+									<input id="statisticName" name="cust.statisticName" type="text"
+										data-validate-length-range="1,500" required="required"
+										value="${cust.statisticName}"
 										class="form-control col-md-7 col-xs-12">
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="cusImageScan">Ảnh scan (jpg, png, gif) <span
+									class="required">*</span></label>
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="cusImageScan" type="file" name="cusImageScan" />
 								</div>
 							</div>
 							<br>
@@ -202,8 +210,7 @@
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="businessName" type="text" name="cust.businessName"
-										data-validate-length-range="1,100"
-										value="${cust.businessName}" required="required"
+										required="required" value="${cust.businessName}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -215,7 +222,6 @@
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="certificateNumber" type="text"
 										name="cust.certificateNumber" required="required"
-										data-validate-length-range="1,100"
 										value="${cust.certificateNumber}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
@@ -248,117 +254,95 @@
 									for="taxNumber">Mã số thuế <span class="required">*</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<input id="taxNumber" type="text" name="cust.taxNumber" required="required"
-										data-validate-length-range="1,100" value="${cust.taxNumber}"
+									<input id="taxNumber" type="text" name="cust.taxNumber"
+										required="required" value="${cust.taxNumber}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="budgetRegister">Vốn đăng kí <span class="required">*</span>
-								</label>
+									for="budgetRegister">Vốn đăng kí </label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="budgetRegister" type="text"
-										name="cust.budgetRegister" data-validate-length-range="1,100"
-										value="${cust.budgetRegister}" required="required"
+										name="cust.budgetRegister" value="${cust.budgetRegister}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="telefone">Điện thoại bàn <span class="required">*</span>
-								</label>
+									for="telefone">Điện thoại bàn </label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<input id="telefone" type="text" name="cust.telefone" required="required"
-										data-validate-length-range="1,100" value="${cust.telefone}"
+									<input id="telefone" type="text" name="cust.telefone"
+										value="${cust.telefone}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="fax">Fax <span class="required">*</span>
-								</label>
+									for="fax">Fax </label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<input id="fax" type="text" name="cust.fax" required="required"
-										data-validate-length-range="1,100" value="${cust.fax}"
+									<input id="fax" type="text" name="cust.fax" value="${cust.fax}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="email">Email <span class="required">*</span>
-								</label>
+									for="email">Email </label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<input type="email" id="email" name="cust.email" required="required"
+									<input type="email" id="email" name="cust.email"
 										value="${cust.email}" class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="socialAddress">Địa chỉ mạng xã hội (Facebook,
-									Twitter, Zalo,…) <span class="required">*</span>
-								</label>
+									Twitter, Zalo,…) </label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="socialAddress" type="text" name="cust.socialAddress"
-										data-validate-length-range="1,1000"
-										value="${cust.socialAddress}" required="required"
-										class="form-control col-md-7 col-xs-12">
-								</div>
-							</div>
-							<div class="item form-group">
-								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="businessAddress">Địa điểm kinh doanh <span
-									class="required">*</span>
-								</label>
-								<div class="col-md-5 col-sm-6 col-xs-12">
-									<input id="businessAddress" type="text"
-										name="cust.businessAddress" required="required"
-										data-validate-length-range="1,1000"
 										value="${cust.socialAddress}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="adviser">Người đại diện pháp luật <span
-									class="required">*</span>
-								</label>
+									for="businessAddress">Địa điểm kinh doanh </label>
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<input id="businessAddress" type="text"
+										name="cust.businessAddress" value="${cust.socialAddress}"
+										class="form-control col-md-7 col-xs-12">
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-3 col-sm-3 col-xs-12"
+									for="adviser">Người đại diện pháp luật </label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="adviser" type="text" name="cust.adviser"
-										data-validate-length-range="1,50"
-										value="${cust.socialAddress}" required="required"
+										value="${cust.socialAddress}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="director">Người quyết định chính công việc <span
-									class="required">*</span>
-								</label>
+									for="director">Người quyết định chính công việc </label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<input id="director" type="text" name="cust.director" required="required"
-										data-validate-length-range="1,50" value="${cust.director}"
+									<input id="director" type="text" name="cust.director"
+										value="${cust.director}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="directorMobile">ĐTDĐ Người quyết định <span
-									class="required">*</span>
-								</label>
+									for="directorMobile">ĐTDĐ Người quyết định </label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="directorMobile" name="cust.directorMobile"
-										type="text" data-validate-length-range="0,13"
-										value="${cust.directorMobile}" required="required"
+										type="text" value="${cust.directorMobile}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="directorBirthday">Ngày sinh: <span
-									class="required">*</span>
-								</label>
+									for="directorBirthday">Ngày sinh </label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<sd:datetimepicker id="directorBirthday" value="%{'today'}"
 										name="cust.directorBirthday" displayFormat="dd-MM-yyyy"
@@ -367,36 +351,27 @@
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="directorDomicile">Nguyên quán: <span
-									class="required">*</span>
-								</label>
+									for="directorDomicile">Nguyên quán </label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="directorDomicile" type="text"
-										name="cust.directorDomicile" required="required"
-										data-validate-length-range="0,100"
-										value="${cust.directorDomicile}"
+										name="cust.directorDomicile" value="${cust.directorDomicile}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="sellMan">Người bán hàng trực tiếp <span
-									class="required">*</span>
-								</label>
+									for="sellMan">Người bán hàng trực tiếp </label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<input id="sellMan" type="text" name="cust.sellMan" required="required"
-										data-validate-length-range="1,100" value="${cust.sellMan}"
+									<input id="sellMan" type="text" name="cust.sellMan"
+										value="${cust.sellMan}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="sellManMobile">ĐTDĐ Người bán hàng <span
-									class="required">*</span>
-								</label>
+									for="sellManMobile">ĐTDĐ Người bán hàng </label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="sellManMobile" type="text" name="cust.sellManMobile"
-										data-validate-length-range="1,100" required="required"
 										value="${cust.sellManMobile}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
@@ -405,12 +380,10 @@
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="budgetOriginal">Ước vốn tự có để kinh doanh
-									(Triệu) <span class="required">*</span>
-								</label>
+									(Triệu) </label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<input id="budgetOriginal" type="text" required="required"
-										name="cust.budgetOriginal" data-validate-length-range="1,100"
-										value="${cust.sellManMobile}"
+									<input id="budgetOriginal" type="text"
+										name="cust.budgetOriginal" value="${cust.sellManMobile}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -422,12 +395,9 @@
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="otherBusiness">Ngành nghề kinh doanh khác <span
-									class="required">*</span>
-								</label>
+									for="otherBusiness">Ngành nghề kinh doanh khác </label>
 								<div class="col-md-4 col-sm-6 col-xs-12">
 									<input id="otherBusiness" type="text" name="cust.otherBusiness"
-										data-validate-length-range="0,100" required="required"
 										value="${cust.otherBusiness}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
@@ -438,7 +408,7 @@
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="cus1Level1_id">Tên <span class="required">(1)*</span>
+									for="cus1Level1_id">Tên <span class="required">(1)</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<s:select id="cus1Level1_id" name="cus1Level1.id"
@@ -451,11 +421,11 @@
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="cus1Phone">Ðiện thoại <span class="required">(1)*</span>
+									for="cus1Phone">Ðiện thoại <span class="required">(1)</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input id="cus1Phone" type="text" readonly name="cus1Phone"
-										data-validate-length-range="1,100" required="required"
+										data-validate-length-range="1,100"
 										value="${cust.customerByCustomer1Level1Id.telefone}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
@@ -463,7 +433,7 @@
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="customer1Percent">Tỉ lệ nhận (%) <span
-									class="required">(1)*</span>
+									class="required">(1)</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input type="number" id="customer1Percent"
@@ -475,7 +445,7 @@
 
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="cus2Level1_id">Tên <span class="required">(2)*</span>
+									for="cus2Level1_id">Tên <span class="required">(2)</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<s:select id="cus2Level1_id" name="cus2Level1.id"
@@ -488,7 +458,7 @@
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="cus2Phone">Ðiện thoại <span class="required">(2)*</span>
+									for="cus2Phone">Ðiện thoại <span class="required">(2)</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input id="cus2Phone" name="cus2Phone" type="text" readonly
@@ -500,7 +470,7 @@
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="customer2Percent">Tỉ lệ nhận (%) <span
-									class="required">(2)*</span>
+									class="required">(2)</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input type="number" id="customer2Percent"
@@ -512,7 +482,7 @@
 
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="cus3Level1_id">Tên <span class="required">(3)*</span>
+									for="cus3Level1_id">Tên <span class="required">(3)</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<s:select id="cus3Level1_id" name="cus3Level1.id"
@@ -525,7 +495,7 @@
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="cus3Phone">Ðiện thoại <span class="required">(3)*</span>
+									for="cus3Phone">Ðiện thoại <span class="required">(3)</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input id="cus3Phone" name="cus3Phone" type="text" readonly
@@ -537,7 +507,7 @@
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="customer3Percent">Tỉ lệ nhận (%) <span
-									class="required">(3)*</span>
+									class="required">(3)</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input id="customer3Percent" name="cust.customer3Percent"
@@ -549,7 +519,7 @@
 
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="cus4Level1_id">Tên <span class="required">(4)*</span>
+									for="cus4Level1_id">Tên <span class="required">(4)</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<s:select id="cus4Level1_id" name="cus4Level1.id"
@@ -562,7 +532,7 @@
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="cus4Phone">Ðiện thoại <span class="required">(4)*</span>
+									for="cus4Phone">Ðiện thoại <span class="required">(4)</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input id="cus4Phone" name="cus4Phone" type="text" readonly
@@ -574,7 +544,7 @@
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="customer4Percent">Tỉ lệ nhận (%) <span
-									class="required">(4)*</span>
+									class="required">(4)</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input id="customer4Percent" name="cust.customer4Percent"
@@ -586,7 +556,7 @@
 
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="cus5Level1_id">Tên <span class="required">(5)*</span>
+									for="cus5Level1_id">Tên <span class="required">(5)</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<s:select id="cus5Level1_id" name="cus5Level1.id"
@@ -599,7 +569,7 @@
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="cus5Phone">Ðiện thoại <span class="required">(5)*</span>
+									for="cus5Phone">Ðiện thoại <span class="required">(5)</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input id="cus5Phone" name="cus5Phone" type="text" readonly
@@ -611,7 +581,7 @@
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="customer5Percent">Tỉ lệ nhận (%) <span
-									class="required">(5)*</span>
+									class="required">(5)</span>
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input id="customer5Percent" name="cust.customer5Percent"
@@ -629,7 +599,7 @@
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="revenue1"> <%=(yearNow - 2)%> - <%=(yearNow - 1)%>
-									(Triệu đồng): <span class="required">*</span>
+									(Triệu đồng)
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="revenue1" name="revenue1" type=text
@@ -640,7 +610,7 @@
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="revenue2"> <%=(yearNow - 1)%> - <%=(yearNow)%>
-									(Triệu đồng): <span class="required">*</span>
+									(Triệu đồng)
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="revenue2" name="revenue2" type=text
@@ -656,7 +626,7 @@
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="revenueExpect1"> <%=(yearNow)%> - <%=(yearNow + 1)%>
-									(Triệu đồng): <span class="required">*</span>
+									(Triệu đồng)
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="revenueExpect1" name="revenueExpect1" type=text
@@ -668,7 +638,7 @@
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="revenueExpect2"> <%=(yearNow + 1)%> - <%=(yearNow + 2)%>
-									(Triệu đồng): <span class="required">*</span>
+									(Triệu đồng)
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="revenueExpect2" name="revenueExpect2" type=text
@@ -680,7 +650,7 @@
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="revenueExpect3"> <%=(yearNow + 2)%> - <%=(yearNow + 3)%>
-									(Triệu đồng): <span class="required">*</span>
+									(Triệu đồng)
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="revenueExpect3" name="revenueExpect3" type=text
@@ -696,8 +666,7 @@
 
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="percentProvide1">Trên 30% <span class="required">*</span>
-								</label>
+									for="percentProvide1">Trên 30% </label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="percentProvide1" name="percentProvide1" type=text
 										data-validate-minmax="1,100000000"
@@ -707,8 +676,7 @@
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="percentProvide2">20 - 30% <span class="required">*</span>
-								</label>
+									for="percentProvide2">20 - 30% </label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="percentProvide2" name="percentProvide2" type=text
 										data-validate-minmax="1,100000000"
@@ -718,8 +686,7 @@
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="percentProvide3">10 - 20% <span class="required">*</span>
-								</label>
+									for="percentProvide3">10 - 20% </label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="percentProvide3" name="percentProvide3" type=text
 										data-validate-minmax="1,100000000"
@@ -729,8 +696,7 @@
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="percentProvide4">Dưới 10% <span class="required">*</span>
-								</label>
+									for="percentProvide4">Dưới 10% </label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
 									<input id="percentProvide4" name="percentProvide4" type=text
 										data-validate-minmax="1,100000000"

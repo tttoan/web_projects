@@ -33,6 +33,11 @@
 		</action>
 		<action name="add_customer" method="addCustomer"
 			class="com.home.action.CustomerAction">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="fileUpload">
+				<param name="allowedTypes">image/png,image/gif,image/jpeg</param>
+				<param name="maximumSize">4096</param>
+			</interceptor-ref>
 			<result name="success" type="redirectAction">list_customer</result>
 			<result name="input">/new_customer.jsp</result>
 		</action>

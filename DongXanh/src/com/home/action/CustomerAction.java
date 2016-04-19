@@ -20,6 +20,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.struts2.ServletActionContext;
 import org.hibernate.SessionFactory;
+
 import com.home.conts.CustomerTable;
 import com.home.dao.CustomerHome;
 import com.home.dao.GroupCustomerHome;
@@ -31,6 +32,7 @@ import com.home.model.GroupCustomer;
 import com.home.model.User;
 import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
+import com.home.util.SystemUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
@@ -69,8 +71,9 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private int cus5Level1Id;
 	private String commonCusPhone = "";
 	private User userSes;
-	
-	
+	private File cusImageScan;
+	private String cusImageScanContentType;
+	private String cusImageScanFileName;
 
 	public String retrievePhoneById() throws Exception {
 		int commonCusId = 0;
@@ -95,7 +98,6 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	@Override
 	public Customer getModel() {
-		cust = new Customer();
 		cust.setCustomer1Percent((float) 0);
 		cust.setCustomer2Percent((float) 0);
 		cust.setCustomer3Percent((float) 0);
@@ -109,7 +111,6 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		cust.setFarmProduct2Session("");
 		cust.setFarmProduct3Session("");
 		cust.setFarmProduct4Session("");
-		cust.setCustomerCode("");
 		return cust;
 	}
 
@@ -123,7 +124,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			try {
 				CustomerHome cusHome = new CustomerHome(getSessionFactory());
 				setCust(cusHome.findById(custId));
-				varCityCode = getCust().getCustomerCode().substring(0, 2);
+				varCityCode = getCust().getCustomerCode().substring(0, getCust().getCustomerCode().length() - 3);
 				setEdit(true);
 			} catch (Exception e) {
 				throw e;
@@ -157,7 +158,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			try (FileInputStream fis = new FileInputStream(theFile)) {
 				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
 				Sheet sheet = workbook.getSheet("city");
-				for(int i = 0; i< sheet.getPhysicalNumberOfRows(); i++){
+				for (int i = 0; i < sheet.getPhysicalNumberOfRows() - 1; i++) {
 					Row row = sheet.getRow(i);
 					Cell code = row.getCell(0);
 					Cell name = row.getCell(1);
@@ -257,20 +258,9 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		}
 	}
 
-	public String notifyListCutomer() throws Exception {
-		try {
-			// CustomerHome cusHome = new CustomerHome(getSessionFactory());
-			// Customer customer = cusHome.findById(id);
-			// cusHome.delete(customer);
-			return SUCCESS;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ERROR;
-		}
-	}
-
 	public String addCustomer() throws Exception {
 		try {
+			cust.setId(custId);
 			if (emp.getId() > 0)
 				getCust().setUser(emp);
 			if (grpCustomer.getId() > 0)
@@ -285,16 +275,29 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 				getCust().setCustomerByCustomer4Level1Id(cus4Level1);
 			if (cus5Level1.getId() > 0)
 				getCust().setCustomerByCustomer5Level1Id(cus5Level1);
+
+			// -----Upload image scan----
+			if (getCusImageScanFileName() != null) {
+				File destFile = new File(SystemUtil.getValuePropertiesByKey("path.image.scan") + "\\", getCusImageScanFileName());
+				// if (destFile.exists())
+				// throw new
+				// Exception("Path upload not found! "+SystemUtil.getValuePropertiesByKey("path.image.scan")
+				// + "\\" + getCusImageScanFileName());
+				FileUtils.copyFile(cusImageScan, destFile);
+			}
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
-			if (getCust().getId() == 0)
-				cusHome.attachDirty(getCust());
-			else
+			if (cust.getId() > 0) {
 				cusHome.updateDirty(getCust());
+			} else {
+				cusHome.attachDirty(getCust());
+				getModel();
+			}
 			return SUCCESS;
 		} catch (Exception e) {
-			addActionError(e.getMessage());
-			return INPUT;
+			cust.setCustomerCode(generateCustomerCode());
+			addActionError(e.getMessage() + ".");
 		}
+		return INPUT;
 	}
 
 	public String importCustomer() throws Exception {
@@ -638,5 +641,28 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		this.listCity = listCity;
 	}
 
-	
+	public File getCusImageScan() {
+		return cusImageScan;
+	}
+
+	public void setCusImageScan(File cusImageScan) {
+		this.cusImageScan = cusImageScan;
+	}
+
+	public String getCusImageScanContentType() {
+		return cusImageScanContentType;
+	}
+
+	public void setCusImageScanContentType(String cusImageScanContentType) {
+		this.cusImageScanContentType = cusImageScanContentType;
+	}
+
+	public String getCusImageScanFileName() {
+		return cusImageScanFileName;
+	}
+
+	public void setCusImageScanFileName(String cusImageScanFileName) {
+		this.cusImageScanFileName = cusImageScanFileName;
+	}
+
 }

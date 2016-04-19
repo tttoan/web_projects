@@ -27,7 +27,7 @@ public class LoginAction extends ActionSupport implements Action, ModelDriven<Us
 
 	@Override
 	public User getModel() {
-		userSes = new User();
+		//userSes = new User();
 		return userSes;
 	}
 
@@ -44,9 +44,9 @@ public class LoginAction extends ActionSupport implements Action, ModelDriven<Us
 				getModel();
 				addActionError("Tên tài khoản hoặc mật khẩu không chính xác");
 			} else {
-				//getSession().put(MyConts.LOGIN_SESSION, userSes);
-				getSession().put(MyConts.LOGIN_SESSION, new User(userSes.getId(),
-						 userSes.getUserName(), userSes.getFullName()));
+				getSession().put(MyConts.LOGIN_SESSION, userSes);
+//				getSession().put(MyConts.LOGIN_SESSION, new User(userSes.getId(),
+//						 userSes.getUserName(), userSes.getFullName()));
 				return SUCCESS;
 			}
 		} catch (Exception e) {

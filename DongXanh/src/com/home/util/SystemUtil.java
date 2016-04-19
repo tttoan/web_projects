@@ -1,8 +1,12 @@
 package com.home.util;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Properties;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -69,5 +73,12 @@ public class SystemUtil {
 			e.printStackTrace();
 			throw e;
 		}
+	}
+	public static String getValuePropertiesByKey(String key) throws FileNotFoundException, IOException {
+		String f = SystemUtil.class.getClassLoader().getResource("config.properties").getFile();
+		Properties prop = new Properties();
+		prop.load(new FileInputStream(f));
+		return prop.getProperty(key);
+
 	}
 }
