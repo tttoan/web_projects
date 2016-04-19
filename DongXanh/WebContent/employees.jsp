@@ -20,7 +20,7 @@
 							style="width: 100%;">
 							<thead>
 								<tr class="headings">
-									<th>STT <s:property value="%{userSes.id}" /> </th>
+									<th>STT</th>
 									<th>Họ và tên</th>
 									<th>Tên tài khoản</th>
 									<th>Email</th>
