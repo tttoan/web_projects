@@ -39,11 +39,22 @@
 			<result name="success">/login.jsp</result>
 			<result name="input">/login.jsp</result>
 		</action>
+
+		<action name="import_customer" method="importCustomer"
+			class="com.home.action.CustomerAction">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="fileUpload">
+				<param name="allowedTypes">application/ms-excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
+			</interceptor-ref>
+			<result name="input">/index.jsp</result>
+			<result name="success">/customers.jsp</result>
+		</action>
 	</package>
 	
-	<include file="promotion.xml"></include>
-	<include file="userplan.xml"></include>
+	<include file="promotion_struts.xml"></include>
+	<include file="userplan_struts.xml"></include>
 	<include file="employee_struts.xml"></include>
 	<include file="customer_struts.xml"></include>
 	<include file="statistic_struts.xml"></include>
+	<include file="report_struts.xml"></include>
 </struts>
