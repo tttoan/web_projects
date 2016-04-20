@@ -51,7 +51,7 @@ pageEncoding="UTF-8"%>
 							<td valign="middle">
 							<div class="item form-group">
 									<div class="col-md-4 col-sm-4 col-xs-12">
-										<input type="number" id="number" name="number"
+										<input type="number" id="revenues_number" name="revenues_number"
 											required="required" data-validate-minmax="1,1000"
 											value="1"
 											class="form-control col-md-7 col-xs-12">
@@ -90,9 +90,6 @@ pageEncoding="UTF-8"%>
 									<th>Ghi chú</th>
 								</tr>
 							</thead>
-
-							<tbody>
-							</tbody>
 
 						</table>
 					</div>
@@ -150,13 +147,7 @@ th {
 
 <!-- Datatables -->
 <script src="js/jquery.dataTables.min.js"></script>
-<script>
-$(document).ready(function() {
-    $('#example').DataTable( {
-        "scrollX": true
-    } );
-} );
-</script>
+
 
  <!-- daterangepicker -->
     <script type="text/javascript" src="js/moment.min2.js"></script>
@@ -195,36 +186,49 @@ $(document).ready(function() {
 </script>
     
 <script type="text/javascript">
-
-	function onTypeChange() {
-		var type = document.getElementById('cboPromotionStatus').value;
-		//alert(type);
-		if(type == '0'){
-			 document.getElementById("cboFilterValue").disabled = true;
-		}else{
-			 document.getElementById("cboFilterValue").disabled = false;
-		}
-		
-	}
 	
+Table = $("#example").DataTable({
+	scrollX: true,
+	data:[],
+	columns: [
+          { "data": "no" },
+            { "data": "customerCode" },
+            { "data": "customerName" },
+            { "data": "customerLocation" },
+            { "data": "customerGroup" },
+            { "data": "revenues2" },
+            { "data": "revenues1" },
+            { "data": "increase30" },
+            { "data": "decrease30" },
+            { "data": "notBuy" },
+            { "data": "multiProvide" },
+            { "data": "provider" },
+            { "data": "sellMan" },
+            { "data": "comment" },
+			],
+	rowCallback: function (row, data) {},
+	/* filter: false,
+	info: false,
+	ordering: false, */
+	processing: true,
+	retrieve: true
+});
+
 	function btnFilterValues(){
-		var type = document.getElementById('cboPromotionStatus').value; 
-		var filterValue = document.getElementById('cboFilterValue').value;
-		//alert(type + "/" + filterValue); 
-		//var resultType = $('radio[name="p_result_status"]:checked').val();
-		//var resultType = document.getElementsByName('p_result_status').value;
-		//alert(type + "/" + filterValue + "/" + resultType); 
+		var start = document.getElementById('single_cal1').value; 
+		var end = document.getElementById('single_cal2').value; 
+		var revenues = document.getElementById('revenues_number').value; 
 		
-		var resultType = 1;
-		var moduleNameRadio=document.getElementsByName("p_result_status");
-		for(var i=0;i<moduleNameRadio.length;i++){
-		       if(moduleNameRadio[i].checked){
-		          //alert('Radio button selected' + moduleNameRadio[i].value);
-		    	   resultType = moduleNameRadio[i].value;
-		      }
-		}
-		
-		var actionUrl = "promotionCusFilterAction?type="+type+"&filterValue="+filterValue+"&resultType="+resultType;
+		 $.ajax({ //Not found in cache, get from server
+				url: 'reportRevenuesComparisonAction?start='+start+'&end='+end+'&revenues='+revenues,
+				type: 'POST',
+				dataType: 'json',
+				async: false,
+				success: function (data) {
+					Table.clear().draw();
+					Table.rows.add(data.data).draw();
+				}
+			});
 	}
 	
 </script>

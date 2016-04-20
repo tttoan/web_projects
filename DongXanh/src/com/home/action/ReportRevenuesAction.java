@@ -8,18 +8,58 @@ import java.util.List;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.util.ServletContextAware;
 
 import com.home.dao.StatisticHome;
 import com.home.entities.RevenuesComparison;
 import com.home.util.DateUtils;
 import com.home.util.HibernateUtil;
+import com.home.util.StringUtil;
 import com.opensymphony.xwork2.Action;
+import com.opensymphony.xwork2.ActionContext;
 
 public class ReportRevenuesAction  implements Action, ServletContextAware{
 	private ServletContext ctx;
-	private List<RevenuesComparison> revenuesComparisons;
+	private List<RevenuesComparison> data;
+	private int draw;
+	private int recordsTotal;
+	private int recordsFiltered;
+	
+	public int getDraw() {
+		return draw;
+	}
+
+	public void setDraw(int draw) {
+		this.draw = draw;
+	}
+
+	public int getRecordsTotal() {
+		return recordsTotal;
+	}
+
+	public void setRecordsTotal(int recordsTotal) {
+		this.recordsTotal = recordsTotal;
+	}
+
+	public int getRecordsFiltered() {
+		return recordsFiltered;
+	}
+
+	public void setRecordsFiltered(int recordsFiltered) {
+		this.recordsFiltered = recordsFiltered;
+	}
+
+
+	public List<RevenuesComparison> getData() {
+		return data;
+	}
+
+	public void setData(List<RevenuesComparison> data) {
+		this.data = data;
+	}
 
 	@Override
 	public void setServletContext(ServletContext context) {
@@ -31,11 +71,23 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 		return Action.SUCCESS;
 	}
 	
+	public static void main(String[] args) {
+		new ReportRevenuesAction().compareRevenues();
+	}
+	
 	public String compareRevenues(){
 		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			String startDate = StringUtil.notNull(request.getParameter("start"));
+			String endDate = StringUtil.notNull(request.getParameter("end"));
+			int revanues = 0;
+			try {
+				revanues = Integer.parseInt(request.getParameter("revenues"));
+			} catch (Exception e) {}
+			
 			StatisticHome statisticHome = new StatisticHome(HibernateUtil.getSessionFactory());
-			Date startDate1 = new Date(DateUtils.getDateFromString("18/04/2016", "dd/MM/yyyy").getTime());
-			Date endDate1 = new Date(DateUtils.getDateFromString("18/04/2016", "dd/MM/yyyy").getTime());
+			Date startDate1 = new Date(DateUtils.getDateFromString(startDate, "dd/MM/yyyy").getTime());
+			Date endDate1 = new Date(DateUtils.getDateFromString(endDate, "dd/MM/yyyy").getTime());
 			
 			Calendar cal = Calendar.getInstance();
 		    cal.setTime(startDate1);
@@ -47,8 +99,9 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 		    year = cal.get(Calendar.YEAR)-1;
 		    cal.set(Calendar.YEAR, year);
 			Date endDate2 = new Date(cal.getTimeInMillis());
-			float minRevenues = 1*1000000;
-			revenuesComparisons = new ArrayList<RevenuesComparison>();
+			float minRevenues = revanues*1000000;
+			data = new ArrayList<RevenuesComparison>();
+			int no = 1;
 			
 			LinkedHashMap<String, RevenuesComparison> results1 = statisticHome.getRevenuesComparison(startDate1, endDate1, 0);
 			LinkedHashMap<String, RevenuesComparison> results2 = statisticHome.getRevenuesComparison(startDate2, endDate2, 0);
@@ -77,28 +130,34 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 						}
 						float r = revenues.getRevenues1().floatValue()-revenues.getRevenues2().floatValue();
 						if(r > 0 && ((r*100)/revenues.getRevenues2().floatValue()) >= 30){
-							revenues.setIncrease30(true);
+							revenues.setIncrease30("X");
 						}
 						else if(r < 0 && ((-r*100)/revenues.getRevenues2().floatValue()) >= 30){
-							revenues.setDecrease30(true);
+							revenues.setDecrease30("X");
 						}
 						if(revenues.getProvider().split(";").length > 1){
-							revenues.setMultiProvide(true);
+							revenues.setMultiProvide("X");
 						}
-						revenuesComparisons.add(revenues);
+						revenues.setNo(no++);
+						data.add(revenues);
 					}
 					
 				}else{
 					if(revenues.getRevenues1().floatValue() >= minRevenues){
 						if(revenues.getProvider().split(";").length > 1){
-							revenues.setMultiProvide(true);
+							revenues.setMultiProvide("X");
 						}
-						revenues.setNotBuy(true);
-						revenuesComparisons.add(revenues);
+						revenues.setNotBuy("X");
+						revenues.setNo(no++);
+						data.add(revenues);
 					}
 				}
 			}
+			draw = 1;
+			recordsTotal = data.size();
+			recordsFiltered = data.size();
 			
+			System.out.println("revenuesComparisons = " + data.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Action.ERROR;
@@ -107,11 +166,4 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 	}
 
 	
-	public List<RevenuesComparison> getRevenuesComparisons() {
-		return revenuesComparisons;
-	}
-
-	public void setRevenuesComparisons(List<RevenuesComparison> revenuesComparisons) {
-		this.revenuesComparisons = revenuesComparisons;
-	}
 }

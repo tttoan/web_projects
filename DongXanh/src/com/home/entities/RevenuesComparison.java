@@ -10,10 +10,10 @@ public class RevenuesComparison {
 	private String customerGroup;
 	private BigDecimal revenues1;
 	private BigDecimal revenues2;
-	private boolean decrease30;
-	private boolean increase30;
-	private boolean notBuy;
-	private boolean multiProvide;
+	private String decrease30;
+	private String increase30;
+	private String notBuy;
+	private String multiProvide;
 	private String provider;
 	private String sellMan;
 	private String comment;
@@ -60,28 +60,28 @@ public class RevenuesComparison {
 	public void setRevenues2(BigDecimal revenues2) {
 		this.revenues2 = revenues2;
 	}
-	public boolean isDecrease30() {
+	public String isDecrease30() {
 		return decrease30;
 	}
-	public void setDecrease30(boolean decrease30) {
+	public void setDecrease30(String decrease30) {
 		this.decrease30 = decrease30;
 	}
-	public boolean isIncrease30() {
+	public String isIncrease30() {
 		return increase30;
 	}
-	public void setIncrease30(boolean increase30) {
+	public void setIncrease30(String increase30) {
 		this.increase30 = increase30;
 	}
-	public boolean isNotBuy() {
+	public String isNotBuy() {
 		return notBuy;
 	}
-	public void setNotBuy(boolean notBuy) {
+	public void setNotBuy(String notBuy) {
 		this.notBuy = notBuy;
 	}
-	public boolean isMultiProvide() {
+	public String isMultiProvide() {
 		return multiProvide;
 	}
-	public void setMultiProvide(boolean multiProvide) {
+	public void setMultiProvide(String multiProvide) {
 		this.multiProvide = multiProvide;
 	}
 	public String getProvider() {
