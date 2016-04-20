@@ -32,6 +32,8 @@
 							href="%{lcURL}" theme="bootstrap"> Danh sách </s:a></li>
 					<li><s:url action="move_to_add_customer" var="macURL"></s:url>
 						<s:a href="%{macURL}"> Tạo và chỉnh Sửa </s:a></li>
+					<li><s:url action="move_to_accept_customer" var="macURL">
+						</s:url> <s:a href="%{macURL}">Thao tác excel</s:a></li>
 				</ul></li>
 			<li><a><i class="fa fa-book"></i> Bảng Kê <span
 					class="fa fa-chevron-down"></span></a>

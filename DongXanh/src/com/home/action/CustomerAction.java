@@ -2,6 +2,7 @@ package com.home.action;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,13 +23,17 @@ import org.apache.struts2.ServletActionContext;
 import org.hibernate.SessionFactory;
 
 import com.home.conts.CustomerTable;
+import com.home.conts.TableStatisticLevel2;
 import com.home.dao.CustomerHome;
 import com.home.dao.GroupCustomerHome;
+import com.home.dao.ProductHome;
+import com.home.dao.StatisticHome;
 import com.home.dao.UserHome;
 import com.home.entities.City;
 import com.home.entities.UserAware;
 import com.home.model.Customer;
 import com.home.model.GroupCustomer;
+import com.home.model.Statistic;
 import com.home.model.User;
 import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
@@ -301,110 +306,87 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	}
 
 	public String importCustomer() throws Exception {
-		File theFile = new File(this.getUploadFileName());
-		FileUtils.copyFile(upload, theFile);
-		try (FileInputStream fis = new FileInputStream(theFile)) {
-			ExcelUtil xls = new ExcelUtil();
-			UserHome userHome = new UserHome(getSessionFactory());
-			workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
-			Sheet sheet = workbook.getSheetAt(0);
-			Iterator<Row> rowIterator = sheet.iterator();
-			rowIterator.next();
-			while (rowIterator.hasNext()) {
-				Row row = rowIterator.next();
-				cust = new Customer();
-				cust.setCustomerCode((String) xls.getValue(row.getCell(CustomerTable.customerCode.value())));
-				cust.setBusinessName((String) xls.getValue(row.getCell(CustomerTable.businessName.value())));
-				cust.setCreateTime((Date) xls.getValue(row.getCell(CustomerTable.createTime.value())));
-				cust.setCertificateNumber((String) xls.getValue(row.getCell(CustomerTable.certificateNumber.value())));
-				cust.setCertificateDate((Date) xls.getValue(row.getCell(CustomerTable.certificateDate.value())));
-				cust.setCertificateAddress((String) xls.getValue(row.getCell(CustomerTable.certificateAddress.value())));
-				cust.setTaxNumber((String) xls.getValue(row.getCell(CustomerTable.taxNumber.value())));
-				// cust.setBudgetRegister((Integer)xls.getValue(row.getCell(CustomerTable.budgetRegister.value())));
-				cust.setTelefone((String) xls.getValue(row.getCell(CustomerTable.telefone.value())));
-				cust.setFax((String) xls.getValue(row.getCell(CustomerTable.fax.value())));
-				cust.setEmail((String) xls.getValue(row.getCell(CustomerTable.email.value())));
-				cust.setSocialAddress((String) xls.getValue(row.getCell(CustomerTable.socialAddress.value())));
-				cust.setBusinessAddress((String) xls.getValue(row.getCell(CustomerTable.businessAddress.value())));
-				cust.setAdviser((String) xls.getValue(row.getCell(CustomerTable.adviser.value())));
-				cust.setDirector((String) xls.getValue(row.getCell(CustomerTable.director.value())));
-				cust.setDirectorMobile((String) xls.getValue(row.getCell(CustomerTable.directorMobile.value())));
-				cust.setDirectorBirthday((Date) xls.getValue(row.getCell(CustomerTable.directorBirthday.value())));
-				cust.setDirectorDomicile((String) xls.getValue(row.getCell(CustomerTable.directorDomicile.value())));
-				cust.setSellMan((String) xls.getValue(row.getCell(CustomerTable.sellMan.value())));
-				cust.setSellManMobile((String) xls.getValue(row.getCell(CustomerTable.sellManMobile.value())));
-				cust.setBudgetOriginal((Integer) xls.getValue(row.getCell(CustomerTable.budgetOriginal.value())));
-				cust.setOtherBusiness((String) xls.getValue(row.getCell(CustomerTable.otherBusiness.value())));
-
-				// cust.setCustomer1Level1((String)
-				// xls.getValue(row.getCell(CustomerTable.customer1Level1.value())));
-				// cust.setCustomer1Phone((String)
-				// xls.getValue(row.getCell(CustomerTable.customer1Phone.value())));
-				// //
-				// cust.setCustomer1Percent((String)xls.getValue(row.getCell(CustomerTable.customer1Percent.value())));
-				//
-				// cust.setCustomer2Level1((String)
-				// xls.getValue(row.getCell(CustomerTable.customer2Level1.value())));
-				// cust.setCustomer2Phone((String)
-				// xls.getValue(row.getCell(CustomerTable.customer2Phone.value())));
-				// //
-				// cust.setCustomer2Percent((String)xls.getValue(row.getCell(CustomerTable.customer2Percent.value())));
-				//
-				// cust.setCustomer3Level1((String)
-				// xls.getValue(row.getCell(CustomerTable.customer3Level1.value())));
-				// cust.setCustomer3Phone((String)
-				// xls.getValue(row.getCell(CustomerTable.customer3Phone.value())));
-				// //
-				// cust.setCustomer3Percent((String)xls.getValue(row.getCell(CustomerTable.customer3Percent.value())));
-				//
-				// cust.setCustomer4Level1((String)
-				// xls.getValue(row.getCell(CustomerTable.customer4Level1.value())));
-				// cust.setCustomer4Phone((String)
-				// xls.getValue(row.getCell(CustomerTable.customer4Phone.value())));
-				// //
-				// cust.setCustomer4Percent((String)xls.getValue(row.getCell(CustomerTable.customer4Percent.value())));
-				//
-				// cust.setCustomer5Level1((String)
-				// xls.getValue(row.getCell(CustomerTable.customer5Level1.value())));
-				// cust.setCustomer5Phone((String)
-				// xls.getValue(row.getCell(CustomerTable.customer5Phone.value())));
-				// cust.setCustomer5Percent((String)xls.getValue(row.getCell(CustomerTable.customer5Percent.value())));
-
-				// cust.setRevenue1((String)xls.getValue(row.getCell(CustomerTable.revenue1.value())));
-				// cust.setRevenue2((String)xls.getValue(row.getCell(CustomerTable.revenue2.value())));
-				cust.setPercentProvide1((String) xls.getValue(row.getCell(CustomerTable.percentProvide1.value())));
-				cust.setPercentProvide2((String) xls.getValue(row.getCell(CustomerTable.percentProvide2.value())));
-				cust.setPercentProvide3((String) xls.getValue(row.getCell(CustomerTable.percentProvide3.value())));
-				cust.setPercentProvide4((String) xls.getValue(row.getCell(CustomerTable.percentProvide4.value())));
-				cust.setProductSell((String) xls.getValue(row.getCell(CustomerTable.productSell.value())));
-				cust.setProduct1Hot((String) xls.getValue(row.getCell(CustomerTable.product1Hot.value())));
-				cust.setProduct2Hot((String) xls.getValue(row.getCell(CustomerTable.product2Hot.value())));
-				cust.setProduct3Hot((String) xls.getValue(row.getCell(CustomerTable.product3Hot.value())));
-				cust.setProduct4Hot((String) xls.getValue(row.getCell(CustomerTable.product4Hot.value())));
-				cust.setProduct5Hot((String) xls.getValue(row.getCell(CustomerTable.product5Hot.value())));
-				cust.setProduct6Hot((String) xls.getValue(row.getCell(CustomerTable.product6Hot.value())));
-
-				// cust.setFarmProduct1((String)xls.getValue(row.getCell(CustomerTable.farmProduct1.value())));
-				cust.setFarmProduct1Session((String) xls.getValue(row.getCell(CustomerTable.farmProduct1Session.value())));
-
-				// cust.setFarmProduct2((String)xls.getValue(row.getCell(CustomerTable.farmProduct2.value())));
-				cust.setFarmProduct2Session((String) xls.getValue(row.getCell(CustomerTable.farmProduct2Session.value())));
-
-				// cust.setFarmProduct3((String)xls.getValue(row.getCell(CustomerTable.farmProduct3.value())));
-				cust.setFarmProduct3Session((String) xls.getValue(row.getCell(CustomerTable.farmProduct3Session.value())));
-
-				// cust.setFarmProduct4((String)xls.getValue(row.getCell(CustomerTable.farmProduct4.value())));
-				cust.setFarmProduct4Session((String) xls.getValue(row.getCell(CustomerTable.farmProduct4Session.value())));
-
-				cust.setUser(userHome.getUserByFullName((String) xls.getValue(row.getCell(CustomerTable.userFullName.value()))));
-
-				addCustomer();
-				setCust(null);
+		try {
+			StringBuilder logDuplicate = new StringBuilder();
+			File theFile = new File(getUploadFileName());
+			FileUtils.copyFile(getUpload(), theFile);
+			Cell cell = null;
+			Object value = null;
+			try (FileInputStream fis = new FileInputStream(theFile)) {
+				ExcelUtil xls = new ExcelUtil();
+				CustomerHome custHome = new CustomerHome(getSessionFactory());
+				UserHome userHome = new UserHome(getSessionFactory());
+				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
+				Sheet sheet = workbook.getSheetAt(0);
+				Iterator<Row> rowIterator = sheet.iterator();
+				rowIterator.next();
+				while (rowIterator.hasNext()) {
+					Row row = rowIterator.next();
+					cust = new Customer();
+					// -------------CreateTime--------------
+					getCust().setCreateTime(new Date());
+					// ---------------------------
+					// -------------customerCode--------------
+					cell = row.getCell(CustomerTable.customerCode.value());
+					value = xls.getValue(cell);
+					getCust().setCustomerCode((value+"").trim());
+					// ---------------------------
+					// -------------businessName--------------
+					cell = row.getCell(CustomerTable.businessName.value());
+					value = xls.getValue(cell);
+					getCust().setBusinessName( value+"");
+					// ---------------------------
+					// -------------businessName--------------
+					cell = row.getCell(CustomerTable.customerGroup.value());
+					value = xls.getValue(cell);
+					GroupCustomer gCust = new GroupCustomer();
+					gCust.setId(((Double) value).intValue());
+					getCust().setGroupCustomer(gCust);
+					// ---------------------------
+					// -------------certificateNumber--------------
+					cell = row.getCell(CustomerTable.certificateNumber.value());
+					value = xls.getValue(cell);
+					getCust().setCertificateNumber( value+"");
+					// ---------------------------
+					// -------------certificateDate--------------
+					cell = row.getCell(CustomerTable.certificateDate.value());
+					value = xls.getValue(cell);
+					getCust().setCertificateDate((Date) value);
+					// ---------------------------
+					// -------------certificateAddress--------------
+					cell = row.getCell(CustomerTable.certificateAddress.value());
+					value = xls.getValue(cell);
+					getCust().setCertificateAddress(value+"");
+					// ---------------------------
+					// -------------taxNumber--------------
+					cell = row.getCell(CustomerTable.taxNumber.value());
+					value = xls.getValue(cell);
+					getCust().setTaxNumber(value+"");
+					// ---------------------------
+					// -------------certificateNumber--------------
+					cell = row.getCell(CustomerTable.employee.value());
+					value = xls.getValue(cell);
+					getCust().setUser(userHome.getUserByFullName((value+"").trim()));
+					// ---------------------------
+					boolean isExisted = custHome.isCustomerExist(getCust().getCustomerCode());
+					if (!isExisted)
+						custHome.attachDirty(getCust());
+					else
+						logDuplicate.append("<li>Cảnh báo: Dữ liệu dòng " + (cell.getRowIndex() + 1) + " đã được cập nhật rồi!</li>");
+					setCust(new Customer());
+				}
+				addActionMessage("<h3>Cập nhật hoàn thành</h3><ul>" + logDuplicate + "</ul>");
+			} catch (Exception e) {
+				addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + e.getMessage() + " ở dòng: " + (cell.getRowIndex() + 1) + ", cột: " + (cell.getColumnIndex() + 1) + ", giá trị: " + value
+						+ "</li></ul>");
+			} finally {
+				if (theFile.exists())
+					FileUtils.deleteQuietly(theFile);
 			}
-		} catch (Exception e) {
-			throw e;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + ex.getMessage() + "</ul></li>");
 		}
-		FileUtils.deleteQuietly(theFile);
 		return SUCCESS;
 	}
 

@@ -10,13 +10,16 @@ import javax.naming.InitialContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Criteria;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 import com.home.model.Customer;
 import com.home.model.User;
@@ -81,7 +84,7 @@ public class CustomerHome {
 			}
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Customer> getListCustomer() {
 		log.debug("retrieve list Customer");
@@ -133,7 +136,7 @@ public class CustomerHome {
 			}
 		}
 	}
-	
+
 	public void updateDirty(Customer transientInstance) {
 		log.debug("attaching dirty Customer instance");
 		Transaction tx = null;
@@ -157,7 +160,7 @@ public class CustomerHome {
 			}
 		}
 	}
-	
+
 	public void attachDirty(Customer transientInstance) {
 		log.debug("attaching dirty Customer instance");
 		Transaction tx = null;
@@ -222,10 +225,11 @@ public class CustomerHome {
 			throw re;
 		}
 	}
+
 	public Customer findCustomerByCode(String customerCode) throws Exception {
 		log.debug("getting Customer instance with code: " + customerCode);
 		Transaction tx = null;
-		Session session=null;
+		Session session = null;
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
@@ -254,10 +258,11 @@ public class CustomerHome {
 			}
 		}
 	}
+
 	public Customer findById(java.lang.Integer id) {
 		log.debug("getting Customer instance with id: " + id);
 		Transaction tx = null;
-		Session session=null;
+		Session session = null;
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
@@ -266,13 +271,13 @@ public class CustomerHome {
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
-				if(instance.getFarmProduct1Session() == null)
+				if (instance.getFarmProduct1Session() == null)
 					instance.setFarmProduct1Session("0");
-				if(instance.getFarmProduct2Session() == null)
+				if (instance.getFarmProduct2Session() == null)
 					instance.setFarmProduct2Session("0");
-				if(instance.getFarmProduct3Session() == null)
+				if (instance.getFarmProduct3Session() == null)
 					instance.setFarmProduct3Session("0");
-				if(instance.getFarmProduct4Session() == null)
+				if (instance.getFarmProduct4Session() == null)
 					instance.setFarmProduct4Session("0");
 				log.debug("get successful, instance found");
 			}
@@ -301,5 +306,36 @@ public class CustomerHome {
 			log.error("find by example failed", re);
 			throw re;
 		}
+	}
+
+	public boolean isCustomerExist(String customerCode) {
+		log.debug("getting Customer instance with code: " + customerCode);
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Criteria criteria = session.createCriteria(Customer.class);
+			criteria.add(Restrictions.eq("customerCode", customerCode));
+			criteria.setProjection(Projections.rowCount());
+			Long count = (Long) criteria.uniqueResult();
+			tx.commit();
+			if (count > 0) {
+				return true;
+			}
+		} catch (Exception re) {
+			log.error("get failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.error("get failed", e);
+			}
+		}
+		return false;
 	}
 }
