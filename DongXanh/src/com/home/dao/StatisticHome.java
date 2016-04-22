@@ -160,26 +160,22 @@ public class StatisticHome {
 		}
 	}
 
-	public boolean isStatictisDuplicateLevel1(Date dateReceived, Integer customerCodeLevel1, Integer productId) {
+	public boolean isStatictisDuplicateLevel1(Date dateReceived, Integer custCodeLevel1Id, Integer productId, Integer invoiceTypeId) {
 		log.debug("Checking Statistic duplicate with: ");
 		Transaction tx = null;
 		Session session = null;
 		try {
-
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			Query query = session.createQuery("FROM Statistic where date_received=:dateReceived and customer_code_level1=:customerCodeLevel1" + " and product_id=:productId");
-			query.setDate("dateReceived", dateReceived);
-			query.setInteger("customerCodeLevel1", customerCodeLevel1);
-			query.setInteger("productId", productId);
-			Statistic instance = (Statistic) query.uniqueResult();
+			Criteria cre = session.createCriteria(Statistic.class);
+			cre.add(Restrictions.eq("dateReceived", dateReceived));
+			cre.add(Restrictions.eq("customerByCustomerCodeLevel1.id", custCodeLevel1Id));
+			cre.add(Restrictions.eq("product.id", productId));
+			cre.add(Restrictions.eq("invoiceType.id", invoiceTypeId));
+			Statistic instance = (Statistic) cre.uniqueResult();
 			tx.commit();
 			if (instance == null) {
-				log.debug("get successful, no instance found");
 				return false;
-			} else {
-				log.debug("get successful, instance found");
-
 			}
 			return true;
 		} catch (RuntimeException re) {
@@ -196,29 +192,24 @@ public class StatisticHome {
 		}
 	}
 
-	public boolean isStatictisDuplicateLevel2(Date dateReceived, Integer customerCodeLevel1, Integer custLevel2Id, Integer productId, Integer userId) {
+	public boolean isStatictisDuplicateLevel2(Date dateReceived, Integer custCodeLevel1Id, Integer custCodeLevel2Id, Integer productId, Integer userId, Integer invoiceTypeId) {
 		log.debug("Checking Statistic duplicate with: ");
 		Transaction tx = null;
 		Session session = null;
 		try {
-
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			Query query = session.createQuery("FROM Statistic where date_received=:dateReceived and customer_code_level1=:customerCodeLevel1"
-					+ " and customer_code_level2=:customerCodeLevel2 and product_id=:productId and user_id=:userId");
-			query.setDate("dateReceived", dateReceived);
-			query.setInteger("customerCodeLevel1", customerCodeLevel1);
-			query.setInteger("customerCodeLevel2", custLevel2Id);
-			query.setInteger("productId", productId);
-			query.setInteger("userId", userId);
-			Statistic instance = (Statistic) query.uniqueResult();
+			Criteria cre = session.createCriteria(Statistic.class);
+			cre.add(Restrictions.eq("dateReceived", dateReceived));
+			cre.add(Restrictions.eq("customerByCustomerCodeLevel1.id", custCodeLevel1Id));
+			cre.add(Restrictions.eq("customerByCustomerCodeLevel2.id", custCodeLevel2Id));
+			cre.add(Restrictions.eq("product.id", productId));
+			cre.add(Restrictions.eq("user.id", userId));
+			cre.add(Restrictions.eq("invoiceType.id", invoiceTypeId));
+			Statistic instance = (Statistic) cre.uniqueResult();
 			tx.commit();
 			if (instance == null) {
-				log.debug("get successful, no instance found");
 				return false;
-			} else {
-				log.debug("get successful, instance found");
-
 			}
 			return true;
 		} catch (RuntimeException re) {
@@ -329,8 +320,8 @@ public class StatisticHome {
 			}
 		}
 	}
-	
-	public LinkedHashMap<String, RevenuesComparison> getRevenuesComparison(java.sql.Date start, java.sql.Date end, float minRevenues) throws Exception{
+
+	public LinkedHashMap<String, RevenuesComparison> getRevenuesComparison(java.sql.Date start, java.sql.Date end, float minRevenues) throws Exception {
 		log.debug("retrieve list Statistic");
 		Session session = null;
 		try {
@@ -338,40 +329,39 @@ public class StatisticHome {
 			SessionImpl sessionImpl = (SessionImpl) session;
 			Connection conn = sessionImpl.connection();
 			LinkedHashMap<String, RevenuesComparison> results = new LinkedHashMap<String, RevenuesComparison>();
-			String sql =
-					"Select  c1.customer_code as customer_code1, c1.business_name as business_name1, c2.customer_code, c2.business_name, c2.business_address, u.user_name, sum(s.total_box) as total_box, sum(s.quantity) as quantity, sum(s.total) as total "
-							+ "From `statistic` s "
-							+ "JOIN `customer` c1 ON s.customer_code_level1=c1.id "
-							+ "JOIN `customer` c2 ON s.customer_code_level2=c2.id "
-							+ "JOIN `user` u ON u.id=s.user_id "
-							+ "Where date_received >= ? And date_received <= ? "
-							+ "Group By customer_code1, business_name1, c2.customer_code, c2.business_name, c2.business_address, u.user_name "
-							+ "Order By c2.customer_code";
+			String sql = "Select  c1.customer_code as customer_code1, c1.business_name as business_name1, c2.customer_code, c2.business_name, c2.business_address, u.user_name, sum(s.total_box) as total_box, sum(s.quantity) as quantity, sum(s.total) as total "
+					+ "From `statistic` s "
+					+ "JOIN `customer` c1 ON s.customer_code_level1=c1.id "
+					+ "JOIN `customer` c2 ON s.customer_code_level2=c2.id "
+					+ "JOIN `user` u ON u.id=s.user_id "
+					+ "Where date_received >= ? And date_received <= ? "
+					+ "Group By customer_code1, business_name1, c2.customer_code, c2.business_name, c2.business_address, u.user_name "
+					+ "Order By c2.customer_code";
 			System.out.println(sql);
 			PreparedStatement pre = conn.prepareStatement(sql);
 			pre.setDate(1, start);
 			pre.setDate(2, end);
 			ResultSet rs = pre.executeQuery();
-			while(rs.next()){
-				String customer_code1 	= rs.getString("customer_code1");
-				String business_name1 	= rs.getString("business_name1");
-				String customer_code 	= rs.getString("customer_code");
-				String business_name 	= rs.getString("business_name");
+			while (rs.next()) {
+				String customer_code1 = rs.getString("customer_code1");
+				String business_name1 = rs.getString("business_name1");
+				String customer_code = rs.getString("customer_code");
+				String business_name = rs.getString("business_name");
 				String business_address = rs.getString("business_address");
-				String user_name 		= rs.getString("user_name");
-				long total_box 			= rs.getLong("total_box");
-				long quantity			= rs.getLong("quantity");
-				BigDecimal total		= rs.getBigDecimal("total");
-				
-				if(results.containsKey(customer_code)){
-					if(!results.get(customer_code).getSellMan().contains(user_name)){
+				String user_name = rs.getString("user_name");
+				long total_box = rs.getLong("total_box");
+				long quantity = rs.getLong("quantity");
+				BigDecimal total = rs.getBigDecimal("total");
+
+				if (results.containsKey(customer_code)) {
+					if (!results.get(customer_code).getSellMan().contains(user_name)) {
 						results.get(customer_code).setSellMan(results.get(customer_code).getSellMan() + ";" + user_name);
 					}
-					if(!results.get(customer_code).getProvider().contains(business_name1)){
+					if (!results.get(customer_code).getProvider().contains(business_name1)) {
 						results.get(customer_code).setProvider(results.get(customer_code).getProvider() + ";" + business_name1);
 					}
 					results.get(customer_code).setRevenues1(results.get(customer_code).getRevenues1().add(total));
-				}else{
+				} else {
 					RevenuesComparison revenues = new RevenuesComparison();
 					revenues.setCustomerCode(customer_code);
 					revenues.setCustomerName(business_name);
@@ -392,11 +382,42 @@ public class StatisticHome {
 			throw re;
 		} finally {
 			try {
-				if(session != null){
+				if (session != null) {
 					session.flush();
 					session.close();
 				}
 			} catch (Exception e) {
+			}
+		}
+	}
+
+	public boolean isBalanceDuplicate(Date dateReceived, int custCodeLevel1Id, int productId, int invoiceTypeId) {
+		log.debug("Checking Statistic duplicate with: ");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Criteria cre = session.createCriteria(Statistic.class);
+			cre.add(Restrictions.eq("dateReceived", dateReceived));
+			cre.add(Restrictions.eq("customerByCustomerCodeLevel1.id", custCodeLevel1Id));
+			cre.add(Restrictions.eq("product.id", productId));
+			cre.add(Restrictions.eq("invoiceType.id", invoiceTypeId));
+			Statistic instance = (Statistic) cre.uniqueResult();
+			tx.commit();
+			if (instance == null)
+				return false;
+			return true;
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}

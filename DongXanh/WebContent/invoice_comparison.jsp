@@ -49,6 +49,15 @@ pageEncoding="UTF-8"%>
 						<tr>
 							<td width="120px" valign="bottom"></td>
 							<td valign="middle">
+								<label class="col-md-4 col-sm-3 col-xs-12"
+									for="grpCustomer_id">Khách hàng Cấp 1 <span class="required">*</span>
+								</label>
+								<div class="col-md-3 col-sm-6 col-xs-12">
+									<s:select id="grpCustomer_id" name="grpCustomer.id"
+										cssClass="form-control col-md-7 col-xs-12" list="{sdsd,sdsd}"
+										listKey="id" listValue="groupName"
+										value="%{cust.groupCustomer.id}" />
+								</div>
 							</td>
 							<td></td>
 						</tr>
@@ -68,9 +77,9 @@ pageEncoding="UTF-8"%>
 									<th>No</th>
 									<th>Tên thuốc và quy cách sản phẩm</th>
 									<th>Tồn đầu kỳ<br>(thùng)</th>
-									<th>SL câp 1<br>(thùng)</th>
+									<th>SL cấp 1<br>(thùng)</th>
 									<th>DS cấp 1<br>(triệu)</th>
-									<th>SL câp 2<br>(thùng)</th>
+									<th>SL cấp 2<br>(thùng)</th>
 									<th>DS cấp 2<br>(triệu)</th>
 									<th>Chênh lệch<br>(thùng)</th>
 									<th>Ghi chú</th>

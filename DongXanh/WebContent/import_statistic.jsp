@@ -14,15 +14,15 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<s:set name="importType" value="%{chooseSubTab}" />
 				<sx:tabbedpanel id="tabContainer" selectedTab="%{chooseTab}">
-					<sx:div label="Bảng kê Cấp I" id="tab1">
+					<sx:div label="Bảng kê Cấp I" id="levelOne">
 						<div class="x_panel">
 							<div class="x_content">
 								<sx:tabbedpanel id="tabContainer1" selectedTab="%{chooseSubTab}">
-									<sx:div label="Cập nhật" id="subtab1_1">
-										<s:form action="import_statistic_level_one" namespace="/"
-											method="post" theme="bootstrap" enctype="multipart/form-data"
+									<sx:div label="Thêm Nhanh Hóa Đơn" id="quickInvoiceLevel1">
+										<s:form action="import_statistic_level_one" method="post"
+											theme="bootstrap" enctype="multipart/form-data"
 											cssClass="form-horizontal form-label-left">
-											<s:if test="%{#importType=='subtab1_1'}">
+											<s:if test="%{#importType=='quickInvoiceLevel1'}">
 												<s:if test="hasActionErrors()">
 													<div class="errors">
 														<s:actionerror escape="false" />
@@ -38,10 +38,10 @@
 											<div class="item form-group">
 												<label class="col-md-3 col-sm-3 col-xs-12"
 													style="text-align: right;" for="uploadLevel1">Chọn
-													bảng kê <span class="required"></span>
+													nguồn dữ liệu (*.xls, *.xlsx) <span class="required"></span>
 												</label>
 												<div class="col-md-5 col-sm-6 col-xs-12">
-													<input id="uploadLevel1" type="file" name="upload"
+													<input id="uploadLevel1" name="upload" type="file"
 														required="required" class="col-md-7 col-xs-12">
 												</div>
 											</div>
@@ -54,26 +54,55 @@
 											</div>
 										</s:form>
 									</sx:div>
-									<sx:div label="Kết xuất" id="subtab1_2">
-										<div class="col-md-12 col-sm-12 col-xs-12">
-											<div class="x_panel">
-												<div class="x_content"></div>
+									<sx:div label="Thêm Nhanh Số Dư Đầu Kỳ" id="quickBalance">
+										<s:form action="import_balance" namespace="/" method="post"
+											theme="bootstrap" enctype="multipart/form-data"
+											cssClass="form-horizontal form-label-left">
+											<s:if test="%{#importType=='quickBalance'}">
+												<s:if test="hasActionErrors()">
+													<div class="errors">
+														<s:actionerror escape="false" />
+													</div>
+												</s:if>
+												<s:elseif test="hasActionMessages()">
+													<div class="message">
+														<s:actionmessage escape="false" />
+													</div>
+												</s:elseif>
+											</s:if>
+											<div class="ln_solid"></div>
+											<div class="item form-group">
+												<label class="col-md-3 col-sm-3 col-xs-12"
+													style="text-align: right;" for="uploadLevel1">Chọn
+													nguồn dữ liệu (*.xls, *.xlsx) <span class="required"></span>
+												</label>
+												<div class="col-md-5 col-sm-6 col-xs-12">
+													<input id="uploadBalance" type="file" name="upload"
+														required="required" class="col-md-7 col-xs-12">
+												</div>
 											</div>
-										</div>
+											<div class="ln_solid"></div>
+											<div class="form-group">
+												<div class="col-md-6 col-md-offset-3">
+													<button id="sendBalance" type="submit"
+														class="btn btn-warning">Cập nhật số dư đầu kỳ</button>
+												</div>
+											</div>
+										</s:form>
 									</sx:div>
 								</sx:tabbedpanel>
 							</div>
 						</div>
 					</sx:div>
-					<sx:div label="Bảng kê Cấp II" id="tab2">
+					<sx:div label="Bảng kê Cấp II" id="levelTwo">
 						<div class="x_panel">
 							<div class="x_content">
 								<sx:tabbedpanel id="tabContainer2" selectedTab="%{chooseSubTab}">
-									<sx:div label="Cập nhật" id="subtab2_1">
+									<sx:div label="Thêm Nhanh Hóa Đơn" id="quickInvoiceLevel2">
 										<s:form action="import_statistic_level_two" namespace="/"
 											method="post" theme="bootstrap" enctype="multipart/form-data"
 											cssClass="form-horizontal form-label-left">
-											<s:if test="%{#importType=='subtab2_1'}">
+											<s:if test="%{#importType=='quickInvoiceLevel2'}">
 												<s:if test="hasActionErrors()">
 													<div class="errors">
 														<s:actionerror escape="false" />
@@ -89,7 +118,7 @@
 											<div class="item form-group">
 												<label class="col-md-3 col-sm-3 col-xs-12"
 													style="text-align: right;" for="uploadLevel2">Chọn
-													bảng kê <span class="required"></span>
+													nguồn dữ liệu (*.xls, *.xlsx) <span class="required"></span>
 												</label>
 												<div class="col-md-5 col-sm-6 col-xs-12">
 													<input id="uploadLevel2" type="file" name="upload"
@@ -105,14 +134,15 @@
 											</div>
 										</s:form>
 									</sx:div>
-									<sx:div label="Kết xuất" id="subtab2_2">
+									<sx:div label="Kết Xuất Hóa Đơn" id="exportInvoiceLevel2">
 										<div class="col-md-12 col-sm-12 col-xs-12">
 											<div class="x_panel">
 												<div class="x_content">
 													<s:url var="fileDownload" action="export_statistic"></s:url>
-													<s:form id="formExport" action="export_statistic" theme="bootstrap"
-														method="post" cssClass="form-horizontal form-label-left">
-														<s:if test="%{#importType=='subtab2_2'}">
+													<s:form id="formExport" action="export_statistic"
+														theme="bootstrap" method="post"
+														cssClass="form-horizontal form-label-left">
+														<s:if test="%{#importType=='exportInvoiceLevel2'}">
 															<s:if test="hasActionErrors()">
 																<div class="errors">
 																	<s:actionerror escape="false" />
@@ -196,9 +226,11 @@
 														<div class="ln_solid"></div>
 														<div class="form-group">
 															<div class="col-md-6 col-md-offset-3">
-																<img id="loadingImage" src="images/loading.gif" style="display: none" />
+																<img id="loadingImage" src="images/loading.gif"
+																	style="display: none" />
 																<button type="reset" class="btn btn-success">Reset</button>
-																<button id="send" type="submit" class="btn btn-primary">Kết xuất bảng kê Cấp II</button>
+																<button id="send" type="submit" class="btn btn-primary">Kết
+																	xuất bảng kê Cấp II</button>
 															</div>
 														</div>
 													</s:form>
@@ -211,7 +243,7 @@
 						</div>
 					</sx:div>
 				</sx:tabbedpanel>
-			
+
 			</div>
 		</div>
 	</div>

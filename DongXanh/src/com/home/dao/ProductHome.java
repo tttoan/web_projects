@@ -19,6 +19,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 
 import com.home.model.Category;
@@ -201,9 +202,7 @@ public class ProductHome {
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			Query quey = session.createQuery("from Product where product_code=:productCode");
-			quey.setString("productCode", productCode);
-			Product instance = (Product) quey.uniqueResult();
+			Product instance = (Product) session.createCriteria(Product.class).add(Restrictions.eq("productCode", productCode)).uniqueResult();
 			tx.commit();
 			if (instance == null) {
 				log.debug("get successful, no instance found");
@@ -213,7 +212,6 @@ public class ProductHome {
 			}
 			return instance;
 		} catch (Exception re) {
-			if (tx!=null) tx.rollback();
 			log.error("get failed", re);
 			throw re;
 		} finally{

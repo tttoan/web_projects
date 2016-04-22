@@ -29,6 +29,8 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
 
+import com.home.conts.InvoiceTypeText;
+import com.home.conts.TableBalance;
 import com.home.conts.TableStatisticLevel1;
 import com.home.conts.TableStatisticLevel2;
 import com.home.dao.CategoryHome;
@@ -40,6 +42,7 @@ import com.home.entities.StatisticCustom;
 import com.home.entities.UserAware;
 import com.home.model.Category;
 import com.home.model.Customer;
+import com.home.model.InvoiceType;
 import com.home.model.Product;
 import com.home.model.Statistic;
 import com.home.model.User;
@@ -49,7 +52,7 @@ import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
-public class StatisticAction extends ActionSupport implements Action, ModelDriven<Statistic>,UserAware {
+public class StatisticAction extends ActionSupport implements Action, ModelDriven<Statistic>, UserAware, InvoiceTypeText {
 	private static final long serialVersionUID = 1L;
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	public List<Statistic> statistics = new ArrayList<Statistic>();
@@ -100,13 +103,16 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		stat.setTotal(new BigDecimal(0));
 		return stat;
 	}
+
 	public User getUserSes() {
 		return userSes;
 	}
+
 	@Override
 	public void setUserSes(User user) {
 		this.userSes = user;
 	}
+
 	@Override
 	public String execute() throws Exception {
 		if (statId != 0) {
@@ -169,7 +175,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 			return ERROR;
 		}
 	}
-	
+
 	public String deleteStatistic() throws Exception {
 		try {
 			StatisticHome sttHome = new StatisticHome(getSessionFactory());
@@ -188,14 +194,17 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 			stat.setCustomerByCustomerCodeLevel1(cusLevel1);
 			stat.setCustomerByCustomerCodeLevel2(cusLevel2);
 			stat.setProduct(pro);
+			InvoiceType invoiceType = new InvoiceType();
+			invoiceType.setId(3);
+			stat.setInvoiceType(invoiceType);
 			StatisticHome sttHome = new StatisticHome(HibernateUtil.getSessionFactory());
 			if (stat.getId() == 0) {
 				boolean isDuplicated = sttHome.isStatictisDuplicateLevel2(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1().getId(), getStat().getCustomerByCustomerCodeLevel2()
-						.getId(), getStat().getProduct().getId(), getStat().getUser().getId());
+						.getId(), getStat().getProduct().getId(), getStat().getUser().getId(), getStat().getInvoiceType().getId());
 				if (!isDuplicated)
 					sttHome.attachDirty(getStat());
 				else {
-					addActionMessage("Dữ liệu đã được cập nhật rồi!");
+					addActionMessage("Dữ liệu đã được tồn tại!");
 					return INPUT;
 				}
 			} else {
@@ -208,10 +217,83 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		return SUCCESS;
 	}
 
+	public String importBalance() {
+		try {
+			chooseTab = "levelOne";
+			chooseSubTab = "quickBalance";
+			StringBuilder logDuplicate = new StringBuilder();
+			File theFile = new File(getUploadFileName());
+			FileUtils.copyFile(getUpload(), theFile);
+			Cell cell = null;
+			Object value = null;
+			try (FileInputStream fis = new FileInputStream(theFile)) {
+				ExcelUtil xls = new ExcelUtil();
+				StatisticHome sttHome = new StatisticHome(getSessionFactory());
+				CustomerHome custHome = new CustomerHome(getSessionFactory());
+				ProductHome proHome = new ProductHome(getSessionFactory());
+				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
+				Sheet sheet = workbook.getSheetAt(0);
+				Iterator<Row> rowIterator = sheet.iterator();
+				rowIterator.next();
+				while (rowIterator.hasNext()) {
+					Row row = rowIterator.next();
+					cell = row.getCell(TableBalance.customerCodeLevel1.value());
+					value = xls.getValue(cell);
+					if (((String) value).isEmpty())
+						continue;
+					setStat(new Statistic());
+					// -------------customerCodeLevel1--------------
+					Customer cust = custHome.findCustomerByCode(value + "");
+					getStat().setCustomerByCustomerCodeLevel1(cust);
+					// ---------------------------
+					// -------------dateReceived--------------
+					cell = row.getCell(TableBalance.dateReceived.value());
+					value = xls.getValue(cell);
+					getStat().setDateReceived(sdf.parse((String) value));
+					// ---------------------------
+					// -------------productCode--------------
+					cell = row.getCell(TableBalance.productCode.value());
+					value = xls.getValue(cell);
+					Product pro = proHome.findProductByCode((String) value);
+					getStat().setProduct(pro);
+					// ---------------------------
+					// -------------totalBox--------------
+					cell = row.getCell(TableBalance.totalBox.value());
+					value = xls.getValue(cell);
+					getStat().setTotalBox(((Double) value).intValue());
+					// ---------------------------
+					// -------------InvoiceType--------------
+					InvoiceType invoiceType = new InvoiceType();
+					invoiceType.setId(4);
+					getStat().setInvoiceType(invoiceType);
+					// ---------------------------
+					boolean isDuplicated = sttHome.isBalanceDuplicate(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1().getId(), getStat().getProduct().getId(), getStat()
+							.getInvoiceType().getId());
+					if (!isDuplicated)
+						sttHome.attachDirty(getStat());
+					else
+						logDuplicate.append("<li>Cảnh báo: Dữ liệu dòng " + (cell.getRowIndex() + 1) + " đã được cập nhật rồi!</li>");
+					setStat(new Statistic());
+				}
+				addActionMessage("<h3>Cập nhật hoàn thành</h3><ul>" + logDuplicate + "</ul>");
+			} catch (Exception e) {
+				addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + e.getMessage() + " ở dòng: " + (cell.getRowIndex() + 1) + ", cột: " + (cell.getColumnIndex() + 1) + ", giá trị: " + value
+						+ "</li></ul>");
+			} finally {
+				if (theFile.exists())
+					FileUtils.deleteQuietly(theFile);
+			}
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + ex.getMessage() + "</ul></li>");
+		}
+		return SUCCESS;
+	}
+
 	public String importStatisticLevelOne() {
 		try {
-			chooseTab = "tab1";
-			chooseSubTab = "subtab1_1";
+			chooseTab = "levelOne";
+			chooseSubTab = "quickInvoiceLevel1";
 			StringBuilder logDuplicate = new StringBuilder();
 			File theFile = new File(getUploadFileName());
 			FileUtils.copyFile(getUpload(), theFile);
@@ -240,12 +322,6 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 						cust = custHome.findCustomerByCode(customerCode.substring(2));
 
 					} else if (xls.isDateReceived(((String) value), sdf) && cust != null) {
-						// -------------Check data valid--------------
-						cell = row.getCell(TableStatisticLevel1.total.value());
-						value = xls.getValue(cell);
-						if (((String) value).isEmpty())
-							continue;
-						// ---------------------------
 						setStat(new Statistic());
 						// -------------customerCodeLevel1--------------
 						getStat().setCustomerByCustomerCodeLevel1(cust);
@@ -261,17 +337,33 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 						Product pro = proHome.findProductByCode((String) value);
 						getStat().setProduct(pro);
 						// ---------------------------
+						int indexQuantiy = TableStatisticLevel1.quantiy.value();
+						// -------------invoiceType--------------
+						cell = row.getCell(TableStatisticLevel1.invoiceType.value());
+						value = xls.getValue(cell);
+						InvoiceType invoiceType = new InvoiceType();
+						if ((value + "").trim().equalsIgnoreCase(INVOICE_RETURN)) {
+							invoiceType.setId(INVOICE_RETURN_ID);
+							indexQuantiy = TableStatisticLevel1.quantiyReturn.value();
+						} else {
+							invoiceType.setId(INVOICE_SOLD_ID);
+							// -------------total--------------
+							cell = row.getCell(TableStatisticLevel1.total.value());
+							value = xls.getValue(cell);
+							getStat().setTotal(new BigDecimal(((String) value).replace(".", "")));
+							// ---------------------------
+						}
+						getStat().setInvoiceType(invoiceType);
+						// ---------------------------
+
 						// -------------quantiy--------------
-						cell = row.getCell(TableStatisticLevel1.quantiy.value());
+						cell = row.getCell(indexQuantiy);
 						value = xls.getValue(cell);
 						getStat().setQuantity(Integer.parseInt(((String) value).replace(".", "")));
 						// ---------------------------
-						// -------------total--------------
-						cell = row.getCell(TableStatisticLevel1.total.value());
-						value = xls.getValue(cell);
-						getStat().setTotal(new BigDecimal(((String) value).replace(".", "")));
-						// ---------------------------
-						boolean isDuplicated = sttHome.isStatictisDuplicateLevel1(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1().getId(), getStat().getProduct().getId());
+
+						boolean isDuplicated = sttHome.isStatictisDuplicateLevel1(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1().getId(), getStat().getProduct().getId(),
+								getStat().getInvoiceType().getId());
 						if (!isDuplicated)
 							sttHome.attachDirty(getStat());
 						else
@@ -281,13 +373,15 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 				}
 				addActionMessage("<h3>Cập nhật hoàn thành</h3><ul>" + logDuplicate + "</ul>");
 			} catch (Exception e) {
-				addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + e.getMessage() + " ở dòng: " + (cell.getRowIndex() + 1) + ", cột: " + (cell.getColumnIndex() + 1) + ", giá trị: " + value
-						+ "</li></ul>");
+				String ms = "";
+				if (cell != null)
+					ms = " ở dòng: " + (cell.getRowIndex() + 1) + ", cột: " + (cell.getColumnIndex() + 1) + ", giá trị: " + value;
+				addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + e.getMessage() + ms + "</li></ul>");
 			} finally {
 				if (theFile.exists())
 					FileUtils.deleteQuietly(theFile);
 			}
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + ex.getMessage() + "</ul></li>");
 		}
@@ -296,11 +390,10 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	public String importStatisticLevelTwo() {
 		try {
-			chooseTab = "tab2";
-			chooseSubTab = "subtab2_1";
+			chooseTab = "levelTwo";
+			chooseSubTab = "quickInvoiceLevel2";
 			StringBuilder logDuplicate = new StringBuilder();
-			String filePath = getRequest().getSession().getServletContext().getRealPath("/");
-			File theFile = new File(filePath, getUploadFileName());
+			File theFile = new File(getUploadFileName());
 			FileUtils.copyFile(getUpload(), theFile);
 			Cell cell = null;
 			Object value = null;
@@ -361,9 +454,14 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 					User user = userHome.getUserByFullName((String) value);
 					getStat().setUser(user);
 					// ---------------------------
+					// -------------InvoiceType--------------
+					InvoiceType invoiceType = new InvoiceType();
+					invoiceType.setId(3);
+					getStat().setInvoiceType(invoiceType);
+					// ---------------------------
 
 					boolean isDuplicated = sttHome.isStatictisDuplicateLevel2(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1().getId(), getStat()
-							.getCustomerByCustomerCodeLevel2().getId(), getStat().getProduct().getId(), getStat().getUser().getId());
+							.getCustomerByCustomerCodeLevel2().getId(), getStat().getProduct().getId(), getStat().getUser().getId(), getStat().getInvoiceType().getId());
 					if (!isDuplicated)
 						sttHome.attachDirty(getStat());
 					else
@@ -372,8 +470,10 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 				}
 				addActionMessage("<h3>Cập nhật hoàn thành</h3><ul>" + logDuplicate + "</ul>");
 			} catch (Exception e) {
-				addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + e.getMessage() + " ở dòng: " + (cell.getRowIndex() + 1) + ", cột: " + (cell.getColumnIndex() + 1) + ", giá trị: " + value
-						+ "</li></ul>");
+				String ms = "";
+				if (cell != null)
+					ms = " ở dòng: " + (cell.getRowIndex() + 1) + ", cột: " + (cell.getColumnIndex() + 1) + ", giá trị: " + value;
+				addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + e.getMessage() + ms + "</li></ul>");
 			} finally {
 				if (theFile.exists())
 					FileUtils.deleteQuietly(theFile);
@@ -387,8 +487,8 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	public String exportStatistic() {
 		try {
-			chooseTab = "tab2";
-			chooseSubTab = "subtab2_2";
+			chooseTab = "levelTwo";
+			chooseSubTab = "exportInvoiceLevel2";
 			statistics.clear();
 			ServletContext servletContext = ServletActionContext.getServletContext();
 			String pathname = servletContext.getRealPath("/WEB-INF/template/excel/blank.xlsx");
@@ -402,16 +502,13 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 				Sheet sheet = workbook.getSheetAt(0);
 				int startIndexRow = 0;
 				int startIndexCell = 0;
-				xls.addRowData(sheet, startIndexRow, startIndexCell, "Tháng", "Ngày nhận","Mã Cấp 2", "Tên cấp 2", "Mã Cấp 1", "Tên Cấp 1", "Mã Hàng", "Mặt Hàng", "Tên Hàng", "Số Thùng", "Số Lượng",
+				xls.addRowData(sheet, startIndexRow, startIndexCell, "Tháng", "Ngày nhận", "Mã Cấp 2", "Tên cấp 2", "Mã Cấp 1", "Tên Cấp 1", "Mã Hàng", "Mặt Hàng", "Tên Hàng", "Số Thùng", "Số Lượng",
 						"Giá có điểm+Ko điểm", "Thành Tiền", "NVTT");
 				startIndexRow++;
 				for (Statistic entry : statistics) {
 					Category cat = catHome.findById(entry.getProduct().getCategory().getId());
-					xls.addRowData(sheet, startIndexRow, startIndexCell,
-							entry.getDateReceived().getMonth() + "", 
-							sdf.format(entry.getDateReceived()), 
-							entry.getCustomerByCustomerCodeLevel2().getCustomerCode(), 
-							entry.getCustomerByCustomerCodeLevel2().getDirector(), entry.getCustomerByCustomerCodeLevel1().getCustomerCode(), entry
+					xls.addRowData(sheet, startIndexRow, startIndexCell, entry.getDateReceived().getMonth() + "", sdf.format(entry.getDateReceived()), entry.getCustomerByCustomerCodeLevel2()
+							.getCustomerCode(), entry.getCustomerByCustomerCodeLevel2().getDirector(), entry.getCustomerByCustomerCodeLevel1().getCustomerCode(), entry
 							.getCustomerByCustomerCodeLevel1().getDirector(), entry.getProduct().getProductCode(), cat.getCategoryCode(), entry.getProduct().getProductName(),
 							entry.getTotalBox() + "", entry.getQuantity() + "", entry.getProduct().getUnitPrice() + "", entry.getTotal() + "", entry.getUser().getFullName());
 					startIndexRow++;
@@ -431,7 +528,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		}
 		return SUCCESS;
 	}
-	
+
 	public String compareStatistic() {
 		try {
 			chooseTab = "tab2";
@@ -449,16 +546,13 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 				Sheet sheet = workbook.getSheetAt(0);
 				int startIndexRow = 0;
 				int startIndexCell = 0;
-				xls.addRowData(sheet, startIndexRow, startIndexCell, "Tháng", "Ngày nhận","Mã Cấp 2", "Tên cấp 2", "Mã Cấp 1", "Tên Cấp 1", "Mã Hàng", "Mặt Hàng", "Tên Hàng", "Số Thùng", "Số Lượng",
+				xls.addRowData(sheet, startIndexRow, startIndexCell, "Tháng", "Ngày nhận", "Mã Cấp 2", "Tên cấp 2", "Mã Cấp 1", "Tên Cấp 1", "Mã Hàng", "Mặt Hàng", "Tên Hàng", "Số Thùng", "Số Lượng",
 						"Giá có điểm+Ko điểm", "Thành Tiền", "NVTT");
 				startIndexRow++;
 				for (Statistic entry : statistics) {
 					Category cat = catHome.findById(entry.getProduct().getCategory().getId());
-					xls.addRowData(sheet, startIndexRow, startIndexCell,
-							entry.getDateReceived().getMonth() + "", 
-							sdf.format(entry.getDateReceived()), 
-							entry.getCustomerByCustomerCodeLevel2().getCustomerCode(), 
-							entry.getCustomerByCustomerCodeLevel2().getDirector(), entry.getCustomerByCustomerCodeLevel1().getCustomerCode(), entry
+					xls.addRowData(sheet, startIndexRow, startIndexCell, entry.getDateReceived().getMonth() + "", sdf.format(entry.getDateReceived()), entry.getCustomerByCustomerCodeLevel2()
+							.getCustomerCode(), entry.getCustomerByCustomerCodeLevel2().getDirector(), entry.getCustomerByCustomerCodeLevel1().getCustomerCode(), entry
 							.getCustomerByCustomerCodeLevel1().getDirector(), entry.getProduct().getProductCode(), cat.getCategoryCode(), entry.getProduct().getProductName(),
 							entry.getTotalBox() + "", entry.getQuantity() + "", entry.getProduct().getUnitPrice() + "", entry.getTotal() + "", entry.getUser().getFullName());
 					startIndexRow++;

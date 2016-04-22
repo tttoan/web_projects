@@ -1,6 +1,6 @@
 package com.home.model;
 
-// Generated Mar 14, 2016 8:28:37 PM by Hibernate Tools 4.3.1
+// Generated Apr 22, 2016 10:24:41 PM by Hibernate Tools 4.3.1
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -13,6 +13,7 @@ public class Statistic implements java.io.Serializable {
 	private Integer id;
 	private Customer customerByCustomerCodeLevel1;
 	private Customer customerByCustomerCodeLevel2;
+	private InvoiceType invoiceType;
 	private Product product;
 	private User user;
 	private Date dateReceived;
@@ -23,9 +24,11 @@ public class Statistic implements java.io.Serializable {
 	public Statistic() {
 	}
 
-	public Statistic(Customer customerByCustomerCodeLevel1, Customer customerByCustomerCodeLevel2, Product product, User user, Date dateReceived, Integer totalBox, Integer quantity, BigDecimal total) {
+	public Statistic(Customer customerByCustomerCodeLevel1, Customer customerByCustomerCodeLevel2, InvoiceType invoiceType, Product product, User user, Date dateReceived, Integer totalBox,
+			Integer quantity, BigDecimal total) {
 		this.customerByCustomerCodeLevel1 = customerByCustomerCodeLevel1;
 		this.customerByCustomerCodeLevel2 = customerByCustomerCodeLevel2;
+		this.invoiceType = invoiceType;
 		this.product = product;
 		this.user = user;
 		this.dateReceived = dateReceived;
@@ -56,6 +59,14 @@ public class Statistic implements java.io.Serializable {
 
 	public void setCustomerByCustomerCodeLevel2(Customer customerByCustomerCodeLevel2) {
 		this.customerByCustomerCodeLevel2 = customerByCustomerCodeLevel2;
+	}
+
+	public InvoiceType getInvoiceType() {
+		return this.invoiceType;
+	}
+
+	public void setInvoiceType(InvoiceType invoiceType) {
+		this.invoiceType = invoiceType;
 	}
 
 	public Product getProduct() {
