@@ -41,8 +41,9 @@
 		</action>
 	</package>
 	
-	<include file="promotion.xml"></include>
-	<include file="userplan.xml"></include>
+	<include file="promotion_struts.xml"></include>
+	<include file="userplan_struts.xml"></include>
+	<include file="report_struts.xml"></include>
 	<include file="employee_struts.xml"></include>
 	<include file="customer_struts.xml"></include>
 	<include file="statistic_struts.xml"></include>
