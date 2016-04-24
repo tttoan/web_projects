@@ -17,7 +17,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.LockMode;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -26,8 +25,12 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 
 import com.home.entities.RevenuesComparison;
+import com.home.entities.RevenuesCustomerDetail;
+import com.home.entities.RevenuesCustomerL1;
 import com.home.entities.StatisticCustom;
+import com.home.model.Product;
 import com.home.model.Statistic;
+import com.home.util.StringUtil;
 
 /**
  * Home object for domain model class Statistic.
@@ -418,6 +421,163 @@ public class StatisticHome {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+			}
+		}
+	}
+	
+	public RevenuesCustomerDetail getRevenuesDetail(java.sql.Date start, java.sql.Date end, String customerCode) throws Exception {
+		log.debug("retrieve list Statistic");
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			String sql = "Select c1.customer_code as customer_code1, c1.business_name as business_name1, c2.customer_code, c2.business_name, c2.business_address, p.product_code, p.product_name, u.user_name, sum(s.total_box) as total_box, sum(s.quantity) as quantity, sum(s.total) as total "
+					+ "From `statistic` s "
+					+ "JOIN `customer` c1 ON s.customer_code_level1=c1.id "
+					+ "JOIN `customer` c2 ON s.customer_code_level2=c2.id "
+					+ "JOIN `product` p ON p.id=s.product_id "
+					+ "JOIN `user` u ON u.id=s.user_id "
+					+ "Where date_received >= ? And date_received <= ? And c2.customer_code=? "
+					+ "Group By customer_code1, business_name1, c2.customer_code, c2.business_name, c2.business_address, u.user_name, p.product_code, p.product_name "
+					+ "Order By c2.customer_code";
+			System.out.println(sql);
+			PreparedStatement pre = conn.prepareStatement(sql);
+			pre.setDate(1, start);
+			pre.setDate(2, end);
+			pre.setString(3, customerCode);
+			ResultSet rs = pre.executeQuery();
+			RevenuesCustomerDetail result = null;
+			while (rs.next()) {
+				String business_name1 = rs.getString("business_name1");
+				String customer_code = rs.getString("customer_code");
+				String business_name = rs.getString("business_name");
+				String business_address = rs.getString("business_address");
+				String user_name = rs.getString("user_name");
+				long total_box = rs.getLong("total_box");
+				long quantity = rs.getLong("quantity");
+				BigDecimal revenues = rs.getBigDecimal("total");
+
+				Product product = new Product();
+				//product.setId(rs.getInt("product_id"));
+				product.setProductCode(StringUtil.notNull(rs.getString("product_code")));
+				product.setProductName(StringUtil.notNull(rs.getString("product_name")));
+				product.setTotalBox((int)total_box);
+				product.setQuantity((int)quantity);
+				product.setUnitPrice(revenues);
+				
+				if(result == null){
+					result = new RevenuesCustomerDetail();
+					result.setCustomerCode(customer_code);
+					result.setCustomerName(business_name);
+					result.setCustomerLocation(business_address);
+					result.setSellMan(user_name);
+					result.setRevenues(revenues);
+					result.setTotalProduct(total_box);
+					result.setProvider(business_name1);
+					
+					result.setListProduct(new ArrayList<Product>());
+					result.getListProduct().add(product);
+				}else{
+					if (!result.getProvider().contains(business_name1)) {
+						result.setProvider(result.getProvider() + ";" + business_name1);
+					}
+					result.setRevenues(result.getRevenues().add(revenues));
+					result.setTotalProduct(result.getTotalProduct() + total_box);
+					result.getListProduct().add(product);
+				}
+			}
+			rs.close();
+			pre.close();
+			return result;
+		} catch (Exception re) {
+			log.error("retrieve list Statistic failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public LinkedHashMap<String, RevenuesCustomerL1> getRevenuesCustomerL1(java.sql.Date start, java.sql.Date end) throws Exception {
+		log.debug("retrieve list Statistic");
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			String sql = "Select c1.customer_code as customer_code1, c1.business_name as business_name1, c2.customer_code, c2.business_name, c2.business_address, p.product_code, p.product_name, sum(s.total_box) as total_box, sum(s.quantity) as quantity, sum(s.total) as total "
+					+ "From `statistic` s "
+					+ "JOIN `customer` c1 ON s.customer_code_level1=c1.id "
+					+ "JOIN `customer` c2 ON s.customer_code_level2=c2.id "
+					+ "JOIN `product` p ON p.id=s.product_id "
+					+ "Where date_received >= ? And date_received <= ? "
+					+ "Group By customer_code1, business_name1, c2.customer_code, c2.business_name, c2.business_address, u.user_name, p.product_code, p.product_name "
+					+ "Order By customer_code1";
+			System.out.println(sql);
+			PreparedStatement pre = conn.prepareStatement(sql);
+			pre.setDate(1, start);
+			pre.setDate(2, end);
+			ResultSet rs = pre.executeQuery();
+			LinkedHashMap<String, RevenuesCustomerL1> results = new LinkedHashMap<String, RevenuesCustomerL1>();
+			while (rs.next()) {
+				String customer_code1 = rs.getString("customer_code1");
+				String business_name1 = rs.getString("business_name1");
+				String customer_code = rs.getString("customer_code");
+//				String business_name = rs.getString("business_name");
+//				String business_address = rs.getString("business_address");
+//				String user_name = rs.getString("user_name");
+				long total_box = rs.getLong("total_box");
+				long quantity = rs.getLong("quantity");
+				BigDecimal revenues = rs.getBigDecimal("total");
+
+				Product product = new Product();
+				//product.setId(rs.getInt("product_id"));
+				product.setProductCode(StringUtil.notNull(rs.getString("product_code")));
+				product.setProductName(StringUtil.notNull(rs.getString("product_name")));
+				product.setTotalBox((int)total_box);
+				product.setQuantity((int)quantity);
+				product.setUnitPrice(revenues);
+			
+				if(results.containsKey(customer_code1)){
+					results.get(customer_code1).getListProduct().add(product);
+					results.get(customer_code1).setTotalRevenues(results.get(customer_code1).getTotalRevenues().add(revenues));
+					results.get(customer_code1).setTotalProduct(results.get(customer_code1).getTotalProduct()+total_box);
+					if(!results.get(customer_code1).getCustomerCodeL2().contains(customer_code)){
+						results.get(customer_code1).setCustomerCodeL2(results.get(customer_code1).getCustomerCodeL2() + ";" + customer_code);
+						results.get(customer_code1).setTotalCustomerL2(results.get(customer_code1).getTotalCustomerL2()+1);
+					}
+				}else{
+					RevenuesCustomerL1 cusL1 = new RevenuesCustomerL1();
+					cusL1.setCustomerCodeL1(customer_code1);
+					cusL1.setCustomerNameL1(business_name1);
+					cusL1.setTotalCustomerL2(1);
+					cusL1.setCustomerCodeL2(customer_code);
+					cusL1.setTotalRevenues(revenues);
+					cusL1.setTotalProduct(total_box);
+					cusL1.setListProduct(new ArrayList<Product>());
+					cusL1.getListProduct().add(product);
+					results.put(customer_code1, cusL1);
+				}
+			}
+			rs.close();
+			pre.close();
+			return results;
+		} catch (Exception re) {
+			log.error("retrieve list Statistic failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
 			}
 		}
 	}

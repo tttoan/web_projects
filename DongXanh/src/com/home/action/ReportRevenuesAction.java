@@ -1,11 +1,15 @@
 package com.home.action;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +19,8 @@ import org.apache.struts2.util.ServletContextAware;
 
 import com.home.dao.StatisticHome;
 import com.home.entities.RevenuesComparison;
+import com.home.entities.RevenuesCustomerDetail;
+import com.home.model.Product;
 import com.home.util.DateUtils;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
@@ -27,7 +33,12 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 	private int draw;
 	private int recordsTotal;
 	private int recordsFiltered;
+	private InputStream inputStream;
 	
+	public InputStream getInputStream() {
+		return inputStream;
+	}
+
 	public int getDraw() {
 		return draw;
 	}
@@ -165,5 +176,157 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 		return Action.SUCCESS;
 	}
 
+	
+	public String customerRevenuesDetail(){
+		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			String startDate = StringUtil.notNull(request.getParameter("start"));
+			String endDate = StringUtil.notNull(request.getParameter("end"));
+			String customerCode = StringUtil.notNull(request.getParameter("cus_code"));
+			
+			Date startDate1 = new Date(DateUtils.getDateFromString(startDate, "dd/MM/yyyy").getTime());
+			Date endDate1 = new Date(DateUtils.getDateFromString(endDate, "dd/MM/yyyy").getTime());
+			
+			Calendar cal = Calendar.getInstance();
+		    cal.setTime(startDate1);
+		    int year = cal.get(Calendar.YEAR)-1;
+		    cal.set(Calendar.YEAR, year);
+			Date startDate2 = new Date(cal.getTimeInMillis());
+			
+			cal.setTime(endDate1);
+		    year = cal.get(Calendar.YEAR)-1;
+		    cal.set(Calendar.YEAR, year);
+			Date endDate2 = new Date(cal.getTimeInMillis());
+			
+			StatisticHome statisticHome = new StatisticHome(HibernateUtil.getSessionFactory());
+			RevenuesCustomerDetail revenuesDetail1 = statisticHome.getRevenuesDetail(startDate1, endDate1, customerCode);
+			RevenuesCustomerDetail revenuesDetail2 = statisticHome.getRevenuesDetail(startDate2, endDate2, customerCode);
+			Vector<String> listP = new Vector<String>();
+			
+			StringBuilder html = new StringBuilder("<table id=\"example\" class=\"table table-striped responsive-utilities jambo_table display nowrap cell-border\" style=\"width: 100%\">");
+			html.append("<thead>");
+			html.append("<tr class=\"headings\">");
+			html.append("<th>No</th><th>Mã khách hàng</th><th>Tên khách hàng</th>");
+			html.append("<th>NVTT</th>");
+			html.append("<th>Thời gian</th>");
+			html.append("<th>Nơi mua hàng</th>");
+			html.append("<th>Doanh số</th>");
+			html.append("<th>Số mặt hàng</th>");
+			if(revenuesDetail1 != null){
+				for (Product p : revenuesDetail1.getListProduct()) {
+					if(!listP.contains(p.getProductCode())){
+						listP.add(p.getProductCode());
+						html.append("<th>"+p.getProductCode()+"</th>");
+					}
+				}
+			}
+			if(revenuesDetail2 != null){
+				for (Product p : revenuesDetail2.getListProduct()) {
+					if(!listP.contains(p.getProductCode())){
+						listP.add(p.getProductCode());
+						html.append("<th>"+p.getProductCode()+"</th>");
+					}
+				}
+			}
+			html.append("</tr");
+			html.append("</thead>");
+			html.append("<tbody>");
+			if(revenuesDetail1 != null){
+				html.append("<tr class=\"even pointer\">");
+				html.append("<th>1</th><th>"+revenuesDetail1.getCustomerCode()+"</th><th>"+revenuesDetail1.getCustomerName()+"</th>");
+				html.append("<th>"+revenuesDetail1.getSellMan()+"</th>");
+				html.append("<th>"+DateUtils.getStringFromDate(startDate1, "dd/MM") + "-" + DateUtils.getStringFromDate(endDate1, "dd/MM/yyyy") + "</th>");
+				html.append("<th>"+revenuesDetail1.getProvider()+"</th>");
+				html.append("<th>"+revenuesDetail1.getRevenues()+"</th>");
+				html.append("<th>"+revenuesDetail1.getTotalProduct()+"</th>");
+
+				for (String productCode : listP) {
+					for (Product p : revenuesDetail1.getListProduct()) {
+						if(p.getProductCode().equals(productCode)){
+							html.append("<th>"+p.getTotalBox()+"</th>");
+							break;
+						}
+					}
+				}
+				
+				html.append("</tr");
+			}
+			if(revenuesDetail2 != null){
+				html.append("<tr class=\"even pointer\">");
+				html.append("<th>2</th><th></th><th></th>");
+				html.append("<th>"+revenuesDetail2.getSellMan()+"</th>");
+				html.append("<th>"+DateUtils.getStringFromDate(startDate2, "dd/MM") + "-" + DateUtils.getStringFromDate(endDate2, "dd/MM/yyyy") + "</th>");
+				html.append("<th>"+revenuesDetail2.getProvider()+"</th>");
+				html.append("<th>"+revenuesDetail2.getRevenues()+"</th>");
+				html.append("<th>"+revenuesDetail2.getTotalProduct()+"</th>");
+
+				for (String productCode : listP) {
+					for (Product p : revenuesDetail2.getListProduct()) {
+						if(p.getProductCode().equals(productCode)){
+							html.append("<th>"+p.getTotalBox()+"</th>");
+							break;
+						}
+					}
+				}
+				
+				html.append("</tr");
+			}
+			html.append("</tbody>");
+			html.append("</table>");
+			inputStream = new ByteArrayInputStream(html.toString().getBytes("UTF-8"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Action.ERROR;
+		}
+		return Action.SUCCESS;
+	}
+	
+	public String revenuesCustomerL1(){
+		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			String startDate = StringUtil.notNull(request.getParameter("start"));
+			String endDate = StringUtil.notNull(request.getParameter("end"));
+			
+			Date startDate1 = new Date(DateUtils.getDateFromString(startDate, "dd/MM/yyyy").getTime());
+			Date endDate1 = new Date(DateUtils.getDateFromString(endDate, "dd/MM/yyyy").getTime());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Action.ERROR;
+		}
+		return Action.SUCCESS;
+	}
+	
+	public String revenuesCustomerL2(){
+		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			String startDate = StringUtil.notNull(request.getParameter("start"));
+			String endDate = StringUtil.notNull(request.getParameter("end"));
+			
+			Date startDate1 = new Date(DateUtils.getDateFromString(startDate, "dd/MM/yyyy").getTime());
+			Date endDate1 = new Date(DateUtils.getDateFromString(endDate, "dd/MM/yyyy").getTime());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Action.ERROR;
+		}
+		return Action.SUCCESS;
+	}
+	
+	public String revenuesSellman(){
+		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			String startDate = StringUtil.notNull(request.getParameter("start"));
+			String endDate = StringUtil.notNull(request.getParameter("end"));
+			
+			Date startDate1 = new Date(DateUtils.getDateFromString(startDate, "dd/MM/yyyy").getTime());
+			Date endDate1 = new Date(DateUtils.getDateFromString(endDate, "dd/MM/yyyy").getTime());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Action.ERROR;
+		}
+		return Action.SUCCESS;
+	}
 	
 }

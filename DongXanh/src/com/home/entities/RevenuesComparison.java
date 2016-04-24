@@ -60,25 +60,25 @@ public class RevenuesComparison {
 	public void setRevenues2(BigDecimal revenues2) {
 		this.revenues2 = revenues2;
 	}
-	public String isDecrease30() {
+	public String getDecrease30() {
 		return decrease30;
 	}
 	public void setDecrease30(String decrease30) {
 		this.decrease30 = decrease30;
 	}
-	public String isIncrease30() {
+	public String getIncrease30() {
 		return increase30;
 	}
 	public void setIncrease30(String increase30) {
 		this.increase30 = increase30;
 	}
-	public String isNotBuy() {
+	public String getNotBuy() {
 		return notBuy;
 	}
 	public void setNotBuy(String notBuy) {
 		this.notBuy = notBuy;
 	}
-	public String isMultiProvide() {
+	public String getMultiProvide() {
 		return multiProvide;
 	}
 	public void setMultiProvide(String multiProvide) {
@@ -102,5 +102,6 @@ public class RevenuesComparison {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
+	
 	
 }

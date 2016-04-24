@@ -91,6 +91,8 @@ pageEncoding="UTF-8"%>
 								</tr>
 							</thead>
 
+							<tbody>
+							</tbody>
 						</table>
 					</div>
 				</div>
@@ -181,6 +183,23 @@ th {
             var startDate = currDate + "/" + currMonth + "/" + currYear;
             $("#single_cal1").attr("value", startDate);
             $("#single_cal2").attr("value", startDate);
+            
+            var table = $('#example').DataTable();
+            $('#example').on('dblclick', 'tr', function () {
+                var data = table.row( this ).data();
+                //alert( 'You clicked on '+data.customerCode+' row' );
+                var start = document.getElementById('single_cal1').value; 
+				var end = document.getElementById('single_cal2').value; 
+                window.location = 'revenues_detail.jsp?cus_code='+data.customerCode+'&start='+start+'&end='+end;
+            } );
+            
+            $('#example tbody').on( 'click', 'button', function () {
+                var data = table.row( $(this).parents('tr') ).data();
+                //alert( 'You clicked on '+data.customerCode+' row' );
+                var start = document.getElementById('single_cal1').value; 
+				var end = document.getElementById('single_cal2').value; 
+                window.location = 'revenues_detail.jsp?cus_code='+data.customerCode+'&start='+start+'&end='+end;
+            } );
 
         });
 </script>
@@ -206,6 +225,11 @@ Table = $("#example").DataTable({
             { "data": "sellMan" },
             { "data": "comment" },
 			],
+	columnDefs: [ {
+	            "targets": -1,
+	            "data": null,
+	            "defaultContent": "<button class=\"btn btn-info btn-xs\">Chi tiết</button>"
+	        } ],
 	rowCallback: function (row, data) {},
 	/* filter: false,
 	info: false,
