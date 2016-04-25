@@ -74,10 +74,10 @@
 							class="table table-striped responsive-utilities jambo_table display nowrap cell-border"
 							style="width: 100%">
 							<thead>
-								<tr class="headings">
-									<th colspan="2"></th>
-									<th colspan="7">Tên khách hàng cấp 1</th>
-								</tr>
+<!-- 								<tr class="headings"> -->
+<!-- 									<th colspan="2"></th> -->
+<!-- 									<th colspan="7">Tên khách hàng cấp 1</th> -->
+<!-- 								</tr> -->
 								<tr class="headings">
 									<th>No</th>
 									<th>Tên thuốc và quy cách sản phẩm</th>
@@ -101,12 +101,12 @@
 									<tr class="even pointer">
 										<td class=""><s:property value="#rowStatus.count" /></td>
 										<td class=""><s:property value="product.productName" /></td>
-										<td class=""><s:property value="balance" /></td>
-										<td class=""><s:property value="totalBox" /></td>
-										<td class=""><s:property value="total" /></td>
-										<td class=""><s:property value="totalBoxLevel2" /></td>
-										<td class=""><s:property value="totalLevel2" /></td>
-										<td class=""><s:property value="different" /></td>
+										<td class=""><s:property value="%{getText('format.number',{balance})}" /></td>
+										<td class=""><s:property value="%{getText('format.number',{totalBox})}" /></td>
+										<td class=""><s:property value="%{getText('format.money',{total})}" /></td>
+										<td class=""><s:property value="%{getText('format.number',{totalBoxLevel2})}" /></td>
+										<td class=""><s:property value="%{getText('format.money',{totalLevel2})}" /></td>
+										<td class=""><s:property value="%{getText('format.number',{different})}" /></td>
 										<td class=""><s:property value="" /></td>
 									</tr>
 								</s:iterator>
