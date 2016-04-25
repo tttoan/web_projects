@@ -48,7 +48,8 @@
 			<li><a><i class="fa fa-bar-chart"></i> Báo cáo <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
-					<li><a href="invoice_comparison.jsp"> So sánh bảng kê</a></li>
+					<li><s:url action="move_to_compare_statistic" var="csURL" /> <s:a
+							href="%{csURL}" theme="bootstrap"> So sánh bảng kê </s:a></li>
 					<li><a href="revenues_comparison.jsp"> So sánh doanh số cùng kỳ </a></li>
 					<li><a href="revenues_cus1.jsp"> Doanh số câp1 </a></li>
 					<li><a href="revenues_cus2.jsp"> Doanh số cấp2</a></li>

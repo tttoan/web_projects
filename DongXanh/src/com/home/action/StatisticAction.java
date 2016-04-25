@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -16,17 +17,13 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.catalina.startup.HomesUserDatabase;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.poi.poifs.crypt.dsig.services.TSPTimeStampService;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.struts2.ServletActionContext;
-import org.apache.struts2.interceptor.ServletRequestAware;
-import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
 
 import com.home.conts.InvoiceTypeText;
@@ -45,6 +42,7 @@ import com.home.model.Customer;
 import com.home.model.InvoiceType;
 import com.home.model.Product;
 import com.home.model.Statistic;
+import com.home.model.StatisticCompare;
 import com.home.model.User;
 import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
@@ -54,6 +52,7 @@ import com.opensymphony.xwork2.ModelDriven;
 
 public class StatisticAction extends ActionSupport implements Action, ModelDriven<Statistic>, UserAware, InvoiceTypeText {
 	private static final long serialVersionUID = 1L;
+	private Calendar calendar = Calendar.getInstance();
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	public List<Statistic> statistics = new ArrayList<Statistic>();
 	private Statistic stat = new Statistic();
@@ -61,6 +60,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	private List<Customer> listCustomer = new ArrayList<>();
 	private List<Product> listProduct = new ArrayList<>();
 	private ArrayList<String> districts = new ArrayList<>();
+	private List<StatisticCompare> listStatComp = new ArrayList<>();
 	private Customer cusLevel1 = new Customer();
 	private Customer cusLevel2 = new Customer();
 	private Product pro = new Product();
@@ -77,6 +77,25 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	private InputStream fileInputStream;
 	private Workbook workbook;
 	private User userSes;
+	private String fromDate;
+
+	public String getFromDate() {
+		return fromDate;
+	}
+
+	public void setFromDate(String fromDate) {
+		this.fromDate = fromDate;
+	}
+
+	public String getToDate() {
+		return toDate;
+	}
+
+	public void setToDate(String toDate) {
+		this.toDate = toDate;
+	}
+
+	private String toDate;
 
 	public String getUploadContentType() {
 		return uploadContentType;
@@ -130,9 +149,14 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	@Override
 	public void validate() {
 		// Default today for date Received value
-		loadLookupEmployee();
-		loadLookupCustomer();
-		loadLookupProduct();
+		try {
+			loadLookupEmployee();
+			loadLookupCustomer();
+			loadLookupProduct();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public SessionFactory getSessionFactory() {
@@ -336,6 +360,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 						value = xls.getValue(cell);
 						Product pro = proHome.findProductByCode((String) value);
 						getStat().setProduct(pro);
+
 						// ---------------------------
 						int indexQuantiy = TableStatisticLevel1.quantiy.value();
 						// -------------invoiceType--------------
@@ -359,9 +384,12 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 						// -------------quantiy--------------
 						cell = row.getCell(indexQuantiy);
 						value = xls.getValue(cell);
-						getStat().setQuantity(Integer.parseInt(((String) value).replace(".", "")));
+						int quantity = Integer.parseInt(((String) value).replace(".", ""));
+						getStat().setQuantity(quantity);
 						// ---------------------------
-
+						// -------------totalBox--------------
+						getStat().setTotalBox(quantity / pro.getQuantity());
+						// ---------------------------
 						boolean isDuplicated = sttHome.isStatictisDuplicateLevel1(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1().getId(), getStat().getProduct().getId(),
 								getStat().getInvoiceType().getId());
 						if (!isDuplicated)
@@ -506,8 +534,9 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 						"Giá có điểm+Ko điểm", "Thành Tiền", "NVTT");
 				startIndexRow++;
 				for (Statistic entry : statistics) {
+					calendar.setTime(entry.getDateReceived());
 					Category cat = catHome.findById(entry.getProduct().getCategory().getId());
-					xls.addRowData(sheet, startIndexRow, startIndexCell, entry.getDateReceived().getMonth() + "", sdf.format(entry.getDateReceived()), entry.getCustomerByCustomerCodeLevel2()
+					xls.addRowData(sheet, startIndexRow, startIndexCell, calendar.get(Calendar.MONTH) + "", sdf.format(entry.getDateReceived()), entry.getCustomerByCustomerCodeLevel2()
 							.getCustomerCode(), entry.getCustomerByCustomerCodeLevel2().getDirector(), entry.getCustomerByCustomerCodeLevel1().getCustomerCode(), entry
 							.getCustomerByCustomerCodeLevel1().getDirector(), entry.getProduct().getProductCode(), cat.getCategoryCode(), entry.getProduct().getProductName(),
 							entry.getTotalBox() + "", entry.getQuantity() + "", entry.getProduct().getUnitPrice() + "", entry.getTotal() + "", entry.getUser().getFullName());
@@ -529,46 +558,35 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		return SUCCESS;
 	}
 
-	public String compareStatistic() {
-		try {
-			chooseTab = "tab2";
-			chooseSubTab = "subtab2_2";
-			statistics.clear();
-			ServletContext servletContext = ServletActionContext.getServletContext();
-			String pathname = servletContext.getRealPath("/WEB-INF/template/excel/blank.xlsx");
-			File theFile = new File(pathname);
-			ExcelUtil xls = new ExcelUtil();
-			CategoryHome catHome = new CategoryHome(getSessionFactory());
-			StatisticHome sttHome = new StatisticHome(getSessionFactory());
-			statistics = sttHome.getListExportStatisticLevel2(sttCustom);
-			try (FileInputStream fis = new FileInputStream(theFile)) {
-				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
-				Sheet sheet = workbook.getSheetAt(0);
-				int startIndexRow = 0;
-				int startIndexCell = 0;
-				xls.addRowData(sheet, startIndexRow, startIndexCell, "Tháng", "Ngày nhận", "Mã Cấp 2", "Tên cấp 2", "Mã Cấp 1", "Tên Cấp 1", "Mã Hàng", "Mặt Hàng", "Tên Hàng", "Số Thùng", "Số Lượng",
-						"Giá có điểm+Ko điểm", "Thành Tiền", "NVTT");
-				startIndexRow++;
-				for (Statistic entry : statistics) {
-					Category cat = catHome.findById(entry.getProduct().getCategory().getId());
-					xls.addRowData(sheet, startIndexRow, startIndexCell, entry.getDateReceived().getMonth() + "", sdf.format(entry.getDateReceived()), entry.getCustomerByCustomerCodeLevel2()
-							.getCustomerCode(), entry.getCustomerByCustomerCodeLevel2().getDirector(), entry.getCustomerByCustomerCodeLevel1().getCustomerCode(), entry
-							.getCustomerByCustomerCodeLevel1().getDirector(), entry.getProduct().getProductCode(), cat.getCategoryCode(), entry.getProduct().getProductName(),
-							entry.getTotalBox() + "", entry.getQuantity() + "", entry.getProduct().getUnitPrice() + "", entry.getTotal() + "", entry.getUser().getFullName());
-					startIndexRow++;
+	public String compareStatistic() throws Exception {
+		StatisticHome sttHome = new StatisticHome(getSessionFactory());
+		ProductHome proHome = new ProductHome(getSessionFactory());
+		listStatComp = sttHome.getDataStatisticCompare(sdf.parse(fromDate), sdf.parse(toDate), cusLevel1.getId(), INVOICE_SOLD_ID);
+		List<StatisticCompare> listStatCompLevel2 = sttHome.getDataStatisticCompare(sdf.parse(fromDate), sdf.parse(toDate), cusLevel1.getId(), INVOICE_SOLD_LEVEL2_ID);
+		calendar.setTime(sdf.parse(fromDate));
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		calendar.set(Calendar.MONTH, 0);
+		List<StatisticCompare> listStatBalance = sttHome.getDataStatisticCompare(calendar.getTime(), cusLevel1.getId(), INVOICE_BALANCE_ID);
+		for (int i = 0; i < listStatComp.size(); i++) {
+			Product pro = proHome.findById(listStatComp.get(i).getProductId());
+			listStatComp.get(i).setProduct(pro);
+			for (StatisticCompare cLevel2 : listStatCompLevel2) {
+				if (listStatComp.get(i).getProductId() == cLevel2.getProductId()) {
+					listStatComp.get(i).setTotalBoxLevel2(cLevel2.getTotalBox());
+					listStatComp.get(i).setTotalLevel2(cLevel2.getTotal());
+					break;
+				} else {
+					listStatComp.get(i).setTotalBoxLevel2((long) 0);
+					listStatComp.get(i).setTotalLevel2(new BigDecimal(0));
 				}
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				workbook.write(baos);
-				fileInputStream = new ByteArrayInputStream(baos.toByteArray());
-				if (statistics.size() <= 0)
-					addActionMessage("Không tìm thấy dữ liệu!");
-				else
-					addActionMessage("Kết xuất hoàn thành!");
 			}
-
-		} catch (Exception e) {
-			addActionError(e.getMessage());
-			e.printStackTrace();
+			for (StatisticCompare csBalance : listStatBalance) {
+				if (listStatComp.get(i).getProductId() == csBalance.getProductId()) {
+					listStatComp.get(i).setBalance(csBalance.getTotalBox());
+					listStatComp.get(i).setDifferent(csBalance.getTotalBox() + listStatComp.get(i).getTotalBox() - listStatComp.get(i).getTotalBoxLevel2());
+					break;
+				}
+			}
 		}
 		return SUCCESS;
 	}
@@ -719,6 +737,14 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	public void setRequest(HttpServletRequest request) {
 		this.request = request;
+	}
+
+	public List<StatisticCompare> getListStatComp() {
+		return listStatComp;
+	}
+
+	public void setListStatComp(List<StatisticCompare> listStatComp) {
+		this.listStatComp = listStatComp;
 	}
 
 }

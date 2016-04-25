@@ -34,7 +34,12 @@
 		<action name="move_to_add_statistic" class="com.home.action.StatisticAction">
 			<result name="success">/new_statistic.jsp</result>
 		</action>
-
+		<action name="move_to_compare_statistic" class="com.home.action.StatisticAction">
+			<result name="success">/invoice_comparison.jsp</result>
+		</action>
+		<action name="compare_statistic" method="compareStatistic" class="com.home.action.StatisticAction">
+			<result name="success">/invoice_comparison.jsp</result>
+		</action>
 		<action name="add_statistic" method="addStatistic"
 			class="com.home.action.StatisticAction">
 			<result name="success" type="redirectAction">list_statistic</result>
@@ -52,8 +57,8 @@
 			</interceptor-ref>
 				<interceptor-ref name="defaultStack"></interceptor-ref>
 			<interceptor-ref name="execAndWait">
-				<param name="delay">3000</param>
-				<param name="delaySleepInterval">3000</param>
+				<param name="delay">500</param>
+				<param name="delaySleepInterval">500</param>
 			</interceptor-ref>
 			<result name="wait">/waiting.jsp</result>
 			<result name="success">/import_statistic.jsp</result>
@@ -78,8 +83,8 @@
 			</interceptor-ref>
 			<interceptor-ref name="defaultStack"></interceptor-ref>
 			<interceptor-ref name="execAndWait">
-				<param name="delay">3000</param>
-				<param name="delaySleepInterval">3000</param>
+				<param name="delay">500</param>
+				<param name="delaySleepInterval">500</param>
 			</interceptor-ref>
 			<result name="wait">/waiting.jsp</result>
 			<result name="success">/import_statistic.jsp</result>
@@ -92,8 +97,8 @@
 				<param name="allowedTypes">application/ms-excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
 			</interceptor-ref>
 			<interceptor-ref name="execAndWait">
-				<param name="delay">3000</param>
-				<param name="delaySleepInterval">3000</param>
+				<param name="delay">500</param>
+				<param name="delaySleepInterval">500</param>
 			</interceptor-ref>
 			<result name="wait">/waiting.jsp</result>
 			<result name="success">/import_statistic.jsp</result>

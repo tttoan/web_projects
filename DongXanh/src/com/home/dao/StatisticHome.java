@@ -21,8 +21,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
+import org.hibernate.transform.Transformers;
 
 import com.home.entities.RevenuesComparison;
 import com.home.entities.RevenuesCustomerDetail;
@@ -30,6 +33,7 @@ import com.home.entities.RevenuesCustomerL1;
 import com.home.entities.StatisticCustom;
 import com.home.model.Product;
 import com.home.model.Statistic;
+import com.home.model.StatisticCompare;
 import com.home.util.StringUtil;
 
 /**
@@ -424,7 +428,7 @@ public class StatisticHome {
 			}
 		}
 	}
-	
+
 	public RevenuesCustomerDetail getRevenuesDetail(java.sql.Date start, java.sql.Date end, String customerCode) throws Exception {
 		log.debug("retrieve list Statistic");
 		Session session = null;
@@ -439,8 +443,7 @@ public class StatisticHome {
 					+ "JOIN `product` p ON p.id=s.product_id "
 					+ "JOIN `user` u ON u.id=s.user_id "
 					+ "Where date_received >= ? And date_received <= ? And c2.customer_code=? "
-					+ "Group By customer_code1, business_name1, c2.customer_code, c2.business_name, c2.business_address, u.user_name, p.product_code, p.product_name "
-					+ "Order By c2.customer_code";
+					+ "Group By customer_code1, business_name1, c2.customer_code, c2.business_name, c2.business_address, u.user_name, p.product_code, p.product_name " + "Order By c2.customer_code";
 			System.out.println(sql);
 			PreparedStatement pre = conn.prepareStatement(sql);
 			pre.setDate(1, start);
@@ -459,14 +462,14 @@ public class StatisticHome {
 				BigDecimal revenues = rs.getBigDecimal("total");
 
 				Product product = new Product();
-				//product.setId(rs.getInt("product_id"));
+				// product.setId(rs.getInt("product_id"));
 				product.setProductCode(StringUtil.notNull(rs.getString("product_code")));
 				product.setProductName(StringUtil.notNull(rs.getString("product_name")));
-				product.setTotalBox((int)total_box);
-				product.setQuantity((int)quantity);
+				product.setTotalBox((int) total_box);
+				product.setQuantity((int) quantity);
 				product.setUnitPrice(revenues);
-				
-				if(result == null){
+
+				if (result == null) {
 					result = new RevenuesCustomerDetail();
 					result.setCustomerCode(customer_code);
 					result.setCustomerName(business_name);
@@ -475,10 +478,10 @@ public class StatisticHome {
 					result.setRevenues(revenues);
 					result.setTotalProduct(total_box);
 					result.setProvider(business_name1);
-					
+
 					result.setListProduct(new ArrayList<Product>());
 					result.getListProduct().add(product);
-				}else{
+				} else {
 					if (!result.getProvider().contains(business_name1)) {
 						result.setProvider(result.getProvider() + ";" + business_name1);
 					}
@@ -503,7 +506,7 @@ public class StatisticHome {
 			}
 		}
 	}
-	
+
 	public LinkedHashMap<String, RevenuesCustomerL1> getRevenuesCustomerL1(java.sql.Date start, java.sql.Date end) throws Exception {
 		log.debug("retrieve list Statistic");
 		Session session = null;
@@ -517,8 +520,7 @@ public class StatisticHome {
 					+ "JOIN `customer` c2 ON s.customer_code_level2=c2.id "
 					+ "JOIN `product` p ON p.id=s.product_id "
 					+ "Where date_received >= ? And date_received <= ? "
-					+ "Group By customer_code1, business_name1, c2.customer_code, c2.business_name, c2.business_address, u.user_name, p.product_code, p.product_name "
-					+ "Order By customer_code1";
+					+ "Group By customer_code1, business_name1, c2.customer_code, c2.business_name, c2.business_address, u.user_name, p.product_code, p.product_name " + "Order By customer_code1";
 			System.out.println(sql);
 			PreparedStatement pre = conn.prepareStatement(sql);
 			pre.setDate(1, start);
@@ -529,30 +531,30 @@ public class StatisticHome {
 				String customer_code1 = rs.getString("customer_code1");
 				String business_name1 = rs.getString("business_name1");
 				String customer_code = rs.getString("customer_code");
-//				String business_name = rs.getString("business_name");
-//				String business_address = rs.getString("business_address");
-//				String user_name = rs.getString("user_name");
+				// String business_name = rs.getString("business_name");
+				// String business_address = rs.getString("business_address");
+				// String user_name = rs.getString("user_name");
 				long total_box = rs.getLong("total_box");
 				long quantity = rs.getLong("quantity");
 				BigDecimal revenues = rs.getBigDecimal("total");
 
 				Product product = new Product();
-				//product.setId(rs.getInt("product_id"));
+				// product.setId(rs.getInt("product_id"));
 				product.setProductCode(StringUtil.notNull(rs.getString("product_code")));
 				product.setProductName(StringUtil.notNull(rs.getString("product_name")));
-				product.setTotalBox((int)total_box);
-				product.setQuantity((int)quantity);
+				product.setTotalBox((int) total_box);
+				product.setQuantity((int) quantity);
 				product.setUnitPrice(revenues);
-			
-				if(results.containsKey(customer_code1)){
+
+				if (results.containsKey(customer_code1)) {
 					results.get(customer_code1).getListProduct().add(product);
 					results.get(customer_code1).setTotalRevenues(results.get(customer_code1).getTotalRevenues().add(revenues));
-					results.get(customer_code1).setTotalProduct(results.get(customer_code1).getTotalProduct()+total_box);
-					if(!results.get(customer_code1).getCustomerCodeL2().contains(customer_code)){
+					results.get(customer_code1).setTotalProduct(results.get(customer_code1).getTotalProduct() + total_box);
+					if (!results.get(customer_code1).getCustomerCodeL2().contains(customer_code)) {
 						results.get(customer_code1).setCustomerCodeL2(results.get(customer_code1).getCustomerCodeL2() + ";" + customer_code);
-						results.get(customer_code1).setTotalCustomerL2(results.get(customer_code1).getTotalCustomerL2()+1);
+						results.get(customer_code1).setTotalCustomerL2(results.get(customer_code1).getTotalCustomerL2() + 1);
 					}
-				}else{
+				} else {
 					RevenuesCustomerL1 cusL1 = new RevenuesCustomerL1();
 					cusL1.setCustomerCodeL1(customer_code1);
 					cusL1.setCustomerNameL1(business_name1);
@@ -578,6 +580,48 @@ public class StatisticHome {
 					session.close();
 				}
 			} catch (Exception e) {
+			}
+		}
+	}
+
+	public List<StatisticCompare> getDataStatisticCompare(Date atDate, int custCodeLevel1Id, int invoiceTypeId) {
+
+		return getDataStatisticCompare(atDate, null, custCodeLevel1Id, invoiceTypeId);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<StatisticCompare> getDataStatisticCompare(Date fromDate, Date toDate, int custCodeLevel1Id, int invoiceTypeId) {
+		log.debug("Checking Statistic duplicate with: ");
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Criteria cre = session.createCriteria(Statistic.class);
+			if (toDate == null)
+				cre.add(Restrictions.eq("dateReceived", fromDate));
+			else
+				cre.add(Restrictions.between("dateReceived", fromDate, toDate));
+			cre.add(Restrictions.eq("customerByCustomerCodeLevel1.id", custCodeLevel1Id));
+			cre.add(Restrictions.eq("invoiceType.id", invoiceTypeId));
+			ProjectionList pList = Projections.projectionList();
+			pList.add(Projections.groupProperty("product.id"), "productId");
+			pList.add(Projections.sum("totalBox"), "totalBox");
+			pList.add(Projections.sum("total"), "total");
+			cre.setProjection(pList).setResultTransformer(Transformers.aliasToBean(StatisticCompare.class));
+			List<StatisticCompare> instance = cre.list();
+			tx.commit();
+			return instance;
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
