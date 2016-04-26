@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +19,9 @@ import org.apache.struts2.util.ServletContextAware;
 import com.home.dao.StatisticHome;
 import com.home.entities.RevenuesComparison;
 import com.home.entities.RevenuesCustomerDetail;
+import com.home.entities.RevenuesCustomerL1;
+import com.home.entities.RevenuesCustomerL2;
+import com.home.entities.RevenuesSellman;
 import com.home.model.Product;
 import com.home.util.DateUtils;
 import com.home.util.HibernateUtil;
@@ -238,7 +240,7 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 				html.append("<th>"+DateUtils.getStringFromDate(startDate1, "dd/MM") + "-" + DateUtils.getStringFromDate(endDate1, "dd/MM/yyyy") + "</th>");
 				html.append("<th>"+revenuesDetail1.getProvider()+"</th>");
 				html.append("<th>"+revenuesDetail1.getRevenues()+"</th>");
-				html.append("<th>"+revenuesDetail1.getTotalProduct()+"</th>");
+				html.append("<th>"+revenuesDetail1.getListProduct().size()+"</th>");
 
 				for (String productCode : listP) {
 					for (Product p : revenuesDetail1.getListProduct()) {
@@ -258,7 +260,7 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 				html.append("<th>"+DateUtils.getStringFromDate(startDate2, "dd/MM") + "-" + DateUtils.getStringFromDate(endDate2, "dd/MM/yyyy") + "</th>");
 				html.append("<th>"+revenuesDetail2.getProvider()+"</th>");
 				html.append("<th>"+revenuesDetail2.getRevenues()+"</th>");
-				html.append("<th>"+revenuesDetail2.getTotalProduct()+"</th>");
+				html.append("<th>"+revenuesDetail2.getListProduct().size()+"</th>");
 
 				for (String productCode : listP) {
 					for (Product p : revenuesDetail2.getListProduct()) {
@@ -290,6 +292,68 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 			Date startDate1 = new Date(DateUtils.getDateFromString(startDate, "dd/MM/yyyy").getTime());
 			Date endDate1 = new Date(DateUtils.getDateFromString(endDate, "dd/MM/yyyy").getTime());
 			
+			StatisticHome statisticHome = new StatisticHome(HibernateUtil.getSessionFactory());
+			LinkedHashMap<String, RevenuesCustomerL1> hmRevenuesL1 = statisticHome.getRevenuesCustomerL1(startDate1, endDate1);
+			
+			StringBuilder htmlTable = new StringBuilder("<table id=\"example\" class=\"table table-striped responsive-utilities jambo_table display nowrap cell-border\" style=\"width: 100%\">");
+			StringBuilder tblHeader = new StringBuilder();
+			tblHeader.append("<tr class=\"headings\">");
+			tblHeader.append("<th>No</th><th>Mã cấp 1</th><th>Tên cấp 1</th>");
+			tblHeader.append("<th>Số lượng cấp 2</th>");
+			tblHeader.append("<th>Tổng doanh số</th>");
+			tblHeader.append("<th>Tổng mặt hàng</th>");
+			
+			StringBuilder tblContent = new StringBuilder();
+			Set<String> set = hmRevenuesL1.keySet();
+			int no = 1;
+			Vector<String> listP = new Vector<String>();
+			for (String customerCode : set) {
+				RevenuesCustomerL1 revenuesCustomerL1 = hmRevenuesL1.get(customerCode);
+				tblContent.append("<tr class=\"even pointer\">");
+				tblContent.append("<th>"+(no++)+"</th><th>"+customerCode+"</th><th>"+revenuesCustomerL1.getCustomerNameL1()+"</th>");
+				tblContent.append("<th>"+revenuesCustomerL1.getTotalCustomerL2()+"</th>");
+				tblContent.append("<th>"+revenuesCustomerL1.getTotalRevenues()+"</th>");
+				tblContent.append("<th>"+revenuesCustomerL1.getTotalProduct()+"</th>");
+				
+				for (Product product : revenuesCustomerL1.getListProduct()) {
+					if(!listP.contains(product.getProductCode())){
+						tblHeader.append("<th>"+product.getProductCode()+"</th>");
+						listP.add(product.getProductCode());
+					}
+				}
+				for (int i = 0; i < listP.size(); i++) {
+					boolean flag = true;
+					for (Product product : revenuesCustomerL1.getListProduct()) {
+						if(listP.get(i).equals(product.getProductCode())){
+							tblContent.append("<th>"+product.getTotalBox()+"</th>");
+							flag = false;
+							break;
+						}
+					}
+					if(flag){
+						tblContent.append("<th></th>");
+					}
+				}
+				
+				tblContent.append("</tr");
+			}
+			
+			tblHeader.append("</tr");
+			StringBuilder tblHeader0 = new StringBuilder();
+			tblHeader0.append("<tr class=\"headings\">");
+			tblHeader0.append("<th colspan=\"6\"></th>");
+			tblHeader0.append("<th colspan=\""+listP.size()+"\">Chi tiết mặt hàng</th>");
+			tblHeader0.append("</tr");
+			
+			htmlTable.append("<thead>");
+			htmlTable.append(tblHeader0);
+			htmlTable.append(tblHeader);
+			htmlTable.append("</thead>");
+			htmlTable.append("<tbody>");
+			htmlTable.append(tblContent);
+			htmlTable.append("</tbody>");
+			htmlTable.append("</table>");
+			inputStream = new ByteArrayInputStream(htmlTable.toString().getBytes("UTF-8"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Action.ERROR;
@@ -306,6 +370,67 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 			Date startDate1 = new Date(DateUtils.getDateFromString(startDate, "dd/MM/yyyy").getTime());
 			Date endDate1 = new Date(DateUtils.getDateFromString(endDate, "dd/MM/yyyy").getTime());
 			
+			StatisticHome statisticHome = new StatisticHome(HibernateUtil.getSessionFactory());
+			Vector<RevenuesCustomerL2> listRevenuesL2 = new Vector<RevenuesCustomerL2>();
+			
+			StringBuilder htmlTable = new StringBuilder("<table id=\"example\" class=\"table table-striped responsive-utilities jambo_table display nowrap cell-border\" style=\"width: 100%\">");
+			StringBuilder tblHeader = new StringBuilder();
+			tblHeader.append("<tr class=\"headings\">");
+			tblHeader.append("<th>No</th><th>Mã cấp 2</th><th>Tên cấp 2</th><th>Tên cấp 1</th>");
+			tblHeader.append("<th>NVTT</th>");
+			tblHeader.append("<th>Tổng doanh số</th>");
+			tblHeader.append("<th>Tổng mặt hàng</th>");
+			
+			StringBuilder tblContent = new StringBuilder();
+			int no = 1;
+			Vector<String> listP = new Vector<String>();
+			for (RevenuesCustomerL2 revenuesCustomerL2 : listRevenuesL2) {
+				tblContent.append("<tr class=\"even pointer\">");
+				tblContent.append("<th>"+(no++)+"</th><th>"+revenuesCustomerL2.getCustomerCodeL2()+"</th><th>"+revenuesCustomerL2.getCustomerNameL2()+"</th>");
+				tblContent.append("<th>"+revenuesCustomerL2.getCustomerNameL1()+"</th>");
+				tblContent.append("<th>"+revenuesCustomerL2.getSellman()+"</th>");
+				tblContent.append("<th>"+revenuesCustomerL2.getTotalRevenues()+"</th>");
+				tblContent.append("<th>"+revenuesCustomerL2.getTotalProduct()+"</th>");
+				
+				for (Product product : revenuesCustomerL2.getListProduct()) {
+					if(!listP.contains(product.getProductCode())){
+						tblHeader.append("<th>"+product.getProductCode()+"</th>");
+						listP.add(product.getProductCode());
+					}
+				}
+				for (int i = 0; i < listP.size(); i++) {
+					boolean flag = true;
+					for (Product product : revenuesCustomerL2.getListProduct()) {
+						if(listP.get(i).equals(product.getProductCode())){
+							tblContent.append("<th>"+product.getTotalBox()+"</th>");
+							flag = false;
+							break;
+						}
+					}
+					if(flag){
+						tblContent.append("<th></th>");
+					}
+				}
+				
+				tblContent.append("</tr");
+			}
+			
+			tblHeader.append("</tr");
+			StringBuilder tblHeader0 = new StringBuilder();
+			tblHeader0.append("<tr class=\"headings\">");
+			tblHeader0.append("<th colspan=\"7\"></th>");
+			tblHeader0.append("<th colspan=\""+listP.size()+"\">Chi tiết mặt hàng</th>");
+			tblHeader0.append("</tr");
+			
+			htmlTable.append("<thead>");
+			htmlTable.append(tblHeader0);
+			htmlTable.append(tblHeader);
+			htmlTable.append("</thead>");
+			htmlTable.append("<tbody>");
+			htmlTable.append(tblContent);
+			htmlTable.append("</tbody>");
+			htmlTable.append("</table>");
+			inputStream = new ByteArrayInputStream(htmlTable.toString().getBytes("UTF-8"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Action.ERROR;
@@ -322,6 +447,67 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 			Date startDate1 = new Date(DateUtils.getDateFromString(startDate, "dd/MM/yyyy").getTime());
 			Date endDate1 = new Date(DateUtils.getDateFromString(endDate, "dd/MM/yyyy").getTime());
 			
+			StatisticHome statisticHome = new StatisticHome(HibernateUtil.getSessionFactory());
+			LinkedHashMap<String, RevenuesSellman> hmRevenuesSellman = new LinkedHashMap<String, RevenuesSellman>();
+			
+			StringBuilder htmlTable = new StringBuilder("<table id=\"example\" class=\"table table-striped responsive-utilities jambo_table display nowrap cell-border\" style=\"width: 100%\">");
+			StringBuilder tblHeader = new StringBuilder();
+			tblHeader.append("<tr class=\"headings\">");
+			tblHeader.append("<th>No</th><th>NVTT</th>");
+			tblHeader.append("<th>Số lượng khách hàng</th>");
+			tblHeader.append("<th>Tổng doanh số</th>");
+			tblHeader.append("<th>Tổng mặt hàng</th>");
+			
+			StringBuilder tblContent = new StringBuilder();
+			Set<String> set = hmRevenuesSellman.keySet();
+			int no = 1;
+			Vector<String> listP = new Vector<String>();
+			for (String sellMan : set) {
+				RevenuesSellman revenuesSellman = hmRevenuesSellman.get(sellMan);
+				tblContent.append("<tr class=\"even pointer\">");
+				tblContent.append("<th>"+(no++)+"</th><th>"+sellMan+"</th><th>"+revenuesSellman.getTotalCustomer()+"</th>");
+				tblContent.append("<th>"+revenuesSellman.getTotalRevenues()+"</th>");
+				tblContent.append("<th>"+revenuesSellman.getTotalProduct()+"</th>");
+				
+				for (Product product : revenuesSellman.getListProduct()) {
+					if(!listP.contains(product.getProductCode())){
+						tblHeader.append("<th>"+product.getProductCode()+"</th>");
+						listP.add(product.getProductCode());
+					}
+				}
+				for (int i = 0; i < listP.size(); i++) {
+					boolean flag = true;
+					for (Product product : revenuesSellman.getListProduct()) {
+						if(listP.get(i).equals(product.getProductCode())){
+							tblContent.append("<th>"+product.getTotalBox()+"</th>");
+							flag = false;
+							break;
+						}
+					}
+					if(flag){
+						tblContent.append("<th></th>");
+					}
+				}
+				
+				tblContent.append("</tr");
+			}
+			
+			tblHeader.append("</tr");
+			StringBuilder tblHeader0 = new StringBuilder();
+			tblHeader0.append("<tr class=\"headings\">");
+			tblHeader0.append("<th colspan=\"5\"></th>");
+			tblHeader0.append("<th colspan=\""+listP.size()+"\">Chi tiết mặt hàng</th>");
+			tblHeader0.append("</tr");
+			
+			htmlTable.append("<thead>");
+			htmlTable.append(tblHeader0);
+			htmlTable.append(tblHeader);
+			htmlTable.append("</thead>");
+			htmlTable.append("<tbody>");
+			htmlTable.append(tblContent);
+			htmlTable.append("</tbody>");
+			htmlTable.append("</table>");
+			inputStream = new ByteArrayInputStream(htmlTable.toString().getBytes("UTF-8"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Action.ERROR;
