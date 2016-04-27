@@ -23,7 +23,7 @@ pageEncoding="UTF-8"%>
 											<div
 												class="col-md-6 xdisplay_inputx form-group has-feedback">
 												<input type="text" class="form-control has-feedback-left"
-													id="single_cal1" 
+													id="single_cal1" name="single_cal1"
 													aria-describedby="inputSuccess2Status"> <span
 													class="fa fa-calendar-o form-control-feedback left"
 													aria-hidden="true"></span> <span id="inputSuccess2Status"
@@ -32,7 +32,7 @@ pageEncoding="UTF-8"%>
 											<div
 												class="col-md-6 xdisplay_inputx form-group has-feedback">
 												<input type="text" class="form-control has-feedback-left"
-													id="single_cal2"
+													id="single_cal2" name="single_cal2"
 													aria-describedby="inputSuccess2Status2"> <span
 													class="fa fa-calendar-o form-control-feedback left"
 													aria-hidden="true"></span> <span id="inputSuccess2Status2"
@@ -56,7 +56,7 @@ pageEncoding="UTF-8"%>
 				</div>
 
 				<div class="x_panel">
-					<div class="x_content">
+					<div id="x_content" class="x_content">
 						<table id="example"
 							class="table table-striped responsive-utilities jambo_table display nowrap cell-border" style="width: 100%">
 							<thead>
@@ -181,35 +181,23 @@ $(document).ready(function() {
 </script>
     
 <script type="text/javascript">
-	function onTypeChange() {
-		var type = document.getElementById('cboPromotionStatus').value;
-		//alert(type);
-		if(type == '0'){
-			 document.getElementById("cboFilterValue").disabled = true;
-		}else{
-			 document.getElementById("cboFilterValue").disabled = false;
-		}
-		
-	}
-	
-	function btnFilterValues(){
-		var type = document.getElementById('cboPromotionStatus').value; 
-		var filterValue = document.getElementById('cboFilterValue').value;
-		//alert(type + "/" + filterValue); 
-		//var resultType = $('radio[name="p_result_status"]:checked').val();
-		//var resultType = document.getElementsByName('p_result_status').value;
-		//alert(type + "/" + filterValue + "/" + resultType); 
-		
-		var resultType = 1;
-		var moduleNameRadio=document.getElementsByName("p_result_status");
-		for(var i=0;i<moduleNameRadio.length;i++){
-		       if(moduleNameRadio[i].checked){
-		          //alert('Radio button selected' + moduleNameRadio[i].value);
-		    	   resultType = moduleNameRadio[i].value;
-		      }
-		}
-		
-		var actionUrl = "promotionCusFilterAction?type="+type+"&filterValue="+filterValue+"&resultType="+resultType;
+	function btnFilterValues() {
+		var vStart = $('[name="single_cal1"]').val();
+		var vEnd = $('[name="single_cal2"]').val();
+		$(document).ready(
+				function() {
+					$.ajax({
+						type : "POST",
+						url : 'reportRevenuesSellmanAction?start=' + vStart + '&end=' + vEnd,
+						success : function(responseText) {
+							//alert(responseText);
+							$('#x_content').html(responseText);
+							$('#example').DataTable({
+								scrollX : true,
+							});
+						}
+					});
+				});
 	}
 	
 </script>

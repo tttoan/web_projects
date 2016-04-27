@@ -230,7 +230,7 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 					}
 				}
 			}
-			html.append("</tr");
+			html.append("</tr>");
 			html.append("</thead>");
 			html.append("<tbody>");
 			if(revenuesDetail1 != null){
@@ -251,7 +251,7 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 					}
 				}
 				
-				html.append("</tr");
+				html.append("</tr>");
 			}
 			if(revenuesDetail2 != null){
 				html.append("<tr class=\"even pointer\">");
@@ -271,7 +271,7 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 					}
 				}
 				
-				html.append("</tr");
+				html.append("</tr>");
 			}
 			html.append("</tbody>");
 			html.append("</table>");
@@ -309,18 +309,22 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 			Vector<String> listP = new Vector<String>();
 			for (String customerCode : set) {
 				RevenuesCustomerL1 revenuesCustomerL1 = hmRevenuesL1.get(customerCode);
-				tblContent.append("<tr class=\"even pointer\">");
-				tblContent.append("<th>"+(no++)+"</th><th>"+customerCode+"</th><th>"+revenuesCustomerL1.getCustomerNameL1()+"</th>");
-				tblContent.append("<th>"+revenuesCustomerL1.getTotalCustomerL2()+"</th>");
-				tblContent.append("<th>"+revenuesCustomerL1.getTotalRevenues()+"</th>");
-				tblContent.append("<th>"+revenuesCustomerL1.getTotalProduct()+"</th>");
-				
 				for (Product product : revenuesCustomerL1.getListProduct()) {
 					if(!listP.contains(product.getProductCode())){
 						tblHeader.append("<th>"+product.getProductCode()+"</th>");
 						listP.add(product.getProductCode());
 					}
 				}
+			}
+			for (String customerCode : set) {
+				RevenuesCustomerL1 revenuesCustomerL1 = hmRevenuesL1.get(customerCode);
+				tblContent.append("<tr class=\"even pointer\">");
+				tblContent.append("<th>"+(no++)+"</th><th>"+customerCode+"</th><th>"+revenuesCustomerL1.getCustomerNameL1()+"</th>");
+				tblContent.append("<th>"+revenuesCustomerL1.getTotalCustomerL2()+"</th>");
+				tblContent.append("<th>"+revenuesCustomerL1.getTotalRevenues()+"</th>");
+				tblContent.append("<th>"+revenuesCustomerL1.getTotalProduct()+"</th>");
+				
+				
 				for (int i = 0; i < listP.size(); i++) {
 					boolean flag = true;
 					for (Product product : revenuesCustomerL1.getListProduct()) {
@@ -335,15 +339,15 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 					}
 				}
 				
-				tblContent.append("</tr");
+				tblContent.append("</tr>");
 			}
 			
-			tblHeader.append("</tr");
+			tblHeader.append("</tr>");
 			StringBuilder tblHeader0 = new StringBuilder();
 			tblHeader0.append("<tr class=\"headings\">");
 			tblHeader0.append("<th colspan=\"6\"></th>");
 			tblHeader0.append("<th colspan=\""+listP.size()+"\">Chi tiết mặt hàng</th>");
-			tblHeader0.append("</tr");
+			tblHeader0.append("</tr>");
 			
 			htmlTable.append("<thead>");
 			htmlTable.append(tblHeader0);
@@ -371,7 +375,7 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 			Date endDate1 = new Date(DateUtils.getDateFromString(endDate, "dd/MM/yyyy").getTime());
 			
 			StatisticHome statisticHome = new StatisticHome(HibernateUtil.getSessionFactory());
-			Vector<RevenuesCustomerL2> listRevenuesL2 = new Vector<RevenuesCustomerL2>();
+			LinkedHashMap<String, RevenuesCustomerL2> hmRevenuesL2 = statisticHome.getRevenuesCustomerL2(startDate1, endDate1);
 			
 			StringBuilder htmlTable = new StringBuilder("<table id=\"example\" class=\"table table-striped responsive-utilities jambo_table display nowrap cell-border\" style=\"width: 100%\">");
 			StringBuilder tblHeader = new StringBuilder();
@@ -382,9 +386,20 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 			tblHeader.append("<th>Tổng mặt hàng</th>");
 			
 			StringBuilder tblContent = new StringBuilder();
+			Set<String> set = hmRevenuesL2.keySet();
 			int no = 1;
 			Vector<String> listP = new Vector<String>();
-			for (RevenuesCustomerL2 revenuesCustomerL2 : listRevenuesL2) {
+			for (String customerCode : set) {
+				RevenuesCustomerL2 revenuesCustomerL2 = hmRevenuesL2.get(customerCode);
+				for (Product product : revenuesCustomerL2.getListProduct()) {
+					if(!listP.contains(product.getProductCode())){
+						tblHeader.append("<th>"+product.getProductCode()+"</th>");
+						listP.add(product.getProductCode());
+					}
+				}
+			}
+			for (String customerCode : set) {
+				RevenuesCustomerL2 revenuesCustomerL2 = hmRevenuesL2.get(customerCode);
 				tblContent.append("<tr class=\"even pointer\">");
 				tblContent.append("<th>"+(no++)+"</th><th>"+revenuesCustomerL2.getCustomerCodeL2()+"</th><th>"+revenuesCustomerL2.getCustomerNameL2()+"</th>");
 				tblContent.append("<th>"+revenuesCustomerL2.getCustomerNameL1()+"</th>");
@@ -392,12 +407,6 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 				tblContent.append("<th>"+revenuesCustomerL2.getTotalRevenues()+"</th>");
 				tblContent.append("<th>"+revenuesCustomerL2.getTotalProduct()+"</th>");
 				
-				for (Product product : revenuesCustomerL2.getListProduct()) {
-					if(!listP.contains(product.getProductCode())){
-						tblHeader.append("<th>"+product.getProductCode()+"</th>");
-						listP.add(product.getProductCode());
-					}
-				}
 				for (int i = 0; i < listP.size(); i++) {
 					boolean flag = true;
 					for (Product product : revenuesCustomerL2.getListProduct()) {
@@ -412,15 +421,15 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 					}
 				}
 				
-				tblContent.append("</tr");
+				tblContent.append("</tr>");
 			}
 			
-			tblHeader.append("</tr");
+			tblHeader.append("</tr>");
 			StringBuilder tblHeader0 = new StringBuilder();
 			tblHeader0.append("<tr class=\"headings\">");
 			tblHeader0.append("<th colspan=\"7\"></th>");
 			tblHeader0.append("<th colspan=\""+listP.size()+"\">Chi tiết mặt hàng</th>");
-			tblHeader0.append("</tr");
+			tblHeader0.append("</tr>");
 			
 			htmlTable.append("<thead>");
 			htmlTable.append(tblHeader0);
@@ -448,7 +457,7 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 			Date endDate1 = new Date(DateUtils.getDateFromString(endDate, "dd/MM/yyyy").getTime());
 			
 			StatisticHome statisticHome = new StatisticHome(HibernateUtil.getSessionFactory());
-			LinkedHashMap<String, RevenuesSellman> hmRevenuesSellman = new LinkedHashMap<String, RevenuesSellman>();
+			LinkedHashMap<String, RevenuesSellman> hmRevenuesSellman = statisticHome.getRevenuesSellman(startDate1, endDate1);
 			
 			StringBuilder htmlTable = new StringBuilder("<table id=\"example\" class=\"table table-striped responsive-utilities jambo_table display nowrap cell-border\" style=\"width: 100%\">");
 			StringBuilder tblHeader = new StringBuilder();
@@ -464,17 +473,20 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 			Vector<String> listP = new Vector<String>();
 			for (String sellMan : set) {
 				RevenuesSellman revenuesSellman = hmRevenuesSellman.get(sellMan);
-				tblContent.append("<tr class=\"even pointer\">");
-				tblContent.append("<th>"+(no++)+"</th><th>"+sellMan+"</th><th>"+revenuesSellman.getTotalCustomer()+"</th>");
-				tblContent.append("<th>"+revenuesSellman.getTotalRevenues()+"</th>");
-				tblContent.append("<th>"+revenuesSellman.getTotalProduct()+"</th>");
-				
 				for (Product product : revenuesSellman.getListProduct()) {
 					if(!listP.contains(product.getProductCode())){
 						tblHeader.append("<th>"+product.getProductCode()+"</th>");
 						listP.add(product.getProductCode());
 					}
 				}
+			}
+			for (String sellMan : set) {
+				RevenuesSellman revenuesSellman = hmRevenuesSellman.get(sellMan);
+				tblContent.append("<tr class=\"even pointer\">");
+				tblContent.append("<th>"+(no++)+"</th><th>"+revenuesSellman.getSellman()+"</th><th>"+revenuesSellman.getTotalCustomer()+"</th>");
+				tblContent.append("<th>"+revenuesSellman.getTotalRevenues()+"</th>");
+				tblContent.append("<th>"+revenuesSellman.getTotalProduct()+"</th>");
+				
 				for (int i = 0; i < listP.size(); i++) {
 					boolean flag = true;
 					for (Product product : revenuesSellman.getListProduct()) {
@@ -489,15 +501,15 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 					}
 				}
 				
-				tblContent.append("</tr");
+				tblContent.append("</tr>");
 			}
 			
-			tblHeader.append("</tr");
+			tblHeader.append("</tr>");
 			StringBuilder tblHeader0 = new StringBuilder();
 			tblHeader0.append("<tr class=\"headings\">");
 			tblHeader0.append("<th colspan=\"5\"></th>");
 			tblHeader0.append("<th colspan=\""+listP.size()+"\">Chi tiết mặt hàng</th>");
-			tblHeader0.append("</tr");
+			tblHeader0.append("</tr>");
 			
 			htmlTable.append("<thead>");
 			htmlTable.append(tblHeader0);
