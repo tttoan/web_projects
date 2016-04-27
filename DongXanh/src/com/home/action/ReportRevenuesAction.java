@@ -319,7 +319,7 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 			for (String customerCode : set) {
 				RevenuesCustomerL1 revenuesCustomerL1 = hmRevenuesL1.get(customerCode);
 				tblContent.append("<tr class=\"even pointer\">");
-				tblContent.append("<th>"+(no++)+"</th><th>"+customerCode+"</th><th>"+revenuesCustomerL1.getCustomerNameL1()+"</th>");
+				tblContent.append("<th>"+(no++)+"</th><th style=\"text-align:left\">"+customerCode+"</th><th style=\"text-align:left\">"+revenuesCustomerL1.getCustomerNameL1()+"</th>");
 				tblContent.append("<th>"+revenuesCustomerL1.getTotalCustomerL2()+"</th>");
 				tblContent.append("<th>"+revenuesCustomerL1.getTotalRevenues()+"</th>");
 				tblContent.append("<th>"+revenuesCustomerL1.getTotalProduct()+"</th>");
@@ -401,9 +401,9 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 			for (String customerCode : set) {
 				RevenuesCustomerL2 revenuesCustomerL2 = hmRevenuesL2.get(customerCode);
 				tblContent.append("<tr class=\"even pointer\">");
-				tblContent.append("<th>"+(no++)+"</th><th>"+revenuesCustomerL2.getCustomerCodeL2()+"</th><th>"+revenuesCustomerL2.getCustomerNameL2()+"</th>");
-				tblContent.append("<th>"+revenuesCustomerL2.getCustomerNameL1()+"</th>");
-				tblContent.append("<th>"+revenuesCustomerL2.getSellman()+"</th>");
+				tblContent.append("<th>"+(no++)+"</th><th style=\"text-align:left\">"+revenuesCustomerL2.getCustomerCodeL2()+"</th><th style=\"text-align:left\">"+revenuesCustomerL2.getCustomerNameL2()+"</th>");
+				tblContent.append("<th style=\"text-align:left\">"+revenuesCustomerL2.getCustomerNameL1()+"</th>");
+				tblContent.append("<th style=\"text-align:left\">"+revenuesCustomerL2.getSellman()+"</th>");
 				tblContent.append("<th>"+revenuesCustomerL2.getTotalRevenues()+"</th>");
 				tblContent.append("<th>"+revenuesCustomerL2.getTotalProduct()+"</th>");
 				
@@ -483,7 +483,7 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 			for (String sellMan : set) {
 				RevenuesSellman revenuesSellman = hmRevenuesSellman.get(sellMan);
 				tblContent.append("<tr class=\"even pointer\">");
-				tblContent.append("<th>"+(no++)+"</th><th>"+revenuesSellman.getSellman()+"</th><th>"+revenuesSellman.getTotalCustomer()+"</th>");
+				tblContent.append("<th>"+(no++)+"</th><th style=\"text-align:left\">"+revenuesSellman.getSellman()+"</th><th>"+revenuesSellman.getTotalCustomer()+"</th>");
 				tblContent.append("<th>"+revenuesSellman.getTotalRevenues()+"</th>");
 				tblContent.append("<th>"+revenuesSellman.getTotalProduct()+"</th>");
 				

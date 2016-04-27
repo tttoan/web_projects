@@ -94,14 +94,15 @@ pageEncoding="UTF-8"%>
 									</s:else>
 									
 									<th colspan=<s:property value="promotion.promotionGifts.size"/> align="center">Quà tặng</th>
-									<s:iterator value="promotion.promotionProducts">
-										<s:if test="%{promotion.customerRegist==1}">
+									<s:if test="%{promotion.customerRegist==1}">
+										<s:iterator value="promotion.promotionProducts">
 											<th colspan="2"><s:property value="product.productName" /></th>
-										</s:if>
-										<s:else>
-											<th rowspan="2"><s:property value="product.productName" /></th>
-										</s:else>
-									</s:iterator>
+										</s:iterator>
+									</s:if>
+									<s:else>
+										<th colspan=<s:property value="promotion.promotionProducts.size"/> align="center">Chi tiết mặt hàng</th>
+									</s:else>
+									
 								</tr>
 								<tr class="headings">
 									
@@ -131,6 +132,9 @@ pageEncoding="UTF-8"%>
 											<th >TH</th>
 											<th >ĐK</th>
 										</s:if>
+										<s:else>
+											<th><s:property value="product.productName" /></th>
+										</s:else>
 									</s:iterator>
 								</tr>
 							</thead>
