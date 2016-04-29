@@ -16,7 +16,7 @@
 						<s:set var="rId">
 							<s:property value="%{userSes.role.roleId}" />
 						</s:set>
-						<table id="example" class="jambo_table display nowrap"
+						<table id="example" class="jambo_table display nowrap cell-border"
 							style="width: 100%">
 							<thead>
 								<tr class="headings">
@@ -79,7 +79,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<s:iterator value="listCustomer" status="rowStatus">
+								<s:iterator value="customers" status="rowStatus">
 									<tr class="even pointer">
 										<td class=""><s:property value="#rowStatus.count" /></td>
 
@@ -138,13 +138,13 @@
 										<td class=""><s:property value="product4Hot" /></td>
 										<td class=""><s:property value="product5Hot" /></td>
 										<td class=""><s:property value="product6Hot" /></td>
-										<td class=""><s:property value="farmProduct1" /></td>
+										<td class=""><s:property value="%{getText('format.percent',{farmProduct1})}" /></td>
 										<td class=""><s:property value="farmProduct1Session" /></td>
-										<td class=""><s:property value="farmProduct2" /></td>
+										<td class=""><s:property value="%{getText('format.percent',{farmProduct2})}" /></td>
 										<td class=""><s:property value="farmProduct2Session" /></td>
-										<td class=""><s:property value="farmProduct3" /></td>
+										<td class=""><s:property value="%{getText('format.percent',{farmProduct3})}" /></td>
 										<td class=""><s:property value="farmProduct3Session" /></td>
-										<td class=""><s:property value="farmProduct4" /></td>
+										<td class=""><s:property value="%{getText('format.percent',{farmProduct4})}" /></td>
 										<td class=""><s:property value="farmProduct4Session" /></td>
 
 										<s:if test="%{#rId == 1}">

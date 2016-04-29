@@ -1,6 +1,6 @@
 package com.home.model;
 
-// Generated Mar 28, 2016 10:31:23 PM by Hibernate Tools 4.3.1
+// Generated Apr 29, 2016 10:47:37 PM by Hibernate Tools 4.3.1
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -75,6 +75,7 @@ public class Customer implements java.io.Serializable {
 	private Float farmProduct4;
 	private String farmProduct4Session;
 	private Integer totalVipCustomer;
+	private String pathDocScan;
 	private Set<PromotionRegister> promotionRegisters = new HashSet<PromotionRegister>(0);
 	private Set<Customer> customersForCustomer5Level1Id = new HashSet<Customer>(0);
 	private Set<Statistic> statisticsForCustomerCodeLevel1 = new HashSet<Statistic>(0);
@@ -95,7 +96,7 @@ public class Customer implements java.io.Serializable {
 			BigDecimal revenue1, BigDecimal revenue2, BigDecimal revenueExpect1, BigDecimal revenueExpect2, BigDecimal revenueExpect3, String percentProvide1, String percentProvide2,
 			String percentProvide3, String percentProvide4, String productSell, String product1Hot, String product2Hot, String product3Hot, String product4Hot, String product5Hot, String product6Hot,
 			Float farmProduct1, String farmProduct1Session, Float farmProduct2, String farmProduct2Session, Float farmProduct3, String farmProduct3Session, Float farmProduct4,
-			String farmProduct4Session, Integer totalVipCustomer, Set<PromotionRegister> promotionRegisters, Set<Customer> customersForCustomer5Level1Id,
+			String farmProduct4Session, Integer totalVipCustomer, String pathDocScan, Set<PromotionRegister> promotionRegisters, Set<Customer> customersForCustomer5Level1Id,
 			Set<Statistic> statisticsForCustomerCodeLevel1, Set<Statistic> statisticsForCustomerCodeLevel2, Set<Customer> customersForCustomer4Level1Id, Set<Customer> customersForCustomer2Level1Id,
 			Set<Customer> customersForCustomer3Level1Id, Set<Customer> customersForCustomer1Level1Id) {
 		this.customerByCustomer5Level1Id = customerByCustomer5Level1Id;
@@ -160,6 +161,7 @@ public class Customer implements java.io.Serializable {
 		this.farmProduct4 = farmProduct4;
 		this.farmProduct4Session = farmProduct4Session;
 		this.totalVipCustomer = totalVipCustomer;
+		this.pathDocScan = pathDocScan;
 		this.promotionRegisters = promotionRegisters;
 		this.customersForCustomer5Level1Id = customersForCustomer5Level1Id;
 		this.statisticsForCustomerCodeLevel1 = statisticsForCustomerCodeLevel1;
@@ -672,6 +674,14 @@ public class Customer implements java.io.Serializable {
 
 	public void setTotalVipCustomer(Integer totalVipCustomer) {
 		this.totalVipCustomer = totalVipCustomer;
+	}
+
+	public String getPathDocScan() {
+		return this.pathDocScan;
+	}
+
+	public void setPathDocScan(String pathDocScan) {
+		this.pathDocScan = pathDocScan;
 	}
 
 	public Set<PromotionRegister> getPromotionRegisters() {

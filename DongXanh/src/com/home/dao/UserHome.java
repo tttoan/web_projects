@@ -4,6 +4,11 @@ package com.home.dao;
 
 import static org.hibernate.criterion.Example.create;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -14,8 +19,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.internal.SessionImpl;
 
-import com.home.model.Statistic;
 import com.home.model.User;
 
 /**
@@ -51,7 +56,7 @@ public class UserHome {
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			List<User> results = session.createCriteria(User.class).add(Restrictions.like("userName", userName+"%")).list();
+			List<User> results = session.createCriteria(User.class).add(Restrictions.like("userName", userName + "%")).list();
 			tx.commit();
 			log.debug("Retrieve successful");
 			return results.size();
@@ -230,7 +235,7 @@ public class UserHome {
 		} catch (RuntimeException re) {
 			log.error("find by credentials failed", re);
 			throw re;
-		}finally {
+		} finally {
 			try {
 				if (session != null) {
 					session.close();
@@ -292,5 +297,76 @@ public class UserHome {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public List<User> getLookupEmployee() {
+		log.debug("finding List User instance by full name");
+		List<User> results = new ArrayList<User>();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			try (Statement sta = conn.createStatement()) {
+				String query = "Select id, user_name, full_name From user";
+				try (ResultSet rs = sta.executeQuery(query)) {
+					while (rs.next()) {
+						User user = new User();
+						user.setId(rs.getInt("id"));
+						user.setUserName(rs.getString("user_name"));
+						user.setFullName(rs.getString("full_name"));
+						results.add(user);
+					}
+				} 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return results;
+		} catch (RuntimeException re) {
+			log.error("find by full name failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+	public HashMap<Integer, String> getFilterEmployee() {
+		log.debug("finding List User instance by full name");
+		 HashMap<Integer, String> results = new HashMap<>();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			try (Statement sta = conn.createStatement()) {
+				String query = "Select id, full_name From user";
+				try (ResultSet rs = sta.executeQuery(query)) {
+					while (rs.next()) {
+						results.put(rs.getInt("id"), rs.getString("full_name"));
+					}
+				} 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return results;
+		} catch (RuntimeException re) {
+			log.error("find by full name failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 }

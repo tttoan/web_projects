@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Mar 28, 2016 10:31:24 PM by Hibernate Tools 4.3.1 -->
+<!-- Generated Apr 29, 2016 10:47:38 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="com.home.model.Customer" table="customer" catalog="db_promotion" optimistic-lock="version">
         <id name="id" type="java.lang.Integer">
@@ -193,6 +193,9 @@
         </property>
         <property name="totalVipCustomer" type="java.lang.Integer">
             <column name="total_vip_customer" />
+        </property>
+        <property name="pathDocScan" type="string">
+            <column name="path_doc_scan" length="65535" />
         </property>
         <set name="promotionRegisters" table="promotion_register" inverse="true" lazy="true" fetch="select">
             <key>

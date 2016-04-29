@@ -6,6 +6,7 @@ import static org.hibernate.criterion.Example.create;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 
 import com.home.model.Category;
+import com.home.model.Customer;
 import com.home.model.Product;
 import com.home.model.Statistic;
 
@@ -449,6 +451,43 @@ public class ProductHome {
 			return true;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public List<Product> getLookupProduct() {
+		log.debug("finding List Product to Auto Lookup");
+		List<Product> results = new ArrayList<Product>();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			try (Statement sta = conn.createStatement()) {
+				String query = "Select id, product_code, product_name From product";
+				try (ResultSet rs = sta.executeQuery(query)) {
+					while (rs.next()) {
+						Product p = new Product();
+						p.setId(rs.getInt("id"));
+						p.setProductCode(rs.getString("product_code"));
+						p.setProductName(rs.getString("product_name"));
+						results.add(p);
+					}
+				} 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return results;
+		} catch (RuntimeException re) {
+			log.error("find by Product failed", re);
 			throw re;
 		} finally {
 			try {

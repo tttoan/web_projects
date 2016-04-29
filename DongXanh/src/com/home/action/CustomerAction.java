@@ -3,6 +3,7 @@ package com.home.action;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,6 +44,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
 public class CustomerAction extends ActionSupport implements Action, ModelDriven<Customer>, UserAware {
+	private static final SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
 	private static final long serialVersionUID = 1L;
 	private boolean edit = false;
 	private int custId = 0;
@@ -79,6 +81,33 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private File cusImageScan;
 	private String cusImageScanContentType;
 	private String cusImageScanFileName;
+	private String varCreateTime = SDF.format(new Date());
+	private String varCertificateDate = SDF.format(new Date());
+	private String varDirectorBirthday = SDF.format(new Date());
+
+	public String getVarCertificateDate() {
+		return varCertificateDate;
+	}
+
+	public void setVarCertificateDate(String varCertificateDate) {
+		this.varCertificateDate = varCertificateDate;
+	}
+
+	public String getVarDirectorBirthday() {
+		return varDirectorBirthday;
+	}
+
+	public void setVarDirectorBirthday(String varDirectorBirthday) {
+		this.varDirectorBirthday = varDirectorBirthday;
+	}
+
+	public String getVarCreateTime() {
+		return varCreateTime;
+	}
+
+	public void setVarCreateTime(String varCreateTime) {
+		this.varCreateTime = varCreateTime;
+	}
 
 	public String retrievePhoneById() throws Exception {
 		int commonCusId = 0;
@@ -130,6 +159,9 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 				CustomerHome cusHome = new CustomerHome(getSessionFactory());
 				setCust(cusHome.findById(custId));
 				varCityCode = getCust().getCustomerCode().substring(0, getCust().getCustomerCode().length() - 3);
+				varCreateTime = SDF.format(getCust().getCreateTime());
+				varCertificateDate = SDF.format(getCust().getCertificateDate());
+				varDirectorBirthday =  SDF.format(getCust().getDirectorBirthday());
 				setEdit(true);
 			} catch (Exception e) {
 				throw e;
@@ -179,17 +211,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	public void loadLookupCustomer() {
 		try {
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
-			listCustomer = cusHome.getListCustomer();
-			GroupCustomerHome groupCusHome = new GroupCustomerHome(HibernateUtil.getSessionFactory());
-			HashMap<Integer, String> groups = groupCusHome.getListGroupCustomer();
-			for (Customer customer : listCustomer) {
-				if (customer.getGroupCustomer() != null) {
-					GroupCustomer g = new GroupCustomer();
-					g.setId(customer.getGroupCustomer().getId());
-					g.setGroupName(groups.get(customer.getGroupCustomer().getId()));
-					customer.setGroupCustomer(g);
-				}
-			}
+			listCustomer = cusHome.getLookupCustomer(custId);
 		} catch (Exception e) {
 			e.printStackTrace();
 			addActionError("Error: load lookup customers. Exception: " + e.getMessage());
@@ -199,7 +221,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	public void loadLookupEmployee() {
 		try {
 			UserHome userHome = new UserHome(getSessionFactory());
-			listEmployee = userHome.getListUser();
+			listEmployee = userHome.getLookupEmployee();
 		} catch (Exception e) {
 			e.printStackTrace();
 			addActionError("Error: load lookup customers. Exception: " + e.getMessage());
@@ -222,8 +244,26 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		try {
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
 			customers = cusHome.findAll();
+			UserHome  userHome = new UserHome(getSessionFactory());
+			GroupCustomerHome groupCusHome = new GroupCustomerHome(getSessionFactory());
+			HashMap<Integer, String> groups = groupCusHome.getListGroupCustomer();
+			HashMap<Integer, String> users = userHome.getFilterEmployee();
+			for (Customer customer : customers) {
+				if (customer.getGroupCustomer() != null) {
+					GroupCustomer g = new GroupCustomer();
+					g.setId(customer.getGroupCustomer().getId());
+					g.setGroupName(groups.get(customer.getGroupCustomer().getId()));
+					customer.setGroupCustomer(g);
+					
+					User user = new User();
+					user.setId(customer.getUser().getId());
+					user.setFullName(users.get(customer.getUser().getId()));
+					customer.setUser(user);
+				}
+			}
 			return SUCCESS;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return ERROR;
 		}
 	}
@@ -232,6 +272,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		try {
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
 			setCust(cusHome.findById(custId));
+		
 			return SUCCESS;
 		} catch (Exception e) {
 			return ERROR;
@@ -265,7 +306,11 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	public String addCustomer() throws Exception {
 		try {
+			CustomerHome cusHome = new CustomerHome(getSessionFactory());
 			cust.setId(custId);
+			cust.setCreateTime(SDF.parse(varCreateTime));
+			cust.setCertificateDate(SDF.parse(varCertificateDate));
+			cust.setDirectorBirthday(SDF.parse(varDirectorBirthday));
 			if (emp.getId() > 0)
 				getCust().setUser(emp);
 			if (grpCustomer.getId() > 0)
@@ -280,17 +325,12 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 				getCust().setCustomerByCustomer4Level1Id(cus4Level1);
 			if (cus5Level1.getId() > 0)
 				getCust().setCustomerByCustomer5Level1Id(cus5Level1);
-
 			// -----Upload image scan----
 			if (getCusImageScanFileName() != null) {
 				File destFile = new File(SystemUtil.getValuePropertiesByKey("path.image.scan") + "\\", getCusImageScanFileName());
-				// if (destFile.exists())
-				// throw new
-				// Exception("Path upload not found! "+SystemUtil.getValuePropertiesByKey("path.image.scan")
-				// + "\\" + getCusImageScanFileName());
-				FileUtils.copyFile(cusImageScan, destFile);
+				FileUtils.copyFile(cusImageScan, destFile, true);
+				cust.setPathDocScan(destFile.getAbsolutePath().replace("//", "/"));
 			}
-			CustomerHome cusHome = new CustomerHome(getSessionFactory());
 			if (cust.getId() > 0) {
 				cusHome.updateDirty(getCust());
 			} else {
@@ -329,12 +369,12 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 					// -------------customerCode--------------
 					cell = row.getCell(CustomerTable.customerCode.value());
 					value = xls.getValue(cell);
-					getCust().setCustomerCode((value+"").trim());
+					getCust().setCustomerCode((value + "").trim());
 					// ---------------------------
 					// -------------businessName--------------
 					cell = row.getCell(CustomerTable.businessName.value());
 					value = xls.getValue(cell);
-					getCust().setBusinessName( value+"");
+					getCust().setBusinessName(value + "");
 					// ---------------------------
 					// -------------businessName--------------
 					cell = row.getCell(CustomerTable.customerGroup.value());
@@ -346,7 +386,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 					// -------------certificateNumber--------------
 					cell = row.getCell(CustomerTable.certificateNumber.value());
 					value = xls.getValue(cell);
-					getCust().setCertificateNumber( value+"");
+					getCust().setCertificateNumber(value + "");
 					// ---------------------------
 					// -------------certificateDate--------------
 					cell = row.getCell(CustomerTable.certificateDate.value());
@@ -356,17 +396,17 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 					// -------------certificateAddress--------------
 					cell = row.getCell(CustomerTable.certificateAddress.value());
 					value = xls.getValue(cell);
-					getCust().setCertificateAddress(value+"");
+					getCust().setCertificateAddress(value + "");
 					// ---------------------------
 					// -------------taxNumber--------------
 					cell = row.getCell(CustomerTable.taxNumber.value());
 					value = xls.getValue(cell);
-					getCust().setTaxNumber(value+"");
+					getCust().setTaxNumber(value + "");
 					// ---------------------------
 					// -------------certificateNumber--------------
 					cell = row.getCell(CustomerTable.employee.value());
 					value = xls.getValue(cell);
-					getCust().setUser(userHome.getUserByFullName((value+"").trim()));
+					getCust().setUser(userHome.getUserByFullName((value + "").trim()));
 					// ---------------------------
 					boolean isExisted = custHome.isCustomerExist(getCust().getCustomerCode());
 					if (!isExisted)

@@ -4,6 +4,10 @@ package com.home.dao;
 
 import static org.hibernate.criterion.Example.create;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.naming.InitialContext;
@@ -20,6 +24,7 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.internal.SessionImpl;
 
 import com.home.model.Customer;
 import com.home.model.User;
@@ -73,32 +78,6 @@ public class CustomerHome {
 			return max;
 		} catch (RuntimeException re) {
 			log.error("retrieve max id", re);
-			throw re;
-		} finally {
-			try {
-				if (session != null) {
-					session.close();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Customer> getListCustomer() {
-		log.debug("retrieve list Customer");
-		Transaction tx = null;
-		Session session = null;
-		try {
-			session = sessionFactory.openSession();
-			tx = session.beginTransaction();
-			List<Customer> results = session.createCriteria(Customer.class).list();
-			tx.commit();
-			log.debug("retrieve list Customer successful, result size: " + results.size());
-			return results;
-		} catch (RuntimeException re) {
-			log.error("retrieve list Customer failed", re);
 			throw re;
 		} finally {
 			try {
@@ -337,5 +316,43 @@ public class CustomerHome {
 			}
 		}
 		return false;
+	}
+
+	public List<Customer> getLookupCustomer(int skipCusId) {
+		log.debug("finding List Customer instance by full name");
+		List<Customer> results = new ArrayList<Customer>();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			try (Statement sta = conn.createStatement()) {
+				String query = "Select id, customer_code, director From customer where id <> "+skipCusId;
+				try (ResultSet rs = sta.executeQuery(query)) {
+					while (rs.next()) {
+						Customer cus = new Customer();
+						cus.setId(rs.getInt("id"));
+						cus.setCustomerCode(rs.getString("customer_code"));
+						cus.setDirector(rs.getString("director"));
+						results.add(cus);
+					}
+				} 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return results;
+		} catch (RuntimeException re) {
+			log.error("find by Customer failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 }

@@ -45,7 +45,7 @@
 			class="com.home.action.CustomerAction">
 			<result name="success">/new_customer.jsp</result>
 		</action>
-		<action name="list_customer" class="com.home.action.CustomerAction">
+		<action name="list_customer" method="findAllCustomer" class="com.home.action.CustomerAction">
 			<result name="success">/customers.jsp</result>
 			<result name="error">/index.jsp</result>
 		</action>

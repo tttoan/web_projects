@@ -109,7 +109,7 @@
 							enctype="multipart/form-data"
 							cssClass="form-horizontal form-label-left" theme="bootstrap">
 
-							<s:hidden name="id" value="%{custId}"></s:hidden>
+							<s:hidden name="custId" value="%{custId}"></s:hidden>
 							<s:hidden name="edit" value="%{edit}"></s:hidden>
 							<s:if test="hasActionErrors()">
 								<div class="errors">
@@ -126,10 +126,13 @@
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="createTime">Ngày lập </label>
-								<div class="col-md-5 col-sm-6 col-xs-12">
-									<sd:datetimepicker id="createTime" name="createTime"
-										displayFormat="dd-MM-yyyy" value="%{'today'}"
-										cssClass="form-control col-md-7 col-xs-12" />
+									<div class="col-md-3 xdisplay_inputx has-feedback">
+										<input type="text" class="form-control has-feedback-left"
+											id="createTime" name="varCreateTime" value="${varCreateTime}"
+											aria-describedby="inputSuccess2Status"> <span
+											class="fa fa-calendar-o form-control-feedback left"
+											aria-hidden="true"></span> <span id="inputSuccess2Status"
+											class="sr-only">(success)</span>
 								</div>
 							</div>
 
@@ -191,10 +194,10 @@
 							</div>
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
-									for="cusImageScan">Ảnh scan (jpg, png, gif) <span
+									for="cusImageScan">Ảnh scan (*.jpg, *.png, *.gif) <span
 									class="required">*</span></label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<input id="cusImageScan" type="file" name="cusImageScan" />
+									<input id="cusImageScan" type="file" name="cusImageScan"  />
 								</div>
 							</div>
 							<br>
@@ -231,10 +234,13 @@
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="certificateDate">Ngày cấp <span class="required">*</span>
 								</label>
-								<div class="col-md-5 col-sm-6 col-xs-12">
-									<sd:datetimepicker id="certificateDate" name="certificateDate"
-										displayFormat="dd-MM-yyyy" value="%{'today'}"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-3 xdisplay_inputx has-feedback">
+										<input type="text" class="form-control has-feedback-left"
+											id="certificateDate" name="varCertificateDate" value="${varCertificateDate}"
+											aria-describedby="inputSuccess2Status"> <span
+											class="fa fa-calendar-o form-control-feedback left"
+											aria-hidden="true"></span> <span id="inputSuccess2Status"
+											class="sr-only">(success)</span>
 								</div>
 							</div>
 
@@ -343,10 +349,13 @@
 							<div class="item form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="directorBirthday">Ngày sinh </label>
-								<div class="col-md-3 col-sm-6 col-xs-12">
-									<sd:datetimepicker id="directorBirthday" value="%{'today'}"
-										name="cust.directorBirthday" displayFormat="dd-MM-yyyy"
-										cssClass="form-control col-md-7 col-xs-12" />
+								<div class="col-md-3 xdisplay_inputx has-feedback">
+										<input type="text" class="form-control has-feedback-left"
+											id="directorBirthday" name="varDirectorBirthday" value="${varDirectorBirthday}"
+											aria-describedby="inputSuccess2Status"> <span
+											class="fa fa-calendar-o form-control-feedback left"
+											aria-hidden="true"></span> <span id="inputSuccess2Status"
+											class="sr-only">(success)</span>
 								</div>
 							</div>
 							<div class="item form-group">
@@ -425,7 +434,6 @@
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input id="cus1Phone" type="text" readonly name="cus1Phone"
-										data-validate-length-range="1,100"
 										value="${cust.customerByCustomer1Level1Id.telefone}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
@@ -462,7 +470,6 @@
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input id="cus2Phone" name="cus2Phone" type="text" readonly
-										data-validate-length-range="1,100"
 										value="${cust.customerByCustomer2Level1Id.telefone}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
@@ -499,7 +506,6 @@
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input id="cus3Phone" name="cus3Phone" type="text" readonly
-										data-validate-length-range="1,100"
 										value="${cust.customerByCustomer3Level1Id.telefone}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
@@ -536,7 +542,6 @@
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input id="cus4Phone" name="cus4Phone" type="text" readonly
-										data-validate-length-range="1,100"
 										value="${cust.customerByCustomer4Level1Id.telefone}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
@@ -573,7 +578,6 @@
 								</label>
 								<div class="col-md-3 col-sm-6 col-xs-12">
 									<input id="cus5Phone" name="cus5Phone" type="text" readonly
-										data-validate-length-range="0,100"
 										value="${cust.customerByCustomer5Level1Id.telefone}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
@@ -1030,7 +1034,7 @@
 							<div class="ln_solid"></div>
 							<div class="form-group">
 								<div class="col-md-6 col-md-offset-3">
-									<button type="reset" class="btn btn-primary">Reset</button>
+									<button id="rs" type="reset" class="btn btn-primary">Reset</button>
 									<button id="send" type="submit" class="btn btn-success">Save</button>
 								</div>
 							</div>
@@ -1216,6 +1220,104 @@ $(document).ready(function() {
 					$('#cus5Phone').val(res);
 				}
 			});
+		});
+	});
+</script>
+<!-- daterangepicker -->
+<script type="text/javascript" src="js/moment.min2.js"></script>
+<script type="text/javascript" src="js/datepicker/daterangepicker.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#createTime,#certificateDate,#directorBirthday').daterangepicker({
+			singleDatePicker : true,
+			calender_style : "picker_2",
+			format : 'DD/MM/YYYY',
+			showDropdowns : true
+		}, function(start, end, label) {
+			console.log(start.toISOString(), end.toISOString(), label);
+		});
+	});
+</script>
+
+<script type="text/javascript">
+	function onTypeChange() {
+		var type = document.getElementById('cboPromotionStatus').value;
+		//alert(type);
+		if (type == '0') {
+			document.getElementById("cboFilterValue").disabled = true;
+		} else {
+			document.getElementById("cboFilterValue").disabled = false;
+		}
+
+	}
+
+	function btnFilterValues() {
+		var type = document.getElementById('cboPromotionStatus').value;
+		var filterValue = document.getElementById('cboFilterValue').value;
+		//alert(type + "/" + filterValue); 
+		//var resultType = $('radio[name="p_result_status"]:checked').val();
+		//var resultType = document.getElementsByName('p_result_status').value;
+		//alert(type + "/" + filterValue + "/" + resultType); 
+
+		var resultType = 1;
+		var moduleNameRadio = document.getElementsByName("p_result_status");
+		for (var i = 0; i < moduleNameRadio.length; i++) {
+			if (moduleNameRadio[i].checked) {
+				//alert('Radio button selected' + moduleNameRadio[i].value);
+				resultType = moduleNameRadio[i].value;
+			}
+		}
+
+		var actionUrl = "promotionCusFilterAction?type=" + type
+				+ "&filterValue=" + filterValue + "&resultType=" + resultType;
+	}
+</script>
+
+<script>
+	$(document).ready(function() {
+		$('input.tableflat').iCheck({
+			checkboxClass : 'icheckbox_flat-green',
+			radioClass : 'iradio_flat-green'
+		});
+	});
+
+	var asInitVals = new Array();
+	$(document).ready(function() {
+		var oTable = $('#example').dataTable({
+			"oLanguage" : {
+				"sSearch" : "Search all columns:"
+			},
+			"aoColumnDefs" : [ {
+				'bSortable' : false,
+				'aTargets' : [ 0 ]
+			} //disables sorting for column one
+			],
+			'iDisplayLength' : 12,
+			"sPaginationType" : "full_numbers",
+			"dom" : 'T<"clear">lfrtip',
+			"tableTools" : {
+			//"sSwfPath" : "<?php echo base_url('assets2/js/Datatables/tools/swf/copy_csv_xls_pdf.swf'); ?>"
+			}
+		});
+		$("tfoot input").keyup(function() {
+			/* Filter on the column based on the index of this element's parent <th> */
+			oTable.fnFilter(this.value, $("tfoot th").index($(this).parent()));
+		});
+		$("tfoot input").each(function(i) {
+			asInitVals[i] = this.value;
+		});
+		$("tfoot input").focus(function() {
+			if (this.className == "search_init") {
+				this.className = "";
+				this.value = "";
+			}
+		});
+		$("tfoot input").blur(function(i) {
+			if (this.value == "") {
+				this.className = "search_init";
+				this.value = asInitVals[$("tfoot input").index(this)];
+			}
 		});
 	});
 </script>

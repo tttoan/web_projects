@@ -176,17 +176,17 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	public void loadLookupProduct() {
 		ProductHome proHome = new ProductHome(getSessionFactory());
-		listProduct = proHome.getListProduct();
+		listProduct = proHome.getLookupProduct();
 	}
 
 	public void loadLookupCustomer() {
 		CustomerHome cusHome = new CustomerHome(getSessionFactory());
-		listCustomer = cusHome.getListCustomer();
+		listCustomer = cusHome.getLookupCustomer(-1);
 	}
 
 	public void loadLookupEmployee() {
 		UserHome userHome = new UserHome(getSessionFactory());
-		listEmployee = userHome.getListUser();
+		listEmployee = userHome.getLookupEmployee();
 	}
 
 	public String testStatistic() throws Exception {
