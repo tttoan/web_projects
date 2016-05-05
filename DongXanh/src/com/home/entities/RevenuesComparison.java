@@ -4,19 +4,19 @@ import java.math.BigDecimal;
 
 public class RevenuesComparison {
 	private int no;
-	private String customerCode;
-	private String customerName;
-	private String customerLocation;
-	private String customerGroup;
+	private String customerCode="";
+	private String customerName="";
+	private String customerLocation="";
+	private String customerGroup="";
 	private BigDecimal revenues1;
 	private BigDecimal revenues2;
-	private String decrease30;
-	private String increase30;
-	private String notBuy;
-	private String multiProvide;
-	private String provider;
-	private String sellMan;
-	private String comment;
+	private String decrease30="";
+	private String increase30="";
+	private String notBuy="";
+	private String multiProvide="";
+	private String provider="";
+	private String sellMan="";
+	private String comment="";
 	
 	public int getNo() {
 		return no;

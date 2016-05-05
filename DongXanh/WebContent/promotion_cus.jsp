@@ -23,7 +23,7 @@ pageEncoding="UTF-8"%>
 
 										<s:select id="cboPromotionStatus"  style="width: 250px"
 											class="select2_group form-control" onchange="onTypeChange()"
-											list="#{'0':'+ Tất cả', '1':'+ Theo NVTT', '2':'+ Theo nhóm khách hàng'}"
+											list="#{'0':'Tất cả', '1':'Theo NVTT', '2':'Theo nhóm khách hàng'}"
 											value='%{type}' required="true" />
 									</div>
 								</s:form></td>
@@ -159,7 +159,13 @@ pageEncoding="UTF-8"%>
 										<td class=""><s:property value="resultString" /></td>
 										<td class=""><s:property value="resultPromotion" /></td>
 										<s:iterator value="promotion.promotionGifts">
-											<td><s:property value="getRegiterGiftTotal(listRegisterGifts, gift.giftName)" /></td>
+											<s:if test="%{promotion.customerRegist==1}">
+												<td><s:property value="getRegiterGiftTotal(listRegisterGifts, gift.giftName)" /></td>
+											</s:if>
+											<s:else>
+												<td><s:property value="getMyGift(totalBoxRegist, totalPointRegist, maxQuantity, maxPoint, result)" /></td>
+											</s:else>
+											
 										</s:iterator>
 										<s:iterator value="promotion.promotionProducts">
 											<s:if test="%{promotion.customerRegist==1}">

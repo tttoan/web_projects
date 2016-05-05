@@ -228,6 +228,40 @@
 	</package>
 	
 	<package name="promotion-result" namespace="/" extends="struts-default">
+	
+		<interceptors>
+			<interceptor name="authentication"
+				class="com.home.listener.AuthenticationInterceptor"></interceptor>
+			<interceptor-stack name="authStack">
+				<interceptor-ref name="authentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref name="authStack"></default-interceptor-ref>
+
+		<global-results>
+			<result name="login" type="redirect">/dongxanh.action</result>
+		</global-results>
+
+		<action name="dongxanh">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result>/login.jsp</result>
+		</action>
+		
+		<action name="promotions"
+			class="com.home.action.ResultPromotionAction">
+			<result name="success">/promotion.jsp</result>
+		</action>
+		<action name="gifts"
+			class="com.home.action.ResultPromotionAction">
+			<result name="success">/gift.jsp</result>
+		</action>
+		<action name="products"
+			class="com.home.action.ResultPromotionAction">
+			<result name="success">/product.jsp</result>
+		</action>
+		
 		<action name="promotionResultAction" method="listPromotionActive"
 			class="com.home.action.ResultPromotionAction">
 			<result name="success">/promotion_result.jsp</result>

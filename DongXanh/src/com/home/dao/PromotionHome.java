@@ -518,8 +518,8 @@ public class PromotionHome {
 			String sql = "SELECT " +
 					"(SELECT count(*)  FROM `promotion` WHERE status=1 AND start_date<=CURDATE() AND end_date >= CURDATE()) as sl1, " +
 					"(SELECT count(*)  FROM `promotion` WHERE status=1 AND start_date>CURDATE() AND end_date > CURDATE()) as sl2, " +
-					"(SELECT count(*)  FROM `promotion` WHERE end_date<CURDATE() AND end_date >= CURDATE()-7) as sl3, " +
-					"(SELECT count(*)  FROM `promotion` WHERE end_date<CURDATE()-7) as sl4"; 
+					"(SELECT count(*)  FROM `promotion` WHERE end_date<CURDATE() AND end_date >= CURDATE()-INTERVAL 7 DAY) as sl3, " +
+					"(SELECT count(*)  FROM `promotion` WHERE end_date<CURDATE()-INTERVAL 7 DAY) as sl4"; 
 			ResultSet rs = conn.createStatement().executeQuery(sql);
 			if(rs.next()){
 				results[0] = rs.getInt("sl1");

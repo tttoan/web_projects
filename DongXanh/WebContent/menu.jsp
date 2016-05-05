@@ -9,16 +9,19 @@
 		<hr />
 		<hr />
 		<ul class="nav side-menu">
-			<li><a href="index.jsp"><i class="fa fa-home"></i> Trang Chủ
-			</a></li>
+			<li><s:url action="homeAction" var="homeURL" /> <s:a
+							href="%{homeURL}" theme="bootstrap"> Trang chủ </s:a></li>
 			<li><a><i class="fa fa-cubes"></i> Khuyến Mãi <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
-					<li><s:url action="promotionResultAction" var="prURL" /> <s:a
-							href="%{prURL}" theme="bootstrap"> Kết quả </s:a></li>
-					<li><a href="promotion.jsp"> Danh sách </a></li>
-					<li><a href="gift.jsp"> Quà tặng </a></li>
-					<li><a href="product.jsp"> Sản phẩm </a></li>
+					<li><s:url action="promotionResultAction" var="p_resultURL" /> <s:a
+							href="%{p_resultURL}" theme="bootstrap"> Kết quả </s:a></li>
+					<li><s:url action="promotions" var="promotionURL" /> <s:a
+							href="%{promotionURL}" theme="bootstrap"> Danh sách </s:a></li>
+					<li><s:url action="gifts" var="giftURL" /> <s:a
+							href="%{giftURL}" theme="bootstrap"> Quà tặng </s:a></li>
+					<li><s:url action="products" var="productURL" /> <s:a
+							href="%{productURL}" theme="bootstrap"> Sản phẩm </s:a></li>
 				</ul></li>
 			<s:include value="menu_employee.jsp">
 				<s:param name="role_id">
@@ -50,10 +53,14 @@
 				<ul class="nav child_menu" style="display: none">
 					<li><s:url action="move_to_compare_statistic" var="csURL" /> <s:a
 							href="%{csURL}" theme="bootstrap"> So sánh bảng kê </s:a></li>
-					<li><a href="revenues_comparison.jsp"> So sánh doanh số cùng kỳ </a></li>
-					<li><a href="revenues_cus1.jsp"> Doanh số câp1 </a></li>
-					<li><a href="revenues_cus2.jsp"> Doanh số cấp2</a></li>
-					<li><a href="revenues_sellman.jsp"> Doanh số NVTT</a></li>
+					<li><s:url action="showReportRevenues1" var="csURL1" /> <s:a
+							href="%{csURL1}" theme="bootstrap"> So sánh doanh số cùng kỳ </s:a></li>
+					<li><s:url action="showReportRevenues2" var="csURL2" /> <s:a
+							href="%{csURL2}" theme="bootstrap"> Doanh số câp1 </s:a></li>
+					<li><s:url action="showReportRevenues3" var="csURL3" /> <s:a
+							href="%{csURL3}" theme="bootstrap"> Doanh số cấp2 </s:a></li>
+					<li><s:url action="showReportRevenues4" var="csURL4" /> <s:a
+							href="%{csURL4}" theme="bootstrap"> Doanh số NVTT </s:a></li>
 			</ul></li>
 			<li><a><i class="fa fa-calendar"></i> Lịch công tác <span
 					class="fa fa-chevron-down"></span></a>

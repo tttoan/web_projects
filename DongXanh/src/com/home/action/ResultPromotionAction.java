@@ -374,11 +374,14 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 //						}
 //						pCus.setResultPromotion(resultString.toString().trim().replaceAll(";$", ""));
 						
+						int arr_target[] = getGiftTarget(promotionGifts);
+						int total_box_regist = arr_target[0];
+						int total_point_regist = arr_target[1];
 						String str = getPromotionResult(
 								promotion.getRule(), 
 								pCus, 
-								0, 
-								0, 
+								total_box_regist, 
+								total_point_regist, 
 								null, 
 								null,
 								getAveragePoint2Value(promotionGifts));
@@ -403,6 +406,19 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	public String getMyGift(int total_box_regist, int total_point_regist, int maxQuantity, int maxPoint, boolean isResult){
+		if(isResult){
+			if(maxPoint >= total_point_regist && total_point_regist > 0){
+				return "X";
+			}
+			else if(maxQuantity >= total_box_regist && total_box_regist > 0){
+				return "X";
+			}
+		}
+		
+		return "";
 	}
 
 	private Object[][] paramRegisterGifts(List<RegisterGift> listRegisterGifts){
@@ -466,6 +482,35 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 			avg = avg/total;
 		}
 		return (int)avg;
+	}
+	
+	private int[] getGiftTarget(Set<PromotionGift> promotionGifts){
+		int arr[] = new int[]{0, 0};
+		int min_Point = 0;
+		int min_Quantity = 0;
+		for (PromotionGift promotionGift : promotionGifts) {
+			int point = promotionGift.getMaxPoint();
+			int quantity = promotionGift.getMaxQuantity();
+			if(min_Point == 0){
+				min_Point = point;
+			}
+			else{
+				if(min_Point > point){
+					min_Point = point;
+				}
+			}
+			if(min_Quantity == 0){
+				min_Quantity = quantity;
+			}
+			else{
+				if(min_Quantity > quantity){
+					min_Quantity = quantity;
+				}
+			}
+		}
+		arr[0] = min_Quantity;
+		arr[1] = min_Point;
+		return arr;
 	}
 
 	private Object[][] paramRegisterProducts(List<RegisterProduct> listRegisterProducts){

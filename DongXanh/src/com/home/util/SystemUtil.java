@@ -3,6 +3,7 @@ package com.home.util;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,7 +15,11 @@ import javax.script.ScriptEngineManager;
 public class SystemUtil {
 
 	public static void main(String[] args) {
-		System.out.println(getCurrentDate().toString());
+		try {
+			System.out.println(format2Money(new BigDecimal("60076000.00")));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static String getUserDir() {
@@ -80,5 +85,16 @@ public class SystemUtil {
 		prop.load(new FileInputStream(f));
 		return prop.getProperty(key);
 
+	}
+	
+	public static String format2Money(Object value) throws Exception{
+		if(value != null){
+			ScriptEngine engine = compileScript("function format(num){var n = num.toString(), p = n.indexOf('.');return n.replace(/\\d(?=(?:\\d{3})+(?:\\.|$))/g, function($0, i){return p<0 || i<p ? ($0+',') : $0; });}");
+			String rs=StringUtil.notNull(engine.eval("format("+value+")"));	
+			if(rs.length() > 0){
+				return rs + " VNĐ";
+			}
+		}
+		return "";
 	}
 }

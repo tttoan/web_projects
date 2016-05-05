@@ -18,13 +18,14 @@ import com.home.entities.UserAware;
 import com.home.model.Customer;
 import com.home.model.Dashboard;
 import com.home.model.GroupCustomer;
+import com.home.model.Role;
 import com.home.model.User;
 import com.home.util.HibernateUtil;
 import com.home.util.SystemUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 
-public class DashboardAction  implements ServletContextAware, UserAware {
+public class DashboardAction  implements Action, ServletContextAware, UserAware {
 	private ServletContext ctx;
 	private Dashboard dashboard ;
 	public List<Customer> birthdayCustomers;
@@ -59,15 +60,27 @@ public class DashboardAction  implements ServletContextAware, UserAware {
 	
 	public String getCurrentUser() throws Exception {
 		try {
-			user = (User) ActionContext.getContext().getSession().get(MyConts.LOGIN_SESSION);
+			User user = (User) ActionContext.getContext().getSession().get(MyConts.LOGIN_SESSION);
 			if(user == null){
 				user = new User();
 				user.setUserName("user");
 				user.setFullName("user");
+				user.setRole(new Role());
+				user.getRole().setRoleId(-1);
+				user.getRole().setRoleName("guest");
 				//return Action.LOGIN; 
+				
+				this.user = new User(user.getId(), user.getUserName(), user.getFullName());
+				this.user.setRole(user.getRole());
 			}else{
-				ActionContext.getContext().getSession().put(MyConts.LOGIN_SESSION, user);
+				this.user = new User(user.getId(), user.getUserName(), user.getFullName());
+				this.user.setRole(new Role());
+				this.user.getRole().setRoleId(user.getRole().getRoleId());
+				this.user.getRole().setRoleName(user.getRole().getRoleName());
+				
+				//ActionContext.getContext().getSession().put(MyConts.LOGIN_SESSION, user);
 			}
+			
 			return Action.SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -167,5 +180,10 @@ public class DashboardAction  implements ServletContextAware, UserAware {
 
 	public void setBirthdayCustomers(List<Customer> birthdayCustomers) {
 		this.birthdayCustomers = birthdayCustomers;
+	}
+
+	@Override
+	public String execute() throws Exception {
+		return Action.SUCCESS;
 	}
 }
