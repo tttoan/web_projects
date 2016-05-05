@@ -15,7 +15,7 @@ pageEncoding="UTF-8"%>
 				<div class="view_pro">
 					<table style="width: 100%">
 						<tr>
-							<td width="120px" valign="middle"><label>Thời gian từ</label></td>
+							<td width="120px" valign="middle"><label>Th?i gian t?</label></td>
 							<td width="500px valign="bottom">
 							<fieldset>
 									<div class="control-group">
@@ -43,11 +43,11 @@ pageEncoding="UTF-8"%>
 								</fieldset>
 							</td>
 							<td align="center" valign="middle">
-								<button type="button" class="btn btn-primary" id="btnFilter" onclick="btnFilterValues()">Xem kết quả</button>
+								<button type="button" class="btn btn-primary" id="btnFilter" onclick="btnFilterValues()">Xem k?t qu?</button>
 							</td>
 						</tr>
 						<tr>
-							<td width="120px" valign="bottom"><label>Mức doanh số >=</label></td>
+							<td width="120px" valign="bottom"><label>M?c doanh s? >=</label></td>
 							<td valign="middle">
 							<div class="item form-group">
 									<div class="col-md-4 col-sm-4 col-xs-12">
@@ -56,7 +56,7 @@ pageEncoding="UTF-8"%>
 											value="1"
 											class="form-control col-md-7 col-xs-12">
 									</div>
-								</div>(Triệu VNĐ)
+								</div>(Tri?u VNÐ)
 							</td>
 							<td></td>
 						</tr>
@@ -64,29 +64,29 @@ pageEncoding="UTF-8"%>
 				</div>
 
 				<div class="x_panel">
-					<div class="x_content">
+					<div id="x_content" class="x_content">
 						<table id="example"
 							class="table table-striped responsive-utilities jambo_table display nowrap cell-border" style="width: 100%">
 							<thead>
 								<tr class="headings">
 									<th colspan="7"></th>
-									<th colspan="4">Biến động DSKH tháng 10-12/2015	</th>
+									<th colspan="4">Bi?n d?ng DSKH</th>
 									<th colspan="3"></th>
 								</tr>
 								<tr class="headings">
 									<th>No</th>
 									<th>Mã khách hàng</th>
 									<th>Tên khách hàng</th>
-									<th>Địa chỉ kinh doanh</th>
+									<th>Ð?a ch? kinh doanh</th>
 									<th>Nhóm</th>
-									<th>Doanh số tháng <br>10-12/2015</th>
-									<th>Doanh số tháng <br>10-12/2016</th>
-									<th>Tăng 30%</th>
-									<th>Giảm 30%</th>
+									<th>Doanh s? tháng <br>2015</th>
+									<th>Doanh s? tháng <br>2016</th>
+									<th>Tang 30%</th>
+									<th>Gi?m 30%</th>
 									<th>Không mua</th>
-									<th>Mua 2 nơi</th>
-									<th>Nơi nhận hàng</th>
-									<th>NVTT quản lý</th>
+									<th>Mua 2 noi</th>
+									<th>Noi nh?n hàng</th>
+									<th>NVTT qu?n lý</th>
 									<th>Ghi chú</th>
 								</tr>
 							</thead>
@@ -149,7 +149,13 @@ th {
 
 <!-- Datatables -->
 <script src="js/jquery.dataTables.min.js"></script>
-
+<script>
+$(document).ready(function() {
+    $('#example').DataTable( {
+        "scrollX": true
+    } );
+} );
+</script>
 
  <!-- daterangepicker -->
     <script type="text/javascript" src="js/moment.min2.js"></script>
@@ -184,75 +190,69 @@ th {
             $("#single_cal1").attr("value", startDate);
             $("#single_cal2").attr("value", startDate);
             
-            var table = $('#example').DataTable();
+            /* var table = $('#example').DataTable();
             $('#example').on('dblclick', 'tr', function () {
                 var data = table.row( this ).data();
                 //alert( 'You clicked on '+data.customerCode+' row' );
                 var start = document.getElementById('single_cal1').value; 
 				var end = document.getElementById('single_cal2').value; 
                 window.location = 'revenues_detail.jsp?cus_code='+data.customerCode+'&start='+start+'&end='+end;
-            } );
+            } ); */
             
-            $('#example tbody').on( 'click', 'button', function () {
+           /*  $('#example tbody').on( 'click', 'button', function () {
                 var data = table.row( $(this).parents('tr') ).data();
                 //alert( 'You clicked on '+data.customerCode+' row' );
                 var start = document.getElementById('single_cal1').value; 
 				var end = document.getElementById('single_cal2').value; 
                 window.location = 'revenues_detail.jsp?cus_code='+data.customerCode+'&start='+start+'&end='+end;
-            } );
+            } ); */
 
         });
 </script>
     
 <script type="text/javascript">
 	
-Table = $("#example").DataTable({
-	scrollX: true,
-	data:[],
-	columns: [
-          { "data": "no" },
-            { "data": "customerCode" },
-            { "data": "customerName" },
-            { "data": "customerLocation" },
-            { "data": "customerGroup" },
-            { "data": "revenues2" },
-            { "data": "revenues1" },
-            { "data": "increase30" },
-            { "data": "decrease30" },
-            { "data": "notBuy" },
-            { "data": "multiProvide" },
-            { "data": "provider" },
-            { "data": "sellMan" },
-            { "data": "comment" },
-			],
-	columnDefs: [ {
-	            "targets": -1,
-	            "data": null,
-	            "defaultContent": "<button class=\"btn btn-info btn-xs\">Chi tiết</button>"
-	        } ],
-	rowCallback: function (row, data) {},
-	/* filter: false,
-	info: false,
-	ordering: false, */
-	processing: true,
-	retrieve: true
-});
-
 	function btnFilterValues(){
 		var start = document.getElementById('single_cal1').value; 
 		var end = document.getElementById('single_cal2').value; 
 		var revenues = document.getElementById('revenues_number').value; 
 		
-		 $.ajax({ //Not found in cache, get from server
-				url: 'reportRevenuesComparisonAction?start='+start+'&end='+end+'&revenues='+revenues,
-				type: 'POST',
-				dataType: 'json',
-				async: false,
-				success: function (data) {
-					Table.clear().draw();
-					Table.rows.add(data.data).draw();
-				}
-			});
+		 $(document).ready(function () {
+        	 $.ajax({
+ 	            type: "POST",
+ 	            url: 'reportRevenuesComparisonAction?start='+start+'&end='+end+'&revenues='+revenues,
+ 	            async: false,
+ 	            success : function(responseText) {
+ 	           		 //alert(responseText);
+	 	              $('#x_content').html(responseText);
+	 	              $('#example').DataTable({
+	 	            	 scrollX: true,
+	 	            	"aoColumnDefs" : [ {
+							'bSortable' : false,
+							'aTargets' : [ 0 ]
+						} //disables sorting for column one
+						],
+	 	              });
+ 	              
+	 	             var table = $('#example').DataTable();
+	 	             $('#example').on('dblclick', 'tr', function () {
+	 	                var data = table.row( this ).data();
+	 	                //alert( 'You clicked on '+data[1]+' row' );
+	 	                var start = document.getElementById('single_cal1').value; 
+	 					var end = document.getElementById('single_cal2').value; 
+	 	                window.location = 'revenues_detail.jsp?cus_code='+data[1]+'&start='+start+'&end='+end;
+	 	             } );
+	 	             
+	 	             $('#example tbody').on( 'click', 'button', function () {
+		                 var data = table.row( $(this).parents('tr') ).data();
+		                 //alert( 'You clicked on '+data.customerCode+' row' );
+		                 var start = document.getElementById('single_cal1').value; 
+		 				 var end = document.getElementById('single_cal2').value; 
+		                 window.location = 'revenues_detail.jsp?cus_code='+data[1]+'&start='+start+'&end='+end;
+		             } ); 
+ 	            }
+ 	        });    
+        });
 	}
 	
 </script>
