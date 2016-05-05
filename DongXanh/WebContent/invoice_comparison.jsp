@@ -15,7 +15,7 @@
 						namespace="/" cssClass="form-horizontal form-label-left">
 						<table style="width: 100%">
 							<tr>
-								<td width="120px" valign="middle"><label>Thời gian
+								<td width="150px" valign="middle"><label>Thời gian
 										từ</label></td>
 								<td width="500px valign="bottom">
 									<fieldset>
@@ -44,18 +44,19 @@
 									</fieldset>
 								</td>
 								<td align="center" valign="middle">
-									<button id="send" type="submit" class="btn btn-success">Xem
+									<button id="send" type="submit" class="btn btn-primary">Xem
 										kết quả</button>
 								</td>
 							</tr>
 							<tr>
 
-								<td width="120px" valign="bottom"></td>
-								<td valign="middle"><label
-									class="col-md-4 col-sm-3 col-xs-12" for="cusLevel1Id">Khách
+								<td width="150px" valign="bottom">
+									<label>Khách
 										hàng Cấp 1 <span class="required">*</span>
-								</label>
-									<div class="col-md-10 col-sm-6 col-xs-12">
+									</label>
+								</td>
+								<td valign="middle">
+									<div >
 										<s:select id="cusLevel1Id" name="cusLevel1.id" headerKey="-1"
 											headerValue="---" cssClass="form-control col-md-7 col-xs-12"
 											list="listCustomer" listKey="id"

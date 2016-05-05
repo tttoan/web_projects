@@ -15,7 +15,7 @@ pageEncoding="UTF-8"%>
 				<div class="view_pro">
 					<table style="width: 100%">
 						<tr>
-							<td width="120px" valign="middle"><label>Th?i gian t?</label></td>
+							<td width="120px" valign="middle"><label>Thời gian từ</label></td>
 							<td width="500px valign="bottom">
 							<fieldset>
 									<div class="control-group">
@@ -43,11 +43,11 @@ pageEncoding="UTF-8"%>
 								</fieldset>
 							</td>
 							<td align="center" valign="middle">
-								<button type="button" class="btn btn-primary" id="btnFilter" onclick="btnFilterValues()">Xem k?t qu?</button>
+								<button type="button" class="btn btn-primary" id="btnFilter" onclick="btnFilterValues()">Xem kết quả</button>
 							</td>
 						</tr>
 						<tr>
-							<td width="120px" valign="bottom"><label>M?c doanh s? >=</label></td>
+							<td width="120px" valign="bottom"><label>Mức doanh số >=</label></td>
 							<td valign="middle">
 							<div class="item form-group">
 									<div class="col-md-4 col-sm-4 col-xs-12">
@@ -56,7 +56,7 @@ pageEncoding="UTF-8"%>
 											value="1"
 											class="form-control col-md-7 col-xs-12">
 									</div>
-								</div>(Tri?u VNÐ)
+								</div>(Triệu VNÐ)
 							</td>
 							<td></td>
 						</tr>
@@ -70,23 +70,23 @@ pageEncoding="UTF-8"%>
 							<thead>
 								<tr class="headings">
 									<th colspan="7"></th>
-									<th colspan="4">Bi?n d?ng DSKH</th>
+									<th colspan="4">Biến động DSKH</th>
 									<th colspan="3"></th>
 								</tr>
 								<tr class="headings">
 									<th>No</th>
 									<th>Mã khách hàng</th>
 									<th>Tên khách hàng</th>
-									<th>Ð?a ch? kinh doanh</th>
+									<th>Địa chỉ kinh doanh</th>
 									<th>Nhóm</th>
-									<th>Doanh s? tháng <br>2015</th>
-									<th>Doanh s? tháng <br>2016</th>
+									<th>Doanh số tháng <br>2015</th>
+									<th>Doanh số tháng <br>2016</th>
 									<th>Tang 30%</th>
 									<th>Gi?m 30%</th>
 									<th>Không mua</th>
 									<th>Mua 2 noi</th>
-									<th>Noi nh?n hàng</th>
-									<th>NVTT qu?n lý</th>
+									<th>Noi nhận hàng</th>
+									<th>NVTT quản lý</th>
 									<th>Ghi chú</th>
 								</tr>
 							</thead>
