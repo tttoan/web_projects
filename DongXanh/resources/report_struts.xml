@@ -4,7 +4,7 @@
 	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
 	"http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
-	
+
 	<package name="report" namespace="/" extends="json-default">
 		<interceptors>
 			<interceptor name="authentication"
@@ -26,26 +26,39 @@
 			<result>/login.jsp</result>
 		</action>
 
-		<action name="showReportRevenues1"
-			class="com.home.action.ReportRevenuesAction">
+		<action name="showReportRevenues1" class="com.home.action.ReportRevenuesAction">
 			<result name="success">/revenues_comparison.jsp</result>
 		</action>
-		<action name="showReportRevenues2"
-			class="com.home.action.ReportRevenuesAction">
+		<action name="showReportRevenues2" class="com.home.action.ReportRevenuesAction">
 			<result name="success">/revenues_cus1.jsp</result>
 		</action>
-		<action name="showReportRevenues3"
-			class="com.home.action.ReportRevenuesAction">
+		<action name="showReportRevenues3" class="com.home.action.ReportRevenuesAction">
 			<result name="success">/revenues_cus2.jsp</result>
 		</action>
-		<action name="showReportRevenues4"
-			class="com.home.action.ReportRevenuesAction">
+		<action name="showReportRevenues4" class="com.home.action.ReportRevenuesAction">
 			<result name="success">/revenues_sellman.jsp</result>
 		</action>
-		
+
 	</package>
-	
+
 	<package name="report-revenues" namespace="/" extends="struts-default">
+		<interceptors>
+			<interceptor name="authentication"
+				class="com.home.listener.AuthenticationInterceptor"></interceptor>
+			<interceptor-stack name="authStack">
+				<interceptor-ref name="authentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="authStack"></default-interceptor-ref>
+		<global-results>
+			<result name="login" type="redirect">/dongxanh.action</result>
+		</global-results>
+		<action name="dongxanh">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result>/login.jsp</result>
+		</action>
+
 		<action name="reportRevenuesComparisonAction" method="compareRevenues"
 			class="com.home.action.ReportRevenuesAction">
 			<result type="stream">
@@ -53,28 +66,28 @@
 				<param name="inputName">inputStream</param>
 			</result>
 		</action>
-		<action name="reportRevenuesDetailAction"  method="customerRevenuesDetail"
+		<action name="reportRevenuesDetailAction" method="customerRevenuesDetail"
 			class="com.home.action.ReportRevenuesAction">
 			<result type="stream">
 				<param name="contentType">text/html</param>
 				<param name="inputName">inputStream</param>
 			</result>
 		</action>
-		<action name="reportRevenuesCustomerL1Action"  method="revenuesCustomerL1"
+		<action name="reportRevenuesCustomerL1Action" method="revenuesCustomerL1"
 			class="com.home.action.ReportRevenuesAction">
 			<result type="stream">
 				<param name="contentType">text/html</param>
 				<param name="inputName">inputStream</param>
 			</result>
 		</action>
-		<action name="reportRevenuesCustomerL2Action"  method="revenuesCustomerL2"
+		<action name="reportRevenuesCustomerL2Action" method="revenuesCustomerL2"
 			class="com.home.action.ReportRevenuesAction">
 			<result type="stream">
 				<param name="contentType">text/html</param>
 				<param name="inputName">inputStream</param>
 			</result>
 		</action>
-		<action name="reportRevenuesSellmanAction"  method="revenuesSellman"
+		<action name="reportRevenuesSellmanAction" method="revenuesSellman"
 			class="com.home.action.ReportRevenuesAction">
 			<result type="stream">
 				<param name="contentType">text/html</param>
@@ -82,6 +95,6 @@
 			</result>
 		</action>
 	</package>
-	
-	
+
+
 </struts>

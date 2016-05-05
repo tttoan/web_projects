@@ -6,6 +6,23 @@
 <struts>
 	
 	<package name="product" namespace="/" extends="json-default">
+			<interceptors>
+			<interceptor name="authentication"
+				class="com.home.listener.AuthenticationInterceptor"></interceptor>
+			<interceptor-stack name="authStack">
+				<interceptor-ref name="authentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="authStack"></default-interceptor-ref>
+		<global-results>
+			<result name="login" type="redirect">/dongxanh.action</result>
+		</global-results>
+		<action name="dongxanh">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result>/login.jsp</result>
+		</action>
+	
 		<action name="*Action" class="com.home.action.ProductAction"
 			method="{1}">
 			<result type="json">/product.jsp</result>
