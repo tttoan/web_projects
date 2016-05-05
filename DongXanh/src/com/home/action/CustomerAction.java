@@ -329,7 +329,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			if (getCusImageScanFileName() != null) {
 				File destFile = new File(SystemUtil.getValuePropertiesByKey("path.image.scan") + "\\", getCusImageScanFileName());
 				FileUtils.copyFile(cusImageScan, destFile, true);
-				cust.setPathDocScan(destFile.getAbsolutePath().replace("//", "/"));
+				cust.setPathDocScan(destFile.getAbsolutePath().replace("\\", "/"));
 			}
 			if (cust.getId() > 0) {
 				cusHome.updateDirty(getCust());
