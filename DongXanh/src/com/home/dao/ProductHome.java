@@ -346,12 +346,86 @@ public class ProductHome {
 			}
 		}
 	}
+	
+	public List<Product> getListProducts(int startPageIndex, int recordsPerPage, String name) throws Exception{
+		log.debug("retrieve list Product");
+		//Transaction tx = null;
+		Session session = null;
+		List<Product> results = new ArrayList<Product>();
+		try {
+			session = sessionFactory.openSession();
+			//			tx = session.beginTransaction();
+			//			List<Product> results = session.createQuery("FROM Product").list();
+			//			tx.commit();
+
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			int range = startPageIndex+recordsPerPage;
+			ResultSet rs = conn.createStatement().executeQuery(
+					"SELECT * FROM (SELECT @i:=@i+1 AS iterator, t.* FROM product t,(SELECT @i:=0) foo Order By id) AS XX WHERE "
+					+ " (UPPER(product_code) like '%" + name.toUpperCase().trim() +"%'  OR UPPER(product_name) like '%" + name.toUpperCase().trim() + "%')"
+					+ " AND iterator > "+startPageIndex+" AND iterator <= " + range);
+			while(rs.next()){
+				Product p = new Product();
+				p.setId(rs.getInt("id"));
+				p.setProductCode(rs.getString("product_code"));
+				p.setProductName(rs.getString("product_name"));
+				p.setDescription(rs.getString("description"));
+				Category category = new Category();
+				category.setId(rs.getInt("category_id"));
+				p.setCategory(category);
+				p.setCategory_id(category.getId());
+				p.setUnitPrice(rs.getBigDecimal("unit_price"));
+				p.setQuantity(rs.getInt("quantity"));
+				p.setPoint(rs.getInt("point"));
+				p.setExportDate(rs.getDate("export_date"));
+				results.add(p);
+			}
+			rs.close();
+			log.debug("retrieve list Product successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
 
 	public int getTotalRecords() throws Exception{
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
 			String sql = "SELECT COUNT(*) AS COUNT FROM Product";
+			Query query = session.createQuery(sql);
+			List results = query.list();
+			return Integer.parseInt(results.get(0).toString());
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public int getTotalRecords(String name) throws Exception{
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			String sql = "SELECT COUNT(*) AS COUNT FROM Product WHERE (UPPER(product_code) like '%" + name.toUpperCase().trim() +"%'  OR UPPER(product_name) like '%" + name.toUpperCase().trim() + "%')";
 			Query query = session.createQuery(sql);
 			List results = query.list();
 			return Integer.parseInt(results.get(0).toString());

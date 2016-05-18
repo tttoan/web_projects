@@ -43,7 +43,7 @@ $(document).ready(function() {
 				list: false
 			},
 			category_id : {
-				title : 'Loại sản phẩm',
+				title : 'Nhóm thuốc',
 				width : '15%',
 				edit : true,
 				 options: function () {
@@ -90,21 +90,27 @@ $(document).ready(function() {
 				width : '10%',
 				edit : true,
 				defaultValue:0,
-				inputClass: 'validate[custom[integer]]'
+				inputClass: 'validate[custom[integer]]',
+				listClass: 'num-style',
 			},
 			point : {
 				title : 'Điểm/thùng',
 				width : '10%',
 				edit : true,
 				defaultValue:0,
-				inputClass: 'validate[custom[integer]]'
+				inputClass: 'validate[custom[integer]]',
+				listClass: 'num-style',
 			},
 			unitPrice : {
 				title : 'Giá đề xuất',
 				width : '10%',
 				edit : true,
 				defaultValue:0,
-				inputClass: 'validate[custom[number]]'
+				inputClass: 'validate[custom[number]]',
+				listClass: 'currency-style',
+				display: function (data) {
+				        return formatCurrency(data.record.unitPrice);
+				}
 			},
 			description : {
 				title : 'Đặc tả',
@@ -143,7 +149,23 @@ $(document).ready(function() {
 			RowNumber = 0;
 		},
 	});
-	$('#ProductTableContainer').jtable('load');
+	
+	//$('#ProductTableContainer').jtable('load');
+	//Re-load records when user click 'load records' button.
+    $('#LoadRecordsButton').click(function (e) {
+        e.preventDefault();
+        $('#ProductTableContainer').jtable('load', {
+        	productName: $('#productName').val()
+        });
+    });
+
+    //Load all records when page is first shown
+    $('#LoadRecordsButton').click();
 });
 
+
+function formatCurrency(num){
+	var n = num.toString(), p = n.indexOf('.');
+	return n.replace(/\d(?=(?:\d{3})+(?:\.|$))/g, function($0, i){return p<0 || i<p ? ($0+',') : $0; }) + ' VNĐ';
+}
 

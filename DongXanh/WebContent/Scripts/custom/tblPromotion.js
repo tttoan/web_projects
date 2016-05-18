@@ -159,17 +159,23 @@ $(document).ready(function() {
         								price: {
         									title: 'Giá tiền',
         									width: '10%',
-        									inputClass: 'validate[required,custom[number]]'
+        									inputClass: 'validate[required,custom[number]]',
+    										listClass: 'currency-style',
+    										display: function (data) {
+    											return formatCurrency(data.record.price);
+    										}
         								},
         								maxQuantity: {
         									title: 'Số thùng phải đạt',
         									width: '10%',
-        									inputClass: 'validate[required,custom[integer]]'
+        									inputClass: 'validate[required,custom[integer]]',
+        									listClass: 'num-style',
         								},
         								maxPoint: {
         									title: 'Số điểm phải đạt',
         									width: '10%',
-        									inputClass: 'validate[required,custom[integer]]'
+        									inputClass: 'validate[required,custom[integer]]',
+        									listClass: 'num-style',
         								},
 //        								formula: {
 //        									title: 'Công thức',
@@ -462,5 +468,11 @@ function sortObject(obj) {
         return a.value - b.value;
     });
     return arr; // returns array
+}
+
+
+function formatCurrency(num){
+	var n = num.toString(), p = n.indexOf('.');
+	return n.replace(/\d(?=(?:\d{3})+(?:\.|$))/g, function($0, i){return p<0 || i<p ? ($0+',') : $0; }) + ' VNĐ';
 }
 

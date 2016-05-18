@@ -132,6 +132,14 @@
             font-weight: bold;
             color: red;
         }
+         .currency-style
+        {
+            text-align: right;
+        }
+          .num-style
+        {
+            text-align: center;
+        }
        /*  table{
     		color: red;
 		} */

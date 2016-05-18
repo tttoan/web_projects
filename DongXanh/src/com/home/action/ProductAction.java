@@ -103,14 +103,25 @@ public class ProductAction implements Action, ServletContextAware{
 			int startPageIndex = Integer.parseInt(request.getParameter("jtStartIndex"));
 			int recordsPerPage = Integer.parseInt(request.getParameter("jtPageSize"));
 			String sorting = request.getParameter("jtSorting");
+			try {
+				productName = StringUtil.notNull(request.getParameter("productName"));
+			} catch (Exception e) {
+				productName = "";
+			}
 			//System.out.println("startPageIndex: " + startPageIndex);
 			//System.out.println("recordsPerPage: " + recordsPerPage);
 			
 			//SessionFactory sf = (SessionFactory) ctx.getAttribute(MyConts.KEY_NAME);
 			ProductHome productHome = new ProductHome(HibernateUtil.getSessionFactory());
-			records = productHome.getListProducts(startPageIndex, recordsPerPage);
-			// Get Total Record Count for Pagination
-			totalRecordCount = productHome.getTotalRecords();
+			if(productName.isEmpty()){
+				records = productHome.getListProducts(startPageIndex, recordsPerPage);
+				// Get Total Record Count for Pagination
+				totalRecordCount = productHome.getTotalRecords();
+			}else{
+				records = productHome.getListProducts(startPageIndex, recordsPerPage, productName);
+				// Get Total Record Count for Pagination
+				totalRecordCount = productHome.getTotalRecords(productName);
+			}
 			result = "OK";
 		} catch (Exception e) {
 			result = "ERROR";

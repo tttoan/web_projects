@@ -4,8 +4,8 @@
 
 <div class="container">
 	<!-- Trigger the modal with a button -->
-	<button type="button" class="btn btn-info btn-lg" id="btnImport">Import
-		excel</button>
+	<!-- <button type="button" class="btn btn-info btn-lg" id="btnImport">Import
+		excel</button> -->
 
 	<!-- Modal -->
 	<div class="modal fade" id="importDialog" role="dialog">

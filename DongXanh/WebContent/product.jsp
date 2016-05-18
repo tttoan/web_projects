@@ -11,8 +11,15 @@
 
 		<div class="row">
 			<div class="col-md-12">
+			
+			<div class="filtering">
+			    <form>
+			        Tên/Mã sản phẩm: <input type="text" name="productName" id="productName" />
+			        <button type="submit" id="LoadRecordsButton">Tìm kiếm</button>
+			    </form>
+			</div>
 				<div class="x_panel">
-
+		
 					<div class="x_content">
 
 						<div id="ProductTableContainer"></div>
@@ -112,6 +119,25 @@
             min-width: 200px;
             font-weight: bold;
         }
+        .currency-style
+        {
+            text-align: right;
+        }
+        .num-style
+        {
+            text-align: center;
+        }
 </style>
+<style>
+        div.filtering
+        {
+    		right: 10px;
+            border: 1px solid #999;
+            margin-bottom: 5px;
+            padding: 5px;
+            background-color: #EEE;
+        }
+</style>
+    
 </body>
 </html>
