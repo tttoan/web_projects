@@ -137,8 +137,7 @@
 
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="customerCode">Mã khách hàng (<%=yearNow%>) <span
-											class="required">*</span>
+											for="customerCode">Mã khách hàng (<%=yearNow%>)
 										</label>
 										<div class="col-md-2 col-sm-6 col-xs-12">
 											<input id="customerCode" type="text" name="customerCode"
@@ -149,7 +148,7 @@
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cityName">Khu vực <span class="required">*</span>
+											for="cityName">Khu vực 
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
 											<s:select id="cityName" name="varCityCode"
@@ -160,7 +159,7 @@
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="grpCustomer_id">Nhóm <span class="required">*</span>
+											for="grpCustomer_id">Nhóm 
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
 											<s:select id="grpCustomer_id" name="grpCustomer.id"
@@ -171,7 +170,7 @@
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="emp_id">Nhân viên TT <span class="required">*</span>
+											for="emp_id">Nhân viên TT 
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
 											<s:select id="emp_id" name="emp.id"
@@ -196,8 +195,7 @@
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cusImageScan">Ảnh scan (*.jpg, *.png, *.gif) <span
-											class="required">*</span></label>
+											for="cusImageScan">Ảnh scan (*.jpg, *.png, *.gif) </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
 											<input id="cusImageScan" type="file" name="cusImageScan" />
 										</div>
@@ -217,12 +215,11 @@
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="certificateNumber">Giấy phép ĐKKD số <span
-											class="required">*</span>
+											for="certificateNumber">Giấy phép ĐKKD số 
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
 											<input id="certificateNumber" type="text"
-												name="cust.certificateNumber" required="required"
+												name="cust.certificateNumber"
 												value="${cust.certificateNumber}"
 												class="form-control col-md-7 col-xs-12">
 										</div>
@@ -230,7 +227,7 @@
 
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="certificateDate">Ngày cấp <span class="required">*</span>
+											for="certificateDate">Ngày cấp 
 										</label>
 										<div class="col-md-3 xdisplay_inputx has-feedback">
 											<input type="text" class="form-control has-feedback-left"
@@ -245,22 +242,21 @@
 
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="certificateAddress">Địa chỉ đăng kí KD <span
-											class="required">*</span>
+											for="certificateAddress">Địa chỉ đăng kí KD 
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
 											<textarea id="certificateAddress"
-												name="cust.certificateAddress" required="required"
+												name="cust.certificateAddress"
 												class="form-control col-md-7 col-xs-12">${cust.certificateAddress}</textarea>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="taxNumber">Mã số thuế <span class="required">*</span>
+											for="taxNumber">Mã số thuế 
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
 											<input id="taxNumber" type="text" name="cust.taxNumber"
-												required="required" value="${cust.taxNumber}"
+												 value="${cust.taxNumber}"
 												class="form-control col-md-7 col-xs-12">
 										</div>
 									</div>
