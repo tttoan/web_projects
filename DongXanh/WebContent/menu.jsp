@@ -34,7 +34,7 @@
 					<li><s:url action="list_customer.action" var="lcURL" /> <s:a
 							href="%{lcURL}" theme="bootstrap"> Danh sách </s:a></li>
 					<li><s:url action="move_to_add_customer" var="macURL"></s:url>
-						<s:a href="%{macURL}"> Tạo và chỉnh Sửa </s:a></li>
+						<s:a href="%{macURL}"> Tạo mới </s:a></li>
 					<li><s:url action="move_to_accept_customer" var="macURL">
 						</s:url> <s:a href="%{macURL}">Thao tác excel</s:a></li>
 				</ul></li>
@@ -44,7 +44,7 @@
 					<li><s:url action="list_statistic" var="liURL" /> <s:a
 							href="%{liURL}" theme="bootstrap"> Danh sách </s:a></li>
 					<li><s:url action="move_to_add_statistic.action" var="maiURL">
-						</s:url> <s:a href="%{maiURL}"> Tạo và chỉnh sửa </s:a></li>
+						</s:url> <s:a href="%{maiURL}"> Tạo mới </s:a></li>
 					<li><s:url action="move_to_accept_statistic" var="masURL">
 						</s:url> <s:a href="%{masURL}">Thao tác excel</s:a></li>
 				</ul></li>
