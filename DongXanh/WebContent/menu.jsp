@@ -31,20 +31,20 @@
 			<li><a><i class="fa fa-users"></i> Khách Hàng <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
+					<li><s:url action="move_to_add_customer" var="macURL"></s:url>
+						<s:a href="%{macURL}"> Thêm mới </s:a></li>
 					<li><s:url action="list_customer.action" var="lcURL" /> <s:a
 							href="%{lcURL}" theme="bootstrap"> Danh sách </s:a></li>
-					<li><s:url action="move_to_add_customer" var="macURL"></s:url>
-						<s:a href="%{macURL}"> Tạo mới </s:a></li>
 					<li><s:url action="move_to_accept_customer" var="macURL">
 						</s:url> <s:a href="%{macURL}">Thao tác excel</s:a></li>
 				</ul></li>
 			<li><a><i class="fa fa-book"></i> Bảng Kê <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
+					<li><s:url action="move_to_add_statistic.action" var="maiURL">
+						</s:url> <s:a href="%{maiURL}"> Thêm mới </s:a></li>
 					<li><s:url action="list_statistic" var="liURL" /> <s:a
 							href="%{liURL}" theme="bootstrap"> Danh sách </s:a></li>
-					<li><s:url action="move_to_add_statistic.action" var="maiURL">
-						</s:url> <s:a href="%{maiURL}"> Tạo mới </s:a></li>
 					<li><s:url action="move_to_accept_statistic" var="masURL">
 						</s:url> <s:a href="%{masURL}">Thao tác excel</s:a></li>
 				</ul></li>
