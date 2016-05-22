@@ -402,13 +402,13 @@
 									<div class="form-group">
 										<div class="col-md-6 col-md-offset-3">
 											<button id="rs" type="reset" class="btn btn-primary">
-												?</button>
+												Reset </button>
 											<button id="send" type="submit" class="btn btn-success">
 												<s:if test="%{edit}">
-												Cập nhật
+												Cập nhật 
 											</s:if>
 												<s:else>
-												Thêm
+												Thêm 
 											</s:else>
 											</button>
 										</div>
@@ -1020,7 +1020,7 @@
 									<div class="form-group">
 										<div class="col-md-6 col-md-offset-3">
 											<button id="rs" type="reset" class="btn btn-primary">
-												?</button>
+												Reset </button>
 											<button id="send" type="submit" class="btn btn-success">
 												<s:if test="%{edit}">
 												Cập nhật
@@ -1084,7 +1084,7 @@
 									<div class="form-group">
 										<div class="col-md-6 col-md-offset-3">
 											<button id="rs" type="reset" class="btn btn-primary">
-												?</button>
+												Reset </button>
 											<button id="send" type="submit" class="btn btn-success">
 												<s:if test="%{edit}">
 												Cập nhật
