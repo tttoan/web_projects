@@ -13,6 +13,31 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
+<%-- 						<s:form action="add_customer" method="post" --%>
+<%-- 							enctype="multipart/form-data" --%>
+<%-- 							cssClass="form-horizontal form-label-left" theme="bootstrap"> --%>
+<%-- 							<s:hidden name="custId" value="%{custId}"></s:hidden> --%>
+<%-- 							<s:hidden name="edit" value="%{edit}"></s:hidden> --%>
+<%-- 							<s:if test="hasActionErrors()"> --%>
+<!-- 								<div class="errors"> -->
+<%-- 									<s:actionerror escape="false" /> --%>
+<!-- 								</div> -->
+<%-- 							</s:if> --%>
+<%-- 							<s:elseif test="hasActionMessages()"> --%>
+<!-- 								<div class="message"> -->
+<%-- 									<s:actionmessage escape="false" /> --%>
+<!-- 								</div> -->
+<%-- 							</s:elseif> --%>
+<%-- 							<span class="section"></span> --%>
+<!-- 							<div class="form-group"> -->
+<!-- 								<div class="col-md-6 col-md-offset-4"> -->
+<!-- 									<button id="rs" type="submit" class="btn btn-primary">Import -->
+<!-- 										Cấp I</button> -->
+<!-- 									<button id="send" type="submit" class="btn btn-success">Import -->
+<!-- 										Cấp II</button> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<%-- 						</s:form> --%>
 						<s:set var="rId">
 							<s:property value="%{userSes.role.roleId}" />
 						</s:set>
@@ -21,7 +46,6 @@
 							<thead>
 								<tr class="headings">
 									<th>STT</th>
-
 									<th>Ngày lập</th>
 									<th>Mã khách hàng</th>
 									<th>Nhóm</th>
@@ -87,7 +111,8 @@
 												value="%{getText('format.date',{createTime})}" /></td>
 										<td class=""><s:property value="customerCode" /></td>
 										<td class=""><a class="btn btn-success btn-xs"><i
-												class="fa"></i> <s:property value="groupCustomer.groupName" /> </a></td>
+												class="fa"></i> <s:property value="groupCustomer.groupName" />
+										</a></td>
 										<td class=""><s:property value="user.fullName" /></td>
 										<td class=""><s:property value="statisticName" /></td>
 										<td class=""><s:property value="businessName" /></td>
@@ -138,13 +163,17 @@
 										<td class=""><s:property value="product4Hot" /></td>
 										<td class=""><s:property value="product5Hot" /></td>
 										<td class=""><s:property value="product6Hot" /></td>
-										<td class=""><s:property value="%{getText('format.percent',{farmProduct1})}" /></td>
+										<td class=""><s:property
+												value="%{getText('format.percent',{farmProduct1})}" /></td>
 										<td class=""><s:property value="farmProduct1Session" /></td>
-										<td class=""><s:property value="%{getText('format.percent',{farmProduct2})}" /></td>
+										<td class=""><s:property
+												value="%{getText('format.percent',{farmProduct2})}" /></td>
 										<td class=""><s:property value="farmProduct2Session" /></td>
-										<td class=""><s:property value="%{getText('format.percent',{farmProduct3})}" /></td>
+										<td class=""><s:property
+												value="%{getText('format.percent',{farmProduct3})}" /></td>
 										<td class=""><s:property value="farmProduct3Session" /></td>
-										<td class=""><s:property value="%{getText('format.percent',{farmProduct4})}" /></td>
+										<td class=""><s:property
+												value="%{getText('format.percent',{farmProduct4})}" /></td>
 										<td class=""><s:property value="farmProduct4Session" /></td>
 
 										<s:if test="%{#rId == 1}">
@@ -169,6 +198,7 @@
 			</div>
 		</div>
 	</div>
+	<%@ include file="import_customer_level1.jsp"%>
 	<!-- footer content -->
 	<s:include value="footer.jsp" />
 	<!-- /footer content -->
@@ -194,11 +224,11 @@
 <!-- Datatables -->
 <script src="js/jquery.dataTables.min.js"></script>
 <script>
-$(document).ready(function() {
-    $('#example').DataTable( {
-        "scrollX": true
-    } );
-} );
+	$(document).ready(function() {
+		$('#example').DataTable({
+			"scrollX" : true
+		});
+	});
 </script>
 </body>
 
