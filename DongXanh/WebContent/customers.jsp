@@ -13,31 +13,66 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
-<%-- 						<s:form action="add_customer" method="post" --%>
-<%-- 							enctype="multipart/form-data" --%>
-<%-- 							cssClass="form-horizontal form-label-left" theme="bootstrap"> --%>
-<%-- 							<s:hidden name="custId" value="%{custId}"></s:hidden> --%>
-<%-- 							<s:hidden name="edit" value="%{edit}"></s:hidden> --%>
-<%-- 							<s:if test="hasActionErrors()"> --%>
-<!-- 								<div class="errors"> -->
-<%-- 									<s:actionerror escape="false" /> --%>
-<!-- 								</div> -->
-<%-- 							</s:if> --%>
-<%-- 							<s:elseif test="hasActionMessages()"> --%>
-<!-- 								<div class="message"> -->
-<%-- 									<s:actionmessage escape="false" /> --%>
-<!-- 								</div> -->
-<%-- 							</s:elseif> --%>
-<%-- 							<span class="section"></span> --%>
-<!-- 							<div class="form-group"> -->
-<!-- 								<div class="col-md-6 col-md-offset-4"> -->
-<!-- 									<button id="rs" type="submit" class="btn btn-primary">Import -->
-<!-- 										Cấp I</button> -->
-<!-- 									<button id="send" type="submit" class="btn btn-success">Import -->
-<!-- 										Cấp II</button> -->
-<!-- 								</div> -->
-<!-- 							</div> -->
-<%-- 						</s:form> --%>
+						<s:form action="#" method="post" enctype="multipart/form-data"
+							cssClass="form-horizontal form-label-left">
+							<s:hidden name="custId" value="%{custId}"></s:hidden>
+							<s:hidden name="edit" value="%{edit}"></s:hidden>
+							<s:if test="hasActionErrors()">
+								<div class="errors">
+									<s:actionerror escape="false" />
+								</div>
+							</s:if>
+							<s:elseif test="hasActionMessages()">
+								<div class="message">
+									<s:actionmessage escape="false" />
+								</div>
+							</s:elseif>
+							<span class="section"></span>
+							<div class="item form-group">
+								<div class="col-md-5 col-sm-6 col-xs-12">
+									<button id="rs" type="submit" class="btn btn-primary">Import
+										Cấp I</button>
+									<button id="send" type="submit" class="btn btn-success">Import
+										Cấp II</button>
+								</div>
+							</div>
+							<span class="section"></span>
+							<div class="item form-group">
+								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+									for="col1_filter">DSKH đã phân công </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<input type="text" id="col1_filter" step="1"
+										class="column_filter form-control col-md-7 col-xs-12 ">
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+									for="col2_filter">DSKH chưa phân công </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<input type="text" id="col2_filter" step="2"
+										class="column_filter form-control col-md-7 col-xs-12 ">
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+									for="col3_filter">DSKH theo Cấp 1 </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<input type="text" id="col3_filter" step="3"
+										class="column_filter form-control col-md-7 col-xs-12 ">
+								</div>
+							</div>
+							<div class="item form-group">
+								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+									for="col4_filter">DSKH theo NVTT </label>
+								<div class="col-md-2 col-sm-6 col-xs-12">
+									<input type="text" id="col4_filter" step="4"
+										class="column_filter form-control col-md-7 col-xs-12 ">
+								</div>
+							</div>
+							
+						</s:form>
+						<br> <span class="section"></span>
+						<div class="clearfix"></div>
 						<s:set var="rId">
 							<s:property value="%{userSes.role.roleId}" />
 						</s:set>
@@ -102,6 +137,7 @@
 
 								</tr>
 							</thead>
+
 							<tbody>
 								<s:iterator value="customers" status="rowStatus">
 									<tr class="even pointer">
@@ -198,7 +234,7 @@
 			</div>
 		</div>
 	</div>
-	<%@ include file="import_customer_level1.jsp"%>
+	<%-- 	<%@ include file="import_customer_level1.jsp"%> --%>
 	<!-- footer content -->
 	<s:include value="footer.jsp" />
 	<!-- /footer content -->
@@ -222,14 +258,60 @@
 <script src="js/custom.js"></script>
 
 <!-- Datatables -->
+<script src="js/jquery-1.12.3.min.js"></script>
 <script src="js/jquery.dataTables.min.js"></script>
+
 <script>
-	$(document).ready(function() {
-		$('#example').DataTable({
-			"scrollX" : true
-		});
+$(document).ready(function() {
+	$('#example').DataTable({
+		"scrollX" : true
 	});
+	  var table = $('#example').DataTable();
+	  
+	    $('#example tbody').on( 'click', 'tr', function () {
+	        if ( $(this).hasClass('selected') ) {
+	            $(this).removeClass('selected');
+	        }
+	        else {
+	            table.$('tr.selected').removeClass('selected');
+	            $(this).addClass('selected');
+	        }
+	    } );
+	 
+	    $('#button').click( function () {
+	        table.row('.selected').remove().draw( false );
+	    } );
+});
+function filterGlobal () {
+    $('#example').DataTable().search(
+        $('#global_filter').val(),
+        $('#global_regex').prop('checked'),
+        $('#global_smart').prop('checked')
+    ).draw();
+}
+ 
+function filterColumn ( i ) {
+    $('#example').DataTable().column( i ).search(
+        $('#col'+i+'_filter').val(),
+        false,
+       true
+    ).draw();
+}
+ 
+$(document).ready(function() {
+    $('#example').DataTable();
+ 
+    $('input.global_filter').on( 'keyup click', function () {
+        filterGlobal();
+    } );
+
+    $('input.column_filter').on( 'keyup click', function () {
+        filterColumn(  $(this).attr('step') );
+    } );
+} );
+	
 </script>
+
 </body>
 
 </html>

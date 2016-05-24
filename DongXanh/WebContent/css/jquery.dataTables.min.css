@@ -1,7 +1,3 @@
-div.dataTables_wrapper {
-        width: 100%;
-        margin: 0 auto;
-    }
 table.dataTable {
 	width: 100%;
 	margin: 0 auto;
@@ -322,7 +318,6 @@ table.dataTable tbody th.dt-body-nowrap, table.dataTable tbody td.dt-body-nowrap
 
 table.dataTable, table.dataTable th, table.dataTable td {
 	-webkit-box-sizing: content-box;
-	-moz-box-sizing: content-box;
 	box-sizing: content-box
 }
 
