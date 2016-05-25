@@ -251,10 +251,12 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 					g.setGroupName(groups.get(customer.getGroupCustomer().getId()));
 					customer.setGroupCustomer(g);
 					
-					User user = new User();
-					user.setId(customer.getUser().getId());
-					user.setFullName(users.get(customer.getUser().getId()));
-					customer.setUser(user);
+					if(customer.getUser() !=null){
+						User user = new User();
+						user.setId(customer.getUser().getId());
+						user.setFullName(users.get(customer.getUser().getId()));
+						customer.setUser(user);
+					}
 				}
 			}
 			return SUCCESS;

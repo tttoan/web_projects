@@ -175,7 +175,7 @@
 										<div class="col-md-5 col-sm-6 col-xs-12">
 											<s:select id="emp_id" name="emp.id"
 												cssClass="form-control col-md-7 col-xs-12"
-												showDownArrow="false" autoComplete="true"
+												showDownArrow="false" autoComplete="true" headerKey="-1" headerValue="--"
 												list="listEmployee" listKey="id"
 												listValue="fullName +' - '+ userName"
 												value="%{cust.user.id}" />
