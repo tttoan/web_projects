@@ -35,6 +35,7 @@
 						<s:a href="%{macURL}"> Thêm mới </s:a></li>
 					<li><s:url action="list_customer.action" var="lcURL" /> <s:a
 							href="%{lcURL}" theme="bootstrap"> Danh sách </s:a></li>
+					<li><a href="assign_customer.jsp">Phân công theo dõi</a></li>
 					<li><s:url action="move_to_accept_customer" var="macURL">
 						</s:url> <s:a href="%{macURL}">Thao tác excel</s:a></li>
 				</ul></li>

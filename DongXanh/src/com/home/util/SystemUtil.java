@@ -1,5 +1,8 @@
 package com.home.util;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
 
+import javax.imageio.ImageIO;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
@@ -80,10 +84,15 @@ public class SystemUtil {
 		}
 	}
 	public static String getValuePropertiesByKey(String key) throws FileNotFoundException, IOException {
-		String f = SystemUtil.class.getClassLoader().getResource("config.properties").getFile();
-		Properties prop = new Properties();
-		prop.load(new FileInputStream(f));
-		return prop.getProperty(key);
+		try {
+			String f = SystemUtil.class.getClassLoader().getResource("config.properties").getFile();
+			Properties prop = new Properties();
+			prop.load(new FileInputStream(f));
+			return prop.getProperty(key);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
 
 	}
 	
@@ -96,5 +105,22 @@ public class SystemUtil {
 			}
 		}
 		return "";
+	}
+	
+	public static byte[] getCustomImageInBytes(File image) {
+		BufferedImage originalImage;
+		byte[] imageInByte = null;
+		try {
+			originalImage = ImageIO.read(image);
+			// convert BufferedImage to byte array
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(originalImage, "jpg", baos);
+			baos.flush();
+			imageInByte = baos.toByteArray();
+			baos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return imageInByte;
 	}
 }
