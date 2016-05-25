@@ -41,7 +41,7 @@
 								<label class="control-label col-md-2 col-sm-3 col-xs-12"
 									for="col1_filter">DSKH đã phân công </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<input type="text" id="col1_filter" step="1"
+									<input type="checkbox" id="col1_filter" step="1" checked="checked"
 										class="column_filter form-control col-md-7 col-xs-12 ">
 								</div>
 							</div>
@@ -49,7 +49,7 @@
 								<label class="control-label col-md-2 col-sm-3 col-xs-12"
 									for="col2_filter">DSKH chưa phân công </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<input type="text" id="col2_filter" step="2"
+									<input type="checkbox" id="col2_filter" step="2" checked="checked"
 										class="column_filter form-control col-md-7 col-xs-12 ">
 								</div>
 							</div>
@@ -69,7 +69,7 @@
 										class="column_filter form-control col-md-7 col-xs-12 ">
 								</div>
 							</div>
-							
+
 						</s:form>
 						<br> <span class="section"></span>
 						<div class="clearfix"></div>
@@ -146,9 +146,8 @@
 										<td class=""><s:property
 												value="%{getText('format.date',{createTime})}" /></td>
 										<td class=""><s:property value="customerCode" /></td>
-										<td class=""><a class="btn btn-success btn-xs"><i
-												class="fa"></i> <s:property value="groupCustomer.groupName" />
-										</a></td>
+										<td class=""><s:property value="groupCustomer.groupName" />
+										</td>
 										<td class=""><s:property value="user.fullName" /></td>
 										<td class=""><s:property value="statisticName" /></td>
 										<td class=""><s:property value="businessName" /></td>
@@ -262,54 +261,56 @@
 <script src="js/jquery.dataTables.min.js"></script>
 
 <script>
-$(document).ready(function() {
-	$('#example').DataTable({
-		"scrollX" : true
-	});
-	  var table = $('#example').DataTable();
-	  
-	    $('#example tbody').on( 'click', 'tr', function () {
-	        if ( $(this).hasClass('selected') ) {
-	            $(this).removeClass('selected');
-	        }
-	        else {
-	            table.$('tr.selected').removeClass('selected');
-	            $(this).addClass('selected');
-	        }
-	    } );
-	 
-	    $('#button').click( function () {
-	        table.row('.selected').remove().draw( false );
-	    } );
-});
-function filterGlobal () {
-    $('#example').DataTable().search(
-        $('#global_filter').val(),
-        $('#global_regex').prop('checked'),
-        $('#global_smart').prop('checked')
-    ).draw();
-}
- 
-function filterColumn ( i ) {
-    $('#example').DataTable().column( i ).search(
-        $('#col'+i+'_filter').val(),
-        false,
-       true
-    ).draw();
-}
- 
-$(document).ready(function() {
-    $('#example').DataTable();
- 
-    $('input.global_filter').on( 'keyup click', function () {
-        filterGlobal();
-    } );
+	$(document).ready(function() {
+		$('#example').DataTable({
+			"scrollX" : true,
 
-    $('input.column_filter').on( 'keyup click', function () {
-        filterColumn(  $(this).attr('step') );
-    } );
-} );
-	
+		});
+		var table = $('#example').DataTable();
+
+		$('#example tbody').on('click', 'tr', function() {
+			if ($(this).hasClass('selected')) {
+				$(this).removeClass('selected');
+			} else {
+				table.$('tr.selected').removeClass('selected');
+				$(this).addClass('selected');
+			}
+		});
+
+		$('#button').click(function() {
+			table.row('.selected').remove().draw(false);
+		});
+	});
+
+	function filterColumn(i) {
+		var value;
+		if (i == 1 || i == 2) {
+			var check1 = $('#col1_filter').prop('checked');
+			var check2 = $('#col2_filter').prop('checked');
+			if (check1 && check2) {
+				value = '^.*$';
+			} else if (check1) {
+				value = '^.+$';
+			} else if (check2) {
+				value = '^\\s*$';
+			} else {
+				value = '^\\s+$';
+			}
+			$('#example').DataTable().column(4).search(value, true, true).draw();
+		} else if (i == 3) {
+			value = $('#col' + i + '_filter').val();
+			$('#example').DataTable().column(3).search(value, true, true).draw();
+		} else if (i == 4) {
+			$('#example').DataTable().column(4).search(value, true, true).draw();
+		}
+	}
+
+	$(document).ready(function() {
+		$('#example').DataTable();
+		$('input.column_filter').on('keyup click', function() {
+			filterColumn($(this).attr('step'));
+		});
+	});
 </script>
 
 </body>
