@@ -2,7 +2,6 @@ package com.home.action;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,20 +20,17 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
 
 import com.home.conts.CustomerTable;
-import com.home.conts.TableStatisticLevel2;
 import com.home.dao.CustomerHome;
 import com.home.dao.GroupCustomerHome;
-import com.home.dao.ProductHome;
-import com.home.dao.StatisticHome;
 import com.home.dao.UserHome;
 import com.home.entities.City;
 import com.home.entities.UserAware;
 import com.home.model.Customer;
 import com.home.model.GroupCustomer;
-import com.home.model.Statistic;
 import com.home.model.User;
 import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
@@ -43,7 +39,7 @@ import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
-public class CustomerAction extends ActionSupport implements Action, ModelDriven<Customer>, UserAware {
+public class CustomerAction extends ActionSupport implements Action, ModelDriven<Customer>, UserAware, ServletContextAware {
 	private static final SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
 	private static final long serialVersionUID = 1L;
 	private boolean edit = false;
@@ -327,9 +323,14 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 				getCust().setCustomerByCustomer5Level1Id(cus5Level1);
 			// -----Upload image scan----
 			if (getCusImageScanFileName() != null) {
-				File destFile = new File(SystemUtil.getValuePropertiesByKey("path.image.scan") + "\\", getCusImageScanFileName());
+				//File destFile = new File(SystemUtil.getValuePropertiesByKey("path.image.scan") + "\\", getCusImageScanFileName());
+				String path_doc_scan = "path_doc_scan";
+				String filePath = this.ctx.getRealPath("/").concat(path_doc_scan);
+				File destFile = new File(filePath, getCusImageScanFileName());
+				
 				FileUtils.copyFile(cusImageScan, destFile, true);
-				cust.setPathDocScan(destFile.getAbsolutePath().replace("\\", "/"));
+				//cust.setPathDocScan(destFile.getAbsolutePath().replace("\\", "/"));
+				cust.setPathDocScan(path_doc_scan + "/" + destFile.getName());
 			}
 			if (cust.getId() > 0) {
 				cusHome.updateDirty(getCust());
@@ -685,6 +686,11 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	public void setCusImageScanFileName(String cusImageScanFileName) {
 		this.cusImageScanFileName = cusImageScanFileName;
+	}
+	
+	@Override
+	public void setServletContext(ServletContext context) {
+		this.ctx = context;
 	}
 
 }

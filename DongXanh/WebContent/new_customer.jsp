@@ -199,6 +199,15 @@
 										<div class="col-md-5 col-sm-6 col-xs-12">
 											<input id="cusImageScan" type="file" name="cusImageScan" />
 										</div>
+										<s:if test="%{edit}">
+											<div id="dvPreview" class="col-md-5 col-sm-6 col-xs-12 divborder">
+												<img src="<s:property value="cust.pathDocScan"/>"  width="300" height="250"  />
+											</div>
+										</s:if>
+										<s:else>
+											<div id="dvPreview" class="col-md-5 col-sm-6 col-xs-12 divborder">
+											</div>
+										</s:else>
 									</div>
 									<br>
 
@@ -1328,5 +1337,58 @@
 				+ "&filterValue=" + filterValue + "&resultType=" + resultType;
 	}
 </script>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script language="javascript" type="text/javascript">
+$(function () {
+    $("#cusImageScan").change(function () {
+    	//alert("huhuhu");
+        $("#dvPreview").html("");
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
+        if (regex.test($(this).val().toLowerCase())) {
+            if ($.browser.msie && parseFloat(jQuery.browser.version) <= 9.0) {
+                $("#dvPreview").show();
+                $("#dvPreview")[0].filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = $(this).val();
+            }
+            else {
+                if (typeof (FileReader) != "undefined") {
+                    $("#dvPreview").show();
+                    $("#dvPreview").append("<img />");
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $("#dvPreview img").attr("src", e.target.result).width(300).height(200);;
+                    }
+                    reader.readAsDataURL($(this)[0].files[0]);
+                } else {
+                    alert("This browser does not support FileReader.");
+                }
+            }
+        } else {
+            alert("Please upload a valid image file.");
+        }
+    });
+});
+</script>
+
+<style>
+	.divleft {
+	    float: left;
+	    width: 300;
+	    height: 150;
+	    border: 3px solid #73AD21;
+	    padding: 5px;
+	}
+	.divright {
+	    float: right;
+	    width: 300;
+	    height: 150;
+	    border: 3px solid #73AD21;
+	    padding: 5px;
+	}
+	.divborder {
+	    border: 3px solid #73AD21;
+	    padding: 5px;
+	}
+</style>
 </body>
 </html>
