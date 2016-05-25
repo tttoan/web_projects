@@ -284,6 +284,7 @@
 
 	function filterColumn(i) {
 		var value;
+		var table = $('#example').DataTable();
 		if (i == 1 || i == 2) {
 			var check1 = $('#col1_filter').prop('checked');
 			var check2 = $('#col2_filter').prop('checked');
@@ -296,12 +297,14 @@
 			} else {
 				value = '^\\s+$';
 			}
-			$('#example').DataTable().column(4).search(value, true, true).draw();
-		} else if (i == 3) {
+			table.column(4).search(value, true, true).draw();
+		} else{
 			value = $('#col' + i + '_filter').val();
-			$('#example').DataTable().column(3).search(value, true, true).draw();
-		} else if (i == 4) {
-			$('#example').DataTable().column(4).search(value, true, true).draw();
+			if (i == 3) {
+				table.column(3).search(value, true, true).draw();
+			} else if (i == 4) {
+				table.column(4).search(value, true, true).draw();
+			}
 		}
 	}
 
