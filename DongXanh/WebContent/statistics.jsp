@@ -11,8 +11,6 @@
 		<div class="clearfix"></div>
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
-				<div class="x_panel">
-					<div class="x_content">
 						<s:set var="rId">
 							<s:property value="%{userSes.role.roleId}" />
 						</s:set>
@@ -74,8 +72,6 @@
 
 						</table>
 					</div>
-				</div>
-			</div>
 		</div>
 	</div>
 	<!-- footer content -->
@@ -115,6 +111,20 @@
 	$(document).ready(function() {
 		$('#example').DataTable({
 			"scrollX" : true
+		});
+		var table = $('#example').DataTable();
+
+		$('#example tbody').on('click', 'tr', function() {
+			if ($(this).hasClass('selected')) {
+				$(this).removeClass('selected');
+			} else {
+				table.$('tr.selected').removeClass('selected');
+				$(this).addClass('selected');
+			}
+		});
+
+		$('#button').click(function() {
+			table.row('.selected').remove().draw(false);
 		});
 	});
 </script>

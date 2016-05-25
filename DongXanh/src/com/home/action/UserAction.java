@@ -1,5 +1,6 @@
 package com.home.action;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +21,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
 public class UserAction extends ActionSupport implements Action, ModelDriven<User>, UserAware {
+	private static final SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
 	private static final long serialVersionUID = 1L;
 	private boolean edit = false;
 	private boolean update = false;
@@ -34,7 +36,7 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 	private ServletContext ctx;
 	public String genUserName = "sss";
 	private User userSes;
-	
+	private String varbirthDate = SDF.format(new Date());
 	public User getUserSes() {
 		return userSes;
 	}
@@ -61,10 +63,13 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 			if (userId != 0) {
 				UserHome userHome = new UserHome(getSessionFactory());
 				user = userHome.findById(userId);
+				varbirthDate = SDF.format(user.getBirthDate());
 				setEdit(true);
 			}
 		} catch (Exception e) {
-			throw e;
+			e.printStackTrace();
+			addActionError(e.getMessage());
+			return INPUT;
 		}
 		return SUCCESS;
 	}
@@ -110,9 +115,11 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 			listRole = roleHome.findAllRole();
 			return SUCCESS;
 		} catch (Exception e) {
+			e.printStackTrace();
+			addActionError(e.getMessage());
 			return INPUT;
 		}
-
+		
 	}
 
 	public String listEmployee() throws Exception {
@@ -120,12 +127,17 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 			UserHome userHome = new UserHome(getSessionFactory());
 			listEmployee = userHome.getListUser();
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw e;
 		}
 		return SUCCESS;
 	}
-
-	public String addEmployee() throws Exception {
+	public String addEmployee1() {
+		System.out.println("asdassssssssssssssssssssssssssssssss");
+		return SUCCESS;
+	}
+	public String addEmployee() {
+		System.out.println("asdassssssssssssssssssssssssssssssss");
 		try {
 			UserHome userHome = new UserHome(getSessionFactory());
 			if (!edit) {
@@ -133,6 +145,7 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 				if (count == 1)
 					throw new Exception("Tên tài khoản đã tồn tại!");
 			}
+			user.setBirthDate(SDF.parse(varbirthDate));
 			Role rl = new Role();
 			rl.setRoleId(getRoleId());
 			user.setRole(rl);
@@ -145,9 +158,10 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 				return SUCCESS;
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			addActionError(e.getMessage());
 		}
-		return INPUT;
+		return SUCCESS;
 	}
 
 	public String deleteEmployeeById() throws Exception {
@@ -224,5 +238,13 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 
 	public void setUpdate(boolean update) {
 		this.update = update;
+	}
+
+	public String getVarbirthDate() {
+		return varbirthDate;
+	}
+
+	public void setVarbirthDate(String varbirthDate) {
+		this.varbirthDate = varbirthDate;
 	}
 }

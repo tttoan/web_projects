@@ -13,7 +13,7 @@
 		<div class="page-title">
 			<div class="title_left">
 				<s:if test="%{edit}">
-					<h3>Sửa thông tin nhân viên</h3>
+					<h3>Cập nhật thông tin Nhân viên</h3>
 				</s:if>
 				<s:else>
 					<h3>Thêm nhân viên</h3>
@@ -76,18 +76,21 @@
 								</label>
 								<div class="col-md-6 col-sm-6 col-xs-12">
 									<input type="email" id="email" name="email" required="required"
-										data-validate-length="1,100" value="${user.email}" class="form-control col-md-7 col-xs-12">
+										data-validate-length="1,100" value="${user.email}"
+										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="birthDate">Ngày sinh <span class="required">*</span>
 								</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
-									<sx:datetimepicker id="birthDate" name="birthDate"
-										value="%{user.birthDate}"
-										cssClass="form-control col-md-7 col-xs-12"
-										displayFormat="dd-MM-yyyy" />
+								<div class="col-md-3 xdisplay_inputx has-feedback">
+									<input type="text" class="form-control has-feedback-left"
+										id="birthDate" name="birthDate" value="${varbirthDate}"
+										aria-describedby="inputSuccess2Status"> <span
+										class="fa fa-calendar-o form-control-feedback left"
+										aria-hidden="true"></span> <span id="inputSuccess2Status"
+										class="sr-only">(success)</span>
 								</div>
 							</div>
 							<div class="item form-group">
@@ -137,7 +140,14 @@
 							<div class="form-group">
 								<div class="col-md-6 col-md-offset-3">
 									<button type="reset" class="btn btn-primary">Reset</button>
-									<button id="send" type="submit" class="btn btn-success">Save</button>
+									<button id="send" type="submit" class="btn btn-success">
+										<s:if test="%{edit}">
+											Cập nhật
+										</s:if>
+										<s:else>
+											Thêm
+										</s:else>
+									</button>
 								</div>
 							</div>
 						</s:form>
@@ -179,8 +189,23 @@
 <script src="js/custom.js"></script>
 <!-- form validation -->
 <script src="js/validator/validator.js"></script>
+<!-- daterangepicker -->
+<script type="text/javascript" src="js/moment.min2.js"></script>
+<script type="text/javascript" src="js/datepicker/daterangepicker.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#birthDate').daterangepicker({
+			singleDatePicker : true,
+			calender_style : "picker_2",
+			format : 'DD/MM/YYYY',
+			showDropdowns : true
+		}, function(start, end, label) {
+			console.log(start.toISOString(), end.toISOString(), label);
+		});
+	});
+</script>
 <script>
-	$(document).ready(function() { 
+	$(document).ready(function() {
 		$('#fullName').change(function() {
 			var varFullName = {
 				"varFullName" : $("#fullName").val()
@@ -221,7 +246,7 @@
 		var submit = true;
 		// evaluate the form using generic validaing
 		if (!validator.checkAll($(this))) {
-			
+
 			submit = false;
 		}
 

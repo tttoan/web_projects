@@ -6,6 +6,7 @@
 <struts>
 	<constant name="struts.convention.result.path" value="/"></constant>
 	<constant name="struts.custom.i18n.resources" value="struts"></constant>
+	<constant name="struts.devMode" value="true" />
 	<package name="default" namespace="/" extends="struts-default">
 		<interceptors>
 			<interceptor name="authentication"
@@ -29,7 +30,6 @@
 			<result name="success">/index.jsp</result>
 			<result name="input">/login.jsp</result>
 		</action>
-
 		<action name="testing_user" method="testUser" class="com.home.action.UserAction">
 			<result name="success">/test.jsp</result>
 		</action>
