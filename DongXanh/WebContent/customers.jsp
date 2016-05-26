@@ -41,7 +41,8 @@
 								<label class="control-label col-md-2 col-sm-3 col-xs-12"
 									for="col1_filter">DSKH đã phân công </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<input type="checkbox" id="col1_filter" step="1" checked="checked"
+									<input type="checkbox" id="col1_filter" step="1"
+										checked="checked"
 										class="column_filter form-control col-md-7 col-xs-12 ">
 								</div>
 							</div>
@@ -49,7 +50,8 @@
 								<label class="control-label col-md-2 col-sm-3 col-xs-12"
 									for="col2_filter">DSKH chưa phân công </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<input type="checkbox" id="col2_filter" step="2" checked="checked"
+									<input type="checkbox" id="col2_filter" step="2"
+										checked="checked"
 										class="column_filter form-control col-md-7 col-xs-12 ">
 								</div>
 							</div>
@@ -71,7 +73,9 @@
 							</div>
 
 						</s:form>
-						<br> <span class="section"></span>
+						<a href="#openModal">Ẩn/Hiện Cột</a> <br> <span
+							class="section"></span>
+
 						<div class="clearfix"></div>
 						<s:set var="rId">
 							<s:property value="%{userSes.role.roleId}" />
@@ -80,57 +84,9 @@
 							style="width: 100%">
 							<thead>
 								<tr class="headings">
-									<th>STT</th>
-									<th>Ngày lập</th>
-									<th>Mã khách hàng</th>
-									<th>Nhóm</th>
-									<th>Nhân viên TT</th>
-									<th>Tên bảng kê</th>
-									<th>Tên doanh nghiệp</th>
-									<th>Giấy phép ĐKKD số</th>
-									<th>Ngày cấp</th>
-									<th>Địa chỉ đăng kí KD</th>
-									<th>Mã số thuế</th>
-									<th>Vốn đăng kí</th>
-									<th>Điện thoại bàn</th>
-									<th>Fax</th>
-									<th>Email</th>
-									<th>Địa chỉ mạng xã hội</th>
-									<th>Địa điểm kinh doanh</th>
-									<th>Người đại diện pháp luật</th>
-									<th>Người quyết định chính công việc</th>
-									<th>ĐTDĐ Người quyết định</th>
-									<th>Ngày sinh</th>
-									<th>Nguyên quán</th>
-									<th>Người bán hàng trực tiếp</th>
-									<th>ĐTDĐ Người bán hàng</th>
-									<th>Ước vốn tự có để kinh doanh</th>
-									<th>Ngành nghề kinh doanh khác</th>
-									<th>Cấp 1 (5)</th>
-									<th>Tỉ lệ nhận (5)</th>
-									<th>Cấp 1 (4)</th>
-									<th>Tỉ lệ nhận (4)</th>
-									<th>Cấp 1 (3)</th>
-									<th>Tỉ lệ nhận (3)</th>
-									<th>Cấp 1 (2)</th>
-									<th>Tỉ lệ nhận (2)</th>
-									<th>Cấp 1 (1)</th>
-									<th>Tỉ lệ nhận (1)</th>
-									<th>3 Sản phẩm thuốc trừ cỏ</th>
-									<th>5 Sản phẩm thuốc trừ sâu</th>
-									<th>3 Sản phẩm thuốc trừ rầy</th>
-									<th>5 Sản phẩm thuốc trừ bệnh</th>
-									<th>3 Sản phẩm kích thích sinh trưởng</th>
-									<th>3 Sản phẩm thuốc trừ ốc</th>
-									<th>Lúa (%)</th>
-									<th>3 Mùa vụ Lúa</th>
-									<th>Rau màu (%)</th>
-									<th>3 Mùa vụ Rau màu</th>
-									<th>Cây ăn trái (%)</th>
-									<th>3 Mùa vụ Cây ăn trái</th>
-									<th>Khác (%)</th>
-									<th>3 Mùa vụ Khác</th>
-
+									<s:iterator value="listTableColumn" status="rowStatus">
+										<th><s:property /></th>
+									</s:iterator>
 									<s:if test="%{#rId == 1}">
 										<th class=" no-link last"><span class="nobr"></span></th>
 									</s:if>
@@ -237,7 +193,7 @@
 	<!-- footer content -->
 	<s:include value="footer.jsp" />
 	<!-- /footer content -->
-
+	<s:include value="customer_define_column.jsp" />
 </div>
 <!-- /page content -->
 </div>
@@ -266,8 +222,12 @@
 			"scrollX" : true,
 
 		});
+		
+		$('input.column_filter').on('keyup click', function() {
+			filterColumn($(this).attr('step'));
+		});
+		
 		var table = $('#example').DataTable();
-
 		$('#example tbody').on('click', 'tr', function() {
 			if ($(this).hasClass('selected')) {
 				$(this).removeClass('selected');
@@ -280,6 +240,7 @@
 		$('#button').click(function() {
 			table.row('.selected').remove().draw(false);
 		});
+		
 	});
 
 	function filterColumn(i) {
@@ -298,7 +259,7 @@
 				value = '^\\s+$';
 			}
 			table.column(4).search(value, true, true).draw();
-		} else{
+		} else {
 			value = $('#col' + i + '_filter').val();
 			if (i == 3) {
 				table.column(3).search(value, true, true).draw();
@@ -307,13 +268,6 @@
 			}
 		}
 	}
-
-	$(document).ready(function() {
-		$('#example').DataTable();
-		$('input.column_filter').on('keyup click', function() {
-			filterColumn($(this).attr('step'));
-		});
-	});
 </script>
 
 </body>

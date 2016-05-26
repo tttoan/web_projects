@@ -28,7 +28,8 @@
 <link href="css/calendar/fullcalendar.css" rel="stylesheet">
 <link href="css/jquery.dataTables.min.css" rel="stylesheet">
 <script src="Scripts/custom/profileUser.js"></script>
-
+<link href="css/show.hidden.field.css"
+	rel="stylesheet" type="text/css" />
 <!-- <link rel="stylesheet" href="css/jquery-ui.css"> -->
 <%-- <script src="js/jquery-1.10.2.js" type="text/javascript"></script> --%>
 
