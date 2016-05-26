@@ -72,7 +72,10 @@
 			<result name="wait">/waiting.jsp</result>
 			<result name="success">/import_customer.jsp</result>
 		</action>
-		
+		<action name="move_to_assign_customer" class="com.home.action.AssignCustomerAction">
+			<result name="success">/assign_customer.jsp</result>
+			<result name="error">/customers.jsp</result>
+		</action>
 	</package>
 	<package name="customerJson" namespace="/" extends="json-default">
 		<interceptors>
@@ -88,6 +91,14 @@
 			<result type="json">
 				<param name="root">commonCusPhone</param>
 			</result>
+		</action>
+		<action name="getAssignCusByNVTTAction" method="getCustomerByNVTT"
+			class="com.home.action.AssignCustomerAction">
+			<result type="json" />
+		</action>
+		<action name="getAssignFreeCusAction" method="getCustomerFree"
+			class="com.home.action.AssignCustomerAction">
+			<result type="json" />
 		</action>
 	</package>
 </struts>

@@ -759,4 +759,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		this.listTableColumn = listTableColumn;
 	}
 
+	public String notifyListCutomer(){
+		return SUCCESS;
+	}
 }

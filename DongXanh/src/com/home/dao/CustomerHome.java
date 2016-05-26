@@ -356,9 +356,9 @@ public class CustomerHome {
 
 	}
 	
-	public List<Customer> getCustomersByNVTT(int user_id) {
+	public List<Object[]> getCustomersByNVTT(int user_id) {
 		log.debug("finding List Customer instance by full name");
-		List<Customer> results = new ArrayList<Customer>();
+		List<Object[]> results = new ArrayList<Object[]>();
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
@@ -366,6 +366,7 @@ public class CustomerHome {
 			Connection conn = sessionImpl.connection();
 			try (Statement sta = conn.createStatement()) {
 				String query = "Select id, customer_code, business_name, director From customer where user_id= "+user_id + " order by business_name";
+				System.out.println(query);
 				try (ResultSet rs = sta.executeQuery(query)) {
 					while (rs.next()) {
 						Customer cus = new Customer();
@@ -373,7 +374,7 @@ public class CustomerHome {
 						cus.setCustomerCode(rs.getString("customer_code"));
 						cus.setDirector(rs.getString("director"));
 						cus.setBusinessName(rs.getString("business_name"));
-						results.add(cus);
+						results.add(new Object[]{cus.getId(), cus.getCustomerCode(), cus.getBusinessName()});
 					}
 				} 
 			} catch (Exception e) {
@@ -394,9 +395,9 @@ public class CustomerHome {
 		}
 	}
 	
-	public List<Customer> getCustomersFree() {
+	public List<Object[]> getCustomersFree() {
 		log.debug("finding List Customer instance by full name");
-		List<Customer> results = new ArrayList<Customer>();
+		List<Object[]> results = new ArrayList<Object[]>();
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
@@ -411,7 +412,7 @@ public class CustomerHome {
 						cus.setCustomerCode(rs.getString("customer_code"));
 						cus.setDirector(rs.getString("director"));
 						cus.setBusinessName(rs.getString("business_name"));
-						results.add(cus);
+						results.add(new Object[]{cus.getId(), cus.getCustomerCode(), cus.getBusinessName()});
 					}
 				} 
 			} catch (Exception e) {

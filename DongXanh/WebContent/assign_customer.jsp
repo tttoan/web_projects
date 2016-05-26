@@ -16,26 +16,22 @@ pageEncoding="UTF-8"%>
 					
 					<div class="item form-group">
 							<div class="right">
-								<select id="emp_id" name="emp.id" style="width: 200px;">
-									<option value="tttoan">tttoan</option>
-				    				<option value="tttoan">tttoan</option>
-								</select>
+								<s:select id="emp_id" name="emp_id"
+												cssClass="form-control col-md-7 col-xs-12"
+												showDownArrow="false" autoComplete="true" headerKey="-1" headerValue="---"
+												list="listEmployee" listKey="id"
+												listValue="fullName +' - '+ userName"
+												value="" />
 							</div>
-							<label class="right" for="emp_id">Nhân viên TT 
+							<label class="right" for="emp_id" style="padding-top:10px">Nhân viên TT 
 							</label>
 					</div>
 				
 					<div id="x_content" class="x_content">
 						
-						<div class="subject-info-box-1">
+						<div class="subject-info-box-1" id="divCus1">
 						  <select size="25" multiple="multiple" id="lstBox1" class="form-control">
 						  	 <optgroup label="Khách hàng chưa có NVTT">
-							    <option value="ajax">Ajax</option>
-							    <option value="jquery">jQuery</option>
-							    <option value="javascript">JavaScript</option>
-							    <option value="mootool">MooTools</option>
-							    <option value="prototype">Prototype</option>
-							    <option value="dojo">Dojo</option>
 							  </optgroup>
 						  </select>
 						</div>
@@ -47,14 +43,8 @@ pageEncoding="UTF-8"%>
 						  <input type="button" id="btnAllLeft" value="&lt;&lt;" class="btn btn-default" />
 						</div>
 						
-						<div class="subject-info-box-2">
+						<div class="subject-info-box-2" id="divCus2">
 						  <select size="25" multiple="multiple" id="lstBox2" class="form-control">
-						    <option value="asp">ASP.NET</option>
-						    <option value="c#">C#</option>
-						    <option value="vb">VB.NET</option>
-						    <option value="java">Java</option>
-						    <option value="php">PHP</option>
-						    <option value="python">Python</option>
 						  </select>
 						</div>
 						
@@ -144,6 +134,41 @@ pageEncoding="UTF-8"%>
         $(selectedOpts).remove();
         e.preventDefault();
     });
+    
+    $("#emp_id" ).change(function() {
+    	var user_id = document.getElementById('emp_id').value;
+		//alert(user_id);
+    	 $.ajax({ //Not found in cache, get from server
+             url: 'getAssignCusByNVTTAction?user_id='+user_id,
+             type: 'POST',
+             dataType: 'json',
+             async: false,
+             success: function (data) {
+            	//alert("hiiiii  " + JSON.stringify(data)); 
+            	 var select = $('#lstBox2');
+                 select.find('option').remove();
+                 for (var i = 0; i < data.listCustomer1.length; i++) {
+                	 $('<option>').val(data.listCustomer1[i][0]).text(data.listCustomer1[i][2]).appendTo(select);
+                 }
+             }
+         });
+    	 
+    	 $.ajax({ //Not found in cache, get from server
+             url: 'getAssignFreeCusAction',
+             type: 'POST',
+             dataType: 'json',
+             async: false,
+             success: function (data) {
+            	// alert("hiiiii  " + JSON.stringify(data)); 
+            	 var select = $('#lstBox1');
+                 select.find('option').remove();
+                 for (var i = 0; i < data.listCustomer2.length; i++) {
+                	 $('<option>').val(data.listCustomer2[i][0]).text(data.listCustomer2[i][2]).appendTo(select);
+                 }
+             }
+         });
+    });
+    
 }(jQuery));
 </script>
 
