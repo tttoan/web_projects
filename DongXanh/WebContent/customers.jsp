@@ -73,7 +73,8 @@
 							</div>
 
 						</s:form>
-						<a href="#openModal">Ẩn/Hiện Cột</a> <br> <span
+						
+						<a href="#openModal" class="btn btn-warning"><b>Ẩn/Hiện Cột</b></a> <br> <span
 							class="section"></span>
 
 						<div class="clearfix"></div>
