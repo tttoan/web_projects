@@ -355,4 +355,133 @@ public class CustomerHome {
 		}
 
 	}
+	
+	public List<Customer> getCustomersByNVTT(int user_id) {
+		log.debug("finding List Customer instance by full name");
+		List<Customer> results = new ArrayList<Customer>();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			try (Statement sta = conn.createStatement()) {
+				String query = "Select id, customer_code, business_name, director From customer where user_id= "+user_id + " order by business_name";
+				try (ResultSet rs = sta.executeQuery(query)) {
+					while (rs.next()) {
+						Customer cus = new Customer();
+						cus.setId(rs.getInt("id"));
+						cus.setCustomerCode(rs.getString("customer_code"));
+						cus.setDirector(rs.getString("director"));
+						cus.setBusinessName(rs.getString("business_name"));
+						results.add(cus);
+					}
+				} 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return results;
+		} catch (RuntimeException re) {
+			log.error("find by Customer failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public List<Customer> getCustomersFree() {
+		log.debug("finding List Customer instance by full name");
+		List<Customer> results = new ArrayList<Customer>();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			try (Statement sta = conn.createStatement()) {
+				String query = "Select id, customer_code, business_name, director From customer where user_id is null order by business_name";
+				try (ResultSet rs = sta.executeQuery(query)) {
+					while (rs.next()) {
+						Customer cus = new Customer();
+						cus.setId(rs.getInt("id"));
+						cus.setCustomerCode(rs.getString("customer_code"));
+						cus.setDirector(rs.getString("director"));
+						cus.setBusinessName(rs.getString("business_name"));
+						results.add(cus);
+					}
+				} 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return results;
+		} catch (RuntimeException re) {
+			log.error("find by Customer failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+	
+	public void assignCustomer2NVTT(int cus_id, int user_id) {
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Query query = session.createQuery("UPDATE Customer set user = :user WHERE id = :id");
+			query.setParameter("user", cus_id);
+			query.setParameter("id", user_id);
+			query.executeUpdate();
+			tx.commit();
+			log.debug("assignCustomer2NVTT successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void unAssignCustomer2NVTT(int user_id) {
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Query query = session.createQuery("UPDATE Customer set user = null WHERE id = :id");
+			query.setParameter("id", user_id);
+			query.executeUpdate();
+			tx.commit();
+			log.debug("unAssignCustomer2NVTT successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 }

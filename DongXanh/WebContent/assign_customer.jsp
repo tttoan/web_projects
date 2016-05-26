@@ -13,16 +13,30 @@ pageEncoding="UTF-8"%>
 			<div class="col-md-12 col-sm-12 col-xs-12">
 
 				<div class="x_panel">
-					<div id="x_content" class="x_content">
 					
+					<div class="item form-group">
+							<div class="right">
+								<select id="emp_id" name="emp.id" style="width: 200px;">
+									<option value="tttoan">tttoan</option>
+				    				<option value="tttoan">tttoan</option>
+								</select>
+							</div>
+							<label class="right" for="emp_id">Nhân viên TT 
+							</label>
+					</div>
+				
+					<div id="x_content" class="x_content">
+						
 						<div class="subject-info-box-1">
 						  <select size="25" multiple="multiple" id="lstBox1" class="form-control">
-						    <option value="ajax">Ajax</option>
-						    <option value="jquery">jQuery</option>
-						    <option value="javascript">JavaScript</option>
-						    <option value="mootool">MooTools</option>
-						    <option value="prototype">Prototype</option>
-						    <option value="dojo">Dojo</option>
+						  	 <optgroup label="Khách hàng chưa có NVTT">
+							    <option value="ajax">Ajax</option>
+							    <option value="jquery">jQuery</option>
+							    <option value="javascript">JavaScript</option>
+							    <option value="mootool">MooTools</option>
+							    <option value="prototype">Prototype</option>
+							    <option value="dojo">Dojo</option>
+							  </optgroup>
 						  </select>
 						</div>
 						
@@ -165,6 +179,11 @@ pageEncoding="UTF-8"%>
 
 .form-control{
     line-height:30px;
+}
+
+.right {
+	    float: right;
+	    padding: 4px 10px 4px 50px;
 }
 </style>
 
