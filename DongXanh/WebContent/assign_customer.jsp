@@ -93,9 +93,10 @@ pageEncoding="UTF-8"%>
             alert("Nothing to move.");
             e.preventDefault();
         }
-
+      	//alert((selectedOpts[0].value)); 
         $('#lstBox2').append($(selectedOpts).clone());
         $(selectedOpts).remove();
+        assignUser(selectedOpts);        
         e.preventDefault();
     });
 
@@ -108,6 +109,7 @@ pageEncoding="UTF-8"%>
 
         $('#lstBox2').append($(selectedOpts).clone());
         $(selectedOpts).remove();
+        assignUser(selectedOpts); 
         e.preventDefault();
     });
 
@@ -120,6 +122,7 @@ pageEncoding="UTF-8"%>
 
         $('#lstBox1').append($(selectedOpts).clone());
         $(selectedOpts).remove();
+        unAssignUser(selectedOpts); 
         e.preventDefault();
     });
 
@@ -132,10 +135,44 @@ pageEncoding="UTF-8"%>
 
         $('#lstBox1').append($(selectedOpts).clone());
         $(selectedOpts).remove();
+        unAssignUser(selectedOpts); 
         e.preventDefault();
     });
     
+    function assignUser(Cuss){
+    	var user_id = document.getElementById('emp_id').value;
+        for(var i=0; i<=Cuss.length; i++){
+        	$.ajax({ //Not found in cache, get from server
+                url: 'setAssignCusByNVTTAction?cus_id='+Cuss[i].value+'&user_id='+user_id,
+                type: 'POST',
+                dataType: 'json',
+                async: false,
+        	});
+        }
+    }
+    
+    function unAssignUser(Cuss){
+        for(var i=0; i<=Cuss.length; i++){
+        	$.ajax({ //Not found in cache, get from server
+                url: 'setAssignFreeCusAction?cus_id='+Cuss[i].value,
+                type: 'POST',
+                dataType: 'json',
+                async: false,
+        	});
+        }
+    }
+    
     $("#emp_id" ).change(function() {
+    	loadCustomerByNVTT();
+    	 loadCustomerFree();
+    });
+    
+    $(document).ready(function() {
+    	loadCustomerByNVTT();
+    	loadCustomerFree();
+    });
+    
+    function loadCustomerByNVTT(){
     	var user_id = document.getElementById('emp_id').value;
 		//alert(user_id);
     	 $.ajax({ //Not found in cache, get from server
@@ -152,22 +189,24 @@ pageEncoding="UTF-8"%>
                  }
              }
          });
-    	 
-    	 $.ajax({ //Not found in cache, get from server
-             url: 'getAssignFreeCusAction',
-             type: 'POST',
-             dataType: 'json',
-             async: false,
-             success: function (data) {
-            	// alert("hiiiii  " + JSON.stringify(data)); 
-            	 var select = $('#lstBox1');
-                 select.find('option').remove();
-                 for (var i = 0; i < data.listCustomer2.length; i++) {
-                	 $('<option>').val(data.listCustomer2[i][0]).text(data.listCustomer2[i][2]).appendTo(select);
-                 }
-             }
-         });
-    });
+    }
+    
+    function loadCustomerFree(){
+    	$.ajax({ //Not found in cache, get from server
+            url: 'getAssignFreeCusAction',
+            type: 'POST',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+           	// alert("hiiiii  " + JSON.stringify(data)); 
+           	 var select = $('#lstBox1');
+                select.find('option').remove();
+                for (var i = 0; i < data.listCustomer2.length; i++) {
+               	 $('<option>').val(data.listCustomer2[i][0]).text(data.listCustomer2[i][2]).appendTo(select);
+                }
+            }
+        });
+    }
     
 }(jQuery));
 </script>

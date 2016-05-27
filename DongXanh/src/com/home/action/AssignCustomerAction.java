@@ -42,13 +42,16 @@ public class AssignCustomerAction extends ActionSupport implements Action, Servl
 			e.printStackTrace();
 			addActionError("Error: load lookup customers. Exception: " + e.getMessage());
 		}
-
 	}
 	
 	public String getCustomerByNVTT(){
 		try {
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
-			int user_id = Integer.parseInt(request.getParameter("user_id"));
+			int user_id = -1;
+			try {
+				user_id = Integer.parseInt(request.getParameter("user_id"));
+			} catch (Exception e) {
+			}
 			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
 			listCustomer1 = cusHome.getCustomersByNVTT(user_id);
 		} catch (Exception e) {
@@ -62,6 +65,33 @@ public class AssignCustomerAction extends ActionSupport implements Action, Servl
 		try {
 			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
 			listCustomer2 = cusHome.getCustomersFree();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+		return SUCCESS;
+	}
+	
+	public String setAssignCustomer2NVTT(){
+		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			int user_id = Integer.parseInt(request.getParameter("user_id"));
+			int cus_id = Integer.parseInt(request.getParameter("cus_id"));
+			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
+			cusHome.assignCustomer2NVTT(cus_id, user_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+		return SUCCESS;
+	}
+	
+	public String setUnAssignCustomer2NVTT(){
+		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			int cus_id = Integer.parseInt(request.getParameter("cus_id"));
+			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
+			cusHome.unAssignCustomer2NVTT(cus_id);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ERROR;

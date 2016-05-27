@@ -434,19 +434,26 @@ public class CustomerHome {
 
 	}
 	
-	public void assignCustomer2NVTT(int cus_id, int user_id) {
+	public void assignCustomer2NVTT(int cus_id, int user_id) throws Exception{
 		Transaction tx = null;
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			Query query = session.createQuery("UPDATE Customer set user = :user WHERE id = :id");
-			query.setParameter("user", cus_id);
-			query.setParameter("id", user_id);
-			query.executeUpdate();
+//			Query query = session.createQuery("UPDATE Customer set user = :vuser WHERE id = :vid");
+//			query.setParameter("vuser", user_id);
+//			query.setParameter("vid", cus_id);
+//			System.out.println(query.toString());
+//			query.executeUpdate();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			try (Statement sta = conn.createStatement()) {
+				sta.executeUpdate("UPDATE customer set user_id = "+user_id+" WHERE id = " + cus_id);
+			}
 			tx.commit();
 			log.debug("assignCustomer2NVTT successful");
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
+			re.printStackTrace();
 			log.error("attach failed", re);
 			throw re;
 		} finally {
@@ -460,18 +467,19 @@ public class CustomerHome {
 		}
 	}
 	
-	public void unAssignCustomer2NVTT(int user_id) {
+	public void unAssignCustomer2NVTT(int cus_id) {
 		Transaction tx = null;
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			Query query = session.createQuery("UPDATE Customer set user = null WHERE id = :id");
-			query.setParameter("id", user_id);
+			Query query = session.createQuery("UPDATE Customer set user = null WHERE id = :vid");
+			query.setParameter("vid", cus_id);
 			query.executeUpdate();
 			tx.commit();
 			log.debug("unAssignCustomer2NVTT successful");
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
+			re.printStackTrace();
 			log.error("attach failed", re);
 			throw re;
 		} finally {

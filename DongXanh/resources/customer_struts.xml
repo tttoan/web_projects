@@ -100,5 +100,13 @@
 			class="com.home.action.AssignCustomerAction">
 			<result type="json" />
 		</action>
+		<action name="setAssignFreeCusAction" method="setUnAssignCustomer2NVTT"
+			class="com.home.action.AssignCustomerAction">
+			<result type="json" />
+		</action>
+		<action name="setAssignCusByNVTTAction" method="setAssignCustomer2NVTT"
+			class="com.home.action.AssignCustomerAction">
+			<result type="json" />
+		</action>
 	</package>
 </struts>
