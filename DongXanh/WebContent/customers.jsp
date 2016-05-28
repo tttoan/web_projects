@@ -59,7 +59,7 @@
 								<label class="control-label col-md-2 col-sm-3 col-xs-12"
 									for="col3_filter">DSKH theo Cấp 1 </label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<input type="text" id="col3_filter" step="3"
+									<input type="checkbox" id="col3_filter" step="3"
 										class="column_filter form-control col-md-7 col-xs-12 ">
 								</div>
 							</div>
@@ -222,11 +222,11 @@
 		$('#example').DataTable({
 			"scrollX" : true,
 		});
-		
+
 		$('input.column_filter').on('keyup click', function() {
 			filterColumn($(this).attr('step'));
 		});
-		
+
 		var table = $('#example').DataTable();
 		$('#example tbody').on('click', 'tr', function() {
 			if ($(this).hasClass('selected')) {
@@ -240,12 +240,12 @@
 		$('#button').click(function() {
 			table.row('.selected').remove().draw(false);
 		});
-		alert($('#example thread th').length);
-		
-// 		for(var i=0; i < 10;i++){
-// 			var column = $('#example').DataTable().column(i);
-// 			column.visible(false);
-// 		}
+		table.columns().every(function(index) {
+			if (index > 5) {
+				var that = this;
+				that.visible(false);
+			}
+		});
 	});
 
 	function filterColumn(i) {
@@ -264,6 +264,13 @@
 				value = '^\\s+$';
 			}
 			table.column(4).search(value, true, true).draw();
+		} else if (i == 3) {
+			var isCheck = $('#col' + i + '_filter').prop('checked');
+			if (isCheck) {
+				table.column(i).search('1', true, true).draw();
+			} else {
+				table.column(i).search('^.*$', true, true).draw();
+			}
 		} else {
 			value = $('#col' + i + '_filter').val();
 			if (i == 3) {
