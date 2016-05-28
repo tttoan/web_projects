@@ -449,7 +449,7 @@
 												value="%{cust.customerByCustomer1Level1Id.id}"
 												cssClass="form-control col-md-7 col-xs-12"
 												list="listCustomer" listKey="id" headerKey="-1"
-												headerValue="---" listValue="director +' - '+ customerCode" />
+												headerValue="---" listValue="businessName +' - '+ customerCode" />
 										</div>
 									</div>
 									<div class="item form-group">
@@ -486,7 +486,7 @@
 												value="%{cust.customerByCustomer2Level1Id.id}"
 												cssClass="form-control col-md-7 col-xs-12"
 												list="listCustomer" listKey="id" headerKey="-1"
-												headerValue="---" listValue="director +' - '+ customerCode" />
+												headerValue="---" listValue="businessName +' - '+ customerCode" />
 										</div>
 									</div>
 									<div class="item form-group">
@@ -523,7 +523,7 @@
 												value="%{cust.customerByCustomer3Level1Id.id}"
 												cssClass="form-control col-md-7 col-xs-12"
 												list="listCustomer" listKey="id" headerKey="-1"
-												headerValue="---" listValue="director +' - '+ customerCode" />
+												headerValue="---" listValue="businessName +' - '+ customerCode" />
 										</div>
 									</div>
 									<div class="item form-group">
@@ -559,7 +559,7 @@
 												value="%{cust.customerByCustomer4Level1Id.id}"
 												cssClass="form-control col-md-7 col-xs-12"
 												list="listCustomer" listKey="id" headerKey="-1"
-												headerValue="---" listValue="director +' - '+ customerCode" />
+												headerValue="---" listValue="businessName +' - '+ customerCode" />
 										</div>
 									</div>
 									<div class="item form-group">
@@ -595,7 +595,7 @@
 												value="%{cust.customerByCustomer5Level1Id.id}"
 												cssClass="form-control col-md-7 col-xs-12"
 												list="listCustomer" listKey="id" headerKey="-1"
-												headerValue="---" listValue="director +' - '+ customerCode" />
+												headerValue="---" listValue="businessName +' - '+ customerCode" />
 										</div>
 									</div>
 									<div class="item form-group">
