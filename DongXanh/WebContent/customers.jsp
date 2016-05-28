@@ -190,11 +190,11 @@
 			</div>
 		</div>
 	</div>
-	<%-- 	<%@ include file="import_customer_level1.jsp"%> --%>
+	<s:include value="customer_define_column.jsp" />
 	<!-- footer content -->
 	<s:include value="footer.jsp" />
 	<!-- /footer content -->
-	<s:include value="customer_define_column.jsp" />
+	
 </div>
 <!-- /page content -->
 </div>
@@ -221,7 +221,6 @@
 	$(document).ready(function() {
 		$('#example').DataTable({
 			"scrollX" : true,
-
 		});
 		
 		$('input.column_filter').on('keyup click', function() {

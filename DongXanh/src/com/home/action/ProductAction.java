@@ -20,12 +20,10 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.util.ServletContextAware;
 
-import com.home.conts.TableStatisticLevel1;
 import com.home.dao.CategoryHome;
 import com.home.dao.ProductHome;
 import com.home.entities.UserAware;
 import com.home.model.Category;
-import com.home.model.Customer;
 import com.home.model.Product;
 import com.home.model.User;
 import com.home.util.ExcelUtil;
@@ -39,16 +37,13 @@ import com.opensymphony.xwork2.ActionContext;
  *
  */
 public class ProductAction implements Action, ServletContextAware, UserAware{
-
 	private ServletContext ctx;
-
 	private Product record ;
 	private List<Product> records ;
 	private String result;
 	private String message;
 	private int totalRecordCount;
 	private HashMap<Integer, String> categories;
-	
 	private User userSes;
 	public User getUserSes() {
 		return userSes;

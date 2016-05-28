@@ -9,18 +9,48 @@
 			<a href="#close" title="Close" class="close">Đóng</a>
 		</div>
 		<div class="modalContent">
-			<table style="width: 67%; margin: 0 auto 2em auto;">
+			<table id="tableDefineColumn" class="jambo_table display nowrap cell-border"
+							style="width: 100%">
+				<thead>
+					<tr class="headings">
+						<th>Tên cột</th>
+						<th>Ẩn/Hiện</th>
+					</tr>
+				</thead>
 				<tbody>
+					<%-- 					<s:iterator value="listTableColumn" status="rowStatus"> --%>
+					<!-- 						<tr> -->
+					<%-- 							<td><s:property /></td> --%>
+					<%-- 							<td align="center" data-column="${rowStatus.index}"><input --%>
+					<!-- 								name="show_hidden0" type="checkbox" class="show_hidden" -->
+					<!-- 								checked="checked"></td> -->
+					<!-- 						</tr> -->
+					<%-- 					</s:iterator> --%>
 					<s:iterator value="listTableColumn" status="rowStatus">
-						<tr>
+						<tr class="even pointer">
 							<td><s:property /></td>
 							<td align="center" data-column="${rowStatus.index}"><input
 								name="show_hidden0" type="checkbox" class="show_hidden"
 								checked="checked"></td>
+
 						</tr>
 					</s:iterator>
 				</tbody>
 			</table>
+
+
+			<!-- 			<table style="width: 100%; margin: 0 auto 2em auto;"> -->
+			<!-- 				<tbody> -->
+			<%-- 					<s:iterator value="listTableColumn" status="rowStatus"> --%>
+			<!-- 						<tr> -->
+			<%-- 							<td><s:property /></td> --%>
+			<%-- 							<td align="center" data-column="${rowStatus.index}"><input --%>
+			<!-- 								name="show_hidden0" type="checkbox" class="show_hidden" -->
+			<!-- 								checked="checked"></td> -->
+			<!-- 						</tr> -->
+			<%-- 					</s:iterator> --%>
+			<!-- 				</tbody> -->
+			<!-- 			</table> -->
 		</div>
 		<div class="modalFooter">
 			<a href="#Apply" title="Apply" class="ok">Cập nhật</a>
@@ -32,6 +62,10 @@
 <script>
 	$(document).ready(
 			function() {
+				$('#tableDefineColumn').DataTable( {
+			        scrollY:        200,
+			        paging:         false
+			    } );
 				$('input.show_hidden').on(
 						'click',
 						function(e) {
@@ -40,6 +74,4 @@
 							column.visible(!column.visible());
 						});
 			});
-
-	
 </script>
