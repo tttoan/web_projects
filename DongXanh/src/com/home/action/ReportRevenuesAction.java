@@ -22,7 +22,9 @@ import com.home.entities.RevenuesCustomerDetail;
 import com.home.entities.RevenuesCustomerL1;
 import com.home.entities.RevenuesCustomerL2;
 import com.home.entities.RevenuesSellman;
+import com.home.entities.UserAware;
 import com.home.model.Product;
+import com.home.model.User;
 import com.home.util.DateUtils;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
@@ -30,8 +32,9 @@ import com.home.util.SystemUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 
-public class ReportRevenuesAction  implements Action, ServletContextAware{
+public class ReportRevenuesAction  implements Action, ServletContextAware, UserAware{
 	private ServletContext ctx;
+	private User userSes;
 	//private List<RevenuesComparison> data;
 	//private int draw;
 	//private int recordsTotal;
@@ -74,6 +77,10 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 //	public void setData(List<RevenuesComparison> data) {
 //		this.data = data;
 //	}
+
+	public User getUserSes() {
+		return userSes;
+	}
 
 	@Override
 	public void setServletContext(ServletContext context) {
@@ -660,5 +667,12 @@ public class ReportRevenuesAction  implements Action, ServletContextAware{
 		}
 		return Action.SUCCESS;
 	}
+
+	@Override
+	public void setUserSes(User user) {
+		userSes = user;
+		
+	}
+
 	
 }
