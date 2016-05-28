@@ -73,9 +73,9 @@
 							</div>
 
 						</s:form>
-						
-						<a href="#openModal" class="btn btn-warning"><b>Ẩn/Hiện Cột</b></a> <br> <span
-							class="section"></span>
+
+						<a href="#openModal" class="btn btn-warning"><b>Ẩn/Hiện
+								Cột</b></a> <br> <span class="section"></span>
 
 						<div class="clearfix"></div>
 						<s:set var="rId">
@@ -194,7 +194,7 @@
 	<!-- footer content -->
 	<s:include value="footer.jsp" />
 	<!-- /footer content -->
-	
+
 </div>
 <!-- /page content -->
 </div>
@@ -240,7 +240,12 @@
 		$('#button').click(function() {
 			table.row('.selected').remove().draw(false);
 		});
+		alert($('#example thread th').length);
 		
+// 		for(var i=0; i < 10;i++){
+// 			var column = $('#example').DataTable().column(i);
+// 			column.visible(false);
+// 		}
 	});
 
 	function filterColumn(i) {

@@ -6,7 +6,7 @@
 	<div>
 		<div class="modalHeader">
 			<h2>Chọn cột muốn Ẩn/Hiện</h2>
-			<a href="#close" title="Close" class="close">Đóng</a>
+			<a href="#close" title="Close" class="close">X</a>
 		</div>
 		<div class="modalContent">
 			<table id="tableDefineColumn" class="jambo_table display nowrap cell-border"
@@ -66,6 +66,9 @@
 			        scrollY:        200,
 			        paging:         false
 			    } );
+
+				
+				
 				$('input.show_hidden').on(
 						'click',
 						function(e) {
