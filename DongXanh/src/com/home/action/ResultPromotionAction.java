@@ -24,6 +24,7 @@ import com.home.conts.Params;
 import com.home.dao.GroupCustomerHome;
 import com.home.dao.PromotionHome;
 import com.home.dao.PromotionRegistHome;
+import com.home.entities.UserAware;
 import com.home.model.GroupCustomer;
 import com.home.model.Product;
 import com.home.model.Promotion;
@@ -33,6 +34,7 @@ import com.home.model.PromotionProduct;
 import com.home.model.PromotionRegister;
 import com.home.model.RegisterGift;
 import com.home.model.RegisterProduct;
+import com.home.model.User;
 import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
@@ -41,8 +43,8 @@ import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
-public class ResultPromotionAction extends ActionSupport implements Action, ServletContextAware, ServletRequestAware {
-
+public class ResultPromotionAction extends ActionSupport implements Action, ServletContextAware, ServletRequestAware, UserAware {
+	private User userSes;
 	private ServletContext ctx;
 	private HttpServletRequest request;
 	private List<Promotion> promotions = new ArrayList<Promotion>();
@@ -890,5 +892,12 @@ public class ResultPromotionAction extends ActionSupport implements Action, Serv
 
 	public void setResultType(int resultType) {
 		this.resultType = resultType;
+	}
+	public User getUserSes() {
+		return userSes;
+	}
+
+	public void setUserSes(User userSes) {
+		this.userSes = userSes;
 	}
 }

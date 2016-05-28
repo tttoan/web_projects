@@ -11,18 +11,27 @@ import org.apache.struts2.util.ServletContextAware;
 
 import com.home.dao.CustomerHome;
 import com.home.dao.UserHome;
+import com.home.entities.UserAware;
 import com.home.model.User;
 import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
-public class AssignCustomerAction extends ActionSupport implements Action, ServletContextAware {
+public class AssignCustomerAction extends ActionSupport implements Action, ServletContextAware,UserAware {
 
 	private ServletContext ctx;
 	private List<User> listEmployee = new ArrayList<>();
 	private List<Object[]> listCustomer1 = new ArrayList<>();
 	private List<Object[]> listCustomer2 = new ArrayList<>();
+	private User userSes;
+	public User getUserSes() {
+		return userSes;
+	}
+
+	public void setUserSes(User userSes) {
+		this.userSes = userSes;
+	}
 
 	@Override
 	public void setServletContext(ServletContext context) {
