@@ -27,55 +27,63 @@
 									<s:actionmessage escape="false" />
 								</div>
 							</s:elseif>
-							<span class="section"></span>
+							
 							<div class="item form-group">
-								<div class="col-md-5 col-sm-6 col-xs-12">
-									<button id="rs" type="submit" class="btn btn-primary">Import
-										Cấp I</button>
-									<button id="send" type="submit" class="btn btn-success">Import
-										Cấp II</button>
-								</div>
-							</div>
-							<span class="section"></span>
-							<div class="item form-group">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
-									for="col1_filter">DSKH đã phân công </label>
-								<div class="col-md-2 col-sm-6 col-xs-12">
-									<input type="checkbox" id="col1_filter" step="1"
-										checked="checked"
-										class="column_filter form-control col-md-7 col-xs-12 ">
-								</div>
-							</div>
-							<div class="item form-group">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
-									for="col2_filter">DSKH chưa phân công </label>
-								<div class="col-md-2 col-sm-6 col-xs-12">
-									<input type="checkbox" id="col2_filter" step="2"
-										checked="checked"
-										class="column_filter form-control col-md-7 col-xs-12 ">
-								</div>
-							</div>
-							<div class="item form-group">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
-									for="col3_filter">DSKH theo Cấp 1 </label>
-								<div class="col-md-2 col-sm-6 col-xs-12">
-									<input type="checkbox" id="col3_filter" step="3"
-										class="column_filter form-control col-md-7 col-xs-12 ">
-								</div>
-							</div>
-							<div class="item form-group">
-								<label class="control-label col-md-2 col-sm-3 col-xs-12"
-									for="col4_filter">DSKH theo NVTT </label>
-								<div class="col-md-2 col-sm-6 col-xs-12">
-									<input type="text" id="col4_filter" step="4"
-										class="column_filter form-control col-md-7 col-xs-12 ">
-								</div>
+								<table style="width: 100%">
+									<tr>
+										<td width="50%">
+											<div >
+												<label 
+													for="col4_filter">DSKH theo NVTT </label>
+												<div >
+													<input type="text" id="col4_filter" step="4"
+														class="column_filter col-md-7 col-xs-12 ">
+												</div>
+											</div>
+										</td>
+										<td>
+											<div >
+												<label
+													for="col1_filter">DSKH đã phân công </label>
+													<input type="checkbox" id="col1_filter" step="1"
+														checked="checked"
+														class="column_filter col-md-3 col-xs-3 ">
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>
+											<div>
+												<label
+													for="col2_filter">DSKH chưa phân công </label>
+													<input type="checkbox" id="col2_filter" step="2"
+														checked="checked"
+														class="column_filter col-md-3 col-xs-3 ">
+											</div>	
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<a href="#openModal" class="btn btn-warning"><b>Ẩn/Hiện thông tin</b></a> 
+											<button id="rs" type="submit" class="btn btn-primary">Import
+												Cấp I</button>
+											<button id="send" type="submit" class="btn btn-success">Import
+												Cấp II</button>
+										</td>
+										<td>
+											<div >
+												<label 
+													for="col3_filter">DSKH theo Cấp 1 </label>
+													<input type="checkbox" id="col3_filter" step="3"
+														class="column_filter col-md-3 col-xs-3 ">
+											</div>
+										</td>
+									</tr>
+								</table>
 							</div>
 
 						</s:form>
-
-						<a href="#openModal" class="btn btn-warning"><b>Ẩn/Hiện
-								Cột</b></a> <br> <span class="section"></span>
 
 						<div class="clearfix"></div>
 						<s:set var="rId">
