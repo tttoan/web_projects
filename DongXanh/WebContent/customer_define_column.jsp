@@ -26,7 +26,6 @@
 							<td align="center" data-column="${rowStatus.index}"><input
 								name="show_hidden0" type="checkbox" class="show_hidden"
 								checked="checked"></td>
-
 						</tr>
 					</s:iterator>
 				</tbody>
