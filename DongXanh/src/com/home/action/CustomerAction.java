@@ -84,56 +84,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private String varCertificateDate = SDF.format(new Date());
 	private String varDirectorBirthday = SDF.format(new Date());
 	private List<DefineColumnImport> listDefineColumns;
-	private String varFieldEntName;
-	private String varIndexColumn;
-
-	public String getVarFieldEntName() {
-		return varFieldEntName;
-	}
-
-	public void setVarFieldEntName(String varFieldEntName) {
-		this.varFieldEntName = varFieldEntName;
-	}
-
-	public String getVarIndexColumn() {
-		return varIndexColumn;
-	}
-
-	public void setVarIndexColumn(String varIndexColumn) {
-		this.varIndexColumn = varIndexColumn;
-	}
-
-	public List<DefineColumnImport> getListDefineColumns() {
-		return listDefineColumns;
-	}
-
-	public void setListDefineColumns(List<DefineColumnImport> listDefineColumns) {
-		this.listDefineColumns = listDefineColumns;
-	}
-
-	public String getVarCertificateDate() {
-		return varCertificateDate;
-	}
-
-	public void setVarCertificateDate(String varCertificateDate) {
-		this.varCertificateDate = varCertificateDate;
-	}
-
-	public String getVarDirectorBirthday() {
-		return varDirectorBirthday;
-	}
-
-	public void setVarDirectorBirthday(String varDirectorBirthday) {
-		this.varDirectorBirthday = varDirectorBirthday;
-	}
-
-	public String getVarCreateTime() {
-		return varCreateTime;
-	}
-
-	public void setVarCreateTime(String varCreateTime) {
-		this.varCreateTime = varCreateTime;
-	}
+	private List<String> listColumnExcel;
 
 	public String retrievePhoneById() throws Exception {
 		int commonCusId = 0;
@@ -199,13 +150,21 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		return SUCCESS;
 	}
 
+	private void generateColumnExcel() {
+		listColumnExcel = new ArrayList<String>();
+		char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+		for (char a : alphabet) {
+			listColumnExcel.add("Cột " + (a + "").toUpperCase());
+		}
+	}
+
 	private void defineColumnImport() {
 		listDefineColumns = new ArrayList<DefineColumnImport>();
-		DefineColumnImport dci = new DefineColumnImport("Mã khách hàng", "user", "0");
+		DefineColumnImport dci = new DefineColumnImport("Mã khách hàng", "user", "1");
 		listDefineColumns.add(dci);
-		dci = new DefineColumnImport("Nhóm", "groupCustomer", "0");
+		dci = new DefineColumnImport("Nhóm", "groupCustomer", "2");
 		listDefineColumns.add(dci);
-		dci = new DefineColumnImport("Cấp 1 đang nhận hành chính", "customerByCustomer1Level1Id", "0");
+		dci = new DefineColumnImport("Cấp 1 đang nhận hành chính", "customerByCustomer1Level1Id", "3");
 		listDefineColumns.add(dci);
 		dci = new DefineColumnImport("Tên doanh nghiệp", "businessName", "0");
 		listDefineColumns.add(dci);
@@ -300,6 +259,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			loadLookupCity();
 			defineTableColumn();
 			defineColumnImport();
+			generateColumnExcel();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -836,5 +796,64 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	public String notifyListCutomer() {
 		return SUCCESS;
+	}
+
+	public List<String> getListColumnExcel() {
+		return listColumnExcel;
+	}
+
+	public void setListColumnExcel(List<String> listColumnExcel) {
+		this.listColumnExcel = listColumnExcel;
+	}
+
+	private String varFieldEntName;
+	private String varIndexColumn;
+
+	public String getVarFieldEntName() {
+		return varFieldEntName;
+	}
+
+	public void setVarFieldEntName(String varFieldEntName) {
+		this.varFieldEntName = varFieldEntName;
+	}
+
+	public String getVarIndexColumn() {
+		return varIndexColumn;
+	}
+
+	public void setVarIndexColumn(String varIndexColumn) {
+		this.varIndexColumn = varIndexColumn;
+	}
+
+	public List<DefineColumnImport> getListDefineColumns() {
+		return listDefineColumns;
+	}
+
+	public void setListDefineColumns(List<DefineColumnImport> listDefineColumns) {
+		this.listDefineColumns = listDefineColumns;
+	}
+
+	public String getVarCertificateDate() {
+		return varCertificateDate;
+	}
+
+	public void setVarCertificateDate(String varCertificateDate) {
+		this.varCertificateDate = varCertificateDate;
+	}
+
+	public String getVarDirectorBirthday() {
+		return varDirectorBirthday;
+	}
+
+	public void setVarDirectorBirthday(String varDirectorBirthday) {
+		this.varDirectorBirthday = varDirectorBirthday;
+	}
+
+	public String getVarCreateTime() {
+		return varCreateTime;
+	}
+
+	public void setVarCreateTime(String varCreateTime) {
+		this.varCreateTime = varCreateTime;
 	}
 }
