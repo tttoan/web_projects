@@ -19,13 +19,20 @@
 					</tr>
 				</thead>
 				<tbody>
-					<s:iterator value="listTableColumn" status="rowStatus">
+					<s:iterator value="listTableColumn" status="rowStatus" var="arr1">
 						<tr class="even pointer">
 							<td class=""><s:property value="#rowStatus.count" /></td>
-							<td><s:property /></td>
-							<td align="center" data-column="${rowStatus.index}"><input
+							<td><s:property value="#arr1[0]"/></td>
+							<s:if test="#arr1[1]">
+								<td align="center" data-column="${rowStatus.index}"><input
 								name="show_hidden0" type="checkbox" class="show_hidden"
 								checked="checked"></td>
+							</s:if>
+							<s:else>
+								<td align="center" data-column="${rowStatus.index}"><input
+								name="show_hidden0" type="checkbox" class="show_hidden"></td>
+							</s:else>
+							
 						</tr>
 					</s:iterator>
 				</tbody>

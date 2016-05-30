@@ -47,7 +47,7 @@ import com.opensymphony.xwork2.ModelDriven;
 public class CustomerAction extends ActionSupport implements Action, ModelDriven<Customer>, UserAware, ServletContextAware {
 	private static final SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
 	private static final long serialVersionUID = 1L;
-	private List<String> listTableColumn = new ArrayList<String>();
+	private List<Object[]> listTableColumn = new ArrayList<Object[]>();
 	private boolean edit = false;
 	private int custId = 0;
 	private String varCityCode = "";
@@ -204,57 +204,57 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	}
 
 	private void defineTableViewCustomer() {
-		listTableColumn = new ArrayList<String>();
-		listTableColumn.add("STT");
-		listTableColumn.add("Ngày lập");
-		listTableColumn.add("Mã khách hàng");
-		listTableColumn.add("Nhóm");
-		listTableColumn.add("Nhân viên TT");
-		listTableColumn.add("Tên bảng kê");
-		listTableColumn.add("Tên doanh nghiệp");
-		listTableColumn.add("Giấy phép ĐKKD số");
-		listTableColumn.add("Ngày cấp");
-		listTableColumn.add("Địa chỉ đăng kí KD");
-		listTableColumn.add("Mã số thuế");
-		listTableColumn.add("Vốn đăng kí");
-		listTableColumn.add("Điện thoại bàn");
-		listTableColumn.add("Fax");
-		listTableColumn.add("Email");
-		listTableColumn.add("Địa chỉ mạng xã hội");
-		listTableColumn.add("Địa điểm kinh doanh");
-		listTableColumn.add("Người đại diện pháp luật");
-		listTableColumn.add("Người quyết định chính công việc");
-		listTableColumn.add("ĐTDĐ Người quyết định");
-		listTableColumn.add("Ngày sinh");
-		listTableColumn.add("Nguyên quán");
-		listTableColumn.add("Người bán hàng trực tiếp");
-		listTableColumn.add("ĐTDĐ Người bán hàng");
-		listTableColumn.add("Ước vốn tự có để kinh doanh");
-		listTableColumn.add("Ngành nghề kinh doanh khác");
-		listTableColumn.add("Cấp 1 (5)");
-		listTableColumn.add("Tỉ lệ nhận (5)");
-		listTableColumn.add("Cấp 1 (4)");
-		listTableColumn.add("Tỉ lệ nhận (4)");
-		listTableColumn.add("Cấp 1 (3)");
-		listTableColumn.add("Tỉ lệ nhận (3)");
-		listTableColumn.add("Cấp 1 (2)");
-		listTableColumn.add("Tỉ lệ nhận (2)");
-		listTableColumn.add("Cấp 1 (1)");
-		listTableColumn.add("Tỉ lệ nhận (1)");
-		listTableColumn.add("3 Sản phẩm thuốc trừ cỏ");
-		listTableColumn.add("5 Sản phẩm thuốc trừ sâu");
-		listTableColumn.add("3 Sản phẩm thuốc trừ rầy");
-		listTableColumn.add("5 Sản phẩm thuốc trừ bệnh");
-		listTableColumn.add("3 Sản phẩm kích thích sinh trưởng");
-		listTableColumn.add("3 Sản phẩm thuốc trừ ốc");
-		listTableColumn.add("Lúa (%)");
-		listTableColumn.add("3 Mùa vụ Lúa");
-		listTableColumn.add("Rau màu (%)");
-		listTableColumn.add("3 Mùa vụ Rau màu");
-		listTableColumn.add("Cây ăn trái (%)");
-		listTableColumn.add("3 Mùa vụ Cây ăn trái");
-		listTableColumn.add("Khác (%)");
-		listTableColumn.add("3 Mùa vụ Khác");
+		listTableColumn = new ArrayList<Object[]>();
+		listTableColumn.add(new Object[]{"STT", true});
+		listTableColumn.add(new Object[]{"Ngày lập", true});
+		listTableColumn.add(new Object[]{"Mã khách hàng", true});
+		listTableColumn.add(new Object[]{"Nhóm", true});
+		listTableColumn.add(new Object[]{"Nhân viên TT", true});
+		listTableColumn.add(new Object[]{"Tên bảng kê", true});
+		listTableColumn.add(new Object[]{"Tên doanh nghiệp", true});
+		listTableColumn.add(new Object[]{"Giấy phép ĐKKD số", false});
+		listTableColumn.add(new Object[]{"Ngày cấp", false});
+		listTableColumn.add(new Object[]{"Địa chỉ đăng kí KD", false});
+		listTableColumn.add(new Object[]{"Mã số thuế", false});
+		listTableColumn.add(new Object[]{"Vốn đăng kí", false});
+		listTableColumn.add(new Object[]{"Điện thoại bàn", true});
+		listTableColumn.add(new Object[]{"Fax", false});
+		listTableColumn.add(new Object[]{"Email", true});
+		listTableColumn.add(new Object[]{"Địa chỉ mạng xã hội", false});
+		listTableColumn.add(new Object[]{"Địa điểm kinh doanh", false});
+		listTableColumn.add(new Object[]{"Người đại diện pháp luật", false});
+		listTableColumn.add(new Object[]{"Người quyết định chính công việc", false});
+		listTableColumn.add(new Object[]{"ĐTDĐ Người quyết định", false});
+		listTableColumn.add(new Object[]{"Ngày sinh", false});
+		listTableColumn.add(new Object[]{"Nguyên quán", false});
+		listTableColumn.add(new Object[]{"Người bán hàng trực tiếp", false});
+		listTableColumn.add(new Object[]{"ĐTDĐ Người bán hàng", false});
+		listTableColumn.add(new Object[]{"Ước vốn tự có để kinh doanh", false});
+		listTableColumn.add(new Object[]{"Ngành nghề kinh doanh khác", false});
+		listTableColumn.add(new Object[]{"Cấp 1 (5)", false});
+		listTableColumn.add(new Object[]{"Tỉ lệ nhận (5)", false});
+		listTableColumn.add(new Object[]{"Cấp 1 (4)", false});
+		listTableColumn.add(new Object[]{"Tỉ lệ nhận (4)", false});
+		listTableColumn.add(new Object[]{"Cấp 1 (3)", false});
+		listTableColumn.add(new Object[]{"Tỉ lệ nhận (3)", false});
+		listTableColumn.add(new Object[]{"Cấp 1 (2)", false});
+		listTableColumn.add(new Object[]{"Tỉ lệ nhận (2)", false});
+		listTableColumn.add(new Object[]{"Cấp 1 (1)", false});
+		listTableColumn.add(new Object[]{"Tỉ lệ nhận (1)", false});
+		listTableColumn.add(new Object[]{"3 Sản phẩm thuốc trừ cỏ", false});
+		listTableColumn.add(new Object[]{"5 Sản phẩm thuốc trừ sâu", false});
+		listTableColumn.add(new Object[]{"3 Sản phẩm thuốc trừ rầy", false});
+		listTableColumn.add(new Object[]{"5 Sản phẩm thuốc trừ bệnh", false});
+		listTableColumn.add(new Object[]{"3 Sản phẩm kích thích sinh trưởng", false});
+		listTableColumn.add(new Object[]{"3 Sản phẩm thuốc trừ ốc", false});
+		listTableColumn.add(new Object[]{"Lúa (%)", false});
+		listTableColumn.add(new Object[]{"3 Mùa vụ Lúa", false});
+		listTableColumn.add(new Object[]{"Rau màu (%)", false});
+		listTableColumn.add(new Object[]{"3 Mùa vụ Rau màu", false});
+		listTableColumn.add(new Object[]{"Cây ăn trái (%)", false});
+		listTableColumn.add(new Object[]{"3 Mùa vụ Cây ăn trái", false});
+		listTableColumn.add(new Object[]{"Khác (%)", false});
+		listTableColumn.add(new Object[]{"3 Mùa vụ Khác", false});
 	}
 
 	@Override
@@ -791,11 +791,11 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		this.ctx = context;
 	}
 
-	public List<String> getListTableColumn() {
+	public List<Object[]> getListTableColumn() {
 		return listTableColumn;
 	}
 
-	public void setListTableColumn(List<String> listTableColumn) {
+	public void setListTableColumn(List<Object[]> listTableColumn) {
 		this.listTableColumn = listTableColumn;
 	}
 

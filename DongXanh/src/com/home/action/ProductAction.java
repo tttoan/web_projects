@@ -36,7 +36,7 @@ import com.opensymphony.xwork2.ActionContext;
  * @author USER
  *
  */
-public class ProductAction implements Action, ServletContextAware, UserAware{
+public class ProductAction implements Action, ServletContextAware{
 	private ServletContext ctx;
 	private Product record ;
 	private List<Product> records ;
@@ -44,14 +44,14 @@ public class ProductAction implements Action, ServletContextAware, UserAware{
 	private String message;
 	private int totalRecordCount;
 	private HashMap<Integer, String> categories;
-	private User userSes;
-	public User getUserSes() {
-		return userSes;
-	}
-
-	public void setUserSes(User userSes) {
-		this.userSes = userSes;
-	}
+//	private User userSes;
+//	public User getUserSes() {
+//		return userSes;
+//	}
+//
+//	public void setUserSes(User userSes) {
+//		this.userSes = userSes;
+//	}
 
 	private Integer id;
 	private Integer proId;
