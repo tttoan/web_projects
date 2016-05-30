@@ -2,6 +2,7 @@ package com.home.action;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,6 +29,7 @@ import com.home.dao.CustomerHome;
 import com.home.dao.GroupCustomerHome;
 import com.home.dao.UserHome;
 import com.home.entities.City;
+import com.home.entities.DefineColumnImport;
 import com.home.entities.UserAware;
 import com.home.model.Customer;
 import com.home.model.GroupCustomer;
@@ -81,6 +83,33 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private String varCreateTime = SDF.format(new Date());
 	private String varCertificateDate = SDF.format(new Date());
 	private String varDirectorBirthday = SDF.format(new Date());
+	private List<DefineColumnImport> listDefineColumns;
+	private String varFieldEntName;
+	private String varIndexColumn;
+
+	public String getVarFieldEntName() {
+		return varFieldEntName;
+	}
+
+	public void setVarFieldEntName(String varFieldEntName) {
+		this.varFieldEntName = varFieldEntName;
+	}
+
+	public String getVarIndexColumn() {
+		return varIndexColumn;
+	}
+
+	public void setVarIndexColumn(String varIndexColumn) {
+		this.varIndexColumn = varIndexColumn;
+	}
+
+	public List<DefineColumnImport> getListDefineColumns() {
+		return listDefineColumns;
+	}
+
+	public void setListDefineColumns(List<DefineColumnImport> listDefineColumns) {
+		this.listDefineColumns = listDefineColumns;
+	}
 
 	public String getVarCertificateDate() {
 		return varCertificateDate;
@@ -158,7 +187,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 				varCityCode = getCust().getCustomerCode().substring(0, getCust().getCustomerCode().length() - 3);
 				varCreateTime = SDF.format(getCust().getCreateTime());
 				varCertificateDate = SDF.format(getCust().getCertificateDate());
-				varDirectorBirthday =  SDF.format(getCust().getDirectorBirthday());
+				varDirectorBirthday = SDF.format(getCust().getDirectorBirthday());
 				setEdit(true);
 			} catch (Exception e) {
 				throw e;
@@ -170,7 +199,45 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		return SUCCESS;
 	}
 
-	private void defineTableColumn(){
+	private void defineColumnImport() {
+		listDefineColumns = new ArrayList<DefineColumnImport>();
+		DefineColumnImport dci = new DefineColumnImport("Mã khách hàng", "user", "0");
+		listDefineColumns.add(dci);
+		dci = new DefineColumnImport("Nhóm", "groupCustomer", "0");
+		listDefineColumns.add(dci);
+		dci = new DefineColumnImport("Cấp 1 đang nhận hành chính", "customerByCustomer1Level1Id", "0");
+		listDefineColumns.add(dci);
+		dci = new DefineColumnImport("Tên doanh nghiệp", "businessName", "0");
+		listDefineColumns.add(dci);
+		dci = new DefineColumnImport("Giấy phép ĐKKD", "certificateNumber", "0");
+		listDefineColumns.add(dci);
+		dci = new DefineColumnImport("Ngày cấp giấy phép ĐKKD", "certificateDate", "0");
+		listDefineColumns.add(dci);
+		dci = new DefineColumnImport("Người đại diện pháp luật", "lawyer", "0");
+		listDefineColumns.add(dci);
+		dci = new DefineColumnImport("Địa chỉ kinh doanh", "businessAddress", "0");
+		listDefineColumns.add(dci);
+		dci = new DefineColumnImport("Mã số thuế", "taxNumber", "0");
+		listDefineColumns.add(dci);
+		dci = new DefineColumnImport("Vốn đăng kí", "budgetRegister", "0");
+		listDefineColumns.add(dci);
+		dci = new DefineColumnImport("Điện thoại bàn", "telefone", "0");
+		listDefineColumns.add(dci);
+		dci = new DefineColumnImport("Fax", "fax", "0");
+		listDefineColumns.add(dci);
+		dci = new DefineColumnImport("Người quyết định chính công việc", "director", "0");
+		listDefineColumns.add(dci);
+		dci = new DefineColumnImport("ĐT di động người QĐCV", "directorMobile", "0");
+		listDefineColumns.add(dci);
+		dci = new DefineColumnImport("Ngày sinh", "directorBirthday", "0");
+		listDefineColumns.add(dci);
+		dci = new DefineColumnImport("Người bán hàng trực tiếp", "sellMan", "0");
+		listDefineColumns.add(dci);
+		dci = new DefineColumnImport("ĐT di động người bán hàng", "sellManMobile", "0");
+		listDefineColumns.add(dci);
+	}
+
+	private void defineTableColumn() {
 		listTableColumn = new ArrayList<String>();
 		listTableColumn.add("STT");
 		listTableColumn.add("Ngày lập");
@@ -223,7 +290,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		listTableColumn.add("Khác (%)");
 		listTableColumn.add("3 Mùa vụ Khác");
 	}
-	
+
 	@Override
 	public void validate() {
 		try {
@@ -232,6 +299,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			loadLookupGrpCustomer();
 			loadLookupCity();
 			defineTableColumn();
+			defineColumnImport();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -296,7 +364,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		try {
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
 			customers = cusHome.findAll();
-			UserHome  userHome = new UserHome(getSessionFactory());
+			UserHome userHome = new UserHome(getSessionFactory());
 			GroupCustomerHome groupCusHome = new GroupCustomerHome(getSessionFactory());
 			HashMap<Integer, String> groups = groupCusHome.getListGroupCustomer();
 			HashMap<Integer, String> users = userHome.getFilterEmployee();
@@ -306,8 +374,8 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 					g.setId(customer.getGroupCustomer().getId());
 					g.setGroupName(groups.get(customer.getGroupCustomer().getId()));
 					customer.setGroupCustomer(g);
-					
-					if(customer.getUser() !=null){
+
+					if (customer.getUser() != null) {
 						User user = new User();
 						user.setId(customer.getUser().getId());
 						user.setFullName(users.get(customer.getUser().getId()));
@@ -326,7 +394,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		try {
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
 			setCust(cusHome.findById(custId));
-		
+
 			return SUCCESS;
 		} catch (Exception e) {
 			return ERROR;
@@ -381,13 +449,16 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 				getCust().setCustomerByCustomer5Level1Id(cus5Level1);
 			// -----Upload image scan----
 			if (getCusImageScanFileName() != null) {
-				//File destFile = new File(SystemUtil.getValuePropertiesByKey("path.image.scan") + "\\", getCusImageScanFileName());
+				// File destFile = new
+				// File(SystemUtil.getValuePropertiesByKey("path.image.scan") +
+				// "\\", getCusImageScanFileName());
 				String path_doc_scan = "path_doc_scan";
 				String filePath = this.ctx.getRealPath("/").concat(path_doc_scan);
 				File destFile = new File(filePath, getCusImageScanFileName());
-				
+
 				FileUtils.copyFile(cusImageScan, destFile, true);
-				//cust.setPathDocScan(destFile.getAbsolutePath().replace("\\", "/"));
+				// cust.setPathDocScan(destFile.getAbsolutePath().replace("\\",
+				// "/"));
 				cust.setPathDocScan(path_doc_scan + "/" + destFile.getName());
 			}
 			if (cust.getId() > 0) {
@@ -406,6 +477,9 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	public String importCustomer() throws Exception {
 		try {
+			cust = new Customer();
+			Field f = cust.getClass().getField("certificateNumber");
+			f.set(cust, "2wwwwwwwwwwwwwwwwwww");
 			StringBuilder logDuplicate = new StringBuilder();
 			File theFile = new File(getUploadFileName());
 			FileUtils.copyFile(getUpload(), theFile);
@@ -419,6 +493,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 				Sheet sheet = workbook.getSheetAt(0);
 				Iterator<Row> rowIterator = sheet.iterator();
 				rowIterator.next();
+
 				while (rowIterator.hasNext()) {
 					Row row = rowIterator.next();
 					cust = new Customer();
@@ -745,7 +820,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	public void setCusImageScanFileName(String cusImageScanFileName) {
 		this.cusImageScanFileName = cusImageScanFileName;
 	}
-	
+
 	@Override
 	public void setServletContext(ServletContext context) {
 		this.ctx = context;
@@ -759,7 +834,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		this.listTableColumn = listTableColumn;
 	}
 
-	public String notifyListCutomer(){
+	public String notifyListCutomer() {
 		return SUCCESS;
 	}
 }
