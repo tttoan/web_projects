@@ -67,8 +67,8 @@
 			<li><a><i class="fa fa-calendar"></i> Lịch công tác <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
-					<li><a href="user_plan.jsp">Xem lịch của tôi</a></li>
-					<li><a href="user_plan.jsp">Tạo mới</a></li>
+					<li><s:url action="getUserPlanAction" var="getUserPlanURL" /> <s:a
+							href="%{getUserPlanURL}" theme="bootstrap"> Xem lịch của tôi </s:a></li>
 
 				</ul></li>
 		</ul>
