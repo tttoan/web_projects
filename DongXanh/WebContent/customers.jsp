@@ -243,6 +243,7 @@
 		$('#button').click(function() {
 			table.row('.selected').remove().draw(false);
 		});
+		
 		table.columns().every(function(index) {
 			if (index > 5) {
 				var that = this;

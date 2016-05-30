@@ -51,10 +51,10 @@
             <column name="statistic_name" length="200" />
         </property>
         <property name="budgetRegister" type="big_decimal">
-            <column name="budget_register" precision="12" />
+            <column name="budget_register" precision="18" />
         </property>
         <property name="telefone" type="string">
-            <column name="telefone" length="20" />
+            <column name="telefone" length="100" />
         </property>
         <property name="fax" type="string">
             <column name="fax" length="20" />
@@ -78,7 +78,7 @@
             <column name="director" length="500" />
         </property>
         <property name="directorMobile" type="string">
-            <column name="director_mobile" length="20" />
+            <column name="director_mobile" length="100" />
         </property>
         <property name="directorBirthday" type="timestamp">
             <column name="director_birthday" length="0" />

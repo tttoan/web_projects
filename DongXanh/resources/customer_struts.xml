@@ -70,7 +70,7 @@
 				<param name="delaySleepInterval">3000</param>
 			</interceptor-ref>
 			<result name="wait">/waiting.jsp</result>
-			<result name="success">/import_customer.jsp</result>
+			<result name="success">/customers.jsp</result>
 		</action>
 		<action name="move_to_assign_customer" class="com.home.action.AssignCustomerAction">
 			<result name="success">/assign_customer.jsp</result>

@@ -275,6 +275,44 @@ public class CustomerHome {
 		}
 	}
 
+	public Customer findByName(String customerName) {
+		log.debug("getting Customer instance with name: " + customerName);
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Customer instance = (Customer) session.createCriteria(Customer.class).add(Restrictions.eq("businessName", customerName)).uniqueResult();
+			tx.commit();
+			if (instance == null) {
+				log.debug("get successful, no instance found");
+			} else {
+				if (instance.getFarmProduct1Session() == null)
+					instance.setFarmProduct1Session("0");
+				if (instance.getFarmProduct2Session() == null)
+					instance.setFarmProduct2Session("0");
+				if (instance.getFarmProduct3Session() == null)
+					instance.setFarmProduct3Session("0");
+				if (instance.getFarmProduct4Session() == null)
+					instance.setFarmProduct4Session("0");
+				log.debug("get successful, instance found");
+			}
+			return instance;
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			re.printStackTrace();
+			return null;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public List<Customer> findByExample(Customer instance) {
 		log.debug("finding Customer instance by example");
 		try {
@@ -304,6 +342,7 @@ public class CustomerHome {
 			}
 		} catch (Exception re) {
 			log.error("get failed", re);
+			re.printStackTrace();
 			throw re;
 		} finally {
 			try {

@@ -3,6 +3,7 @@ package com.home.action;
 import java.io.File;
 import java.io.FileInputStream;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,8 +35,10 @@ import com.home.entities.UserAware;
 import com.home.model.Customer;
 import com.home.model.GroupCustomer;
 import com.home.model.User;
+import com.home.util.DateUtils;
 import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
+import com.home.util.StringUtil;
 import com.home.util.SystemUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
@@ -160,43 +163,47 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	private void defineColumnImport() {
 		listDefineColumns = new ArrayList<DefineColumnImport>();
-		DefineColumnImport dci = new DefineColumnImport("Mã khách hàng", "user", "1");
+		DefineColumnImport dci = new DefineColumnImport("Mã khách hàng", "customerCode", "1");
 		listDefineColumns.add(dci);
-		dci = new DefineColumnImport("Nhóm", "groupCustomer", "2");
+		dci = new DefineColumnImport("Tên Bảng Kê", "customerCode", "2");
 		listDefineColumns.add(dci);
-		dci = new DefineColumnImport("Cấp 1 đang nhận hành chính", "customerByCustomer1Level1Id", "3");
+		dci = new DefineColumnImport("Nhóm", "groupCustomer", "3");
 		listDefineColumns.add(dci);
-		dci = new DefineColumnImport("Tên doanh nghiệp", "businessName", "0");
+		dci = new DefineColumnImport("Cấp 1 đang nhận hành chính", "customerByCustomer1Level1Id", "4");
 		listDefineColumns.add(dci);
-		dci = new DefineColumnImport("Giấy phép ĐKKD", "certificateNumber", "0");
+		dci = new DefineColumnImport("Tên doanh nghiệp", "businessName", "5");
 		listDefineColumns.add(dci);
-		dci = new DefineColumnImport("Ngày cấp giấy phép ĐKKD", "certificateDate", "0");
+		dci = new DefineColumnImport("Tên thường gọi", "otherBusiness", "6");
 		listDefineColumns.add(dci);
-		dci = new DefineColumnImport("Người đại diện pháp luật", "lawyer", "0");
+		dci = new DefineColumnImport("Giấy phép ĐKKD", "certificateNumber", "7");
 		listDefineColumns.add(dci);
-		dci = new DefineColumnImport("Địa chỉ kinh doanh", "businessAddress", "0");
+		dci = new DefineColumnImport("Ngày cấp giấy phép ĐKKD", "certificateDate", "8");
 		listDefineColumns.add(dci);
-		dci = new DefineColumnImport("Mã số thuế", "taxNumber", "0");
+		dci = new DefineColumnImport("Người đại diện pháp luật", "lawyer", "9");
 		listDefineColumns.add(dci);
-		dci = new DefineColumnImport("Vốn đăng kí", "budgetRegister", "0");
+		dci = new DefineColumnImport("Địa chỉ kinh doanh", "businessAddress", "10");
 		listDefineColumns.add(dci);
-		dci = new DefineColumnImport("Điện thoại bàn", "telefone", "0");
+		dci = new DefineColumnImport("Mã số thuế", "taxNumber", "11");
 		listDefineColumns.add(dci);
-		dci = new DefineColumnImport("Fax", "fax", "0");
+		dci = new DefineColumnImport("Vốn đăng kí", "budgetRegister", "12");
 		listDefineColumns.add(dci);
-		dci = new DefineColumnImport("Người quyết định chính công việc", "director", "0");
+		dci = new DefineColumnImport("Điện thoại bàn", "telefone", "13");
 		listDefineColumns.add(dci);
-		dci = new DefineColumnImport("ĐT di động người QĐCV", "directorMobile", "0");
+		dci = new DefineColumnImport("Fax", "fax", "14");
 		listDefineColumns.add(dci);
-		dci = new DefineColumnImport("Ngày sinh", "directorBirthday", "0");
+		dci = new DefineColumnImport("Người quyết định chính công việc", "director", "15");
 		listDefineColumns.add(dci);
-		dci = new DefineColumnImport("Người bán hàng trực tiếp", "sellMan", "0");
+		dci = new DefineColumnImport("ĐT di động người QĐCV", "directorMobile", "16");
 		listDefineColumns.add(dci);
-		dci = new DefineColumnImport("ĐT di động người bán hàng", "sellManMobile", "0");
+		dci = new DefineColumnImport("Ngày sinh", "directorBirthday", "17");
+		listDefineColumns.add(dci);
+		dci = new DefineColumnImport("Người bán hàng trực tiếp", "sellMan", "18");
+		listDefineColumns.add(dci);
+		dci = new DefineColumnImport("ĐT di động người bán hàng", "sellManMobile", "19");
 		listDefineColumns.add(dci);
 	}
 
-	private void defineTableColumn() {
+	private void defineTableViewCustomer() {
 		listTableColumn = new ArrayList<String>();
 		listTableColumn.add("STT");
 		listTableColumn.add("Ngày lập");
@@ -257,7 +264,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			loadLookupCustomer();
 			loadLookupGrpCustomer();
 			loadLookupCity();
-			defineTableColumn();
+			defineTableViewCustomer();
 			defineColumnImport();
 			generateColumnExcel();
 		} catch (Exception e) {
@@ -438,8 +445,6 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	public String importCustomer() throws Exception {
 		try {
 			cust = new Customer();
-			Field f = cust.getClass().getField("certificateNumber");
-			f.set(cust, "2wwwwwwwwwwwwwwwwwww");
 			StringBuilder logDuplicate = new StringBuilder();
 			File theFile = new File(getUploadFileName());
 			FileUtils.copyFile(getUpload(), theFile);
@@ -448,59 +453,59 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			try (FileInputStream fis = new FileInputStream(theFile)) {
 				ExcelUtil xls = new ExcelUtil();
 				CustomerHome custHome = new CustomerHome(getSessionFactory());
-				UserHome userHome = new UserHome(getSessionFactory());
+				// UserHome userHome = new UserHome(getSessionFactory());
 				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
 				Sheet sheet = workbook.getSheetAt(0);
 				Iterator<Row> rowIterator = sheet.iterator();
-				rowIterator.next();
-
+				int rowStart = Integer.parseInt(varIndexRow);
+				for (int i = 0; i < rowStart - 1; i++) {
+					rowIterator.next();
+				}
 				while (rowIterator.hasNext()) {
 					Row row = rowIterator.next();
 					cust = new Customer();
+
+					String[] arrIndexColumn = varIndexColumn.split(",");
+					String[] arrFieldEntName = varFieldEntName.split(",");
+
 					// -------------CreateTime--------------
 					getCust().setCreateTime(new Date());
 					// ---------------------------
-					// -------------customerCode--------------
-					cell = row.getCell(CustomerTable.customerCode.value());
-					value = xls.getValue(cell);
-					getCust().setCustomerCode((value + "").trim());
-					// ---------------------------
-					// -------------businessName--------------
-					cell = row.getCell(CustomerTable.businessName.value());
-					value = xls.getValue(cell);
-					getCust().setBusinessName(value + "");
-					// ---------------------------
-					// -------------businessName--------------
-					cell = row.getCell(CustomerTable.customerGroup.value());
-					value = xls.getValue(cell);
-					GroupCustomer gCust = new GroupCustomer();
-					gCust.setId(((Double) value).intValue());
-					getCust().setGroupCustomer(gCust);
-					// ---------------------------
-					// -------------certificateNumber--------------
-					cell = row.getCell(CustomerTable.certificateNumber.value());
-					value = xls.getValue(cell);
-					getCust().setCertificateNumber(value + "");
-					// ---------------------------
-					// -------------certificateDate--------------
-					cell = row.getCell(CustomerTable.certificateDate.value());
-					value = xls.getValue(cell);
-					getCust().setCertificateDate((Date) value);
-					// ---------------------------
-					// -------------certificateAddress--------------
-					cell = row.getCell(CustomerTable.certificateAddress.value());
-					value = xls.getValue(cell);
-					getCust().setCertificateAddress(value + "");
-					// ---------------------------
-					// -------------taxNumber--------------
-					cell = row.getCell(CustomerTable.taxNumber.value());
-					value = xls.getValue(cell);
-					getCust().setTaxNumber(value + "");
-					// ---------------------------
-					// -------------certificateNumber--------------
-					cell = row.getCell(CustomerTable.employee.value());
-					value = xls.getValue(cell);
-					getCust().setUser(userHome.getUserByFullName((value + "").trim()));
+					for (int i = 0; i < arrIndexColumn.length; i++) {
+						cell = row.getCell(Integer.parseInt(arrIndexColumn[i].trim()));
+						value = xls.getValue(cell);
+						if (arrFieldEntName[i].trim().equals("customerByCustomer1Level1Id")) {
+							Customer cus = custHome.findByName(StringUtil.notNull(value));
+							cust.setCustomerByCustomer1Level1Id(cus);
+						} else if (arrFieldEntName[i].trim().equals("groupCustomer")) {
+							// -------------CustomerGroup--------------
+							GroupCustomer gCust = new GroupCustomer();
+							gCust.setId(2);
+							getCust().setGroupCustomer(gCust);
+							// ---------------------------
+						} else {
+							Field f = cust.getClass().getField(arrFieldEntName[i].trim());
+							if (f.getType() == Date.class) {
+								if (StringUtil.notNull(value).isEmpty()) {
+									f.set(cust, null);
+								} else {
+									try{
+										f.set(cust, (Date) value);
+									}catch(Exception e){
+										f.set(cust, DateUtils.tryConvertStringToDate(StringUtil.notNull(value)));
+									}
+								}
+							} else if (f.getType() == BigDecimal.class) {
+								if (StringUtil.notNull(value).isEmpty()) {
+									f.set(cust, new BigDecimal(0));
+								} else {
+									f.set(cust, new BigDecimal(StringUtil.notNull(value)));
+								}
+							} else {
+								f.set(cust,StringUtil.notNull(value));
+							}
+						}
+					}
 					// ---------------------------
 					boolean isExisted = custHome.isCustomerExist(getCust().getCustomerCode());
 					if (!isExisted)
@@ -808,6 +813,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	private String varFieldEntName;
 	private String varIndexColumn;
+	private String varIndexRow = "3";
 
 	public String getVarFieldEntName() {
 		return varFieldEntName;
@@ -855,5 +861,13 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	public void setVarCreateTime(String varCreateTime) {
 		this.varCreateTime = varCreateTime;
+	}
+
+	public String getVarIndexRow() {
+		return varIndexRow;
+	}
+
+	public void setVarIndexRow(String varIndexRow) {
+		this.varIndexRow = varIndexRow;
 	}
 }

@@ -5,7 +5,7 @@
 <div id="openImportLevel1" class="modalWindow">
 	<div>
 		<div class="modalHeader">
-			<h2>Chọn cột muốn Ẩn/Hiện</h2>
+			<h2>Cấu Hình Import Cho Khách Hàng Cấp I</h2>
 			<a href="#close" title="Close" class="close">X</a>
 		</div>
 		<div class="modalContent">
@@ -23,17 +23,35 @@
 						</tr>
 					</thead>
 					<tbody>
+						<tr class="even pointer">
+							<td class="">0</td>
+							<td>BẮT ĐẦU DÒNG</td>
+							<td align="center"><select name="varIndexRow">
+									<s:iterator value="listColumnExcel" status="rowStatusExc">
+										<s:if test="%{#rowStatusExc.index == varIndexRow}">
+											<option value="${rowStatusExc.index}" selected="selected"><s:property
+													value="%{#rowStatusExc.count}" /></option>
+										</s:if>
+										<s:else>
+											<option value="${rowStatusExc.index}"><s:property
+													value="%{#rowStatusExc.count}" /></option>
+										</s:else>
+
+									</s:iterator>
+							</select></td>
+							<td></td>
+						</tr>
 						<s:iterator value="listDefineColumns" status="rowStatus">
 							<tr class="even pointer">
 								<td class=""><s:property value="#rowStatus.count" /></td>
-								<td><s:property value="%{fieldEntName}" /></td>
+								<td><s:property value="%{title}" /></td>
 								<td align="center"><select name="varIndexColumn">
 										<s:iterator value="listColumnExcel" status="rowStatusExc">
 											<s:if test="%{indexColumn == #rowStatusExc.index}">
-												<option value="${rowStatus.index}" selected="selected"><s:property /></option>
+												<option value="${rowStatusExc.index}" selected="selected"><s:property /></option>
 											</s:if>
 											<s:else>
-												<option value="${rowStatus.index}"><s:property /></option>
+												<option value="${rowStatusExc.index}"><s:property /></option>
 											</s:else>
 										</s:iterator>
 								</select></td>
