@@ -22,7 +22,7 @@ public class Customer implements java.io.Serializable {
 	public User user;
 	public Date createTime;
 	public String certificateNumber;
-	public Date certificateDate;
+	private Date certificateDate;
 	public String certificateAddress;
 	public String taxNumber;
 	public String businessName;
@@ -108,7 +108,7 @@ public class Customer implements java.io.Serializable {
 		this.user = user;
 		this.createTime = createTime;
 		this.certificateNumber = certificateNumber;
-		this.certificateDate = certificateDate;
+		this.setCertificateDate(certificateDate);
 		this.certificateAddress = certificateAddress;
 		this.taxNumber = taxNumber;
 		this.businessName = businessName;
@@ -256,8 +256,8 @@ public class Customer implements java.io.Serializable {
 		return this.certificateDate;
 	}
 
-	public void setCertificateDate(Date certificateDate) {
-		this.certificateDate = certificateDate;
+	public void DirectorBirthday(Date certificateDate) {
+		this.setCertificateDate(certificateDate);
 	}
 
 	public String getCertificateAddress() {
@@ -746,6 +746,10 @@ public class Customer implements java.io.Serializable {
 
 	public void setCustomersForCustomer1Level1Id(Set<Customer> customersForCustomer1Level1Id) {
 		this.customersForCustomer1Level1Id = customersForCustomer1Level1Id;
+	}
+
+	public void setCertificateDate(Date certificateDate) {
+		this.certificateDate = certificateDate;
 	}
 
 }

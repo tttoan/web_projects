@@ -11,10 +11,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.Cell;
@@ -24,8 +22,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
-
-import com.home.conts.CustomerTable;
 import com.home.dao.CustomerHome;
 import com.home.dao.GroupCustomerHome;
 import com.home.dao.UserHome;
@@ -39,7 +35,6 @@ import com.home.util.DateUtils;
 import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
-import com.home.util.SystemUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
@@ -86,8 +81,11 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private String varCreateTime = SDF.format(new Date());
 	private String varCertificateDate = SDF.format(new Date());
 	private String varDirectorBirthday = SDF.format(new Date());
-	private List<DefineColumnImport> listDefineColumns;
+	private List<DefineColumnImport> listDefineColumnsLevel1;
+	private List<DefineColumnImport> listDefineColumnsLevel2;
 	private List<String> listColumnExcel;
+	private int totalRecordExcel = 0;
+	private int processIndexExcel = 0;
 
 	public String retrievePhoneById() throws Exception {
 		int commonCusId = 0;
@@ -137,7 +135,9 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		if (custId != 0) {
 			try {
 				CustomerHome cusHome = new CustomerHome(getSessionFactory());
-				setCust(cusHome.findById(custId));
+				Customer cusTemp = cusHome.findById(custId);
+				setCust(cusTemp);
+				generateCustomerByRule(cusTemp);
 				varCityCode = getCust().getCustomerCode().substring(0, getCust().getCustomerCode().length() - 3);
 				varCreateTime = SDF.format(getCust().getCreateTime());
 				varCertificateDate = SDF.format(getCust().getCertificateDate());
@@ -161,100 +161,114 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		}
 	}
 
-	private void defineColumnImport() {
-		listDefineColumns = new ArrayList<DefineColumnImport>();
+	private void defineColumnImportLevel1() {
+		setListDefineColumnsLevel1(new ArrayList<DefineColumnImport>());
 		DefineColumnImport dci = new DefineColumnImport("Mã khách hàng", "customerCode", "1");
-		listDefineColumns.add(dci);
-		dci = new DefineColumnImport("Tên Bảng Kê", "customerCode", "2");
-		listDefineColumns.add(dci);
+		getListDefineColumnsLevel1().add(dci);
+		dci = new DefineColumnImport("Tên Bảng Kê", "statisticName", "2");
+		getListDefineColumnsLevel1().add(dci);
 		dci = new DefineColumnImport("Nhóm", "groupCustomer", "3");
-		listDefineColumns.add(dci);
+		getListDefineColumnsLevel1().add(dci);
 		dci = new DefineColumnImport("Cấp 1 đang nhận hành chính", "customerByCustomer1Level1Id", "4");
-		listDefineColumns.add(dci);
+		getListDefineColumnsLevel1().add(dci);
 		dci = new DefineColumnImport("Tên doanh nghiệp", "businessName", "5");
-		listDefineColumns.add(dci);
+		getListDefineColumnsLevel1().add(dci);
 		dci = new DefineColumnImport("Tên thường gọi", "otherBusiness", "6");
-		listDefineColumns.add(dci);
+		getListDefineColumnsLevel1().add(dci);
 		dci = new DefineColumnImport("Giấy phép ĐKKD", "certificateNumber", "7");
-		listDefineColumns.add(dci);
+		getListDefineColumnsLevel1().add(dci);
 		dci = new DefineColumnImport("Ngày cấp giấy phép ĐKKD", "certificateDate", "8");
-		listDefineColumns.add(dci);
+		getListDefineColumnsLevel1().add(dci);
 		dci = new DefineColumnImport("Người đại diện pháp luật", "lawyer", "9");
-		listDefineColumns.add(dci);
+		getListDefineColumnsLevel1().add(dci);
 		dci = new DefineColumnImport("Địa chỉ kinh doanh", "businessAddress", "10");
-		listDefineColumns.add(dci);
+		getListDefineColumnsLevel1().add(dci);
 		dci = new DefineColumnImport("Mã số thuế", "taxNumber", "11");
-		listDefineColumns.add(dci);
+		getListDefineColumnsLevel1().add(dci);
 		dci = new DefineColumnImport("Vốn đăng kí", "budgetRegister", "12");
-		listDefineColumns.add(dci);
+		getListDefineColumnsLevel1().add(dci);
 		dci = new DefineColumnImport("Điện thoại bàn", "telefone", "13");
-		listDefineColumns.add(dci);
+		getListDefineColumnsLevel1().add(dci);
 		dci = new DefineColumnImport("Fax", "fax", "14");
-		listDefineColumns.add(dci);
+		getListDefineColumnsLevel1().add(dci);
 		dci = new DefineColumnImport("Người quyết định chính công việc", "director", "15");
-		listDefineColumns.add(dci);
+		getListDefineColumnsLevel1().add(dci);
 		dci = new DefineColumnImport("ĐT di động người QĐCV", "directorMobile", "16");
-		listDefineColumns.add(dci);
+		getListDefineColumnsLevel1().add(dci);
 		dci = new DefineColumnImport("Ngày sinh", "directorBirthday", "17");
-		listDefineColumns.add(dci);
+		getListDefineColumnsLevel1().add(dci);
 		dci = new DefineColumnImport("Người bán hàng trực tiếp", "sellMan", "18");
-		listDefineColumns.add(dci);
+		getListDefineColumnsLevel1().add(dci);
 		dci = new DefineColumnImport("ĐT di động người bán hàng", "sellManMobile", "19");
-		listDefineColumns.add(dci);
+		getListDefineColumnsLevel1().add(dci);
+	}
+
+	private void defineColumnImportLevel2() {
+		setListDefineColumnsLevel2(new ArrayList<DefineColumnImport>());
+		DefineColumnImport dci = new DefineColumnImport("Mã khách hàng", "customerCode", "2");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("Tên khách hàng", "businessName", "3");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("Tên Bảng Kê", "statisticName", "4");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("Địa chỉ", "businessAddress", "5");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("Điện thoại bàn", "telefone", "6");
+		getListDefineColumnsLevel2().add(dci);
 	}
 
 	private void defineTableViewCustomer() {
 		listTableColumn = new ArrayList<Object[]>();
-		listTableColumn.add(new Object[]{"STT", true});
-		listTableColumn.add(new Object[]{"Ngày lập", true});
-		listTableColumn.add(new Object[]{"Mã khách hàng", true});
-		listTableColumn.add(new Object[]{"Nhóm", true});
-		listTableColumn.add(new Object[]{"Nhân viên TT", true});
-		listTableColumn.add(new Object[]{"Tên bảng kê", true});
-		listTableColumn.add(new Object[]{"Tên doanh nghiệp", true});
-		listTableColumn.add(new Object[]{"Giấy phép ĐKKD số", false});
-		listTableColumn.add(new Object[]{"Ngày cấp", false});
-		listTableColumn.add(new Object[]{"Địa chỉ đăng kí KD", false});
-		listTableColumn.add(new Object[]{"Mã số thuế", false});
-		listTableColumn.add(new Object[]{"Vốn đăng kí", false});
-		listTableColumn.add(new Object[]{"Điện thoại bàn", true});
-		listTableColumn.add(new Object[]{"Fax", false});
-		listTableColumn.add(new Object[]{"Email", true});
-		listTableColumn.add(new Object[]{"Địa chỉ mạng xã hội", false});
-		listTableColumn.add(new Object[]{"Địa điểm kinh doanh", false});
-		listTableColumn.add(new Object[]{"Người đại diện pháp luật", false});
-		listTableColumn.add(new Object[]{"Người quyết định chính công việc", false});
-		listTableColumn.add(new Object[]{"ĐTDĐ Người quyết định", false});
-		listTableColumn.add(new Object[]{"Ngày sinh", false});
-		listTableColumn.add(new Object[]{"Nguyên quán", false});
-		listTableColumn.add(new Object[]{"Người bán hàng trực tiếp", false});
-		listTableColumn.add(new Object[]{"ĐTDĐ Người bán hàng", false});
-		listTableColumn.add(new Object[]{"Ước vốn tự có để kinh doanh", false});
-		listTableColumn.add(new Object[]{"Ngành nghề kinh doanh khác", false});
-		listTableColumn.add(new Object[]{"Cấp 1 (5)", false});
-		listTableColumn.add(new Object[]{"Tỉ lệ nhận (5)", false});
-		listTableColumn.add(new Object[]{"Cấp 1 (4)", false});
-		listTableColumn.add(new Object[]{"Tỉ lệ nhận (4)", false});
-		listTableColumn.add(new Object[]{"Cấp 1 (3)", false});
-		listTableColumn.add(new Object[]{"Tỉ lệ nhận (3)", false});
-		listTableColumn.add(new Object[]{"Cấp 1 (2)", false});
-		listTableColumn.add(new Object[]{"Tỉ lệ nhận (2)", false});
-		listTableColumn.add(new Object[]{"Cấp 1 (1)", false});
-		listTableColumn.add(new Object[]{"Tỉ lệ nhận (1)", false});
-		listTableColumn.add(new Object[]{"3 Sản phẩm thuốc trừ cỏ", false});
-		listTableColumn.add(new Object[]{"5 Sản phẩm thuốc trừ sâu", false});
-		listTableColumn.add(new Object[]{"3 Sản phẩm thuốc trừ rầy", false});
-		listTableColumn.add(new Object[]{"5 Sản phẩm thuốc trừ bệnh", false});
-		listTableColumn.add(new Object[]{"3 Sản phẩm kích thích sinh trưởng", false});
-		listTableColumn.add(new Object[]{"3 Sản phẩm thuốc trừ ốc", false});
-		listTableColumn.add(new Object[]{"Lúa (%)", false});
-		listTableColumn.add(new Object[]{"3 Mùa vụ Lúa", false});
-		listTableColumn.add(new Object[]{"Rau màu (%)", false});
-		listTableColumn.add(new Object[]{"3 Mùa vụ Rau màu", false});
-		listTableColumn.add(new Object[]{"Cây ăn trái (%)", false});
-		listTableColumn.add(new Object[]{"3 Mùa vụ Cây ăn trái", false});
-		listTableColumn.add(new Object[]{"Khác (%)", false});
-		listTableColumn.add(new Object[]{"3 Mùa vụ Khác", false});
+		listTableColumn.add(new Object[] { "STT", true });
+		listTableColumn.add(new Object[] { "Ngày lập", true });
+		listTableColumn.add(new Object[] { "Mã khách hàng", true });
+		listTableColumn.add(new Object[] { "Nhóm", true });
+		listTableColumn.add(new Object[] { "Nhân viên TT", true });
+		listTableColumn.add(new Object[] { "Tên bảng kê", true });
+		listTableColumn.add(new Object[] { "Tên doanh nghiệp", true });
+		listTableColumn.add(new Object[] { "Giấy phép ĐKKD số", false });
+		listTableColumn.add(new Object[] { "Ngày cấp", false });
+		listTableColumn.add(new Object[] { "Địa chỉ đăng kí KD", false });
+		listTableColumn.add(new Object[] { "Mã số thuế", false });
+		listTableColumn.add(new Object[] { "Vốn đăng kí", false });
+		listTableColumn.add(new Object[] { "Điện thoại bàn", true });
+		listTableColumn.add(new Object[] { "Fax", false });
+		listTableColumn.add(new Object[] { "Email", true });
+		listTableColumn.add(new Object[] { "Địa chỉ mạng xã hội", false });
+		listTableColumn.add(new Object[] { "Địa điểm kinh doanh", false });
+		listTableColumn.add(new Object[] { "Người đại diện pháp luật", false });
+		listTableColumn.add(new Object[] { "Người quyết định chính công việc", false });
+		listTableColumn.add(new Object[] { "ĐTDĐ Người quyết định", false });
+		listTableColumn.add(new Object[] { "Ngày sinh", false });
+		listTableColumn.add(new Object[] { "Nguyên quán", false });
+		listTableColumn.add(new Object[] { "Người bán hàng trực tiếp", false });
+		listTableColumn.add(new Object[] { "ĐTDĐ Người bán hàng", false });
+		listTableColumn.add(new Object[] { "Ước vốn tự có để kinh doanh", false });
+		listTableColumn.add(new Object[] { "Ngành nghề kinh doanh khác", false });
+		listTableColumn.add(new Object[] { "Cấp 1 (5)", false });
+		listTableColumn.add(new Object[] { "Tỉ lệ nhận (5)", false });
+		listTableColumn.add(new Object[] { "Cấp 1 (4)", false });
+		listTableColumn.add(new Object[] { "Tỉ lệ nhận (4)", false });
+		listTableColumn.add(new Object[] { "Cấp 1 (3)", false });
+		listTableColumn.add(new Object[] { "Tỉ lệ nhận (3)", false });
+		listTableColumn.add(new Object[] { "Cấp 1 (2)", false });
+		listTableColumn.add(new Object[] { "Tỉ lệ nhận (2)", false });
+		listTableColumn.add(new Object[] { "Cấp 1 (1)", false });
+		listTableColumn.add(new Object[] { "Tỉ lệ nhận (1)", false });
+		listTableColumn.add(new Object[] { "3 Sản phẩm thuốc trừ cỏ", false });
+		listTableColumn.add(new Object[] { "5 Sản phẩm thuốc trừ sâu", false });
+		listTableColumn.add(new Object[] { "3 Sản phẩm thuốc trừ rầy", false });
+		listTableColumn.add(new Object[] { "5 Sản phẩm thuốc trừ bệnh", false });
+		listTableColumn.add(new Object[] { "3 Sản phẩm kích thích sinh trưởng", false });
+		listTableColumn.add(new Object[] { "3 Sản phẩm thuốc trừ ốc", false });
+		listTableColumn.add(new Object[] { "Lúa (%)", false });
+		listTableColumn.add(new Object[] { "3 Mùa vụ Lúa", false });
+		listTableColumn.add(new Object[] { "Rau màu (%)", false });
+		listTableColumn.add(new Object[] { "3 Mùa vụ Rau màu", false });
+		listTableColumn.add(new Object[] { "Cây ăn trái (%)", false });
+		listTableColumn.add(new Object[] { "3 Mùa vụ Cây ăn trái", false });
+		listTableColumn.add(new Object[] { "Khác (%)", false });
+		listTableColumn.add(new Object[] { "3 Mùa vụ Khác", false });
 	}
 
 	@Override
@@ -265,7 +279,8 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			loadLookupGrpCustomer();
 			loadLookupCity();
 			defineTableViewCustomer();
-			defineColumnImport();
+			defineColumnImportLevel1();
+			defineColumnImportLevel2();
 			generateColumnExcel();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -357,11 +372,19 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		}
 	}
 
+	private void generateCustomerByRule(Customer cusTemp) {
+		if (cusTemp.getCertificateDate() == null)
+			cusTemp.setCertificateDate(new Date());
+		if (cusTemp.getDirectorBirthday() == null)
+			cusTemp.setDirectorBirthday(new Date());
+	}
+
 	public String findCustomer() {
 		try {
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
-			setCust(cusHome.findById(custId));
-
+			Customer cusTemp = cusHome.findById(custId);
+			generateCustomerByRule(cusTemp);
+			setCust(cusTemp);
 			return SUCCESS;
 		} catch (Exception e) {
 			return ERROR;
@@ -457,29 +480,59 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
 				Sheet sheet = workbook.getSheetAt(0);
 				Iterator<Row> rowIterator = sheet.iterator();
-				int rowStart = Integer.parseInt(varIndexRow);
-				for (int i = 0; i < rowStart - 1; i++) {
+				totalRecordExcel = sheet.getPhysicalNumberOfRows();
+				for (int i = 0; i < Integer.parseInt(varIndexRow) - 1; i++) {
 					rowIterator.next();
 				}
 				while (rowIterator.hasNext()) {
 					Row row = rowIterator.next();
+					processIndexExcel = row.getRowNum() + 1;
 					cust = new Customer();
-
+					cell = row.getCell(0);
+					value = xls.getValue(cell);
+					if (StringUtil.notNull(value).isEmpty())
+						continue;
 					String[] arrIndexColumn = varIndexColumn.split(",");
 					String[] arrFieldEntName = varFieldEntName.split(",");
 
 					// -------------CreateTime--------------
 					getCust().setCreateTime(new Date());
 					// ---------------------------
+					// -------------GroupCustomer--------------
+					GroupCustomer gCust = new GroupCustomer();
+					gCust.setId(1);
+					getCust().setGroupCustomer(gCust);
+					// ---------------------------
 					for (int i = 0; i < arrIndexColumn.length; i++) {
 						cell = row.getCell(Integer.parseInt(arrIndexColumn[i].trim()));
 						value = xls.getValue(cell);
 						if (arrFieldEntName[i].trim().equals("customerByCustomer1Level1Id")) {
-							Customer cus = custHome.findByName(StringUtil.notNull(value));
-							cust.setCustomerByCustomer1Level1Id(cus);
+							String[] arrCustomerName = StringUtil.notNull(value).split(",");
+							for (int j = 1; j <= arrCustomerName.length; j++) {
+								Customer cus = custHome.findByName(StringUtil.notNull(arrCustomerName[j - 1].trim()));
+								switch (j) {
+									case 1:
+										cust.setCustomerByCustomer1Level1Id(cus);
+										break;
+									case 2:
+										cust.setCustomerByCustomer2Level1Id(cus);
+										break;
+									case 3:
+										cust.setCustomerByCustomer3Level1Id(cus);
+										break;
+									case 4:
+										cust.setCustomerByCustomer4Level1Id(cus);
+										break;
+									case 5:
+										cust.setCustomerByCustomer5Level1Id(cus);
+										break;
+									default:
+										break;
+								}
+							}
 						} else if (arrFieldEntName[i].trim().equals("groupCustomer")) {
 							// -------------CustomerGroup--------------
-							GroupCustomer gCust = new GroupCustomer();
+							 gCust = new GroupCustomer();
 							gCust.setId(2);
 							getCust().setGroupCustomer(gCust);
 							// ---------------------------
@@ -489,9 +542,9 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 								if (StringUtil.notNull(value).isEmpty()) {
 									f.set(cust, null);
 								} else {
-									try{
+									try {
 										f.set(cust, (Date) value);
-									}catch(Exception e){
+									} catch (Exception e) {
 										f.set(cust, DateUtils.tryConvertStringToDate(StringUtil.notNull(value)));
 									}
 								}
@@ -502,7 +555,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 									f.set(cust, new BigDecimal(StringUtil.notNull(value)));
 								}
 							} else {
-								f.set(cust,StringUtil.notNull(value));
+								f.set(cust, StringUtil.notNull(value));
 							}
 						}
 					}
@@ -831,14 +884,6 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		this.varIndexColumn = varIndexColumn;
 	}
 
-	public List<DefineColumnImport> getListDefineColumns() {
-		return listDefineColumns;
-	}
-
-	public void setListDefineColumns(List<DefineColumnImport> listDefineColumns) {
-		this.listDefineColumns = listDefineColumns;
-	}
-
 	public String getVarCertificateDate() {
 		return varCertificateDate;
 	}
@@ -869,5 +914,37 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	public void setVarIndexRow(String varIndexRow) {
 		this.varIndexRow = varIndexRow;
+	}
+
+	public int getTotalRecordExcel() {
+		return totalRecordExcel;
+	}
+
+	public void setTotalRecordExcel(int totalRecordExcel) {
+		this.totalRecordExcel = totalRecordExcel;
+	}
+
+	public int getProcessIndexExcel() {
+		return processIndexExcel;
+	}
+
+	public void setProcessIndexExcel(int processIndexExcel) {
+		this.processIndexExcel = processIndexExcel;
+	}
+
+	public List<DefineColumnImport> getListDefineColumnsLevel2() {
+		return listDefineColumnsLevel2;
+	}
+
+	public void setListDefineColumnsLevel2(List<DefineColumnImport> listDefineColumnsLevel2) {
+		this.listDefineColumnsLevel2 = listDefineColumnsLevel2;
+	}
+
+	public List<DefineColumnImport> getListDefineColumnsLevel1() {
+		return listDefineColumnsLevel1;
+	}
+
+	public void setListDefineColumnsLevel1(List<DefineColumnImport> listDefineColumnsLevel1) {
+		this.listDefineColumnsLevel1 = listDefineColumnsLevel1;
 	}
 }

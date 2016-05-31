@@ -275,18 +275,21 @@ public class CustomerHome {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public Customer findByName(String customerName) {
 		log.debug("getting Customer instance with name: " + customerName);
 		Transaction tx = null;
 		Session session = null;
 		try {
+			Customer instance = null;
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			Customer instance = (Customer) session.createCriteria(Customer.class).add(Restrictions.eq("businessName", customerName)).uniqueResult();
+			List<Customer> listInstance = (List<Customer>) session.createCriteria(Customer.class).add(Restrictions.eq("businessName", customerName).ignoreCase()).list();
 			tx.commit();
-			if (instance == null) {
+			if (listInstance.size() < 1) {
 				log.debug("get successful, no instance found");
 			} else {
+				instance = listInstance.get(0);
 				if (instance.getFarmProduct1Session() == null)
 					instance.setFarmProduct1Session("0");
 				if (instance.getFarmProduct2Session() == null)

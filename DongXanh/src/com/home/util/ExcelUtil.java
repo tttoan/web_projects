@@ -60,30 +60,30 @@ public class ExcelUtil {
 		switch (cell.getCellType()) {
 			case Cell.CELL_TYPE_BOOLEAN:
 				value = cell.getBooleanCellValue();
-				System.out.print(cell.getBooleanCellValue() + "\t\t");
+//				System.out.print(cell.getBooleanCellValue() + "\t\t");
 				break;
 			case Cell.CELL_TYPE_NUMERIC:
 				if (DateUtil.isCellDateFormatted(cell)) {
 					value = cell.getDateCellValue();
-					System.out.print(cell.getDateCellValue() + "\t\t");
+//					System.out.print(cell.getDateCellValue() + "\t\t");
 				} else {
 					value = cell.getNumericCellValue();
-					System.out.print(cell.getNumericCellValue() + "\t\t");
+//					System.out.print(cell.getNumericCellValue() + "\t\t");
 				}
 				break;
 			case Cell.CELL_TYPE_STRING:
 				value = cell.getStringCellValue();
-				System.out.print(cell.getStringCellValue() + "\t\t");
+//				System.out.print(cell.getStringCellValue() + "\t\t");
 				break;
 			case Cell.CELL_TYPE_FORMULA:
 				switch (cell.getCachedFormulaResultType()) {
 					case Cell.CELL_TYPE_NUMERIC:
 						value = cell.getNumericCellValue();
-						System.out.println("Last evaluated as: " + cell.getNumericCellValue());
+//						System.out.println("Last evaluated as: " + cell.getNumericCellValue());
 						break;
 					case Cell.CELL_TYPE_STRING:
 						value = cell.getStringCellValue();
-						System.out.println("Last evaluated as \"" + cell.getStringCellValue() + "\"");
+//						System.out.println("Last evaluated as \"" + cell.getStringCellValue() + "\"");
 						break;
 				}
 				break;

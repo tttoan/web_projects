@@ -5,39 +5,72 @@
 <div id="openImportLevel2" class="modalWindow">
 	<div>
 		<div class="modalHeader">
-			<h2>Chọn cột muốn Ẩn/Hiện</h2>
+			<h2>Cấu Hình Import Cho Khách Hàng Cấp II</h2>
 			<a href="#close" title="Close" class="close">X</a>
 		</div>
 		<div class="modalContent">
-			<table id="tableDefineLevel2"
-				class="jambo_table display nowrap cell-border" style="width: 100%">
-				<thead>
-					<tr class="headings">
-						<th>STT</th>
-						<th>Tên cột</th>
-						<th>Ẩn/Hiện</th>
-					</tr>
-				</thead>
-				<tbody>
-					<s:iterator value="defineColumns" status="rowStatus">
-						<tr class="even pointer">
-							<td class=""><s:property value="#rowStatus.count" /></td>
-							<td><s:property value="%{title}" /></td>
-							<s:hidden name="fieldName" value="%{fieldName}" />
-							<td align="center"><select name="index">
-									<option value="0" selected="selected">Cột A</option>
-									<option value="1">Cột B</option>
-									<option value="2">Cột C</option>
-									<option value="3">Cột D</option>
-							</select></td>
+			<s:form action="import_customer" method="post"
+				enctype="multipart/form-data"
+				cssClass="form-horizontal form-label-left">
+				<table id="defineLevelII"
+					class="jambo_table display nowrap cell-border" style="width: 100%">
+					<thead>
+						<tr class="headings">
+							<th>STT</th>
+							<th>Tên cột</th>
+							<th>Vị trí cột</th>
+							<th></th>
 						</tr>
-					</s:iterator>
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						<tr class="even pointer">
+							<td class="">0</td>
+							<td>BẮT ĐẦU DÒNG</td>
+							<td align="center"><select name="varIndexRow">
+									<s:iterator value="listColumnExcel" status="rowStatusExc">
+										<s:if test="%{#rowStatusExc.index == varIndexRow}">
+											<option value="${rowStatusExc.index}" selected="selected"><s:property
+													value="%{#rowStatusExc.count}" /></option>
+										</s:if>
+										<s:else>
+											<option value="${rowStatusExc.index}"><s:property
+													value="%{#rowStatusExc.count}" /></option>
+										</s:else>
+
+									</s:iterator>
+							</select></td>
+							<td></td>
+						</tr>
+						<s:iterator value="listDefineColumnsLevel2" status="rowStatus">
+							<tr class="even pointer">
+								<td class=""><s:property value="#rowStatus.count" /></td>
+								<td><s:property value="%{title}" /></td>
+								<td align="center"><select name="varIndexColumn">
+										<s:iterator value="listColumnExcel" status="rowStatusExc">
+											<s:if test="%{indexColumn == #rowStatusExc.index}">
+												<option value="${rowStatusExc.index}" selected="selected"><s:property /></option>
+											</s:if>
+											<s:else>
+												<option value="${rowStatusExc.index}"><s:property /></option>
+											</s:else>
+										</s:iterator>
+								</select></td>
+								<td><input type="hidden" name="varFieldEntName"
+									value="${fieldEntName}"></td>
+							</tr>
+						</s:iterator>
+					</tbody>
+				</table>
+				<div class="clear"></div>
+				<input id="uploadLevel1" type="file" name="upload"
+					required="required" class="col-md-7 col-xs-12">
+				<button id="send2" type="submit" class="btn btn-primary">Cập
+					nhật</button>
+			</s:form>
 		</div>
 		<div class="modalFooter">
-			
-			<a href="#Apply" title="Apply" class="ok">Cập nhật</a>
+			<a href="#close" title="Close" class="close">Đóng</a>
+			<!-- 						<a href="#Apply" title="Apply" class="ok">Cập nhật</a> -->
 			<div class="clear"></div>
 		</div>
 	</div>
@@ -46,7 +79,7 @@
 <script>
 	$(document).ready(
 			function() {
-				$('#tableDefineLevel2').DataTable({
+				$('#defineLevelII').DataTable({
 					scrollY : 200,
 					paging : false
 				});

@@ -41,7 +41,7 @@
 							</select></td>
 							<td></td>
 						</tr>
-						<s:iterator value="listDefineColumns" status="rowStatus">
+						<s:iterator value="listDefineColumnsLevel1" status="rowStatus">
 							<tr class="even pointer">
 								<td class=""><s:property value="#rowStatus.count" /></td>
 								<td><s:property value="%{title}" /></td>
@@ -79,7 +79,7 @@
 <script>
 	$(document).ready(function() {
 		$('#defineLevelI').DataTable({
-			scrollY : 250,
+			scrollY : 200,
 			paging : false
 		});
 	});

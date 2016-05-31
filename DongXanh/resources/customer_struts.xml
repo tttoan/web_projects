@@ -66,11 +66,11 @@
 				<param name="allowedTypes">application/ms-excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
 			</interceptor-ref>
 			<interceptor-ref name="execAndWait">
-				<param name="delay">3000</param>
+				<param name="delay">500</param>
 				<param name="delaySleepInterval">3000</param>
 			</interceptor-ref>
 			<result name="wait">/waiting.jsp</result>
-			<result name="success">/customers.jsp</result>
+			<result name="success" type="redirectAction">list_customer</result>
 		</action>
 		<action name="move_to_assign_customer" class="com.home.action.AssignCustomerAction">
 			<result name="success">/assign_customer.jsp</result>
