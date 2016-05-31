@@ -49,7 +49,7 @@
 	$(document).ready(
 			function() {
 				$('#tableDefineColumn').DataTable({
-					scrollY : 200,
+					scrollY : 250,
 					paging : false
 				});
 
