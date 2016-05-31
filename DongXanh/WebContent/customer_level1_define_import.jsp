@@ -25,7 +25,7 @@
 					<tbody>
 						<tr class="even pointer">
 							<td class="">0</td>
-							<td>BẮT ĐẦU DÒNG</td>
+							<td><b>BẮT ĐẦU DÒNG</b></td>
 							<td align="center"><select name="varIndexRow">
 									<s:iterator value="listColumnExcel" status="rowStatusExc">
 										<s:if test="%{#rowStatusExc.index == varIndexRow}">
@@ -79,7 +79,7 @@
 <script>
 	$(document).ready(function() {
 		$('#defineLevelI').DataTable({
-			scrollY : 200,
+			scrollY : 250,
 			paging : false
 		});
 	});

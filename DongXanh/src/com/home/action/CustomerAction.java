@@ -161,60 +161,60 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		}
 	}
 
-	private void defineColumnImportLevel1() {
-		setListDefineColumnsLevel1(new ArrayList<DefineColumnImport>());
-		DefineColumnImport dci = new DefineColumnImport("Mã khách hàng", "customerCode", "1");
-		getListDefineColumnsLevel1().add(dci);
-		dci = new DefineColumnImport("Tên Bảng Kê", "statisticName", "2");
-		getListDefineColumnsLevel1().add(dci);
-		dci = new DefineColumnImport("Nhóm", "groupCustomer", "3");
-		getListDefineColumnsLevel1().add(dci);
-		dci = new DefineColumnImport("Cấp 1 đang nhận hành chính", "customerByCustomer1Level1Id", "4");
-		getListDefineColumnsLevel1().add(dci);
-		dci = new DefineColumnImport("Tên doanh nghiệp", "businessName", "5");
-		getListDefineColumnsLevel1().add(dci);
-		dci = new DefineColumnImport("Tên thường gọi", "otherBusiness", "6");
-		getListDefineColumnsLevel1().add(dci);
-		dci = new DefineColumnImport("Giấy phép ĐKKD", "certificateNumber", "7");
-		getListDefineColumnsLevel1().add(dci);
-		dci = new DefineColumnImport("Ngày cấp giấy phép ĐKKD", "certificateDate", "8");
-		getListDefineColumnsLevel1().add(dci);
-		dci = new DefineColumnImport("Người đại diện pháp luật", "lawyer", "9");
-		getListDefineColumnsLevel1().add(dci);
-		dci = new DefineColumnImport("Địa chỉ kinh doanh", "businessAddress", "10");
-		getListDefineColumnsLevel1().add(dci);
-		dci = new DefineColumnImport("Mã số thuế", "taxNumber", "11");
-		getListDefineColumnsLevel1().add(dci);
-		dci = new DefineColumnImport("Vốn đăng kí", "budgetRegister", "12");
-		getListDefineColumnsLevel1().add(dci);
-		dci = new DefineColumnImport("Điện thoại bàn", "telefone", "13");
-		getListDefineColumnsLevel1().add(dci);
-		dci = new DefineColumnImport("Fax", "fax", "14");
-		getListDefineColumnsLevel1().add(dci);
-		dci = new DefineColumnImport("Người quyết định chính công việc", "director", "15");
-		getListDefineColumnsLevel1().add(dci);
-		dci = new DefineColumnImport("ĐT di động người QĐCV", "directorMobile", "16");
-		getListDefineColumnsLevel1().add(dci);
-		dci = new DefineColumnImport("Ngày sinh", "directorBirthday", "17");
-		getListDefineColumnsLevel1().add(dci);
-		dci = new DefineColumnImport("Người bán hàng trực tiếp", "sellMan", "18");
-		getListDefineColumnsLevel1().add(dci);
-		dci = new DefineColumnImport("ĐT di động người bán hàng", "sellManMobile", "19");
-		getListDefineColumnsLevel1().add(dci);
-	}
-
 	private void defineColumnImportLevel2() {
 		setListDefineColumnsLevel2(new ArrayList<DefineColumnImport>());
+		DefineColumnImport dci = new DefineColumnImport("Mã khách hàng", "customerCode", "1");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("Tên Bảng Kê", "statisticName", "2");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("Nhóm", "groupCustomer", "3");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("Cấp 1 đang nhận hành chính", "customerByCustomer1Level1Id", "4");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("Tên doanh nghiệp", "businessName", "5");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("Tên thường gọi", "otherBusiness", "6");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("Giấy phép ĐKKD", "certificateNumber", "7");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("Ngày cấp giấy phép ĐKKD", "certificateDate", "8");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("Người đại diện pháp luật", "lawyer", "9");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("Địa chỉ kinh doanh", "businessAddress", "10");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("Mã số thuế", "taxNumber", "11");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("Vốn đăng kí", "budgetRegister", "12");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("Điện thoại bàn", "telefone", "13");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("Fax", "fax", "14");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("Người quyết định chính công việc", "director", "15");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("ĐT di động người QĐCV", "directorMobile", "16");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("Ngày sinh", "directorBirthday", "17");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("Người bán hàng trực tiếp", "sellMan", "18");
+		getListDefineColumnsLevel2().add(dci);
+		dci = new DefineColumnImport("ĐT di động người bán hàng", "sellManMobile", "19");
+		getListDefineColumnsLevel2().add(dci);
+	}
+
+	private void defineColumnImportLevel1() {
+		setListDefineColumnsLevel1(new ArrayList<DefineColumnImport>());
 		DefineColumnImport dci = new DefineColumnImport("Mã khách hàng", "customerCode", "2");
-		getListDefineColumnsLevel2().add(dci);
+		getListDefineColumnsLevel1().add(dci);
 		dci = new DefineColumnImport("Tên khách hàng", "businessName", "3");
-		getListDefineColumnsLevel2().add(dci);
+		getListDefineColumnsLevel1().add(dci);
 		dci = new DefineColumnImport("Tên Bảng Kê", "statisticName", "4");
-		getListDefineColumnsLevel2().add(dci);
+		getListDefineColumnsLevel1().add(dci);
 		dci = new DefineColumnImport("Địa chỉ", "businessAddress", "5");
-		getListDefineColumnsLevel2().add(dci);
+		getListDefineColumnsLevel1().add(dci);
 		dci = new DefineColumnImport("Điện thoại bàn", "telefone", "6");
-		getListDefineColumnsLevel2().add(dci);
+		getListDefineColumnsLevel1().add(dci);
 	}
 
 	private void defineTableViewCustomer() {
@@ -488,6 +488,8 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 					Row row = rowIterator.next();
 					processIndexExcel = row.getRowNum() + 1;
 					cust = new Customer();
+					if (row.getCell(0) == null)
+						break;
 					cell = row.getCell(0);
 					value = xls.getValue(cell);
 					if (StringUtil.notNull(value).isEmpty())
@@ -532,7 +534,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 							}
 						} else if (arrFieldEntName[i].trim().equals("groupCustomer")) {
 							// -------------CustomerGroup--------------
-							 gCust = new GroupCustomer();
+							gCust = new GroupCustomer();
 							gCust.setId(2);
 							getCust().setGroupCustomer(gCust);
 							// ---------------------------
@@ -569,6 +571,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 				}
 				addActionMessage("<h3>Cập nhật hoàn thành</h3><ul>" + logDuplicate + "</ul>");
 			} catch (Exception e) {
+				e.printStackTrace();
 				addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + e.getMessage() + " ở dòng: " + (cell.getRowIndex() + 1) + ", cột: " + (cell.getColumnIndex() + 1) + ", giá trị: " + value
 						+ "</li></ul>");
 			} finally {
@@ -932,19 +935,19 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		this.processIndexExcel = processIndexExcel;
 	}
 
-	public List<DefineColumnImport> getListDefineColumnsLevel2() {
-		return listDefineColumnsLevel2;
-	}
-
-	public void setListDefineColumnsLevel2(List<DefineColumnImport> listDefineColumnsLevel2) {
-		this.listDefineColumnsLevel2 = listDefineColumnsLevel2;
-	}
-
 	public List<DefineColumnImport> getListDefineColumnsLevel1() {
 		return listDefineColumnsLevel1;
 	}
 
 	public void setListDefineColumnsLevel1(List<DefineColumnImport> listDefineColumnsLevel1) {
 		this.listDefineColumnsLevel1 = listDefineColumnsLevel1;
+	}
+
+	public List<DefineColumnImport> getListDefineColumnsLevel2() {
+		return listDefineColumnsLevel2;
+	}
+
+	public void setListDefineColumnsLevel2(List<DefineColumnImport> listDefineColumnsLevel2) {
+		this.listDefineColumnsLevel2 = listDefineColumnsLevel2;
 	}
 }

@@ -25,7 +25,7 @@
 					<tbody>
 						<tr class="even pointer">
 							<td class="">0</td>
-							<td>BẮT ĐẦU DÒNG</td>
+							<td><b>BẮT ĐẦU DÒNG</b></td>
 							<td align="center"><select name="varIndexRow">
 									<s:iterator value="listColumnExcel" status="rowStatusExc">
 										<s:if test="%{#rowStatusExc.index == varIndexRow}">
@@ -64,7 +64,7 @@
 				<div class="clear"></div>
 				<input id="uploadLevel1" type="file" name="upload"
 					required="required" class="col-md-7 col-xs-12">
-				<button id="send2" type="submit" class="btn btn-primary">Cập
+				<button id="send2" type="submit" class="btn btn-success">Cập
 					nhật</button>
 			</s:form>
 		</div>
