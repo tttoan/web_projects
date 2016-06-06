@@ -45,6 +45,10 @@
 			class="com.home.action.CustomerAction">
 			<result name="success">/new_customer.jsp</result>
 		</action>
+		<action name="view_customer" method="findCustomer"
+			class="com.home.action.CustomerAction">
+			<result name="success">/view_customer.jsp</result>
+		</action>
 		<action name="list_customer" method="findAllCustomer" class="com.home.action.CustomerAction">
 			<result name="success">/customers.jsp</result>
 			<result name="error">/index.jsp</result>

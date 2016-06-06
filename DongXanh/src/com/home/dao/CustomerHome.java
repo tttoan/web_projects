@@ -376,6 +376,7 @@ public class CustomerHome {
 						cus.setId(rs.getInt("id"));
 						cus.setCustomerCode(rs.getString("customer_code"));
 						cus.setDirector(rs.getString("director"));
+						cus.setBusinessName(rs.getString("business_name"));
 						results.add(cus);
 					}
 				} 
