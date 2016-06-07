@@ -91,6 +91,8 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	private String varIndexColumn;
 	private String varIndexRow = "4";
 	private String varDateReceived = SDF.format(new Date());
+	private String varFromDate = SDF.format(new Date());
+	private String varToDate = SDF.format(new Date());
 	private List<DefineColumnImport> listDefineColStatisticLevel1;
 	private List<DefineColumnImport> listDefineColStatisticLevel2;
 	private List<DefineColumnImport> listDefineColStatisticBalance;
@@ -287,18 +289,23 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	public String addStatistic() throws Exception {
 		try {
-			stat.setUser(emp);
-			stat.setCustomerByCustomerCodeLevel1(cusLevel1);
-			stat.setCustomerByCustomerCodeLevel2(cusLevel2);
-			stat.setProduct(pro);
+			if (emp.getId() > -1)
+				stat.setUser(emp);
+			if (cusLevel1.getId() > -1)
+				stat.setCustomerByCustomerCodeLevel1(cusLevel1);
+			if (cusLevel2.getId() > -1)
+				stat.setCustomerByCustomerCodeLevel2(cusLevel2);
+			if (pro.getId() > -1)
+				stat.setProduct(pro);
 			InvoiceType invoiceType = new InvoiceType();
 			invoiceType.setId(3);
 			stat.setInvoiceType(invoiceType);
 			stat.setDateReceived(SDF.parse(varDateReceived));
 			StatisticHome sttHome = new StatisticHome(HibernateUtil.getSessionFactory());
 			if (stat.getId() == 0) {
-				boolean isDuplicated = sttHome.isStatictisDuplicateLevel2(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1().getId(), getStat().getCustomerByCustomerCodeLevel2()
-						.getId(), getStat().getProduct().getId(), getStat().getUser().getId(), getStat().getInvoiceType().getId());
+				boolean isDuplicated = sttHome.isStatictisDuplicateLevel2(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1() == null ? null : getStat()
+						.getCustomerByCustomerCodeLevel1().getId(), getStat().getCustomerByCustomerCodeLevel2() == null ? null : getStat().getCustomerByCustomerCodeLevel2().getId(), getStat()
+						.getProduct() == null ? null : getStat().getProduct().getId(), getStat().getUser() == null ? null : getStat().getUser().getId(), getStat().getInvoiceType().getId());
 				if (!isDuplicated)
 					sttHome.attachDirty(getStat());
 				else {
@@ -758,7 +765,10 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 			ExcelUtil xls = new ExcelUtil();
 			CategoryHome catHome = new CategoryHome(getSessionFactory());
 			StatisticHome sttHome = new StatisticHome(getSessionFactory());
+			sttCustom.setFromDate(SDF.parse(varFromDate));
+			sttCustom.setToDate(SDF.parse(varToDate));
 			statistics = sttHome.getListExportStatisticLevel2(sttCustom);
+
 			try (FileInputStream fis = new FileInputStream(theFile)) {
 				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
 				Sheet sheet = workbook.getSheetAt(0);
@@ -1067,6 +1077,22 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	public void setListCustomerLevel2(List<Customer> listCustomerLevel2) {
 		this.listCustomerLevel2 = listCustomerLevel2;
+	}
+
+	public String getVarFromDate() {
+		return varFromDate;
+	}
+
+	public void setVarFromDate(String varFromDate) {
+		this.varFromDate = varFromDate;
+	}
+
+	public String getVarToDate() {
+		return varToDate;
+	}
+
+	public void setVarToDate(String varToDate) {
+		this.varToDate = varToDate;
 	}
 
 }

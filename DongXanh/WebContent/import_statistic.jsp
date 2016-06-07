@@ -76,11 +76,14 @@
 																		class="control-label col-md-3 col-sm-3 col-xs-12"
 																		for="fromDate">Từ ngày <span class="required">*</span>
 																	</label>
-																	<div class="col-md-6 col-sm-6 col-xs-12">
-																		<sx:datetimepicker id="fromDate"
-																			name="sttCustom.fromDate"
-																			cssClass="form-control col-md-7 col-xs-12"
-																			value="%{'today'}" displayFormat="dd-MM-yyyy" />
+																	<div class="col-md-3 xdisplay_inputx has-feedback">
+																		<input type="text"
+																			class="form-control has-feedback-left" id="fromDate"
+																			name="varFromDate" value="${varFromDate}"
+																			aria-describedby="inputSuccess2Status"> <span
+																			class="fa fa-calendar-o form-control-feedback left"
+																			aria-hidden="true"></span> <span
+																			id="inputSuccess2Status" class="sr-only">(success)</span>
 																	</div>
 																</div>
 																<div class="item form-group">
@@ -88,10 +91,14 @@
 																		class="control-label col-md-3 col-sm-3 col-xs-12"
 																		for="toDate">Đến ngày <span class="required">*</span>
 																	</label>
-																	<div class="col-md-6 col-sm-6 col-xs-12">
-																		<sx:datetimepicker id="toDate" name="sttCustom.toDate"
-																			cssClass="form-control col-md-7 col-xs-12"
-																			value="%{'today'}" displayFormat="dd-MM-yyyy" />
+																	<div class="col-md-3 xdisplay_inputx has-feedback">
+																		<input type="text"
+																			class="form-control has-feedback-left" id="toDate"
+																			name="varToDate" value="${varToDate}"
+																			aria-describedby="inputSuccess2Status"> <span
+																			class="fa fa-calendar-o form-control-feedback left"
+																			aria-hidden="true"></span> <span
+																			id="inputSuccess2Status" class="sr-only">(success)</span>
 																	</div>
 																</div>
 																<div class="item form-group">
@@ -103,35 +110,34 @@
 																	<div class="col-md-6 col-sm-6 col-xs-12">
 																		<s:select id="emp_id" name="sttCustom.empId"
 																			cssClass="form-control col-md-7 col-xs-12"
-																			headerKey="-1"
-																			headerValue="-- Chọn nhân viên thị trường --"
-																			showDownArrow="false" autoComplete="true"
-																			list="listEmployee" value="%{stat.user.id}"
-																			listKey="id" listValue="fullName +' - '+ userName" />
+																			headerKey="-1" headerValue="--" showDownArrow="false"
+																			autoComplete="true" list="listEmployee"
+																			value="%{stat.user.id}" listKey="id"
+																			listValue="fullName +' - '+ userName" />
 																	</div>
 																</div>
 																<div class="item form-group">
 																	<label
 																		class="control-label col-md-3 col-sm-3 col-xs-12"
-																		for=cusLevel2.id>Tên cấp II <span
+																		for=cusLevel2.id>Tên cấp 2 <span
 																		class="required">*</span>
 																	</label>
 																	<div class="col-md-6 col-sm-6 col-xs-12">
 																		<s:url id="url" value="/add_statistic.action" />
 																		<s:select id="cusLevel2.id"
 																			name="sttCustom.custLevel2Id" headerKey="-1"
-																			headerValue="-- Chọn khách hàng cấp 2 --"
+																			headerValue="--"
 																			cssClass="form-control col-md-7 col-xs-12"
 																			value="%{stat.customerByCustomerCodeLevel2.id}"
 																			showDownArrow="false" autoComplete="true"
-																			list="listCustomer" listKey="id"
+																			list="listCustomerLevel2" listKey="id"
 																			listValue="director +' - '+ customerCode" />
 																	</div>
 																</div>
 																<div class="item form-group">
 																	<label
 																		class="control-label col-md-3 col-sm-3 col-xs-12"
-																		for="cusLevel1.id">Tên cấp I <span
+																		for="cusLevel1.id">Tên cấp 1 <span
 																		class="required">*</span>
 																	</label>
 																	<div class="col-md-6 col-sm-6 col-xs-12">
@@ -140,8 +146,8 @@
 																			autoComplete="true"
 																			value="%{stat.customerByCustomerCodeLevel1.id}"
 																			cssClass="form-control col-md-7 col-xs-12"
-																			list="listCustomer" listKey="id" headerKey="-1"
-																			headerValue="-- Chọn khách hàng cấp 1 --"
+																			list="listCustomerLevel1" listKey="id" headerKey="-1"
+																			headerValue="--"
 																			listValue="director +' - '+ customerCode" />
 																	</div>
 																</div>
@@ -206,6 +212,21 @@
 <script src="js/custom.js"></script>
 <!-- Datatables -->
 <script src="js/jquery.dataTables.min.js"></script>
+<!-- daterangepicker -->
+<script type="text/javascript" src="js/moment.min2.js"></script>
+<script type="text/javascript" src="js/datepicker/daterangepicker.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#fromDate,#toDate').daterangepicker({
+			singleDatePicker : true,
+			calender_style : "picker_2",
+			format : 'DD/MM/YYYY',
+			showDropdowns : true
+		}, function(start, end, label) {
+			console.log(start.toISOString(), end.toISOString(), label);
+		});
+	});
+</script>
 </body>
 
 </html>
