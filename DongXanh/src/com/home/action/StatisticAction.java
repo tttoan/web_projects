@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,17 +36,21 @@ import com.home.dao.CustomerHome;
 import com.home.dao.ProductHome;
 import com.home.dao.StatisticHome;
 import com.home.dao.UserHome;
+import com.home.entities.DefineColumnImport;
 import com.home.entities.StatisticCustom;
 import com.home.entities.UserAware;
 import com.home.model.Category;
 import com.home.model.Customer;
+import com.home.model.GroupCustomer;
 import com.home.model.InvoiceType;
 import com.home.model.Product;
 import com.home.model.Statistic;
 import com.home.model.StatisticCompare;
 import com.home.model.User;
+import com.home.util.DateUtils;
 import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
+import com.home.util.StringUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
@@ -53,11 +58,12 @@ import com.opensymphony.xwork2.ModelDriven;
 public class StatisticAction extends ActionSupport implements Action, ModelDriven<Statistic>, UserAware, InvoiceTypeText {
 	private static final long serialVersionUID = 1L;
 	private Calendar calendar = Calendar.getInstance();
-	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	private static final SimpleDateFormat SDF = new SimpleDateFormat("dd/MM/yyyy");
 	public List<Statistic> statistics = new ArrayList<Statistic>();
 	private Statistic stat = new Statistic();
 	private List<User> listEmployee = new ArrayList<>();
-	private List<Customer> listCustomer = new ArrayList<>();
+	private List<Customer> listCustomerLevel1 = new ArrayList<>();
+	private List<Customer> listCustomerLevel2 = new ArrayList<>();
 	private List<Product> listProduct = new ArrayList<>();
 	private ArrayList<String> districts = new ArrayList<>();
 	private List<StatisticCompare> listStatComp = new ArrayList<>();
@@ -78,6 +84,24 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	private Workbook workbook;
 	private User userSes;
 	private String fromDate;
+	private List<String> listColumnExcel;
+	private int totalRecordExcel = 0;
+	private int processIndexExcel = 0;
+	private String varFieldEntName;
+	private String varIndexColumn;
+	private String varIndexRow = "4";
+	private String varDateReceived = SDF.format(new Date());
+	private List<DefineColumnImport> listDefineColStatisticLevel1;
+	private List<DefineColumnImport> listDefineColStatisticLevel2;
+	private List<DefineColumnImport> listDefineColStatisticBalance;
+
+	private void generateColumnExcel() {
+		listColumnExcel = new ArrayList<String>();
+		char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+		for (char a : alphabet) {
+			listColumnExcel.add("Cột " + (a + "").toUpperCase());
+		}
+	}
 
 	public String getFromDate() {
 		return fromDate;
@@ -138,8 +162,10 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 			try {
 				StatisticHome sttHome = new StatisticHome(getSessionFactory());
 				stat = sttHome.findById(statId);
+				varDateReceived = SDF.format(stat.getDateReceived());
 				setEdit(true);
 			} catch (Exception e) {
+				e.printStackTrace();
 				throw e;
 			}
 		}
@@ -148,15 +174,61 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	@Override
 	public void validate() {
-		// Default today for date Received value
 		try {
 			loadLookupEmployee();
 			loadLookupCustomer();
 			loadLookupProduct();
+			generateColumnExcel();
+			defineColImportStatisticLevel1();
+			defineColImportStatisticLevel2();
+			defineColImportStatisticBalance();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
 
+	private void defineColImportStatisticLevel1() {
+		setListDefineColStatisticLevel1(new ArrayList<DefineColumnImport>());
+		DefineColumnImport dci = new DefineColumnImport("Ngày hóa đơn", "dateReceived", "0");
+		getListDefineColStatisticLevel1().add(dci);
+		dci = new DefineColumnImport("Mã khách hàng cấp 1", "customerByCustomerCodeLevel1", "2");
+		getListDefineColStatisticLevel1().add(dci);
+		dci = new DefineColumnImport("Mã hàng", "product", "4");
+		getListDefineColStatisticLevel1().add(dci);
+		dci = new DefineColumnImport("Số lượng", "quantity", "7");
+		getListDefineColStatisticLevel1().add(dci);
+		dci = new DefineColumnImport("Danh số bán", "total", "9");
+		getListDefineColStatisticLevel1().add(dci);
+	}
+
+	private void defineColImportStatisticLevel2() {
+		setListDefineColStatisticLevel2(new ArrayList<DefineColumnImport>());
+		DefineColumnImport dci = new DefineColumnImport("Ngày nhận", "dateReceived", "1");
+		getListDefineColStatisticLevel2().add(dci);
+		dci = new DefineColumnImport("Mã khách hàng cấp 2", "customerByCustomerCodeLevel2", "2");
+		getListDefineColStatisticLevel2().add(dci);
+		dci = new DefineColumnImport("Mã khách hàng cấp 1", "customerByCustomerCodeLevel1", "4");
+		getListDefineColStatisticLevel2().add(dci);
+		dci = new DefineColumnImport("Mã hàng", "product", "6");
+		getListDefineColStatisticLevel2().add(dci);
+		dci = new DefineColumnImport("Số thùng", "totalBox", "9");
+		getListDefineColStatisticLevel2().add(dci);
+		dci = new DefineColumnImport("Số lượng", "quantity", "10");
+		getListDefineColStatisticLevel2().add(dci);
+		dci = new DefineColumnImport("Thành tiền", "total", "11");
+		getListDefineColStatisticLevel2().add(dci);
+	}
+
+	private void defineColImportStatisticBalance() {
+		setListDefineColStatisticBalance(new ArrayList<DefineColumnImport>());
+		DefineColumnImport dci = new DefineColumnImport("Ngày nhận", "dateReceived", "0");
+		getListDefineColStatisticBalance().add(dci);
+		dci = new DefineColumnImport("Mã khách hàng cấp 1", "customerByCustomerCodeLevel1", "1");
+		getListDefineColStatisticBalance().add(dci);
+		dci = new DefineColumnImport("Mã hàng", "product", "3");
+		getListDefineColStatisticBalance().add(dci);
+		dci = new DefineColumnImport("Số dư đầu kỳ (Thùng)", "totalBox", "5");
+		getListDefineColStatisticBalance().add(dci);
 	}
 
 	public SessionFactory getSessionFactory() {
@@ -181,7 +253,8 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	public void loadLookupCustomer() {
 		CustomerHome cusHome = new CustomerHome(getSessionFactory());
-		listCustomer = cusHome.getLookupCustomer(-1);
+		setListCustomerLevel1(cusHome.getLookupCustomer(-1, 1));
+		setListCustomerLevel2(cusHome.getLookupCustomer(-1, 2));
 	}
 
 	public void loadLookupEmployee() {
@@ -221,6 +294,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 			InvoiceType invoiceType = new InvoiceType();
 			invoiceType.setId(3);
 			stat.setInvoiceType(invoiceType);
+			stat.setDateReceived(SDF.parse(varDateReceived));
 			StatisticHome sttHome = new StatisticHome(HibernateUtil.getSessionFactory());
 			if (stat.getId() == 0) {
 				boolean isDuplicated = sttHome.isStatictisDuplicateLevel2(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1().getId(), getStat().getCustomerByCustomerCodeLevel2()
@@ -245,6 +319,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		try {
 			chooseTab = "levelOne";
 			chooseSubTab = "quickBalance";
+			stat = new Statistic();
 			StringBuilder logDuplicate = new StringBuilder();
 			File theFile = new File(getUploadFileName());
 			FileUtils.copyFile(getUpload(), theFile);
@@ -258,41 +333,72 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
 				Sheet sheet = workbook.getSheetAt(0);
 				Iterator<Row> rowIterator = sheet.iterator();
-				rowIterator.next();
+				totalRecordExcel = sheet.getPhysicalNumberOfRows();
+				for (int i = 0; i < Integer.parseInt(varIndexRow) - 1; i++) {
+					rowIterator.next();
+				}
 				while (rowIterator.hasNext()) {
 					Row row = rowIterator.next();
-					cell = row.getCell(TableBalance.customerCodeLevel1.value());
-					value = xls.getValue(cell);
-					if (((String) value).isEmpty())
-						continue;
+					processIndexExcel = row.getRowNum() + 1;
 					setStat(new Statistic());
-					// -------------customerCodeLevel1--------------
-					Customer cust = custHome.findCustomerByCode(value + "");
-					getStat().setCustomerByCustomerCodeLevel1(cust);
-					// ---------------------------
-					// -------------dateReceived--------------
-					cell = row.getCell(TableBalance.dateReceived.value());
+					cell = row.getCell(0);
+					if (cell == null)
+						break;
 					value = xls.getValue(cell);
-					getStat().setDateReceived(sdf.parse((String) value));
-					// ---------------------------
-					// -------------productCode--------------
-					cell = row.getCell(TableBalance.productCode.value());
-					value = xls.getValue(cell);
-					Product pro = proHome.findProductByCode((String) value);
-					getStat().setProduct(pro);
-					// ---------------------------
-					// -------------totalBox--------------
-					cell = row.getCell(TableBalance.totalBox.value());
-					value = xls.getValue(cell);
-					getStat().setTotalBox(((Double) value).intValue());
-					// ---------------------------
-					// -------------InvoiceType--------------
+					if (StringUtil.notNull(value).isEmpty())
+						continue;
+
+					String[] arrIndexColumn = varIndexColumn.split(",");
+					String[] arrFieldEntName = varFieldEntName.split(",");
+
+					for (int i = 0; i < arrIndexColumn.length; i++) {
+						cell = row.getCell(Integer.parseInt(arrIndexColumn[i].trim()));
+						value = xls.getValue(cell);
+						if (arrFieldEntName[i].trim().equals("customerByCustomerCodeLevel1")) {
+							Customer cus = custHome.findCustomerByCode(StringUtil.notNull(arrIndexColumn[i].trim()));
+							stat.setCustomerByCustomerCodeLevel1(cus);
+						} else if (arrFieldEntName[i].trim().equals("customerByCustomerCodeLevel2")) {
+							Customer cus = custHome.findCustomerByCode(StringUtil.notNull(arrIndexColumn[i].trim()));
+							stat.setCustomerByCustomerCodeLevel2(cus);
+						} else if (arrFieldEntName[i].trim().equals("product")) {
+							Product pro = proHome.findProductByCode(StringUtil.notNull(value));
+							stat.setProduct(pro);
+						} else {
+							Field f = stat.getClass().getField(arrFieldEntName[i].trim());
+							if (f.getType() == Date.class) {
+								if (StringUtil.notNull(value).isEmpty()) {
+									f.set(stat, null);
+								} else {
+									try {
+										f.set(stat, (Date) value);
+									} catch (Exception e) {
+										f.set(stat, DateUtils.tryConvertStringToDate(StringUtil.notNull(value)));
+									}
+								}
+							} else if (f.getType() == BigDecimal.class) {
+								if (StringUtil.notNull(value).isEmpty()) {
+									f.set(stat, new BigDecimal(0));
+								} else {
+									f.set(stat, new BigDecimal(StringUtil.notNull(value)));
+								}
+							} else if (f.getType() == Integer.class) {
+								if (StringUtil.notNull(value).isEmpty()) {
+									f.set(stat, 0);
+								} else {
+									f.set(stat, ((Double) value).intValue());
+								}
+							} else {
+								f.set(stat, StringUtil.notNull(value));
+							}
+						}
+					}
+					// --------Balance Type-------
 					InvoiceType invoiceType = new InvoiceType();
 					invoiceType.setId(4);
-					getStat().setInvoiceType(invoiceType);
+					stat.setInvoiceType(invoiceType);
 					// ---------------------------
-					boolean isDuplicated = sttHome.isBalanceDuplicate(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1().getId(), getStat().getProduct().getId(), getStat()
-							.getInvoiceType().getId());
+					boolean isDuplicated = sttHome.isStatictisDuplicateLevel1(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1() == null ? null : getStat()
+							.getCustomerByCustomerCodeLevel1().getId(), getStat().getProduct() == null ? null : getStat().getProduct().getId(), getStat().getInvoiceType().getId());
 					if (!isDuplicated)
 						sttHome.attachDirty(getStat());
 					else
@@ -301,13 +407,134 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 				}
 				addActionMessage("<h3>Cập nhật hoàn thành</h3><ul>" + logDuplicate + "</ul>");
 			} catch (Exception e) {
-				addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + e.getMessage() + " ở dòng: " + (cell.getRowIndex() + 1) + ", cột: " + (cell.getColumnIndex() + 1) + ", giá trị: " + value
-						+ "</li></ul>");
+				String ms = "";
+				if (cell != null)
+					ms = " ở dòng: " + (cell.getRowIndex() + 1) + ", cột: " + (cell.getColumnIndex() + 1) + ", giá trị: " + value;
+				addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + e.getMessage() + ms + "</li></ul>");
+				e.printStackTrace();
 			} finally {
 				if (theFile.exists())
 					FileUtils.deleteQuietly(theFile);
 			}
 		} catch (IOException ex) {
+			ex.printStackTrace();
+			addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + ex.getMessage() + "</ul></li>");
+		}
+		return SUCCESS;
+	}
+
+	public String importStatistic() {
+		try {
+			chooseTab = "levelOne";
+			chooseSubTab = "quickInvoiceLevel1";
+			stat = new Statistic();
+			StringBuilder logDuplicate = new StringBuilder();
+			File theFile = new File(getUploadFileName());
+			FileUtils.copyFile(getUpload(), theFile);
+			Cell cell = null;
+			Object value = null;
+			try (FileInputStream fis = new FileInputStream(theFile)) {
+				ExcelUtil xls = new ExcelUtil();
+				StatisticHome sttHome = new StatisticHome(getSessionFactory());
+				CustomerHome custHome = new CustomerHome(getSessionFactory());
+				ProductHome proHome = new ProductHome(getSessionFactory());
+				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
+				Sheet sheet = workbook.getSheetAt(0);
+				Iterator<Row> rowIterator = sheet.iterator();
+				totalRecordExcel = sheet.getPhysicalNumberOfRows();
+				for (int i = 0; i < Integer.parseInt(varIndexRow) - 1; i++) {
+					rowIterator.next();
+				}
+				while (rowIterator.hasNext()) {
+					Row row = rowIterator.next();
+					processIndexExcel = row.getRowNum() + 1;
+					setStat(new Statistic());
+					cell = row.getCell(0);
+					if (cell == null)
+						break;
+					value = xls.getValue(cell);
+					if (StringUtil.notNull(value).isEmpty())
+						continue;
+
+					String[] arrIndexColumn = varIndexColumn.split(",");
+					String[] arrFieldEntName = varFieldEntName.split(",");
+					boolean flagLevel1 = false;
+					boolean flagLevel2 = false;
+
+					for (int i = 0; i < arrIndexColumn.length; i++) {
+						cell = row.getCell(Integer.parseInt(arrIndexColumn[i].trim()));
+						value = xls.getValue(cell);
+						if (arrFieldEntName[i].trim().equals("customerByCustomerCodeLevel1")) {
+							Customer cus = custHome.findCustomerByCode(StringUtil.notNull(arrIndexColumn[i].trim()));
+							stat.setCustomerByCustomerCodeLevel1(cus);
+							flagLevel1 = true;
+						} else if (arrFieldEntName[i].trim().equals("customerByCustomerCodeLevel2")) {
+							Customer cus = custHome.findCustomerByCode(StringUtil.notNull(arrIndexColumn[i].trim()));
+							stat.setCustomerByCustomerCodeLevel2(cus);
+							flagLevel2 = true;
+
+						} else if (arrFieldEntName[i].trim().equals("product")) {
+							Product pro = proHome.findProductByCode(StringUtil.notNull(value));
+							stat.setProduct(pro);
+						} else {
+							Field f = stat.getClass().getField(arrFieldEntName[i].trim());
+							if (f.getType() == Date.class) {
+								if (StringUtil.notNull(value).isEmpty()) {
+									f.set(stat, null);
+								} else {
+									try {
+										f.set(stat, (Date) value);
+									} catch (Exception e) {
+										f.set(stat, DateUtils.tryConvertStringToDate(StringUtil.notNull(value)));
+									}
+								}
+							} else if (f.getType() == BigDecimal.class) {
+								if (StringUtil.notNull(value).isEmpty()) {
+									f.set(stat, new BigDecimal(0));
+								} else {
+									f.set(stat, new BigDecimal(StringUtil.notNull(value)));
+								}
+							} else if (f.getType() == Integer.class) {
+								if (StringUtil.notNull(value).isEmpty()) {
+									f.set(stat, 0);
+								} else {
+									f.set(stat, ((Double) value).intValue());
+								}
+							} else {
+								f.set(stat, StringUtil.notNull(value));
+							}
+						}
+					}
+					InvoiceType invoiceType = new InvoiceType();
+					if (flagLevel1 && flagLevel2) {
+						invoiceType.setId(3);
+						stat.setInvoiceType(invoiceType);
+					} else {
+						invoiceType.setId(1);
+						stat.setInvoiceType(invoiceType);
+					}
+
+					// ---------------------------
+					boolean isDuplicated = sttHome.isStatictisDuplicateLevel1(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1() == null ? null : getStat()
+							.getCustomerByCustomerCodeLevel1().getId(), getStat().getProduct() == null ? null : getStat().getProduct().getId(), getStat().getInvoiceType().getId());
+					if (!isDuplicated)
+						sttHome.attachDirty(getStat());
+					else
+						logDuplicate.append("<li>Cảnh báo: Dữ liệu dòng " + (cell.getRowIndex() + 1) + " đã được cập nhật rồi!</li>");
+					setStat(new Statistic());
+				}
+				addActionMessage("<h3>Cập nhật hoàn thành</h3><ul>" + logDuplicate + "</ul>");
+			} catch (Exception e) {
+				String ms = "";
+				if (cell != null)
+					ms = " ở dòng: " + (cell.getRowIndex() + 1) + ", cột: " + (cell.getColumnIndex() + 1) + ", giá trị: " + value;
+				addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + e.getMessage() + ms + "</li></ul>");
+				e.printStackTrace();
+			} finally {
+				if (theFile.exists())
+					FileUtils.deleteQuietly(theFile);
+			}
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + ex.getMessage() + "</ul></li>");
 		}
@@ -331,21 +558,28 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
 				Sheet sheet = workbook.getSheetAt(0);
 				Iterator<Row> rowIterator = sheet.iterator();
-				rowIterator.next();
+				totalRecordExcel = sheet.getPhysicalNumberOfRows();
+				for (int i = 0; i < Integer.parseInt(varIndexRow) - 1; i++) {
+					rowIterator.next();
+				}
 				Customer cust = null;
 				while (rowIterator.hasNext()) {
 					Row row = rowIterator.next();
+					processIndexExcel = row.getRowNum() + 1;
+					setStat(new Statistic());
+					cell = row.getCell(0);
+					if (cell == null)
+						break;
 					cell = row.getCell(TableStatisticLevel1.customerCodeLevel1.value());
 					value = xls.getValue(cell);
 					if (((String) value).isEmpty())
 						continue;
 					if (((String) value).toLowerCase().trim().startsWith("mã khách hàng")) {
-						setStat(new Statistic());
 						String customerCode = ((String) value).split(":")[1].trim();
 						// Remove 2 first character
 						cust = custHome.findCustomerByCode(customerCode.substring(2));
 
-					} else if (xls.isDateReceived(((String) value), sdf) && cust != null) {
+					} else if (xls.isDateReceived(((String) value), SDF) && cust != null) {
 						setStat(new Statistic());
 						// -------------customerCodeLevel1--------------
 						getStat().setCustomerByCustomerCodeLevel1(cust);
@@ -353,7 +587,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 						// -------------dateReceived--------------
 						cell = row.getCell(TableStatisticLevel1.dateReceived.value());
 						value = xls.getValue(cell);
-						getStat().setDateReceived(sdf.parse((String) value));
+						getStat().setDateReceived(SDF.parse((String) value));
 						// ---------------------------
 						// -------------productCode--------------
 						cell = row.getCell(TableStatisticLevel1.productCode.value());
@@ -536,7 +770,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 				for (Statistic entry : statistics) {
 					calendar.setTime(entry.getDateReceived());
 					Category cat = catHome.findById(entry.getProduct().getCategory().getId());
-					xls.addRowData(sheet, startIndexRow, startIndexCell, calendar.get(Calendar.MONTH) + "", sdf.format(entry.getDateReceived()), entry.getCustomerByCustomerCodeLevel2()
+					xls.addRowData(sheet, startIndexRow, startIndexCell, calendar.get(Calendar.MONTH) + "", SDF.format(entry.getDateReceived()), entry.getCustomerByCustomerCodeLevel2()
 							.getCustomerCode(), entry.getCustomerByCustomerCodeLevel2().getDirector(), entry.getCustomerByCustomerCodeLevel1().getCustomerCode(), entry
 							.getCustomerByCustomerCodeLevel1().getDirector(), entry.getProduct().getProductCode(), cat.getCategoryCode(), entry.getProduct().getProductName(),
 							entry.getTotalBox() + "", entry.getQuantity() + "", entry.getProduct().getUnitPrice() + "", entry.getTotal() + "", entry.getUser().getFullName());
@@ -561,9 +795,9 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	public String compareStatistic() throws Exception {
 		StatisticHome sttHome = new StatisticHome(getSessionFactory());
 		ProductHome proHome = new ProductHome(getSessionFactory());
-		listStatComp = sttHome.getDataStatisticCompare(sdf.parse(fromDate), sdf.parse(toDate), cusLevel1.getId(), INVOICE_SOLD_ID);
-		List<StatisticCompare> listStatCompLevel2 = sttHome.getDataStatisticCompare(sdf.parse(fromDate), sdf.parse(toDate), cusLevel1.getId(), INVOICE_SOLD_LEVEL2_ID);
-		calendar.setTime(sdf.parse(fromDate));
+		listStatComp = sttHome.getDataStatisticCompare(SDF.parse(fromDate), SDF.parse(toDate), cusLevel1.getId(), INVOICE_SOLD_ID);
+		List<StatisticCompare> listStatCompLevel2 = sttHome.getDataStatisticCompare(SDF.parse(fromDate), SDF.parse(toDate), cusLevel1.getId(), INVOICE_SOLD_LEVEL2_ID);
+		calendar.setTime(SDF.parse(fromDate));
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
 		calendar.set(Calendar.MONTH, 0);
 		List<StatisticCompare> listStatBalance = sttHome.getDataStatisticCompare(calendar.getTime(), cusLevel1.getId(), INVOICE_BALANCE_ID);
@@ -597,14 +831,6 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	public void setListEmployee(List<User> listEmployee) {
 		this.listEmployee = listEmployee;
-	}
-
-	public List<Customer> getListCustomer() {
-		return listCustomer;
-	}
-
-	public void setListCustomer(List<Customer> listCustomer) {
-		this.listCustomer = listCustomer;
 	}
 
 	public List<Statistic> getStats() {
@@ -745,6 +971,102 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	public void setListStatComp(List<StatisticCompare> listStatComp) {
 		this.listStatComp = listStatComp;
+	}
+
+	public List<String> getListColumnExcel() {
+		return listColumnExcel;
+	}
+
+	public void setListColumnExcel(List<String> listColumnExcel) {
+		this.listColumnExcel = listColumnExcel;
+	}
+
+	public List<DefineColumnImport> getListDefineColStatisticLevel1() {
+		return listDefineColStatisticLevel1;
+	}
+
+	public void setListDefineColStatisticLevel1(List<DefineColumnImport> listDefineColStatisticLevel1) {
+		this.listDefineColStatisticLevel1 = listDefineColStatisticLevel1;
+	}
+
+	public List<DefineColumnImport> getListDefineColStatisticLevel2() {
+		return listDefineColStatisticLevel2;
+	}
+
+	public void setListDefineColStatisticLevel2(List<DefineColumnImport> listDefineColStatisticLevel2) {
+		this.listDefineColStatisticLevel2 = listDefineColStatisticLevel2;
+	}
+
+	public List<DefineColumnImport> getListDefineColStatisticBalance() {
+		return listDefineColStatisticBalance;
+	}
+
+	public void setListDefineColStatisticBalance(List<DefineColumnImport> listDefineColStatisticBalance) {
+		this.listDefineColStatisticBalance = listDefineColStatisticBalance;
+	}
+
+	public int getTotalRecordExcel() {
+		return totalRecordExcel;
+	}
+
+	public void setTotalRecordExcel(int totalRecordExcel) {
+		this.totalRecordExcel = totalRecordExcel;
+	}
+
+	public int getProcessIndexExcel() {
+		return processIndexExcel;
+	}
+
+	public void setProcessIndexExcel(int processIndexExcel) {
+		this.processIndexExcel = processIndexExcel;
+	}
+
+	public String getVarFieldEntName() {
+		return varFieldEntName;
+	}
+
+	public void setVarFieldEntName(String varFieldEntName) {
+		this.varFieldEntName = varFieldEntName;
+	}
+
+	public String getVarIndexColumn() {
+		return varIndexColumn;
+	}
+
+	public void setVarIndexColumn(String varIndexColumn) {
+		this.varIndexColumn = varIndexColumn;
+	}
+
+	public String getVarIndexRow() {
+		return varIndexRow;
+	}
+
+	public void setVarIndexRow(String varIndexRow) {
+		this.varIndexRow = varIndexRow;
+	}
+
+	public String getVarDateReceived() {
+		return varDateReceived;
+	}
+
+	public void setVarDateReceived(String varDateReceived) {
+		this.varDateReceived = varDateReceived;
+	}
+
+	public List<Customer> getListCustomerLevel1() {
+		return listCustomerLevel1;
+	}
+
+	public void setListCustomerLevel1(List<Customer> listCustomerLevel1) {
+		this.listCustomerLevel1 = listCustomerLevel1;
+	}
+
+	public List<Customer> getListCustomerLevel2() {
+		return listCustomerLevel2;
+	}
+
+	public void setListCustomerLevel2(List<Customer> listCustomerLevel2) {
+		this.listCustomerLevel2 = listCustomerLevel2;
 	}
 
 }

@@ -10,16 +10,16 @@ import java.util.Date;
  */
 public class Statistic implements java.io.Serializable {
 
-	private Integer id;
-	private Customer customerByCustomerCodeLevel1;
-	private Customer customerByCustomerCodeLevel2;
-	private InvoiceType invoiceType;
-	private Product product;
-	private User user;
-	private Date dateReceived;
-	private Integer totalBox;
-	private Integer quantity;
-	private BigDecimal total;
+	public Integer id;
+	public Customer customerByCustomerCodeLevel1;
+	public Customer customerByCustomerCodeLevel2;
+	public InvoiceType invoiceType;
+	public Product product;
+	public User user;
+	public Date dateReceived;
+	public Integer totalBox;
+	public Integer quantity;
+	public BigDecimal total;
 
 	public Statistic() {
 	}

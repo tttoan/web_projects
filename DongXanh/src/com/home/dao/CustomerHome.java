@@ -361,6 +361,10 @@ public class CustomerHome {
 	}
 
 	public List<Customer> getLookupCustomer(int skipCusId) {
+		return getLookupCustomer(skipCusId, 0);
+	}
+
+	public List<Customer> getLookupCustomer(int skipCusId, int groupCustomerId) {
 		log.debug("finding List Customer instance by full name");
 		List<Customer> results = new ArrayList<Customer>();
 		Session session = null;
@@ -369,17 +373,20 @@ public class CustomerHome {
 			SessionImpl sessionImpl = (SessionImpl) session;
 			Connection conn = sessionImpl.connection();
 			try (Statement sta = conn.createStatement()) {
-				String query = "Select id, customer_code, director From customer where id <> "+skipCusId;
+				String addCondition = "";
+				if (groupCustomerId > 0)
+					addCondition = " and group_customer_id = " + groupCustomerId + "";
+
+				String query = "Select id, customer_code, business_name From customer where id <> " + skipCusId + addCondition;
 				try (ResultSet rs = sta.executeQuery(query)) {
 					while (rs.next()) {
 						Customer cus = new Customer();
 						cus.setId(rs.getInt("id"));
 						cus.setCustomerCode(rs.getString("customer_code"));
-						cus.setDirector(rs.getString("director"));
-						cus.setBusinessName(rs.getString("business_name"));
+						cus.setDirector(rs.getString("business_name"));
 						results.add(cus);
 					}
-				} 
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -535,5 +542,6 @@ public class CustomerHome {
 			}
 		}
 	}
+
 
 }

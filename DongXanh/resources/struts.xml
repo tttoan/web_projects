@@ -7,6 +7,7 @@
 	<constant name="struts.convention.result.path" value="/"></constant>
 	<constant name="struts.custom.i18n.resources" value="struts"></constant>
 	<constant name="struts.devMode" value="true" />
+	<constant name="struts.multipart.maxSize" value="30000000" />
 	<package name="default" namespace="/" extends="struts-default">
 		<interceptors>
 			<interceptor name="authentication"

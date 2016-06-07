@@ -4,7 +4,7 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <html>
 <head>
-<title>Please wait! Processing <s:property value="%{processIndexExcel}" /> of <s:property value="%{totalRecordExcel}" /> dòng</title>
+<title>Processing <s:property value="%{processIndexExcel}" /> of <s:property value="%{totalRecordExcel}" /> dòng</title>
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css"
 	href="css/font-awesome-4.1.0.min.css">

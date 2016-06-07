@@ -15,10 +15,10 @@
 		<div class="page-title">
 			<div class="title_left">
 				<s:if test="%{edit}">
-					<h3>Sửa Số Liệu Hóa Đơn</h3>
+					<h3>Cập nhật thông tin hóa đơn</h3>
 				</s:if>
 				<s:else>
-					<h3>Thêm Hóa Đơn</h3>
+					<h3>Thêm hóa đơn</h3>
 				</s:else>
 			</div>
 		</div>
@@ -46,10 +46,13 @@
 								<label class="control-label col-md-3 col-sm-3 col-xs-12"
 									for="dateReceived">Ngày nhận <span class="required">*</span>
 								</label>
-								<div class="col-md-6 col-sm-6 col-xs-12">
-									<sx:datetimepicker id="dateReceived" name="dateReceived"
-										cssClass="form-control col-md-7 col-xs-12"
-										value="%{stat.dateReceived}" displayFormat="dd-MM-yyyy" />
+								<div class="col-md-3 xdisplay_inputx has-feedback">
+									<input type="text" class="form-control has-feedback-left"
+										id="dateReceived" name="varDateReceived" value="${varDateReceived}"
+										aria-describedby="inputSuccess2Status"> <span
+										class="fa fa-calendar-o form-control-feedback left"
+										aria-hidden="true"></span> <span id="inputSuccess2Status"
+										class="sr-only">(success)</span>
 								</div>
 							</div>
 							<div class="item form-group">
@@ -74,7 +77,7 @@
 									<s:select id="cusLevel2.id" name="cusLevel2.id" headerKey="-1"
 										headerValue="---" cssClass="form-control col-md-7 col-xs-12"
 										value="%{stat.customerByCustomerCodeLevel2.id}"
-										showDownArrow="false" autoComplete="true" list="listCustomer"
+										showDownArrow="false" autoComplete="true" list="listCustomerLevel2"
 										listKey="id" listValue="director +' - '+ customerCode" />
 								</div>
 							</div>
@@ -86,7 +89,7 @@
 									<s:select id="cusLevel1.id" name="cusLevel1.id"
 										showDownArrow="false" autoComplete="true"
 										value="%{stat.customerByCustomerCodeLevel1.id}"
-										cssClass="form-control col-md-7 col-xs-12" list="listCustomer"
+										cssClass="form-control col-md-7 col-xs-12" list="listCustomerLevel1"
 										listKey="id" headerKey="-1" headerValue="---"
 										listValue="director +' - '+ customerCode" />
 								</div>
@@ -161,7 +164,12 @@
 							<div class="form-group">
 								<div class="col-md-6 col-md-offset-3">
 									<button type="reset" class="btn btn-primary">Reset</button>
-									<button id="send" type="submit" class="btn btn-success">Save</button>
+									<button id="send" type="submit" class="btn btn-success"><s:if test="%{edit}">
+											Cập nhật
+										</s:if>
+										<s:else>
+											Thêm
+										</s:else></button>
 								</div>
 							</div>
 						</s:form>
@@ -202,6 +210,22 @@
 <script src="js/custom.js"></script>
 <!-- form validation -->
 <script src="js/validator/validator.js"></script>
+
+<!-- daterangepicker -->
+<script type="text/javascript" src="js/moment.min2.js"></script>
+<script type="text/javascript" src="js/datepicker/daterangepicker.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#dateReceived').daterangepicker({
+			singleDatePicker : true,
+			calender_style : "picker_2",
+			format : 'DD/MM/YYYY',
+			showDropdowns : true
+		}, function(start, end, label) {
+			console.log(start.toISOString(), end.toISOString(), label);
+		});
+	});
+</script>
 <script>
 	// initialize the validator function
 	validator.message['date'] = 'not a real date';

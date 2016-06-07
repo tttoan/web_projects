@@ -170,20 +170,11 @@
 										<td class=""><s:property value="farmProduct4Session" /></td>
 
 										<s:if test="%{#rId == 1}">
-											<td class="last">
-												<s:url action="view_customer"
-													var="viewURL">
-													<s:param name="custId" value="%{id}"></s:param>
-												</s:url> <s:a href="%{viewURL}" cssClass="btn btn-info btn-xs">
-													<i class="fa fa-pencil"></i> Xem </s:a>
-													
-												<s:url action="move_to_add_customer"
+											<td class="last"><s:url action="move_to_add_customer"
 													var="editURL">
 													<s:param name="custId" value="%{id}"></s:param>
 												</s:url> <s:a href="%{editURL}" cssClass="btn btn-info btn-xs">
-													<i class="fa fa-pencil"></i> Sửa </s:a>
-													 
-												<s:url
+													<i class="fa fa-pencil"></i> Sửa </s:a> <s:url
 													action="delete_customer" var="deleteURL">
 													<s:param name="custId" value="%{id}"></s:param>
 												</s:url> <s:a href="%{deleteURL}" cssClass="btn btn-danger btn-xs">
@@ -213,17 +204,7 @@
 
 </div>
 
-<script src="js/bootstrap.min.js"></script>
 
-<!-- chart js -->
-<script src="js/chartjs/chart.min.js"></script>
-<!-- bootstrap progress js -->
-<script src="js/progressbar/bootstrap-progressbar.min.js"></script>
-<script src="js/nicescroll/jquery.nicescroll.min.js"></script>
-<!-- icheck -->
-<script src="js/icheck/icheck.min.js"></script>
-
-<script src="js/custom.js"></script>
 
 <!-- Datatables -->
 <script src="js/jquery-1.12.3.min.js"></script>

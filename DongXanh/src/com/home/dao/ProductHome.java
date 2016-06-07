@@ -208,7 +208,6 @@ public class ProductHome {
 			tx.commit();
 			if (instance == null) {
 				log.debug("get successful, no instance found");
-				throw new Exception("Không tìm thấy sản phẩm với mã "+productCode);
 			} else {
 				log.debug("get successful, instance found");
 			}

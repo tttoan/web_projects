@@ -8,19 +8,19 @@
             <column name="id" />
             <generator class="identity" />
         </id>
-        <many-to-one name="customerByCustomerCodeLevel1" class="com.home.model.Customer" fetch="select">
+        <many-to-one name="customerByCustomerCodeLevel1" class="com.home.model.Customer" fetch="join">
             <column name="customer_code_level1" />
         </many-to-one>
-        <many-to-one name="customerByCustomerCodeLevel2" class="com.home.model.Customer" fetch="select">
+        <many-to-one name="customerByCustomerCodeLevel2" class="com.home.model.Customer" fetch="join">
             <column name="customer_code_level2" />
         </many-to-one>
-        <many-to-one name="invoiceType" class="com.home.model.InvoiceType" fetch="select">
+        <many-to-one name="invoiceType" class="com.home.model.InvoiceType" fetch="join">
             <column name="invoice_type_id" />
         </many-to-one>
-        <many-to-one name="product" class="com.home.model.Product" fetch="select">
+        <many-to-one name="product" class="com.home.model.Product" fetch="join">
             <column name="product_id" />
         </many-to-one>
-        <many-to-one name="user" class="com.home.model.User" fetch="select">
+        <many-to-one name="user" class="com.home.model.User" fetch="join">
             <column name="user_id" />
         </many-to-one>
         <property name="dateReceived" type="date">

@@ -86,7 +86,7 @@
 								</label>
 								<div class="col-md-3 xdisplay_inputx has-feedback">
 									<input type="text" class="form-control has-feedback-left"
-										id="birthDate" name="birthDate" value="${varbirthDate}"
+										id="birthDate" name="varbirthDate" value="${varbirthDate}"
 										aria-describedby="inputSuccess2Status"> <span
 										class="fa fa-calendar-o form-control-feedback left"
 										aria-hidden="true"></span> <span id="inputSuccess2Status"

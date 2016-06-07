@@ -86,6 +86,9 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private List<String> listColumnExcel;
 	private int totalRecordExcel = 0;
 	private int processIndexExcel = 0;
+	private String varFieldEntName;
+	private String varIndexColumn;
+	private String varIndexRow = "3";
 
 	public String retrievePhoneById() throws Exception {
 		int commonCusId = 0;
@@ -488,9 +491,9 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 					Row row = rowIterator.next();
 					processIndexExcel = row.getRowNum() + 1;
 					cust = new Customer();
-					if (row.getCell(0) == null)
-						break;
 					cell = row.getCell(0);
+					if (cell == null)
+						break;
 					value = xls.getValue(cell);
 					if (StringUtil.notNull(value).isEmpty())
 						continue;
@@ -867,9 +870,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		this.listColumnExcel = listColumnExcel;
 	}
 
-	private String varFieldEntName;
-	private String varIndexColumn;
-	private String varIndexRow = "3";
+
 
 	public String getVarFieldEntName() {
 		return varFieldEntName;

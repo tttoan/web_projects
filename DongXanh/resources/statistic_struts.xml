@@ -37,7 +37,8 @@
 		<action name="move_to_compare_statistic" class="com.home.action.StatisticAction">
 			<result name="success">/invoice_comparison.jsp</result>
 		</action>
-		<action name="compare_statistic" method="compareStatistic" class="com.home.action.StatisticAction">
+		<action name="compare_statistic" method="compareStatistic"
+			class="com.home.action.StatisticAction">
 			<result name="success">/invoice_comparison.jsp</result>
 		</action>
 		<action name="add_statistic" method="addStatistic"
@@ -49,24 +50,26 @@
 			class="com.home.action.StatisticAction">
 			<result name="success" type="redirectAction">list_statistic</result>
 		</action>
-
-		<action name="import_statistic_level_one" method="importStatisticLevelOne"
+		
+		<action name="import_statistic" method="importStatistic"
 			class="com.home.action.StatisticAction">
 			<interceptor-ref name="fileUpload">
 				<param name="allowedTypes">application/ms-excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
 			</interceptor-ref>
-				<interceptor-ref name="defaultStack"></interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
 			<interceptor-ref name="execAndWait">
 				<param name="delay">500</param>
-				<param name="delaySleepInterval">500</param>
+				<param name="delaySleepInterval">3000</param>
 			</interceptor-ref>
 			<result name="wait">/waiting.jsp</result>
-			<result name="success">/import_statistic.jsp</result>
+			<result name="success" type="redirectAction">list_statistic</result>
 		</action>
+		
 		<action name="move_to_accept_statistic" class="com.home.action.StatisticAction">
 			<result name="success">/import_statistic.jsp</result>
 			<result name="error">/index.jsp</result>
 		</action>
+		
 		<action name="export_statistic" method="exportStatistic"
 			class="com.home.action.StatisticAction">
 			<result name="success" type="stream">
@@ -75,7 +78,7 @@
 				<param name="contentDisposition">attachment;filename="export.xlsx"</param>
 			</result>
 		</action>
-		
+
 		<action name="import_balance" method="importBalance"
 			class="com.home.action.StatisticAction">
 			<interceptor-ref name="fileUpload">
@@ -87,21 +90,7 @@
 				<param name="delaySleepInterval">500</param>
 			</interceptor-ref>
 			<result name="wait">/waiting.jsp</result>
-			<result name="success">/import_statistic.jsp</result>
-		</action>
-		
-		<action name="import_statistic_level_two" method="importStatisticLevelTwo"
-			class="com.home.action.StatisticAction">
-			<interceptor-ref name="defaultStack" />
-			<interceptor-ref name="fileUpload">
-				<param name="allowedTypes">application/ms-excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
-			</interceptor-ref>
-			<interceptor-ref name="execAndWait">
-				<param name="delay">500</param>
-				<param name="delaySleepInterval">500</param>
-			</interceptor-ref>
-			<result name="wait">/waiting.jsp</result>
-			<result name="success">/import_statistic.jsp</result>
+			<result name="success" type="redirectAction">list_statistic</result>
 		</action>
 	</package>
 
