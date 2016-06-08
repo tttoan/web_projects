@@ -170,11 +170,20 @@
 										<td class=""><s:property value="farmProduct4Session" /></td>
 
 										<s:if test="%{#rId == 1}">
-											<td class="last"><s:url action="move_to_add_customer"
+											<td class="last">
+												<s:url action="view_customer"
+													var="viewURL">
+													<s:param name="custId" value="%{id}"></s:param>
+												</s:url> <s:a href="%{viewURL}" cssClass="btn btn-info btn-xs">
+													<i class="fa fa-pencil"></i> Xem </s:a>
+													
+												<s:url action="move_to_add_customer"
 													var="editURL">
 													<s:param name="custId" value="%{id}"></s:param>
 												</s:url> <s:a href="%{editURL}" cssClass="btn btn-info btn-xs">
-													<i class="fa fa-pencil"></i> Sửa </s:a> <s:url
+													<i class="fa fa-pencil"></i> Sửa </s:a>
+													 
+												<s:url
 													action="delete_customer" var="deleteURL">
 													<s:param name="custId" value="%{id}"></s:param>
 												</s:url> <s:a href="%{deleteURL}" cssClass="btn btn-danger btn-xs">
