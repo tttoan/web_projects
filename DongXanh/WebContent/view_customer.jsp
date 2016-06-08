@@ -15,7 +15,7 @@
 	<div class="">
 		<div class="page-title">
 			<div class="title_left">
-				<h3>Xem thông tin khách hàng</h3>
+				<h3>Thông tin khách hàng</h3>
 			</div>
 		</div>
 		<div class="clearfix"></div>
@@ -106,51 +106,51 @@
 
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="createTime">Ngày lập </label>
+											for="createTime">Ngày lập: </label>
 										<div class="col-md-3 xdisplay_inputx has-feedback">
-											<s:property value="cust.createTime"/>
+											<label class="control-label"> <s:property value="cust.createTime"/></label>
 										</div>
 									</div>
 
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="customerCode">Mã khách hàng
+											for="customerCode">Mã khách hàng:
 										</label>
 										<div class="col-md-2 col-sm-6 col-xs-12">
-											<s:property value="cust.customerCode"/>
+											<label class="control-label"> <s:property value="cust.customerCode"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cityName">Khu vực 
+											for="cityName">Khu vực: 
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.certificateAddress"/>
+											<label class="control-label"> <s:property value="cust.certificateAddress"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="grpCustomer_id">Nhóm 
+											for="grpCustomer_id">Nhóm: 
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.groupCustomer.groupName"/>
+											<label class="control-label"> <s:property value="cust.groupCustomer.groupName"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="emp_id">Nhân viên TT 
+											for="emp_id">Nhân viên TT:
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.user.userName"/>
+											<label class="control-label"> <s:property value="cust.user.userName"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="statisticName">Tên bảng kê <span
+											for="statisticName">Tên bảng kê: <span
 											class="required">*</span>
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.statisticName"/>
+											<label class="control-label"> <s:property value="cust.statisticName"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
@@ -164,147 +164,147 @@
 
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="businessName">Tên doanh nghiệp (cửa hàng) <span
+											for="businessName">Tên doanh nghiệp (cửa hàng): <span
 											class="required">*</span>
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.businessName"/>
+											<label class="control-label"> <s:property value="cust.businessName"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="certificateNumber">Giấy phép ĐKKD số 
+											for="certificateNumber">Giấy phép ĐKKD số: 
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.certificateNumber"/>
+											<label class="control-label"> <s:property value="cust.certificateNumber"/></label>
 										</div>
 									</div>
 
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="certificateDate">Ngày cấp 
+											for="certificateDate">Ngày cấp: 
 										</label>
 										<div class="col-md-3 xdisplay_inputx has-feedback">
-											<s:property value="cust.certificateDate"/>
+											<label class="control-label"> <s:property value="cust.certificateDate"/></label>
 										</div>
 									</div>
 
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="certificateAddress">Địa chỉ đăng kí KD 
+											for="certificateAddress">Địa chỉ đăng kí KD: 
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.certificateAddress"/>
+											<label class="control-label"> <s:property value="cust.certificateAddress"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="taxNumber">Mã số thuế 
+											for="taxNumber">Mã số thuế: 
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.taxNumber"/>
+											<label class="control-label"> <s:property value="cust.taxNumber"/></label>
 										</div>
 									</div>
 
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="budgetRegister">Vốn đăng kí </label>
+											for="budgetRegister">Vốn đăng kí: </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.budgetRegister"/>
+											<label class="control-label"> <s:property value="cust.budgetRegister"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="telefone">Điện thoại bàn </label>
+											for="telefone">Điện thoại bàn: </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.telefone"/>
+											<label class="control-label"> <s:property value="cust.telefone"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="fax">Fax </label>
+											for="fax">Fax: </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.fax"/>
+											<label class="control-label"> <s:property value="cust.fax"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="email">Email </label>
+											for="email">Email: </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.email"/>
+											<label class="control-label"> <s:property value="cust.email"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
 											for="socialAddress">Địa chỉ mạng xã hội (Facebook,
-											Twitter, Zalo,…) </label>
+											Twitter, Zalo,…): </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.socialAddress"/>
+											<label class="control-label"> <s:property value="cust.socialAddress"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="businessAddress">Địa điểm kinh doanh </label>
+											for="businessAddress">Địa điểm kinh doanh: </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.businessAddress"/>
+											<label class="control-label"> <s:property value="cust.businessAddress"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="adviser">Người đại diện pháp luật </label>
+											for="adviser">Người đại diện pháp luật: </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.lawyer"/>
+											<label class="control-label"> <s:property value="cust.lawyer"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="director">Người quyết định chính công việc </label>
+											for="director">Người quyết định chính công việc: </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.director"/>
+											<label class="control-label"> <s:property value="cust.director"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="directorMobile">ĐTDĐ Người quyết định </label>
+											for="directorMobile">ĐTDĐ Người quyết định: </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.directorMobile"/>
+											<label class="control-label"> <s:property value="cust.directorMobile"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="directorBirthday">Ngày sinh </label>
+											for="directorBirthday">Ngày sinh: </label>
 										<div class="col-md-3 xdisplay_inputx has-feedback">
-											<s:property value="cust.directorBirthday"/>
+											<label class="control-label"> <s:property value="cust.directorBirthday"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="directorDomicile">Nguyên quán </label>
+											for="directorDomicile">Nguyên quán: </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.directorDomicile"/>
+											<label class="control-label"> <s:property value="cust.directorDomicile"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="sellMan">Người bán hàng trực tiếp </label>
+											for="sellMan">Người bán hàng trực tiếp: </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.sellMan"/>
+											<label class="control-label"> <s:property value="cust.sellMan"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="sellManMobile">ĐTDĐ Người bán hàng </label>
+											for="sellManMobile">ĐTDĐ Người bán hàng: </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.sellManMobile"/>
+											<label class="control-label"> <s:property value="cust.sellManMobile"/></label>
 										</div>
 									</div>
 
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
 											for="budgetOriginal">Ước vốn tự có để kinh doanh
-											(Triệu) </label>
+											(Triệu): </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.budgetRegister"/>
+											<label class="control-label"> <s:property value="cust.budgetRegister"/></label>
 										</div>
 									</div>
 								</div>
@@ -317,259 +317,259 @@
 									<span class="section"></span>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="otherBusiness">Ngành nghề kinh doanh khác </label>
+											for="otherBusiness">Ngành nghề kinh doanh khác: </label>
 										<div class="col-md-4 col-sm-6 col-xs-12">
-											<s:property value="cust.otherBusiness"/>
+											<label class="control-label"> <s:property value="cust.otherBusiness"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
-										<label class="col-md-5 col-sm-3 col-xs-12">CÁC CẤP 1
-											ĐANG NHẬN HÀNG CHÍNH </label>
+										<label class="col-md-5 col-sm-3 col-xs-12"><u><i>CÁC CẤP 1
+											ĐANG NHẬN HÀNG CHÍNH</i></u> </label>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cus1Level1_id">Tên <span class="required">(1)</span>
+											for="cus1Level1_id">Tên: <span class="required">(1)</span>
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.customerByCustomer1Level1Id.businessName"/>
+											<label class="control-label"> <s:property value="cust.customerByCustomer1Level1Id.businessName"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cus1Phone">Ðiện thoại <span class="required">(1)</span>
+											for="cus1Phone">Ðiện thoại: <span class="required">(1)</span>
 										</label>
 										<div class="col-md-3 col-sm-6 col-xs-12">
-											<s:property value="cust.customerByCustomer1Level1Id.telefone"/>
+											<label class="control-label"> <s:property value="cust.customerByCustomer1Level1Id.telefone"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="customer1Percent">Tỉ lệ nhận (%) <span
+											for="customer1Percent">Tỉ lệ nhận (%): <span
 											class="required">(1)</span>
 										</label>
 										<div class="col-md-3 col-sm-6 col-xs-12">
-											<s:property value="cust.customer1Percent"/>
+											<label class="control-label"> <s:property value="cust.customer1Percent"/></label>
 										</div>
 									</div>
 
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cus2Level1_id">Tên <span class="required">(2)</span>
+											for="cus2Level1_id">Tên: <span class="required">(2)</span>
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.customerByCustomer2Level1Id.businessName"/>
+											<label class="control-label"> <s:property value="cust.customerByCustomer2Level1Id.businessName"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cus2Phone">Ðiện thoại <span class="required">(2)</span>
+											for="cus2Phone">Ðiện thoại: <span class="required">(2)</span>
 										</label>
 										<div class="col-md-3 col-sm-6 col-xs-12">
-											<s:property value="cust.customerByCustomer2Level1Id.telefone"/>
+											<label class="control-label"> <s:property value="cust.customerByCustomer2Level1Id.telefone"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="customer2Percent">Tỉ lệ nhận (%) <span
+											for="customer2Percent">Tỉ lệ nhận (%): <span
 											class="required">(2)</span>
 										</label>
 										<div class="col-md-3 col-sm-6 col-xs-12">
-											<s:property value="cust.customer2Percent"/>
+											<label class="control-label"> <s:property value="cust.customer2Percent"/></label>
 										</div>
 									</div>
 
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cus3Level1_id">Tên <span class="required">(3)</span>
+											for="cus3Level1_id">Tên: <span class="required">(3)</span>
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.customerByCustomer3Level1Id.businessName"/>
+											<label class="control-label"> <s:property value="cust.customerByCustomer3Level1Id.businessName"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cus3Phone">Ðiện thoại <span class="required">(3)</span>
+											for="cus3Phone">Ðiện thoại: <span class="required">(3)</span>
 										</label>
 										<div class="col-md-3 col-sm-6 col-xs-12">
-											<s:property value="cust.customerByCustomer3Level1Id.telefone"/>
+											<label class="control-label"> <s:property value="cust.customerByCustomer3Level1Id.telefone"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="customer3Percent">Tỉ lệ nhận (%) <span
+											for="customer3Percent">Tỉ lệ nhận (%): <span
 											class="required">(3)</span>
 										</label>
 										<div class="col-md-3 col-sm-6 col-xs-12">
-											<s:property value="cust.customer3Percent"/>
+											<label class="control-label"> <s:property value="cust.customer3Percent"/></label>
 										</div>
 									</div>
 
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cus4Level1_id">Tên <span class="required">(4)</span>
+											for="cus4Level1_id">Tên: <span class="required">(4)</span>
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.customerByCustomer4Level1Id.businessName"/>
+											<label class="control-label"> <s:property value="cust.customerByCustomer4Level1Id.businessName"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cus4Phone">Ðiện thoại <span class="required">(4)</span>
+											for="cus4Phone">Ðiện thoại: <span class="required">(4)</span>
 										</label>
 										<div class="col-md-3 col-sm-6 col-xs-12">
-											<s:property value="cust.customerByCustomer4Level1Id.telefone"/>
+											<label class="control-label"> <s:property value="cust.customerByCustomer4Level1Id.telefone"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="customer4Percent">Tỉ lệ nhận (%) <span
+											for="customer4Percent">Tỉ lệ nhận (%): <span
 											class="required">(4)</span>
 										</label>
 										<div class="col-md-3 col-sm-6 col-xs-12">
-											<s:property value="cust.customer4Percent"/>
+											<label class="control-label"> <s:property value="cust.customer4Percent"/></label>
 										</div>
 									</div>
 
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cus5Level1_id">Tên <span class="required">(5)</span>
+											for="cus5Level1_id">Tên: <span class="required">(5)</span>
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.customerByCustomer5Level1Id.businessName"/>
+											<label class="control-label"> <s:property value="cust.customerByCustomer5Level1Id.businessName"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cus5Phone">Ðiện thoại <span class="required">(5)</span>
+											for="cus5Phone">Ðiện thoại: <span class="required">(5)</span>
 										</label>
 										<div class="col-md-3 col-sm-6 col-xs-12">
-											<s:property value="cust.customerByCustomer5Level1Id.telefone"/>
+											<label class="control-label"> <s:property value="cust.customerByCustomer5Level1Id.telefone"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="customer5Percent">Tỉ lệ nhận (%) <span
+											for="customer5Percent">Tỉ lệ nhận (%): <span
 											class="required">(5)</span>
 										</label>
 										<div class="col-md-3 col-sm-6 col-xs-12">
-											<s:property value="cust.customer5Percent"/>
+											<label class="control-label"> <s:property value="cust.customer5Percent"/></label>
 										</div>
 									</div>
 
 									<div class="item form-group">
-										<label class="col-md-8 col-sm-3 col-xs-12">DOANH SỐ
-											BÁN THUỐC BVTV 2 NIÊN VỤ VỪA QUA </label>
+										<label class="col-md-8 col-sm-3 col-xs-12"><u><i>DOANH SỐ
+											BÁN THUỐC BVTV 2 NIÊN VỤ VỪA QUA </i></u></label>
 									</div>
 
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
 											for="revenue1"> <%=(yearNow - 2)%> - <%=(yearNow - 1)%>
-											(Triệu đồng)
+											(Triệu đồng):
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.revenue1"/>
+											<label class="control-label"> <s:property value="cust.revenue1"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
 											for="revenue2"> <%=(yearNow - 1)%> - <%=(yearNow)%>
-											(Triệu đồng)
+											(Triệu đồng):
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.revenue2"/>
+											<label class="control-label"> <s:property value="cust.revenue2"/></label>
 										</div>
 									</div>
 
 
 									<div class="item form-group">
-										<label class="col-md-8 col-sm-3 col-xs-12">TỈ LỆ DOANH
-											SỐ PHÂN PHỐI CỦA CÁC CTY KINH DOANH THUỐC BVTV CUNG ỨNG </label>
+										<label class="col-md-8 col-sm-3 col-xs-12"><u><i>TỈ LỆ DOANH
+											SỐ PHÂN PHỐI CỦA CÁC CTY KINH DOANH THUỐC BVTV CUNG ỨNG </i></u></label>
 									</div>
 
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
 											for="percentProvide1">Trên 30% </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.percentProvide1"/>
+											<label class="control-label"> <s:property value="cust.percentProvide1"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
 											for="percentProvide2">20 - 30% </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.percentProvide2"/>
+											<label class="control-label"> <s:property value="cust.percentProvide2"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
 											for="percentProvide3">10 - 20% </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.percentProvide3"/>
+											<label class="control-label"> <s:property value="cust.percentProvide3"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
 											for="percentProvide4">Dưới 10% </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.percentProvide4"/>
+											<label class="control-label"> <s:property value="cust.percentProvide4"/></label>
 										</div>
 									</div>
 
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
 											for="productSell">Tên ít nhất 7 sản phẩm Đồng Xanh
-											đang bán theo số lượng thấp dần </label>
+											đang bán theo số lượng thấp dần: </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.productSell"/>
+											<label class="control-label"> <s:property value="cust.productSell"/></label>
 										</div>
 									</div>
 
 									<br>
 									<div class="item form-group">
-										<label class="col-md-8 col-sm-3 col-xs-12">DANH MỤC
-											CÁC MẶT HÀNG (TÊN THƯƠNG MẠI) ĐANG TIÊU THỤ MẠNH </label>
+										<label class="col-md-8 col-sm-3 col-xs-12"><u><i>DANH MỤC
+											CÁC MẶT HÀNG (TÊN THƯƠNG MẠI) ĐANG TIÊU THỤ MẠNH </i></u></label>
 									</div>
 
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="product1Hot">3 Sản phẩm thuốc trừ cỏ </label>
+											for="product1Hot">3 Sản phẩm thuốc trừ cỏ: </label>
 										<div class="col-md-6 col-sm-6 col-xs-12">
-											<s:property value="cust.product1Hot"/>
+											<label class="control-label"> <s:property value="cust.product1Hot"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="product2Hot">5 Sản phẩm thuốc trừ sâu </label>
+											for="product2Hot">5 Sản phẩm thuốc trừ sâu: </label>
 										<div class="col-md-6 col-sm-6 col-xs-12">
-											<s:property value="cust.product2Hot"/>
+											<label class="control-label"> <s:property value="cust.product2Hot"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="product3Hot">3 Sản phẩm thuốc trừ rầy </label>
+											for="product3Hot">3 Sản phẩm thuốc trừ rầy: </label>
 										<div class="col-md-6 col-sm-6 col-xs-12">
-											<s:property value="cust.product3Hot"/>
+											<label class="control-label"> <s:property value="cust.product3Hot"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="product4Hot">5 Sản phẩm thuốc trừ bệnh </label>
+											for="product4Hot">5 Sản phẩm thuốc trừ bệnh: </label>
 										<div class="col-md-6 col-sm-6 col-xs-12">
-											<s:property value="cust.product4Hot"/>
+											<label class="control-label"> <s:property value="cust.product4Hot"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="product5Hot">3 Sản phẩm kích thích sinh trưởng </label>
+											for="product5Hot">3 Sản phẩm kích thích sinh trưởng: </label>
 										<div class="col-md-6 col-sm-6 col-xs-12">
-											<s:property value="cust.product5Hot"/>
+											<label class="control-label"> <s:property value="cust.product5Hot"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="product6Hot">3 Sản phẩm thuốc trừ ốc </label>
+											for="product6Hot">3 Sản phẩm thuốc trừ ốc: </label>
 										<div class="col-md-6 col-sm-6 col-xs-12">
-											<s:property value="cust.product6Hot"/>
+											<label class="control-label"> <s:property value="cust.product6Hot"/></label>
 										</div>
 									</div>
 
@@ -582,34 +582,34 @@
 								<div class="x_content">
 									<span class="section"></span>
 									<div class="item form-group">
-										<label class="col-md-5 col-sm-3 col-xs-12">DOANH SỐ DỰ
-											KIẾN TRONG 3 NĂM TỚI </label>
+										<label class="col-md-5 col-sm-3 col-xs-12"><u><i>DOANH SỐ DỰ
+											KIẾN TRONG 3 NĂM TỚI </i></u></label>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
 											for="revenueExpect1"> <%=(yearNow)%> - <%=(yearNow + 1)%>
-											(Triệu đồng)
+											(Triệu đồng):
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.revenueExpect1"/>
+											<label class="control-label"> <s:property value="cust.revenueExpect1"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
 											for="revenueExpect2"> <%=(yearNow + 1)%> - <%=(yearNow + 2)%>
-											(Triệu đồng)
+											(Triệu đồng):
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.revenueExpect2"/>
+											<label class="control-label"> <s:property value="cust.revenueExpect2"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
 											for="revenueExpect3"> <%=(yearNow + 2)%> - <%=(yearNow + 3)%>
-											(Triệu đồng)
+											(Triệu đồng):
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<s:property value="cust.revenueExpect3"/>
+											<label class="control-label"> <s:property value="cust.revenueExpect3"/></label>
 										</div>
 									</div>
 								</div>
