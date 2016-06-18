@@ -207,6 +207,7 @@ public class CustomerHome {
 
 	public Customer findCustomerByCode(String customerCode) throws Exception {
 		log.debug("getting Customer instance with code: " + customerCode);
+		System.out.println("getting Customer instance with code: " + customerCode);
 		Transaction tx = null;
 		Session session = null;
 		try {
@@ -218,7 +219,7 @@ public class CustomerHome {
 			tx.commit();
 			if (instance == null) {
 				log.debug("get Customer successful, no instance found");
-				throw new Exception("Không tìm thấy khách hàng!");
+				throw new Exception("Không tìm thấy khách hàng ("+customerCode+")");
 			} else {
 				log.debug("get successful, instance found");
 			}
