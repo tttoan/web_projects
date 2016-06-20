@@ -42,9 +42,9 @@
 								<td class=""><s:property
 										value="%{getText('format.date',{dateReceived})}" /></td>
 								<td class=""><s:property
-										value="customerByCustomerCodeLevel1.businessName" /></td>
-								<td class=""><s:property
 										value="customerByCustomerCodeLevel2.businessName" /></td>
+											<td class=""><s:property
+										value="customerByCustomerCodeLevel1.businessName" /></td>
 								<td class=""><s:property value="product.productName" /></td>
 								<td class=""><s:property
 										value="%{getText('format.money',{product.unitPrice})}" /></td>
