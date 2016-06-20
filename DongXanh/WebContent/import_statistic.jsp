@@ -14,6 +14,16 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
+						<s:if test="hasActionErrors()">
+							<div class="errors">
+								<s:actionerror escape="false" />
+							</div>
+						</s:if>
+						<s:elseif test="hasActionMessages()">
+							<div class="message">
+								<s:actionmessage escape="false" />
+							</div>
+						</s:elseif>
 						<s:set name="importType" value="%{chooseSubTab}" />
 						<sx:tabbedpanel id="tabContainer" selectedTab="%{chooseTab}">
 							<sx:div label="Bảng kê Cấp I" id="levelOne">

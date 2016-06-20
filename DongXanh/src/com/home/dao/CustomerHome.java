@@ -219,7 +219,7 @@ public class CustomerHome {
 			tx.commit();
 			if (instance == null) {
 				log.debug("get Customer successful, no instance found");
-				throw new Exception("Không tìm thấy khách hàng ("+customerCode+")");
+				//throw new Exception("Không tìm thấy khách hàng ("+customerCode+")");
 			} else {
 				log.debug("get successful, instance found");
 			}

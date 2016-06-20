@@ -63,11 +63,11 @@
 			</interceptor-ref>
 			<result name="wait">/waiting.jsp</result>
 			<result name="success" type="redirectAction">list_statistic</result>
+			<result name="error">/import_statistic.jsp</result>
 		</action>
 		
 		<action name="move_to_accept_statistic" class="com.home.action.StatisticAction">
 			<result name="success">/import_statistic.jsp</result>
-			<result name="error">/index.jsp</result>
 		</action>
 		
 		<action name="export_statistic" method="exportStatistic"

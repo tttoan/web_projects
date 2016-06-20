@@ -33,7 +33,7 @@
             <column name="quantity" />
         </property>
         <property name="total" type="big_decimal">
-            <column name="total" precision="10" />
+            <column name="total" precision="18" />
         </property>
     </class>
 </hibernate-mapping>

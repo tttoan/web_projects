@@ -26,11 +26,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.struts2.ServletActionContext;
 import org.hibernate.SessionFactory;
-
 import com.home.conts.InvoiceTypeText;
-import com.home.conts.TableBalance;
-import com.home.conts.TableStatisticLevel1;
-import com.home.conts.TableStatisticLevel2;
 import com.home.dao.CategoryHome;
 import com.home.dao.CustomerHome;
 import com.home.dao.ProductHome;
@@ -41,7 +37,6 @@ import com.home.entities.StatisticCustom;
 import com.home.entities.UserAware;
 import com.home.model.Category;
 import com.home.model.Customer;
-import com.home.model.GroupCustomer;
 import com.home.model.InvoiceType;
 import com.home.model.Product;
 import com.home.model.Statistic;
@@ -472,11 +467,11 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 						cell = row.getCell(Integer.parseInt(arrIndexColumn[i].trim()));
 						value = xls.getValue(cell);
 						if (arrFieldEntName[i].trim().equals("customerByCustomerCodeLevel1")) {
-							Customer cus = custHome.findCustomerByCode(StringUtil.notNull(arrIndexColumn[i].trim()));
+							Customer cus = custHome.findCustomerByCode(StringUtil.notNull(value));
 							stat.setCustomerByCustomerCodeLevel1(cus);
 							flagLevel1 = true;
 						} else if (arrFieldEntName[i].trim().equals("customerByCustomerCodeLevel2")) {
-							Customer cus = custHome.findCustomerByCode(StringUtil.notNull(arrIndexColumn[i].trim()));
+							Customer cus = custHome.findCustomerByCode(StringUtil.notNull(value));
 							stat.setCustomerByCustomerCodeLevel2(cus);
 							flagLevel2 = true;
 
@@ -514,6 +509,8 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 					}
 					InvoiceType invoiceType = new InvoiceType();
 					if (flagLevel1 && flagLevel2) {
+						chooseTab = "levelTwo";
+						chooseSubTab = "quickInvoiceLevel2";
 						invoiceType.setId(3);
 						stat.setInvoiceType(invoiceType);
 					} else {
@@ -537,6 +534,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 					ms = " ở dòng: " + (cell.getRowIndex() + 1) + ", cột: " + (cell.getColumnIndex() + 1) + ", giá trị: " + value;
 				addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + e.getMessage() + ms + "</li></ul>");
 				e.printStackTrace();
+				return ERROR;
 			} finally {
 				if (theFile.exists())
 					FileUtils.deleteQuietly(theFile);
@@ -544,216 +542,12 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + ex.getMessage() + "</ul></li>");
+			return ERROR;
 		}
 		return SUCCESS;
+		
 	}
-
-	public String importStatisticLevelOne() {
-		try {
-			chooseTab = "levelOne";
-			chooseSubTab = "quickInvoiceLevel1";
-			StringBuilder logDuplicate = new StringBuilder();
-			File theFile = new File(getUploadFileName());
-			FileUtils.copyFile(getUpload(), theFile);
-			Cell cell = null;
-			Object value = null;
-			try (FileInputStream fis = new FileInputStream(theFile)) {
-				ExcelUtil xls = new ExcelUtil();
-				StatisticHome sttHome = new StatisticHome(getSessionFactory());
-				CustomerHome custHome = new CustomerHome(getSessionFactory());
-				ProductHome proHome = new ProductHome(getSessionFactory());
-				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
-				Sheet sheet = workbook.getSheetAt(0);
-				Iterator<Row> rowIterator = sheet.iterator();
-				totalRecordExcel = sheet.getPhysicalNumberOfRows();
-				for (int i = 0; i < Integer.parseInt(varIndexRow) - 1; i++) {
-					rowIterator.next();
-				}
-				Customer cust = null;
-				while (rowIterator.hasNext()) {
-					Row row = rowIterator.next();
-					processIndexExcel = row.getRowNum() + 1;
-					setStat(new Statistic());
-					cell = row.getCell(0);
-					if (cell == null)
-						break;
-					cell = row.getCell(TableStatisticLevel1.customerCodeLevel1.value());
-					value = xls.getValue(cell);
-					if (((String) value).isEmpty())
-						continue;
-					if (((String) value).toLowerCase().trim().startsWith("mã khách hàng")) {
-						String customerCode = ((String) value).split(":")[1].trim();
-						// Remove 2 first character
-						cust = custHome.findCustomerByCode(customerCode.substring(2));
-
-					} else if (xls.isDateReceived(((String) value), SDF) && cust != null) {
-						setStat(new Statistic());
-						// -------------customerCodeLevel1--------------
-						getStat().setCustomerByCustomerCodeLevel1(cust);
-						// ---------------------------
-						// -------------dateReceived--------------
-						cell = row.getCell(TableStatisticLevel1.dateReceived.value());
-						value = xls.getValue(cell);
-						getStat().setDateReceived(SDF.parse((String) value));
-						// ---------------------------
-						// -------------productCode--------------
-						cell = row.getCell(TableStatisticLevel1.productCode.value());
-						value = xls.getValue(cell);
-						Product pro = proHome.findProductByCode((String) value);
-						getStat().setProduct(pro);
-
-						// ---------------------------
-						int indexQuantiy = TableStatisticLevel1.quantiy.value();
-						// -------------invoiceType--------------
-						cell = row.getCell(TableStatisticLevel1.invoiceType.value());
-						value = xls.getValue(cell);
-						InvoiceType invoiceType = new InvoiceType();
-						if ((value + "").trim().equalsIgnoreCase(INVOICE_RETURN)) {
-							invoiceType.setId(INVOICE_RETURN_ID);
-							indexQuantiy = TableStatisticLevel1.quantiyReturn.value();
-						} else {
-							invoiceType.setId(INVOICE_SOLD_ID);
-							// -------------total--------------
-							cell = row.getCell(TableStatisticLevel1.total.value());
-							value = xls.getValue(cell);
-							getStat().setTotal(new BigDecimal(((String) value).replace(".", "")));
-							// ---------------------------
-						}
-						getStat().setInvoiceType(invoiceType);
-						// ---------------------------
-
-						// -------------quantiy--------------
-						cell = row.getCell(indexQuantiy);
-						value = xls.getValue(cell);
-						int quantity = Integer.parseInt(((String) value).replace(".", ""));
-						getStat().setQuantity(quantity);
-						// ---------------------------
-						// -------------totalBox--------------
-						getStat().setTotalBox(quantity / pro.getQuantity());
-						// ---------------------------
-						boolean isDuplicated = sttHome.isStatictisDuplicateLevel1(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1().getId(), getStat().getProduct().getId(),
-								getStat().getInvoiceType().getId());
-						if (!isDuplicated)
-							sttHome.attachDirty(getStat());
-						else
-							logDuplicate.append("<li>Cảnh báo: Dữ liệu dòng " + (cell.getRowIndex() + 1) + " đã được cập nhật rồi!</li>");
-						setStat(new Statistic());
-					}
-				}
-				addActionMessage("<h3>Cập nhật hoàn thành</h3><ul>" + logDuplicate + "</ul>");
-			} catch (Exception e) {
-				String ms = "";
-				if (cell != null)
-					ms = " ở dòng: " + (cell.getRowIndex() + 1) + ", cột: " + (cell.getColumnIndex() + 1) + ", giá trị: " + value;
-				addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + e.getMessage() + ms + "</li></ul>");
-			} finally {
-				if (theFile.exists())
-					FileUtils.deleteQuietly(theFile);
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + ex.getMessage() + "</ul></li>");
-		}
-		return SUCCESS;
-	}
-
-	public String importStatisticLevelTwo() {
-		try {
-			chooseTab = "levelTwo";
-			chooseSubTab = "quickInvoiceLevel2";
-			StringBuilder logDuplicate = new StringBuilder();
-			File theFile = new File(getUploadFileName());
-			FileUtils.copyFile(getUpload(), theFile);
-			Cell cell = null;
-			Object value = null;
-			try (FileInputStream fis = new FileInputStream(theFile)) {
-				ExcelUtil xls = new ExcelUtil();
-				StatisticHome sttHome = new StatisticHome(getSessionFactory());
-				CustomerHome custHome = new CustomerHome(getSessionFactory());
-				ProductHome proHome = new ProductHome(getSessionFactory());
-				UserHome userHome = new UserHome(getSessionFactory());
-				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
-				Sheet sheet = workbook.getSheetAt(0);
-				Iterator<Row> rowIterator = sheet.iterator();
-				rowIterator.next();
-				while (rowIterator.hasNext()) {
-					Row row = rowIterator.next();
-					setStat(new Statistic());
-					// -------------dateReceived--------------
-					cell = row.getCell(TableStatisticLevel2.dateReceived.value());
-					value = xls.getValue(cell);
-					getStat().setDateReceived((Date) value);
-					// ---------------------------
-					// -------------customerCodeLevel2--------------
-					cell = row.getCell(TableStatisticLevel2.customerCodeLevel2.value());
-					value = xls.getValue(cell);
-					Customer cust = custHome.findCustomerByCode((String) value);
-					getStat().setCustomerByCustomerCodeLevel2(cust);
-					// ---------------------------
-					// -------------customerCodeLevel1--------------
-					cell = row.getCell(TableStatisticLevel2.customerCodeLevel1.value());
-					value = xls.getValue(cell);
-					cust = custHome.findCustomerByCode((String) value);
-					getStat().setCustomerByCustomerCodeLevel1(cust);
-					// ---------------------------
-					// -------------productCode--------------
-					cell = row.getCell(TableStatisticLevel2.productCode.value());
-					value = xls.getValue(cell);
-					Product pro = proHome.findProductByCode(String.valueOf(value));
-					getStat().setProduct(pro);
-					// ---------------------------
-					// -------------totalBox--------------
-					cell = row.getCell(TableStatisticLevel2.totalBox.value());
-					value = xls.getValue(cell);
-					getStat().setTotalBox(((Double) value).intValue());
-					// ---------------------------
-					// -------------quantiy--------------
-					cell = row.getCell(TableStatisticLevel2.quantiy.value());
-					value = xls.getValue(cell);
-					getStat().setQuantity(((Double) value).intValue());
-					// ---------------------------
-					// -------------total--------------
-					cell = row.getCell(TableStatisticLevel2.total.value());
-					value = xls.getValue(cell);
-					getStat().setTotal(new BigDecimal(String.valueOf(value)));
-					// ---------------------------
-					// -------------userFullName--------------
-					cell = row.getCell(TableStatisticLevel2.userFullName.value());
-					value = xls.getValue(cell);
-					User user = userHome.getUserByFullName((String) value);
-					getStat().setUser(user);
-					// ---------------------------
-					// -------------InvoiceType--------------
-					InvoiceType invoiceType = new InvoiceType();
-					invoiceType.setId(3);
-					getStat().setInvoiceType(invoiceType);
-					// ---------------------------
-
-					boolean isDuplicated = sttHome.isStatictisDuplicateLevel2(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1().getId(), getStat()
-							.getCustomerByCustomerCodeLevel2().getId(), getStat().getProduct().getId(), getStat().getUser().getId(), getStat().getInvoiceType().getId());
-					if (!isDuplicated)
-						sttHome.attachDirty(getStat());
-					else
-						logDuplicate.append("<li>Cảnh báo: Dữ liệu dòng " + (cell.getRowIndex() + 1) + " đã được cập nhật rồi!</li>");
-					setStat(new Statistic());
-				}
-				addActionMessage("<h3>Cập nhật hoàn thành</h3><ul>" + logDuplicate + "</ul>");
-			} catch (Exception e) {
-				String ms = "";
-				if (cell != null)
-					ms = " ở dòng: " + (cell.getRowIndex() + 1) + ", cột: " + (cell.getColumnIndex() + 1) + ", giá trị: " + value;
-				addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + e.getMessage() + ms + "</li></ul>");
-			} finally {
-				if (theFile.exists())
-					FileUtils.deleteQuietly(theFile);
-			}
-		} catch (IOException ex) {
-			ex.printStackTrace();
-			addActionError("<h3>Cập nhật thất bại</h3><ul><li>Lỗi: " + ex.getMessage() + "</ul></li>");
-		}
-		return SUCCESS;
-	}
-
+	
 	public String exportStatistic() {
 		try {
 			chooseTab = "levelTwo";
