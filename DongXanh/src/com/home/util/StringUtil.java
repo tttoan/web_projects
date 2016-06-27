@@ -11,6 +11,18 @@ public class StringUtil {
 			return "";
 		}
 	}
+	
+	public static String replaceInvalidChar(String strIn) {
+		if (strIn != null) {
+			strIn = strIn.replace("\\", "\\\\");
+			strIn = strIn.replace("'", "\\'");
+			strIn = strIn.replace("\"", "\\\"");
+			strIn = strIn.replace("\n", "\\n");
+			return strIn;
+		} else {
+			return "";
+		}
+	}
 
 	private static String removeAccent(String val) {
 		String temp = Normalizer.normalize(val, Normalizer.Form.NFD);

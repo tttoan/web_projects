@@ -391,13 +391,7 @@ public class CustomerHome {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-			} finally{
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+			} 
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by Customer failed", re);

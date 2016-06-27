@@ -28,13 +28,14 @@
 							<th>Số lượng</th>
 							<th>Thành tiền</th>
 							<th>NVTT</th>
-							<s:if test="%{#rId == 1}">
+							<%-- <s:if test="%{#rId == 1}">
 								<th class="no-link last"><span class="nobr"></span></th>
-							</s:if>
+							</s:if> --%>
+							<th class="no-link last"></th>
 						</tr>
 					</thead>
 
-					<tbody>
+				<!-- 	<tbody> 
 
 						<s:iterator value="statistics" status="rowStatus">
 							<tr class="even pointer">
@@ -68,7 +69,7 @@
 								</s:if>
 							</tr>
 						</s:iterator>
-					</tbody>
+					</tbody> -->
 
 				</table>
 			</div>
@@ -104,31 +105,84 @@
 <script src="js/icheck/icheck.min.js"></script>
 
 <script src="js/custom.js"></script>
+<script src="js/moment.js"></script>
 
+<style>
+        .currency-style
+        {
+            text-align: right;
+        }
+        .num-style
+        {
+            text-align: center;
+        }
+</style>
 
 <!-- Datatables -->
 <script src="js/jquery.dataTables.min.js"></script>
-<script>
-	$(document).ready(function() {
-		$('#example').DataTable({
-			"scrollX" : true
-		});
-		var table = $('#example').DataTable();
 
-		$('#example tbody').on('click', 'tr', function() {
-			if ($(this).hasClass('selected')) {
-				$(this).removeClass('selected');
-			} else {
-				table.$('tr.selected').removeClass('selected');
-				$(this).addClass('selected');
-			}
-		});
+ <script>
+     $(document).ready(function () {
+         $("#example").DataTable({
+             "processing": true, // for show progress bar
+             "serverSide": true, // for process server side
+             "filter": true, // this is for disable filter (search box)
+             "orderMulti": false, // for disable multiple column at once
+             "scrollX" : true,
+             "ajax": {
+                 "url": "listStatisticJSonAction",
+                 "type": "POST",
+                 "datatype": "json"
+             },
+              "columns": [
+                     { "data": "no",  "autoWidth": true },
+                     { "data": "dateReceived", "autoWidth": true 
+                    	 ,  "render": function ( data, type, full, meta ) {
+                    		 if(type == "display"){
+                                 var date = new Date(data);
+                                 //return date.toISOString().substr(0,10);;
+                                 return moment(date).format('DD-MM-YYYY')
+                         	}
 
-		$('#button').click(function() {
-			table.row('.selected').remove().draw(false);
-		});
-	});
-</script>
+                         	return data;
+       					}		 
+                     },
+                     { "data": "customerByCustomerCodeLevel2.businessName", "autoWidth": true },
+                     { "data": "customerByCustomerCodeLevel1.businessName", "autoWidth": true },
+                     { "data": "product.productName", "autoWidth": true },
+                     { "data": "product.unitPrice", "autoWidth": true, "className": "currency-style" 
+                    	 ,  "render": function ( data, type, full, meta ) {
+           					return formatCurrency(data);
+       					}		 
+                     },
+                     { "data": "totalBox", "autoWidth": true, "className": "num-style" },
+                     { "data": "quantity", "autoWidth": true, "className": "num-style" },
+                     { "data": "total", "autoWidth": true, "className": "currency-style"
+                    	 ,  "render": function ( data, type, full, meta ) {
+          					return formatCurrency(data);
+      					}	
+                     },
+                     { "data": "user.userName", "autoWidth": true },
+                     { "data": "id"
+                    	 ,  "render": function ( data, type, full, meta ) {
+                    		 return '<a href="move_to_add_statistic?statId='+data+'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa <a>' + 
+                    				'<a href="delete_statistic?statId='+data+'" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Xóa <a>';
+                     	}
+                     }
+             ] 
+         });
+     });
+     
+     function formatCurrency(num){
+    	 if(num != null){
+    		var n = num.toString(), p = n.indexOf('.');
+     		return n.replace(/\d(?=(?:\d{3})+(?:\.|$))/g, function($0, i){return p<0 || i<p ? ($0+',') : $0; }) + ' VNĐ';
+    	 }
+     }
+     
+ </script>
+    
+
 </body>
 
 </html>

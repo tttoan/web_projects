@@ -413,6 +413,7 @@ public class ProductHome {
 		} finally{
 			try {
 				if(session != null){
+					session.flush();
 					session.close();
 				}
 			} catch (Exception e) {

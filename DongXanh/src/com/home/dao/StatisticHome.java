@@ -17,6 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -33,9 +34,13 @@ import com.home.entities.RevenuesCustomerL1;
 import com.home.entities.RevenuesCustomerL2;
 import com.home.entities.RevenuesSellman;
 import com.home.entities.StatisticCustom;
+import com.home.model.Category;
+import com.home.model.Customer;
+import com.home.model.InvoiceType;
 import com.home.model.Product;
 import com.home.model.Statistic;
 import com.home.model.StatisticCompare;
+import com.home.model.User;
 import com.home.util.StringUtil;
 
 /**
@@ -772,6 +777,164 @@ public class StatisticHome {
 		} finally {
 			try {
 				if (session != null) {
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public List<Statistic> getListStatistic(int startPageIndex, int recordsPerPage, String searchValue) throws Exception{
+		log.debug("retrieve list getListStatistic");
+		Session session = null;
+		List<Statistic> results = new ArrayList<Statistic>();
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			int range = startPageIndex+recordsPerPage;
+			ResultSet rs = conn.createStatement().executeQuery(
+					"SELECT * FROM (SELECT @i:=@i+1 AS iterator, t.* FROM statistic t,(SELECT @i:=0) foo Order By id) AS XX "
+					+ "WHERE iterator > "+startPageIndex+" AND iterator <= " + range 
+					+ " AND (''="+searchValue+" OR )");
+			int no = 1;
+			while(rs.next()){
+				Statistic s = new Statistic();
+				s.setNo(no++);
+				s.setId(rs.getInt("id"));
+				s.setDateReceived(rs.getDate("date_received"));
+				Customer cus1 = new Customer();
+				cus1.setId(rs.getInt("customer_code_level1"));
+				if(cus1.getId() != null && cus1.getId() > 0){
+					cus1.setBusinessName(getCusName(conn, cus1.getId()));
+				}
+				s.setCustomerByCustomerCodeLevel1(cus1);
+				Customer cus2 = new Customer();
+				cus2.setId(rs.getInt("customer_code_level2"));
+				if(cus2.getId() != null && cus2.getId() > 0){
+					cus2.setBusinessName(getCusName(conn, cus2.getId()));
+				}
+				s.setCustomerByCustomerCodeLevel2(cus2);
+				Product product = new Product();
+				product.setId(rs.getInt("product_id"));
+				if(product.getId() != null && product.getId() > 0){
+					product.setProductName(getProductName(conn, product.getId()));
+				}
+				s.setProduct(product);
+				s.setTotalBox(rs.getInt("total_box"));
+				s.setQuantity(rs.getInt("quantity"));
+				s.setTotal(rs.getBigDecimal("total"));
+				User user = new User();
+				user.setId(rs.getInt("user_id"));
+				if(user.getId() != null && user.getId() > 0){
+					user.setUserName(getUserName(conn, user.getId()));
+				}
+				s.setUser(user);
+				InvoiceType invoiceType = new InvoiceType();
+				invoiceType.setId(rs.getInt("invoice_type_id"));
+				if(invoiceType.getId() != null && invoiceType.getId() > 0){
+					invoiceType.setInvoiceType(getInvoiceType(conn, invoiceType.getId()));
+				}
+				results.add(s);
+			}
+			rs.close();
+			log.debug("retrieve list Product successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	private String getCusName(Connection conn, int id) throws Exception{
+		try {
+			String name = null;
+			ResultSet rs = conn.createStatement().executeQuery(
+					"SELECT business_name FROM `customer` WHERE id="+id);
+			if(rs.next()){
+				name = StringUtil.notNull(rs.getString("business_name"));
+			}
+			rs.close();
+			return name;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	private String getProductName(Connection conn, int id) throws Exception{
+		try {
+			String name = null;
+			ResultSet rs = conn.createStatement().executeQuery(
+					"SELECT product_name FROM `product` WHERE id="+id);
+			if(rs.next()){
+				name = StringUtil.notNull(rs.getString("product_name"));
+			}
+			rs.close();
+			return name;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	private String getUserName(Connection conn, int id) throws Exception{
+		try {
+			String name = null;
+			ResultSet rs = conn.createStatement().executeQuery(
+					"SELECT user_name FROM `user` WHERE id="+id);
+			if(rs.next()){
+				name = StringUtil.notNull(rs.getString("user_name"));
+			}
+			rs.close();
+			return name;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	private String getInvoiceType(Connection conn, int id) throws Exception{
+		try {
+			String name = null;
+			ResultSet rs = conn.createStatement().executeQuery(
+					"SELECT invoice_type FROM `invoice_type` WHERE id="+id);
+			if(rs.next()){
+				name = StringUtil.notNull(rs.getString("invoice_type"));
+			}
+			rs.close();
+			return name;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	public int getTotalRecords() throws Exception{
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			String sql = "SELECT COUNT(*) AS COUNT FROM Statistic";
+			Query query = session.createQuery(sql);
+			List results = query.list();
+			return Integer.parseInt(results.get(0).toString());
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
 					session.flush();
 					session.close();
 				}

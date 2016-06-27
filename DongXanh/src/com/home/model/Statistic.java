@@ -20,6 +20,7 @@ public class Statistic implements java.io.Serializable {
 	public Integer totalBox;
 	public Integer quantity;
 	public BigDecimal total;
+	private int no;
 
 	public Statistic() {
 	}
@@ -117,4 +118,11 @@ public class Statistic implements java.io.Serializable {
 		this.total = total;
 	}
 
+	public int getNo() {
+		return no;
+	}
+
+	public void setNo(int no) {
+		this.no = no;
+	}
 }

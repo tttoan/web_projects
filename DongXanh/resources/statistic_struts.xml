@@ -25,8 +25,8 @@
 			<result>/login.jsp</result>
 		</action>
 
-		<action name="list_statistic" method="listStatistic"
-			class="com.home.action.StatisticAction">
+		<action name="list_statistic"
+			class="com.home.action.StatisticAction2">
 			<result name="success">/statistics.jsp</result>
 			<result name="error" type="redirectAction">move_to_add_statistic</result>
 		</action>
@@ -109,6 +109,9 @@
 				<param name="root">unitPrice</param>
 			</result>
 		</action>
-
+		<action name="listStatisticJSonAction" class="com.home.action.StatisticAction2"
+			method="listStatisticJson">
+			<result type="json">/statistics.jsp</result>
+		</action>
 	</package>
 </struts>
