@@ -795,10 +795,24 @@ public class StatisticHome {
 			Connection conn = sessionImpl.connection();
 
 			int range = startPageIndex+recordsPerPage;
-			ResultSet rs = conn.createStatement().executeQuery(
-					"SELECT * FROM (SELECT @i:=@i+1 AS iterator, t.* FROM statistic t,(SELECT @i:=0) foo Order By id) AS XX "
-					+ "WHERE iterator > "+startPageIndex+" AND iterator <= " + range 
-					+ " AND (''="+searchValue+" OR )");
+			searchValue = searchValue.toLowerCase().trim();
+			
+			String sql = 
+					"SELECT XX.*, c1.business_name as cus1name, c2.business_name as cus2name, product_name, unit_price, user_name, full_name, invoice_type FROM (SELECT @i:=@i+1 AS iterator, t.* FROM statistic t,(SELECT @i:=0) foo Order By date_received desc) AS XX " + 
+							" LEFT JOIN customer c1 ON XX.customer_code_level1=c1.id " +
+							" LEFT JOIN customer c2 ON XX.customer_code_level2=c2.id " +
+							" LEFT JOIN product p ON XX.product_id=p.id " +
+							" LEFT JOIN user u ON XX.user_id=u.id " +
+							" LEFT JOIN invoice_type iv ON XX.invoice_type_id=iv.id " +
+						"WHERE iterator > "+startPageIndex+" AND iterator <= " + range +
+						" AND (''='"+searchValue+"' OR ("
+								+ " lower(c1.business_name) like '"+searchValue+"%'"
+								+ " OR lower(c2.business_name) like '"+searchValue+"%'"
+								+ " OR lower(product_name) like '"+searchValue+"%'"
+								+ " OR lower(user_name) like '"+searchValue+"%'"
+								+ ") ) order by date_received desc, id";
+			//System.out.println(sql);
+			ResultSet rs = conn.createStatement().executeQuery(sql);
 			int no = 1;
 			while(rs.next()){
 				Statistic s = new Statistic();
@@ -807,36 +821,37 @@ public class StatisticHome {
 				s.setDateReceived(rs.getDate("date_received"));
 				Customer cus1 = new Customer();
 				cus1.setId(rs.getInt("customer_code_level1"));
-				if(cus1.getId() != null && cus1.getId() > 0){
-					cus1.setBusinessName(getCusName(conn, cus1.getId()));
-				}
+				//if(cus1.getId() != null && cus1.getId() > 0){
+					cus1.setBusinessName(StringUtil.notNull(rs.getString("cus1name")));
+				//}
 				s.setCustomerByCustomerCodeLevel1(cus1);
 				Customer cus2 = new Customer();
 				cus2.setId(rs.getInt("customer_code_level2"));
-				if(cus2.getId() != null && cus2.getId() > 0){
-					cus2.setBusinessName(getCusName(conn, cus2.getId()));
-				}
+				//if(cus2.getId() != null && cus2.getId() > 0){
+					cus2.setBusinessName(StringUtil.notNull(rs.getString("cus2name")));
+				//}
 				s.setCustomerByCustomerCodeLevel2(cus2);
 				Product product = new Product();
 				product.setId(rs.getInt("product_id"));
-				if(product.getId() != null && product.getId() > 0){
-					product.setProductName(getProductName(conn, product.getId()));
-				}
+				//if(product.getId() != null && product.getId() > 0){
+					product.setProductName(StringUtil.notNull(rs.getString("product_name")));
+					product.setUnitPrice(rs.getBigDecimal("unit_price"));
+				//}
 				s.setProduct(product);
 				s.setTotalBox(rs.getInt("total_box"));
 				s.setQuantity(rs.getInt("quantity"));
 				s.setTotal(rs.getBigDecimal("total"));
 				User user = new User();
 				user.setId(rs.getInt("user_id"));
-				if(user.getId() != null && user.getId() > 0){
-					user.setUserName(getUserName(conn, user.getId()));
-				}
+				//if(user.getId() != null && user.getId() > 0){
+					user.setUserName(StringUtil.notNull(rs.getString("user_name")));
+				//}
 				s.setUser(user);
 				InvoiceType invoiceType = new InvoiceType();
 				invoiceType.setId(rs.getInt("invoice_type_id"));
-				if(invoiceType.getId() != null && invoiceType.getId() > 0){
-					invoiceType.setInvoiceType(getInvoiceType(conn, invoiceType.getId()));
-				}
+				//if(invoiceType.getId() != null && invoiceType.getId() > 0){
+					invoiceType.setInvoiceType(StringUtil.notNull(rs.getString("invoice_type")));
+				//}
 				results.add(s);
 			}
 			rs.close();
