@@ -216,6 +216,7 @@ public class CustomerHome {
 			tx = session.beginTransaction();
 			Query query = session.createQuery("from Customer where customer_code =:customerCode");
 			query.setString("customerCode", customerCode);
+			query.setMaxResults(1);
 			Customer instance = (Customer) query.uniqueResult();
 			tx.commit();
 			if (instance == null) {
@@ -237,6 +238,29 @@ public class CustomerHome {
 				e.printStackTrace();
 				log.error("get failed", e);
 			}
+		}
+	}
+	
+	public Customer findCustomerByCode(Session session, String customerCode) throws Exception {
+		log.debug("getting Customer instance with code: " + customerCode);
+		//System.out.println("getting Customer instance with code: " + customerCode);
+		try {
+			Query query = session.createQuery("from Customer where customer_code =:customerCode");
+			query.setString("customerCode", customerCode);
+			query.setMaxResults(1);
+			Customer instance = (Customer) query.uniqueResult();
+			if (instance == null) {
+				log.debug("get Customer successful, no instance found");
+				//throw new Exception("Không tìm thấy khách hàng ("+customerCode+")");
+			} else {
+				log.debug("get successful, instance found");
+			}
+			return instance;
+		} catch (Exception re) {
+			log.error("get failed", re);
+			throw re;
+		} finally {
+			
 		}
 	}
 

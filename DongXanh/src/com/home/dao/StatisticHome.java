@@ -102,6 +102,15 @@ public class StatisticHome {
 			}
 		}
 	}
+	
+	public void attachDirty(Session session, Statistic instance) {
+		try {
+			session.save(instance);
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		} finally {}
+	}
 
 	public void updateDirty(Statistic instance) {
 		log.debug("attaching dirty Statistic instance");
@@ -174,6 +183,27 @@ public class StatisticHome {
 		}
 	}
 
+	public boolean isStatictisDuplicateLevel1(Session session, Date dateReceived, Integer custCodeLevel1Id, Integer productId, Integer invoiceTypeId) {
+		log.debug("Checking Statistic duplicate with: ");
+		try {
+			Criteria cre = session.createCriteria(Statistic.class);
+			cre.add(Restrictions.eq("dateReceived", dateReceived));
+			cre.add(Restrictions.eq("customerByCustomerCodeLevel1.id", custCodeLevel1Id));
+			cre.add(Restrictions.eq("product.id", productId));
+			cre.add(Restrictions.eq("invoiceType.id", invoiceTypeId));
+			cre.setMaxResults(1);
+			Statistic instance = (Statistic) cre.uniqueResult();
+			if (instance == null) {
+				return false;
+			}
+			return true;
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		} finally {
+		}
+	}
+	
 	public boolean isStatictisDuplicateLevel1(Date dateReceived, Integer custCodeLevel1Id, Integer productId, Integer invoiceTypeId) {
 		log.debug("Checking Statistic duplicate with: ");
 		Transaction tx = null;
@@ -845,6 +875,7 @@ public class StatisticHome {
 				user.setId(rs.getInt("user_id"));
 				//if(user.getId() != null && user.getId() > 0){
 					user.setUserName(StringUtil.notNull(rs.getString("user_name")));
+					user.setFullName(StringUtil.notNull(rs.getString("full_name")));
 				//}
 				s.setUser(user);
 				InvoiceType invoiceType = new InvoiceType();

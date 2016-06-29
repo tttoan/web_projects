@@ -226,6 +226,24 @@ public class ProductHome {
 			}
 		}
 	}
+	
+	public Product findProductByCode(Session session, String productCode) throws Exception {
+		log.debug("getting Product instance with code: " + productCode);
+		try {
+			Product instance = (Product) session.createCriteria(Product.class).add(Restrictions.eq("productCode", productCode)).uniqueResult();
+			if (instance == null) {
+				log.debug("get successful, no instance found");
+			} else {
+				log.debug("get successful, instance found");
+			}
+			return instance;
+		} catch (Exception re) {
+			log.error("get failed", re);
+			throw re;
+		} finally{
+			
+		}
+	}
 
 	public Product findById(java.lang.Integer id) throws Exception{
 		log.debug("getting Product instance with id: " + id);
