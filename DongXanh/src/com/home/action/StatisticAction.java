@@ -175,7 +175,6 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	@Override
 	public void validate() {
 		try {
-			System.out.println("into validate!");
 			loadLookupEmployee();
 			loadLookupCustomer();
 			loadLookupProduct();
@@ -473,7 +472,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 					for (int i = 0; i < arrIndexColumn.length; i++) {
 						cell = row.getCell(Integer.parseInt(arrIndexColumn[i].trim()));
 						value = xls.getValue(cell);
-						System.out.println(arrFieldEntName[i] + "=" + value);
+						//System.out.println(arrFieldEntName[i] + "=" + value);
 						if (arrFieldEntName[i].trim().equals("customerByCustomerCodeLevel1")) {
 							Customer cus = custHome.findCustomerByCode(session, StringUtil.notNull(value));
 							stat.setCustomerByCustomerCodeLevel1(cus);
@@ -539,7 +538,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 					
 					long t3 = System.currentTimeMillis();
 					
-					System.out.println(processIndexExcel + " -> " + (float)(t2-t1)/1000 + "/" + (float)(t3-t2)/1000 + "/" + (float)(t3-t1)/1000);
+					//System.out.println(processIndexExcel + " -> " + (float)(t2-t1)/1000 + "/" + (float)(t3-t2)/1000 + "/" + (float)(t3-t1)/1000);
 				}
 				tx.commit();
 				session.flush();

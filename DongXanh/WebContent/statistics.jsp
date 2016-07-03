@@ -10,6 +10,64 @@
 	<div class="">
 		<div class="clearfix"></div>
 		<div class="row">
+		
+			<div class="view_pro">
+					<table style="width: 100%">
+						<tr>
+							<td width="120px" valign="middle"><label>Thời gian từ:</label></td>
+							<td width="500px" valign="bottom">
+							<fieldset>
+									<div class="control-group">
+										<div class="controls">
+											<div
+												class="col-md-6 xdisplay_inputx form-group has-feedback">
+												<input type="text" class="form-control has-feedback-left"
+													id="single_cal1" 
+													aria-describedby="inputSuccess2Status"> <span
+													class="fa fa-calendar-o form-control-feedback left"
+													aria-hidden="true"></span> <span id="inputSuccess2Status"
+													class="sr-only">(success)</span>
+											</div>
+											<div
+												class="col-md-6 xdisplay_inputx form-group has-feedback">
+												<input type="text" class="form-control has-feedback-left"
+													id="single_cal2"
+													aria-describedby="inputSuccess2Status2"> <span
+													class="fa fa-calendar-o form-control-feedback left"
+													aria-hidden="true"></span> <span id="inputSuccess2Status2"
+													class="sr-only">(success)</span>
+											</div>
+										</div>
+									</div>
+								</fieldset>
+							</td>
+							<td valign="top">
+								<button type="button" class="btn btn-primary" id="btnFilter" onclick="btnFilterValues()">Xem kết quả</button>
+							</td>
+						</tr>
+						<tr>
+							<td width="120px" valign="bottom"><label>Loại bảng kê:</label></td>
+							<td valign="middle">
+								<div class="item form-group">
+									<div class="col-md-4 col-sm-4 col-xs-12">
+									<s:form name="promotionTypeForm"
+										class="form-horizontal form-label-left">
+										<div class="form-group">
+											<s:select id="cboPromotionStatus"  style="width: 232px"
+												class="select2_group form-control" onchange="onTypeChange()"
+												list="#{'0':'Tất cả', '1':'Cấp 1', '2':'Cấp 2'}"
+												value='%{type}' required="true" />
+										</div>
+									</s:form>
+									</div>
+								</div>
+							</td>
+							<td valign="bottom">
+							</td>
+						</tr>
+					</table>
+				</div>
+				
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<s:set var="rId">
 					<s:property value="%{userSes.role.roleId}" />
@@ -108,18 +166,65 @@
 <script src="js/moment.js"></script>
 
 <style>
-        .currency-style
-        {
-            text-align: right;
-        }
-        .num-style
-        {
-            text-align: center;
-        }
+	.currency-style
+	{
+	    text-align: right;
+	}
+	.num-style
+	{
+	    text-align: center;
+	}
+	.view_pro {
+		margin: 0px;
+		text-align: left;
+		padding: 5px 10px 5px 10px;
+		margin: 0px 0px 5px 0px;
+		border-style: outset;
+	}
+	
+	th {
+		text-align: center;
+		vertical-align: middle;
+	}
 </style>
 
 <!-- Datatables -->
 <script src="js/jquery.dataTables.min.js"></script>
+
+ <!-- daterangepicker -->
+ <script type="text/javascript" src="js/moment.min2.js"></script>
+ <script type="text/javascript" src="js/datepicker/daterangepicker.js"></script>
+    
+ <script type="text/javascript">
+        $(document).ready(function () {
+            $('#single_cal1').daterangepicker({
+                singleDatePicker: true,
+                calender_style: "picker_2",
+                format: 'DD/MM/YYYY',
+                showDropdowns: true
+            }, function (start, end, label) {
+                console.log(start.toISOString(), end.toISOString(), label);
+            });
+            $('#single_cal2').daterangepicker({
+            	 singleDatePicker: true,
+                 calender_style: "picker_2",
+                 format: 'DD/MM/YYYY',
+                 showDropdowns: true
+            }, function (start, end, label) {
+                console.log(start.toISOString(), end.toISOString(), label);
+            });
+            
+            var d = new Date();
+            var currDate = d.getDate();
+            if(currDate < 10)currDate = '0'+currDate;
+            var currMonth = d.getMonth()+1;
+            if(currMonth < 10) currMonth = '0'+currMonth;
+            var currYear = d.getFullYear();
+            var startDate = currDate + "/" + currMonth + "/" + currYear;
+            $("#single_cal1").attr("value", startDate);
+            $("#single_cal2").attr("value", startDate);
+        });
+</script>
 
  <script>
      $(document).ready(function () {
