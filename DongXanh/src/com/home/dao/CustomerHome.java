@@ -704,9 +704,9 @@ public class CustomerHome {
 				c.setTotalVipCustomer((rs.getInt("total_vip_customer"))	);
 				
 				User user = new User();
-				user.setId(rs.getInt("user_name"));
+				user.setId(rs.getInt("user_id"));
 				user.setFullName(StringUtil.notNull(rs.getString("full_name")));
-				user.setUserName(StringUtil.notNull(rs.getString("user_id")));
+				user.setUserName(StringUtil.notNull(rs.getString("user_name")));
 				c.setUser(user);
 
 				GroupCustomer group = new GroupCustomer();
