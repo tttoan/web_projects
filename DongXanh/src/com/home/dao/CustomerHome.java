@@ -28,7 +28,11 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 
 import com.home.model.Customer;
+import com.home.model.InvoiceType;
+import com.home.model.Product;
+import com.home.model.Statistic;
 import com.home.model.User;
+import com.home.util.StringUtil;
 
 /**
  * Home object for domain model class Customer.
@@ -565,6 +569,117 @@ public class CustomerHome {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+			}
+		}
+	}
+	
+	public int getTotalRecords() throws Exception{
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			String sql = "SELECT COUNT(*) AS COUNT FROM Customer";
+			Query query = session.createQuery(sql);
+			List results = query.list();
+			return Integer.parseInt(results.get(0).toString());
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public List<Customer> getListCustomer(int startPageIndex, int recordsPerPage, String searchValue) throws Exception{
+		log.debug("retrieve list Customer");
+		Session session = null;
+		List<Customer> results = new ArrayList<Customer>();
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			int range = startPageIndex+recordsPerPage;
+			searchValue = searchValue.toLowerCase().trim();
+			
+			String sql = 
+					"SELECT XX.*, c1.business_name as cus1name, c2.business_name as cus2name, product_name, unit_price, user_name, full_name, invoice_type FROM (SELECT @i:=@i+1 AS iterator, t.* FROM statistic t,(SELECT @i:=0) foo Order By date_received desc) AS XX " + 
+							" LEFT JOIN customer c1 ON XX.customer_code_level1=c1.id " +
+							" LEFT JOIN customer c2 ON XX.customer_code_level2=c2.id " +
+							" LEFT JOIN product p ON XX.product_id=p.id " +
+							" LEFT JOIN user u ON XX.user_id=u.id " +
+							" LEFT JOIN invoice_type iv ON XX.invoice_type_id=iv.id " +
+						"WHERE iterator > "+startPageIndex+" AND iterator <= " + range +
+						" AND (''='"+searchValue+"' OR ("
+								+ " lower(c1.business_name) like '"+searchValue+"%'"
+								+ " OR lower(c2.business_name) like '"+searchValue+"%'"
+								+ " OR lower(product_name) like '"+searchValue+"%'"
+								+ " OR lower(user_name) like '"+searchValue+"%'"
+								+ ") ) order by date_received desc, id";
+			//System.out.println(sql);
+			ResultSet rs = conn.createStatement().executeQuery(sql);
+			int no = 1;
+			while(rs.next()){
+				Customer s = new Customer();
+				s.setNo(no++);
+				s.setId(rs.getInt("id"));
+				s.setDateReceived(rs.getDate("date_received"));
+				Customer cus1 = new Customer();
+				cus1.setId(rs.getInt("customer_code_level1"));
+				//if(cus1.getId() != null && cus1.getId() > 0){
+					cus1.setBusinessName(StringUtil.notNull(rs.getString("cus1name")));
+				//}
+				s.setCustomerByCustomerCodeLevel1(cus1);
+				Customer cus2 = new Customer();
+				cus2.setId(rs.getInt("customer_code_level2"));
+				//if(cus2.getId() != null && cus2.getId() > 0){
+					cus2.setBusinessName(StringUtil.notNull(rs.getString("cus2name")));
+				//}
+				s.setCustomerByCustomerCodeLevel2(cus2);
+				Product product = new Product();
+				product.setId(rs.getInt("product_id"));
+				//if(product.getId() != null && product.getId() > 0){
+					product.setProductName(StringUtil.notNull(rs.getString("product_name")));
+					product.setUnitPrice(rs.getBigDecimal("unit_price"));
+				//}
+				s.setProduct(product);
+				s.setTotalBox(rs.getInt("total_box"));
+				s.setQuantity(rs.getInt("quantity"));
+				s.setTotal(rs.getBigDecimal("total"));
+				User user = new User();
+				user.setId(rs.getInt("user_id"));
+				//if(user.getId() != null && user.getId() > 0){
+					user.setUserName(StringUtil.notNull(rs.getString("user_name")));
+					user.setFullName(StringUtil.notNull(rs.getString("full_name")));
+				//}
+				s.setUser(user);
+				InvoiceType invoiceType = new InvoiceType();
+				invoiceType.setId(rs.getInt("invoice_type_id"));
+				//if(invoiceType.getId() != null && invoiceType.getId() > 0){
+					invoiceType.setInvoiceType(StringUtil.notNull(rs.getString("invoice_type")));
+				//}
+				results.add(s);
+			}
+			rs.close();
+			log.debug("retrieve list Product successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
 			}
 		}
 	}

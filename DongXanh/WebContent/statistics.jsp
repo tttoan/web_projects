@@ -181,7 +181,6 @@
 		margin: 0px 0px 5px 0px;
 		border-style: outset;
 	}
-	
 	th {
 		text-align: center;
 		vertical-align: middle;

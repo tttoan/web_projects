@@ -84,6 +84,15 @@ public class Customer implements java.io.Serializable {
 	public Set<Customer> customersForCustomer2Level1Id = new HashSet<Customer>(0);
 	public Set<Customer> customersForCustomer3Level1Id = new HashSet<Customer>(0);
 	public Set<Customer> customersForCustomer1Level1Id = new HashSet<Customer>(0);
+	private int no;
+
+	public int getNo() {
+		return no;
+	}
+
+	public void setNo(int no) {
+		this.no = no;
+	}
 
 	public Customer() {
 	}
