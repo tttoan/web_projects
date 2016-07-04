@@ -86,17 +86,21 @@
 							style="width: 100%">
 							<thead>
 								<tr class="headings">
+									
 									<s:iterator value="listTableColumn" status="rowStatus">
 										<th><s:property /></th>
 									</s:iterator>
-									<s:if test="%{#rId == 1}">
+									<%--
+									 <s:if test="%{#rId == 1}">
 										<th class=" no-link last"><span class="nobr"></span></th>
-									</s:if>
+									</s:if> 
+									--%>
+									<th class="no-link last"></th>
 
 								</tr>
 							</thead>
 
-							<tbody>
+							<%-- <tbody>
 								<s:iterator value="customers" status="rowStatus">
 									<tr class="even pointer">
 										<td class=""><s:property value="#rowStatus.count" /></td>
@@ -192,7 +196,7 @@
 
 									</tr>
 								</s:iterator>
-							</tbody>
+							</tbody> --%>
 
 						</table>
 					</div>
@@ -219,8 +223,139 @@
 <script src="js/jquery-1.12.3.min.js"></script>
 <script src="js/jquery.dataTables.min.js"></script>
 
+<script src="js/moment.js"></script>
+
+<style>
+	.currency-style
+	{
+	    text-align: right;
+	}
+	.num-style
+	{
+	    text-align: center;
+	}
+	.view_pro {
+		margin: 0px;
+		text-align: left;
+		padding: 5px 10px 5px 10px;
+		margin: 0px 0px 5px 0px;
+		border-style: outset;
+	}
+	th {
+		text-align: center;
+		vertical-align: middle;
+	}
+</style>
+
+ <script>
+     $(document).ready(function () {
+         $("#example").DataTable({
+             "processing": true, // for show progress bar
+             "serverSide": true, // for process server side
+             "filter": true, // this is for disable filter (search box)
+             "orderMulti": false, // for disable multiple column at once
+             "scrollX" : true,
+             "ajax": {
+                 "url": "listCustomerJSonAction",
+                 "type": "POST",
+                 "datatype": "json"
+             },
+              "columns": [
+                     { "data": "no",  "autoWidth": true },
+                     { "data": "createTime", "autoWidth": true 
+                    	 ,  "render": function ( data, type, full, meta ) {
+                    		 if(type == "display"){
+                                 return moment(new Date(data)).format('DD-MM-YYYY')
+                         	}
+                         	return data;
+       					}		 
+                     },
+                     { "data": "customerCode", "autoWidth": true },
+                     { "data": "groupCustomer.groupName", "autoWidth": true },
+                     { "data": "user.fullName", "autoWidth": true },
+                     { "data": "statisticName", "autoWidth": true},
+                     { "data": "businessName", "autoWidth": true},
+                     { "data": "certificateNumber", "autoWidth": true},
+                     { "data": "certificateDate", "autoWidth":  true 
+                    	 ,  "render": function ( data, type, full, meta ) {
+                    		 if(type == "display"){
+                                 return moment(new Date(data)).format('DD-MM-YYYY')
+                         	}
+                         	return data;
+       					}		 
+                     },
+                     { "data": "certificateAddress", "autoWidth": true },
+                     { "data": "taxNumber", "autoWidth": true },
+                     { "data": "budgetRegister", "autoWidth": true },
+                     { "data": "telefone", "autoWidth": true },
+                     { "data": "fax", "autoWidth": true },
+                     { "data": "email", "autoWidth": true },
+                     { "data": "socialAddress", "autoWidth": true },
+                     { "data": "businessAddress", "autoWidth": true },
+                     { "data": "adviser", "autoWidth": true },
+                     { "data": "director", "autoWidth": true },
+                     { "data": "directorMobile", "autoWidth": true },
+                     { "data": "directorBirthday", "autoWidth":  true 
+                    	 ,  "render": function ( data, type, full, meta ) {
+                    		 if(type == "display"){
+                                 return moment(new Date(data)).format('DD-MM-YYYY')
+                         	}
+                         	return data;
+       					}		 
+                     },
+                     { "data": "directorDomicile", "autoWidth": true },
+                     { "data": "sellMan", "autoWidth": true },
+                     { "data": "sellManMobile", "autoWidth": true },
+                     { "data": "budgetOriginal", "autoWidth": true },
+                     { "data": "otherBusiness", "autoWidth": true },
+                     { "data": "customerByCustomer5Level1Id.businessName", "autoWidth": true },
+                     { "data": "customer5Percent", "autoWidth": true },
+                     { "data": "customerByCustomer4Level1Id.businessName", "autoWidth": true },
+                     { "data": "customer4Percent", "autoWidth": true },
+                     { "data": "customerByCustomer3Level1Id.businessName", "autoWidth": true },
+                     { "data": "customer3Percent", "autoWidth": true },
+                     { "data": "customerByCustomer2Level1Id.businessName", "autoWidth": true },
+                     { "data": "customer2Percent", "autoWidth": true },
+                     { "data": "customerByCustomer1Level1Id.businessName", "autoWidth": true },
+                     { "data": "customer1Percent", "autoWidth": true },
+                     { "data": "product1Hot", "autoWidth": true },
+                     { "data": "product2Hot", "autoWidth": true },
+                     { "data": "product3Hot", "autoWidth": true },
+                     { "data": "product4Hot", "autoWidth": true },
+                     { "data": "product5Hot", "autoWidth": true },
+                     { "data": "product6Hot", "autoWidth": true },
+                     { "data": "farmProduct1", "autoWidth": true },
+                     { "data": "farmProduct1Session", "autoWidth": true },
+                     { "data": "farmProduct2", "autoWidth": true },
+                     { "data": "farmProduct2Session", "autoWidth": true },
+                     { "data": "farmProduct3", "autoWidth": true },
+                     { "data": "farmProduct3Session", "autoWidth": true },
+                     { "data": "farmProduct4", "autoWidth": true },
+                     { "data": "farmProduct4Session", "autoWidth": true },
+                     
+                     
+                     { "data": "id"
+                    	 ,  "render": function ( data, type, full, meta ) {
+                    		 return '<a href="view_customer?custId='+data+'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Xem <a>' + 
+                    		 		'<a href="move_to_add_customer?custId='+data+'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa <a>' + 
+                    				'<a href="delete_customer?custId='+data+'" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Xóa <a>';
+                     	}
+                     }
+             ] 
+         });
+     });
+     
+     function formatCurrency(num){
+    	 if(num != null){
+    		var n = num.toString(), p = n.indexOf('.');
+     		return n.replace(/\d(?=(?:\d{3})+(?:\.|$))/g, function($0, i){return p<0 || i<p ? ($0+',') : $0; }) + ' VNĐ';
+    	 }
+     }
+     
+ </script>
+ 
 <script>
-	$(document).ready(function() {
+	/* $(document).ready(function() {
 		$('#example').DataTable({
 			"scrollX" : true,
 			 "columnDefs": [
@@ -287,13 +422,7 @@
 			table.row('.selected').remove().draw(false);
 		});
 		
-		/* table.columns().every(function(index) {
-			if (index > 5) {
-				var that = this;
-				that.visible(false);
-			}
-		}); */
-	});
+	}); */
 
 	function filterColumn(i) {
 		var value;

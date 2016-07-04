@@ -6,12 +6,9 @@ import static org.hibernate.criterion.Example.create;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.naming.InitialContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -21,16 +18,12 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 
 import com.home.model.Customer;
-import com.home.model.InvoiceType;
-import com.home.model.Product;
-import com.home.model.Statistic;
+import com.home.model.GroupCustomer;
 import com.home.model.User;
 import com.home.util.StringUtil;
 
@@ -609,62 +602,122 @@ public class CustomerHome {
 			searchValue = searchValue.toLowerCase().trim();
 			
 			String sql = 
-					"SELECT XX.*, c1.business_name as cus1name, c2.business_name as cus2name, product_name, unit_price, user_name, full_name, invoice_type FROM (SELECT @i:=@i+1 AS iterator, t.* FROM statistic t,(SELECT @i:=0) foo Order By date_received desc) AS XX " + 
-							" LEFT JOIN customer c1 ON XX.customer_code_level1=c1.id " +
-							" LEFT JOIN customer c2 ON XX.customer_code_level2=c2.id " +
-							" LEFT JOIN product p ON XX.product_id=p.id " +
+					"SELECT XX.*, c1.business_name as cus1name, c2.business_name as cus2name, c3.business_name as cus3name, c4.business_name as cus4name, c5.business_name as cus5name, user_name, full_name, group_name "
+					+ " FROM (SELECT @i:=@i+1 AS iterator, t.* FROM customer t,(SELECT @i:=0) foo Order By business_name) AS XX " + 
+							" LEFT JOIN customer c1 ON XX.customer1_level1_id=c1.id " +
+							" LEFT JOIN customer c2 ON XX.customer2_level1_id=c2.id " +
+							" LEFT JOIN customer c3 ON XX.customer3_level1_id=c3.id " +
+							" LEFT JOIN customer c4 ON XX.customer4_level1_id=c4.id " +
+							" LEFT JOIN customer c5 ON XX.customer5_level1_id=c5.id " +
 							" LEFT JOIN user u ON XX.user_id=u.id " +
-							" LEFT JOIN invoice_type iv ON XX.invoice_type_id=iv.id " +
+							" LEFT JOIN group_customer iv ON XX.group_customer_id=iv.id " +
 						"WHERE iterator > "+startPageIndex+" AND iterator <= " + range +
 						" AND (''='"+searchValue+"' OR ("
 								+ " lower(c1.business_name) like '"+searchValue+"%'"
 								+ " OR lower(c2.business_name) like '"+searchValue+"%'"
-								+ " OR lower(product_name) like '"+searchValue+"%'"
+								+ " OR lower(XX.business_name) like '"+searchValue+"%'"
 								+ " OR lower(user_name) like '"+searchValue+"%'"
-								+ ") ) order by date_received desc, id";
-			//System.out.println(sql);
+								+ ") ) order by XX.business_name";
+			System.out.println(sql);
 			ResultSet rs = conn.createStatement().executeQuery(sql);
 			int no = 1;
 			while(rs.next()){
-				Customer s = new Customer();
-				s.setNo(no++);
-				s.setId(rs.getInt("id"));
-				s.setDateReceived(rs.getDate("date_received"));
-				Customer cus1 = new Customer();
-				cus1.setId(rs.getInt("customer_code_level1"));
-				//if(cus1.getId() != null && cus1.getId() > 0){
-					cus1.setBusinessName(StringUtil.notNull(rs.getString("cus1name")));
-				//}
-				s.setCustomerByCustomerCodeLevel1(cus1);
-				Customer cus2 = new Customer();
-				cus2.setId(rs.getInt("customer_code_level2"));
-				//if(cus2.getId() != null && cus2.getId() > 0){
-					cus2.setBusinessName(StringUtil.notNull(rs.getString("cus2name")));
-				//}
-				s.setCustomerByCustomerCodeLevel2(cus2);
-				Product product = new Product();
-				product.setId(rs.getInt("product_id"));
-				//if(product.getId() != null && product.getId() > 0){
-					product.setProductName(StringUtil.notNull(rs.getString("product_name")));
-					product.setUnitPrice(rs.getBigDecimal("unit_price"));
-				//}
-				s.setProduct(product);
-				s.setTotalBox(rs.getInt("total_box"));
-				s.setQuantity(rs.getInt("quantity"));
-				s.setTotal(rs.getBigDecimal("total"));
+				Customer c = new Customer();
+				c.setNo(no++);
+				c.setId(rs.getInt("id"));
+				c.setCreateTime((rs.getDate("create_time"))	);
+				c.setCertificateNumber(StringUtil.notNull(rs.getString("certificate_number"))	);
+				c.setCertificateDate((rs.getDate("certificate_date"))	);
+				c.setCertificateAddress(StringUtil.notNull(rs.getString("certificate_address"))	);
+				c.setTaxNumber(StringUtil.notNull(rs.getString("tax_number"))	);
+				c.setBusinessName(StringUtil.notNull(rs.getString("business_name"))	);
+				c.setStatisticName(StringUtil.notNull(rs.getString("statistic_name"))	);
+				c.setBudgetRegister((rs.getBigDecimal("budget_register"))	);
+				c.setTelefone(StringUtil.notNull(rs.getString("telefone"))	);
+				c.setFax(StringUtil.notNull(rs.getString("fax"))	);
+				c.setEmail(StringUtil.notNull(rs.getString("email"))	);
+				c.setSocialAddress(StringUtil.notNull(rs.getString("social_address"))	);
+				c.setBusinessAddress(StringUtil.notNull(rs.getString("business_address"))	);
+				c.setLawyer(StringUtil.notNull(rs.getString("lawyer"))	);
+				c.setAdviser(StringUtil.notNull(rs.getString("adviser"))	);
+				c.setDirector(StringUtil.notNull(rs.getString("director"))	);
+				c.setDirectorMobile(StringUtil.notNull(rs.getString("director_mobile"))	);
+				c.setDirectorBirthday((rs.getDate("director_birthday"))	);
+				c.setDirectorBirthdayNotify((rs.getBoolean("director_birthday_notify"))	);
+				c.setCustomerCode(StringUtil.notNull(rs.getString("customer_code"))	);
+				c.setDirectorDomicile(StringUtil.notNull(rs.getString("director_domicile"))	);
+				c.setSellMan(StringUtil.notNull(rs.getString("sell_man"))	);
+				c.setSellManMobile(StringUtil.notNull(rs.getString("sell_man_mobile"))	);
+				c.setBudgetOriginal((rs.getInt("budget_original"))	);
+				c.setOtherBusiness(StringUtil.notNull(rs.getString("other_business"))	);
+				
+				Customer c1 = new Customer();
+				c1.setId(rs.getInt("customer1_level1_id"));
+				c1.setBusinessName(rs.getString("cus1name"));
+				c.setCustomerByCustomer1Level1Id(c1);
+				c.setCustomer1Percent((rs.getFloat("customer1_percent"))	);
+				Customer c2 = new Customer();
+				c2.setId(rs.getInt("customer2_level1_id"));
+				c2.setBusinessName(rs.getString("cus2name"));
+				c.setCustomerByCustomer2Level1Id(c2);
+				c.setCustomer2Percent((rs.getFloat("customer2_percent"))	);
+				Customer c3 = new Customer();
+				c3.setId(rs.getInt("customer3_level1_id"));
+				c3.setBusinessName(rs.getString("cus3name"));
+				c.setCustomerByCustomer3Level1Id(c3);
+				c.setCustomer3Percent((rs.getFloat("customer3_percent"))	);
+				Customer c4 = new Customer();
+				c4.setId(rs.getInt("customer4_level1_id"));
+				c4.setBusinessName(rs.getString("cus4name"));
+				c.setCustomerByCustomer4Level1Id(c4);
+				c.setCustomer4Percent((rs.getFloat("customer4_percent"))	);
+				Customer c5 = new Customer();
+				c5.setId(rs.getInt("customer5_level1_id"));
+				c5.setBusinessName(rs.getString("cus5name"));
+				c.setCustomerByCustomer5Level1Id(c5);
+				c.setCustomer5Percent((rs.getFloat("customer5_percent"))	);
+				
+				c.setRevenue1((rs.getBigDecimal("revenue1"))	);
+				c.setRevenue2((rs.getBigDecimal("revenue2"))	);
+				c.setRevenueExpect1((rs.getBigDecimal("revenue_expect1"))	);
+				c.setRevenueExpect2((rs.getBigDecimal("revenue_expect2"))	);
+				c.setRevenueExpect3((rs.getBigDecimal("revenue_expect3"))	);
+				c.setPercentProvide1(StringUtil.notNull(rs.getString("percent_provide1"))	);
+				c.setPercentProvide2(StringUtil.notNull(rs.getString("percent_provide2"))	);
+				c.setPercentProvide3(StringUtil.notNull(rs.getString("percent_provide3"))	);
+				c.setPercentProvide4(StringUtil.notNull(rs.getString("percent_provide4"))	);
+				c.setProductSell(StringUtil.notNull(rs.getString("product_sell"))	);
+				c.setProduct1Hot(StringUtil.notNull(rs.getString("product1_hot"))	);
+				c.setProduct2Hot(	StringUtil.notNull(rs.getString("product2_hot"))	);
+				c.setProduct3Hot(	StringUtil.notNull(rs.getString("product3_hot"))	);
+				c.setProduct4Hot(	StringUtil.notNull(rs.getString("product4_hot"))	);
+				c.setProduct5Hot(	StringUtil.notNull(rs.getString("product5_hot"))	);
+				c.setProduct6Hot(	StringUtil.notNull(rs.getString("product6_hot"))	);
+				c.setFarmProduct1((rs.getFloat("farm_product1"))	);
+				c.setFarmProduct1Session(StringUtil.notNull(rs.getString("farm_product1_session"))	);
+				c.setFarmProduct2((rs.getFloat("farm_product2"))	);
+				c.setFarmProduct2Session(StringUtil.notNull(rs.getString("farm_product2_session"))	);
+				c.setFarmProduct3((rs.getFloat("farm_product3"))	);
+				c.setFarmProduct3Session(StringUtil.notNull(rs.getString("farm_product3_session"))	);
+				c.setFarmProduct4((rs.getFloat("farm_product4"))	);
+				c.setFarmProduct4Session(StringUtil.notNull(rs.getString("farm_product4_session"))	);
+				c.setTotalVipCustomer((rs.getInt("total_vip_customer"))	);
+				
 				User user = new User();
-				user.setId(rs.getInt("user_id"));
-				//if(user.getId() != null && user.getId() > 0){
-					user.setUserName(StringUtil.notNull(rs.getString("user_name")));
-					user.setFullName(StringUtil.notNull(rs.getString("full_name")));
-				//}
-				s.setUser(user);
-				InvoiceType invoiceType = new InvoiceType();
-				invoiceType.setId(rs.getInt("invoice_type_id"));
-				//if(invoiceType.getId() != null && invoiceType.getId() > 0){
-					invoiceType.setInvoiceType(StringUtil.notNull(rs.getString("invoice_type")));
-				//}
-				results.add(s);
+				user.setId(rs.getInt("user_name"));
+				user.setFullName(StringUtil.notNull(rs.getString("full_name")));
+				user.setUserName(StringUtil.notNull(rs.getString("user_id")));
+				c.setUser(user);
+
+				GroupCustomer group = new GroupCustomer();
+				group.setId(rs.getInt("group_customer_id"));
+				group.setGroupName(StringUtil.notNull(rs.getString("group_name")));
+				c.setGroupCustomer(group);
+				
+				c.setPathDocScan(StringUtil.notNull(rs.getString("path_doc_scan"))	);
+
+				
+				results.add(c);
 			}
 			rs.close();
 			log.debug("retrieve list Product successful, result size: " + results.size());

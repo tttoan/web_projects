@@ -49,7 +49,7 @@
 			class="com.home.action.CustomerAction">
 			<result name="success">/view_customer.jsp</result>
 		</action>
-		<action name="list_customer" method="findAllCustomer" class="com.home.action.CustomerAction">
+		<action name="list_customer" class="com.home.action.CustomerAction2">
 			<result name="success">/customers.jsp</result>
 			<result name="error">/index.jsp</result>
 		</action>
@@ -111,6 +111,10 @@
 		<action name="setAssignCusByNVTTAction" method="setAssignCustomer2NVTT"
 			class="com.home.action.AssignCustomerAction">
 			<result type="json" />
+		</action>
+		<action name="listCustomerJSonAction" class="com.home.action.CustomerAction2"
+			method="lisCustomerJson">
+			<result type="json">/customers.jsp</result>
 		</action>
 	</package>
 </struts>
