@@ -60,11 +60,10 @@
 									</tr>
 									<tr>
 										<td><a href="#openModal" class="btn btn-warning"><b>Ẩn/Hiện
-													thông tin</b></a> 
-											<a href="#openImportLevel1" class="btn btn-primary"><b>Import
-													Cấp I</b></a> 
-											<a href="#openImportLevel2" class="btn btn-success"><b>Import
-												Cấp II</b></a>
+													thông tin</b></a> <a href="#openImportLevel1"
+											class="btn btn-primary"><b>Import Cấp I</b></a> <a
+											href="#openImportLevel2" class="btn btn-success"><b>Import
+													Cấp II</b></a>
 										<td>
 											<div>
 												<label for="col3_filter">DSKH theo Cấp 1 </label> <input
@@ -86,7 +85,7 @@
 							style="width: 100%">
 							<thead>
 								<tr class="headings">
-									
+
 									<s:iterator value="listTableColumn" status="rowStatus">
 										<th><s:property /></th>
 									</s:iterator>
@@ -226,28 +225,53 @@
 <script src="js/moment.js"></script>
 
 <style>
-	.currency-style
-	{
-	    text-align: right;
-	}
-	.num-style
-	{
-	    text-align: center;
-	}
-	.view_pro {
-		margin: 0px;
-		text-align: left;
-		padding: 5px 10px 5px 10px;
-		margin: 0px 0px 5px 0px;
-		border-style: outset;
-	}
-	th {
-		text-align: center;
-		vertical-align: middle;
-	}
+.currency-style {
+	text-align: right;
+}
+
+.num-style {
+	text-align: center;
+}
+
+.view_pro {
+	margin: 0px;
+	text-align: left;
+	padding: 5px 10px 5px 10px;
+	margin: 0px 0px 5px 0px;
+	border-style: outset;
+}
+
+th {
+	text-align: center;
+	vertical-align: middle;
+}
 </style>
 
- <script>
+<script>
+ 	$(document).ready(function() {
+ 		$('#col4_filter').on('keyup click', function() {
+			filterColumn($(this).attr('step'));
+		});
+		$('#col4_filter,#col1_filter,#col2_filter,#col3_filter').change(function() {
+			var varCusByUser = {
+				"varCusByUser" : $("#col4_filter").val(),
+				"varCusAssign" : $('#col1_filter').prop('checked'),
+				"varCusNotAssign" : $('#col2_filter').prop('checked'),
+				"varCusByLevel1" : $('#col3_filter').prop('checked'),
+			};
+			$.ajax({
+				url : "ParameterSession",
+				data : JSON.stringify(varCusByUser),
+				dataType : 'json',
+				contentType : 'application/json',
+				type : 'POST',
+				async : true
+			});
+			var table = $('#example').DataTable();
+			table.ajax.reload( null, false );
+		});
+	});
+	
      $(document).ready(function () {
          $("#example").DataTable({
              "processing": true, // for show progress bar
@@ -353,7 +377,7 @@
      }
      
  </script>
- 
+
 <script>
 	/* $(document).ready(function() {
 		$('#example').DataTable({
@@ -424,38 +448,38 @@
 		
 	}); */
 
-	function filterColumn(i) {
-		var value;
-		var table = $('#example').DataTable();
-		if (i == 1 || i == 2) {
-			var check1 = $('#col1_filter').prop('checked');
-			var check2 = $('#col2_filter').prop('checked');
-			if (check1 && check2) {
-				value = '^.*$';
-			} else if (check1) {
-				value = '^.+$';
-			} else if (check2) {
-				value = '^\\s*$';
-			} else {
-				value = '^\\s+$';
-			}
-			table.column(4).search(value, true, true).draw();
-		} else if (i == 3) {
-			var isCheck = $('#col' + i + '_filter').prop('checked');
-			if (isCheck) {
-				table.column(i).search('1', true, true).draw();
-			} else {
-				table.column(i).search('^.*$', true, true).draw();
-			}
-		} else {
-			value = $('#col' + i + '_filter').val();
-			if (i == 3) {
-				table.column(3).search(value, true, true).draw();
-			} else if (i == 4) {
-				table.column(4).search(value, true, true).draw();
-			}
-		}
-	}
+// 	function filterColumn(i) {
+// 		var value;
+// 		var table = $('#example').DataTable();
+// 		if (i == 1 || i == 2) {
+// 			var check1 = $('#col1_filter').prop('checked');
+// 			var check2 = $('#col2_filter').prop('checked');
+// 			if (check1 && check2) {
+// 				value = '^.*$';
+// 			} else if (check1) {
+// 				value = '^.+$';
+// 			} else if (check2) {
+// 				value = '^\\s*$';
+// 			} else {
+// 				value = '^\\s+$';
+// 			}
+// 			table.column(4).search(value, true, true).draw();
+// 		} else if (i == 3) {
+// 			var isCheck = $('#col' + i + '_filter').prop('checked');
+// 			if (isCheck) {
+// 				table.column(i).search('1', true, true).draw();
+// 			} else {
+// 				table.column(i).search('^.*$', true, true).draw();
+// 			}
+// 		} else {
+// 			value = $('#col' + i + '_filter').val();
+// 			if (i == 3) {
+// 				table.column(3).search(value, true, true).draw();
+// 			} else if (i == 4) {
+// 				table.column(4).search(value, true, true).draw();
+// 			}
+// 		}
+// 	}
 </script>
 
 </body>

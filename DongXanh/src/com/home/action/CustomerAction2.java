@@ -2,14 +2,18 @@ package com.home.action;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.interceptor.ServletRequestAware;
+import org.apache.struts2.interceptor.SessionAware;
 import org.apache.struts2.util.ServletContextAware;
 
 import com.home.dao.CustomerHome;
+import com.home.dao.UserHome;
 import com.home.entities.DefineColumnImport;
 import com.home.model.Customer;
 import com.home.util.HibernateUtil;
@@ -18,19 +22,23 @@ import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
-public class CustomerAction2 extends ActionSupport implements Action, ServletContextAware{
+public class CustomerAction2 extends ActionSupport implements Action, ServletContextAware {
 	private ServletContext ctx;
 	private List<Customer> data;
-	private int recordsFiltered ;
-	private int recordsTotal  ;
+	private int recordsFiltered;
+	private int recordsTotal;
 	private int draw;
 	private String order;
 	private String search;
+	private String varCusByUser;
+	private boolean varCusAssign;
+	private boolean varCusNotAssign;
+	private boolean varCusByLevel1;
 	private List<Object[]> listTableColumn = new ArrayList<Object[]>();
 	private List<DefineColumnImport> listDefineColumnsLevel1;
 	private List<DefineColumnImport> listDefineColumnsLevel2;
 	private List<String> listColumnExcel;
-	
+
 	public static void main(String[] args) {
 		try {
 			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
@@ -39,37 +47,74 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 			e.printStackTrace();
 		}
 	}
-	
+
+	public String storeParameterSession() {
+		try {
+			Map sessionMap = (Map) ActionContext.getContext().get("session");
+			if (sessionMap.containsKey("varCusByUser")) {
+				sessionMap.remove("varCusByUser");
+			}
+			if (sessionMap.containsKey("varCusAssign")) {
+				sessionMap.remove("varCusAssign");
+			}
+			if (sessionMap.containsKey("varCusNotAssign")) {
+				sessionMap.remove("varCusNotAssign");
+			}
+			if (sessionMap.containsKey("varCusByLevel1")) {
+				sessionMap.remove("varCusByLevel1");
+			}
+			sessionMap.put("varCusByUser", getVarCusByUser());
+			sessionMap.put("varCusAssign", isVarCusAssign());
+			sessionMap.put("varCusNotAssign", isVarCusNotAssign());
+			sessionMap.put("varCusByLevel1", isVarCusByLevel1());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+		return SUCCESS;
+	}
+
 	public String lisCustomerJson() throws Exception {
 		try {
-			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+
+			Map sessionMap = (Map) ActionContext.getContext().get("session");
+			varCusByUser = sessionMap.get("varCusByUser") + "";
+			varCusAssign = (boolean) sessionMap.get("varCusAssign");
+			varCusNotAssign = (boolean) sessionMap.get("varCusNotAssign");
+			varCusByLevel1 = ((boolean) sessionMap.get("varCusByLevel1"));
+			System.out.println("Parameter: "+varCusByUser + " - "+ varCusAssign+" - "+varCusNotAssign+" - "+varCusByLevel1);
+			
+			
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
 			// Fetch Data from User Table
-			String start  = (request.getParameter("start"));
-			String length  = (request.getParameter("length"));
-			String strDraw  = (request.getParameter("draw"));
-			draw = StringUtil.notNull(strDraw).isEmpty()?0:Integer.parseInt(strDraw);
+			
+			String start = (request.getParameter("start"));
+			String length = (request.getParameter("length"));
+			String strDraw = (request.getParameter("draw"));
+			draw = StringUtil.notNull(strDraw).isEmpty() ? 0 : Integer.parseInt(strDraw);
 			order = StringUtil.notNull((request.getParameter("order[i][dir]")));
 			System.out.println("order = " + order);
 			search = StringUtil.replaceInvalidChar(StringUtil.notNull(request.getParameter("search[value]")));
 			System.out.println("search = " + search);
 
-			int pageSize = length != null? Integer.parseInt(length) : 0;
+			int pageSize = length != null ? Integer.parseInt(length) : 0;
 			int skip = start != null ? Integer.parseInt(start) : 0;
+			System.out.println("pageSize = " + pageSize);
+			System.out.println("skip = " + skip);
 
 			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
 			data = cusHome.getListCustomer(skip, pageSize, search);
 			// Get Total Record Count for Pagination
 			recordsTotal = cusHome.getTotalRecords();
 			recordsFiltered = recordsTotal;
-
+			System.out.println("Records total " + data.size());
 			return SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ERROR;
 		}
 	}
-	
-	
+
 	private void generateColumnExcel() {
 		listColumnExcel = new ArrayList<String>();
 		char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
@@ -187,8 +232,7 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 		listTableColumn.add(new Object[] { "Khác (%)", false });
 		listTableColumn.add(new Object[] { "3 Mùa vụ Khác", false });
 	}
-	
-	
+
 	@Override
 	public void validate() {
 		try {
@@ -200,7 +244,7 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void setServletContext(ServletContext context) {
 		this.ctx = context;
@@ -250,7 +294,7 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 	public void setSearch(String search) {
 		this.search = search;
 	}
-	
+
 	public String getOrder() {
 		return order;
 	}
@@ -258,7 +302,7 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 	public void setOrder(String order) {
 		this.order = order;
 	}
-	
+
 	public List<Object[]> getListTableColumn() {
 		return listTableColumn;
 	}
@@ -271,8 +315,7 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 		return listDefineColumnsLevel1;
 	}
 
-	public void setListDefineColumnsLevel1(
-			List<DefineColumnImport> listDefineColumnsLevel1) {
+	public void setListDefineColumnsLevel1(List<DefineColumnImport> listDefineColumnsLevel1) {
 		this.listDefineColumnsLevel1 = listDefineColumnsLevel1;
 	}
 
@@ -280,8 +323,7 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 		return listDefineColumnsLevel2;
 	}
 
-	public void setListDefineColumnsLevel2(
-			List<DefineColumnImport> listDefineColumnsLevel2) {
+	public void setListDefineColumnsLevel2(List<DefineColumnImport> listDefineColumnsLevel2) {
 		this.listDefineColumnsLevel2 = listDefineColumnsLevel2;
 	}
 
@@ -292,5 +334,38 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 	public void setListColumnExcel(List<String> listColumnExcel) {
 		this.listColumnExcel = listColumnExcel;
 	}
+
+	public String getVarCusByUser() {
+		return varCusByUser;
+	}
+
+	public void setVarCusByUser(String varCusByUser) {
+		this.varCusByUser = varCusByUser;
+	}
+
+	public boolean isVarCusAssign() {
+		return varCusAssign;
+	}
+
+	public void setVarCusAssign(boolean varCusAssign) {
+		this.varCusAssign = varCusAssign;
+	}
+
+	public boolean isVarCusNotAssign() {
+		return varCusNotAssign;
+	}
+
+	public void setVarCusNotAssign(boolean varCusNotAssign) {
+		this.varCusNotAssign = varCusNotAssign;
+	}
+
+	public boolean isVarCusByLevel1() {
+		return varCusByLevel1;
+	}
+
+	public void setVarCusByLevel1(boolean varCusByLevel1) {
+		this.varCusByLevel1 = varCusByLevel1;
+	}
+
 
 }

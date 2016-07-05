@@ -116,5 +116,11 @@
 			method="lisCustomerJson">
 			<result type="json">/customers.jsp</result>
 		</action>
+		<action name="ParameterSession" class="com.home.action.CustomerAction2"
+			method="storeParameterSession">
+			<result type="json">
+				<param name="root">varUserName</param>
+			</result>
+		</action>
 	</package>
 </struts>
