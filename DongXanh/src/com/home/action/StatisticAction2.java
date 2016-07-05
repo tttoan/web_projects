@@ -1,5 +1,6 @@
 package com.home.action;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -11,6 +12,7 @@ import org.hibernate.SessionFactory;
 
 import com.home.dao.StatisticHome;
 import com.home.model.Statistic;
+import com.home.util.DateUtils;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
 import com.opensymphony.xwork2.Action;
@@ -30,6 +32,20 @@ public class StatisticAction2  implements Action, ServletContextAware{
 		try {
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
 			// Fetch Data from User Table
+			int statistic_type = 0;
+			Date startDate1 = null;
+			Date endDate1 = null;
+			try {
+				String startday = StringUtil.notNull(request.getParameter("startday"));
+				String endday = StringUtil.notNull(request.getParameter("endday"));
+				statistic_type = Integer.parseInt(StringUtil.notNull(request.getParameter("statistic_type")));
+				if(startday.length() == 10 && endday.length() == 10){
+					 startDate1 = new Date(DateUtils.getDateFromString(startday, "dd/MM/yyyy").getTime());
+					 endDate1 = new Date(DateUtils.getDateFromString(endday, "dd/MM/yyyy").getTime());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			String start  = (request.getParameter("start"));
 			String length  = (request.getParameter("length"));
 			String strDraw  = (request.getParameter("draw"));
@@ -43,7 +59,7 @@ public class StatisticAction2  implements Action, ServletContextAware{
 			int skip = start != null ? Integer.parseInt(start) : 0;
 
 			StatisticHome sttHome = new StatisticHome(HibernateUtil.getSessionFactory());
-			data = sttHome.getListStatistic(skip, pageSize, search);
+			data = sttHome.getListStatistic(skip, pageSize, search, startDate1, endDate1, statistic_type);
 			// Get Total Record Count for Pagination
 			recordsTotal = sttHome.getTotalRecords();
 			recordsFiltered = recordsTotal;

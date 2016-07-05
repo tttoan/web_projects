@@ -815,7 +815,7 @@ public class StatisticHome {
 		}
 	}
 	
-	public List<Statistic> getListStatistic(int startPageIndex, int recordsPerPage, String searchValue) throws Exception{
+	public List<Statistic> getListStatistic(int startPageIndex, int recordsPerPage, String searchValue, java.sql.Date startday, java.sql.Date endday, int type) throws Exception{
 		log.debug("retrieve list getListStatistic");
 		Session session = null;
 		List<Statistic> results = new ArrayList<Statistic>();
@@ -828,7 +828,12 @@ public class StatisticHome {
 			searchValue = searchValue.toLowerCase().trim();
 			
 			String sql = 
-					"SELECT XX.*, c1.business_name as cus1name, c2.business_name as cus2name, product_name, unit_price, user_name, full_name, invoice_type FROM (SELECT @i:=@i+1 AS iterator, t.* FROM statistic t,(SELECT @i:=0) foo Order By date_received desc) AS XX " + 
+					"SELECT XX.*, c1.business_name as cus1name, c2.business_name as cus2name, product_name, unit_price, user_name, full_name, invoice_type "
+					+ " FROM (SELECT @i:=@i+1 AS iterator, t.* FROM statistic t,(SELECT @i:=0) foo "
+					+ " WHERE "
+					+ " (0="+(startday==null?0:1)+" Or (date_received >= ? And date_received <= ?))"
+					+ " AND (0="+type+" Or ("+ (type==1?"customer_code_level2 IS NULL OR customer_code_level2<=0":"1=1")+"))"
+					+ " Order By date_received desc) AS XX " + 
 							" LEFT JOIN customer c1 ON XX.customer_code_level1=c1.id " +
 							" LEFT JOIN customer c2 ON XX.customer_code_level2=c2.id " +
 							" LEFT JOIN product p ON XX.product_id=p.id " +
@@ -840,9 +845,14 @@ public class StatisticHome {
 								+ " OR lower(c2.business_name) like '"+searchValue+"%'"
 								+ " OR lower(product_name) like '"+searchValue+"%'"
 								+ " OR lower(user_name) like '"+searchValue+"%'"
-								+ ") ) order by date_received desc, id";
-			//System.out.println(sql);
-			ResultSet rs = conn.createStatement().executeQuery(sql);
+								+ ") ) "
+								+ " Order by date_received desc, id";
+			System.out.println(sql);
+			PreparedStatement pre = conn.prepareStatement(sql);
+			pre.setDate(1, startday);
+			pre.setDate(2, endday);
+			System.out.println(pre.toString());
+			ResultSet rs = pre.executeQuery();
 			int no = 1;
 			while(rs.next()){
 				Statistic s = new Statistic();

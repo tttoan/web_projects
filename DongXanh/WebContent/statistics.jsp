@@ -15,8 +15,8 @@
 					<table style="width: 100%">
 						<tr>
 							<td width="120px" valign="middle"><label>Thời gian từ:</label></td>
-							<td width="500px" valign="bottom">
-							<fieldset>
+							<td width="500px" valign="bottom" height="0">
+							<fieldset style="height: 44px; padding-top: 6px;">
 									<div class="control-group">
 										<div class="controls">
 											<div
@@ -41,20 +41,20 @@
 									</div>
 								</fieldset>
 							</td>
-							<td valign="top">
-								<button type="button" class="btn btn-primary" id="btnFilter" onclick="btnFilterValues()">Xem kết quả</button>
+							<td valign="bottom">
+								<button type="button" class="btn btn-primary" id="btnFilter" onclick="history.go(0)">Xem kết quả</button>
 							</td>
 						</tr>
 						<tr>
 							<td width="120px" valign="bottom"><label>Loại bảng kê:</label></td>
-							<td valign="middle">
+							<td valign="middle" height="0">
 								<div class="item form-group">
 									<div class="col-md-4 col-sm-4 col-xs-12">
 									<s:form name="promotionTypeForm"
 										class="form-horizontal form-label-left">
 										<div class="form-group">
 											<s:select id="cboPromotionStatus"  style="width: 232px"
-												class="select2_group form-control" onchange="onTypeChange()"
+												class="select2_group form-control"
 												list="#{'0':'Tất cả', '1':'Cấp 1', '2':'Cấp 2'}"
 												value='%{type}' required="true" />
 										</div>
@@ -177,7 +177,7 @@
 	.view_pro {
 		margin: 0px;
 		text-align: left;
-		padding: 5px 10px 5px 10px;
+		padding: 0px 10px 5px 10px;
 		margin: 0px 0px 5px 0px;
 		border-style: outset;
 	}
@@ -226,6 +226,7 @@
 </script>
 
  <script>
+	
      $(document).ready(function () {
          $("#example").DataTable({
              "processing": true, // for show progress bar
@@ -236,7 +237,12 @@
              "ajax": {
                  "url": "listStatisticJSonAction",
                  "type": "POST",
-                 "datatype": "json"
+                 "datatype": "json",
+                 "data": {
+                     "startday": document.getElementById('single_cal1').value,
+                     "endday": document.getElementById('single_cal2').value,
+                     "statistic_type": document.getElementById('cboPromotionStatus').value,
+                 }
              },
               "columns": [
                      { "data": "no",  "autoWidth": true },
