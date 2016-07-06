@@ -61,7 +61,7 @@ public class StatisticAction2  implements Action, ServletContextAware{
 			StatisticHome sttHome = new StatisticHome(HibernateUtil.getSessionFactory());
 			data = sttHome.getListStatistic(skip, pageSize, search, startDate1, endDate1, statistic_type);
 			// Get Total Record Count for Pagination
-			recordsTotal = sttHome.getTotalRecords();
+			recordsTotal = sttHome.getTotalRecords(search, startDate1, endDate1, statistic_type);
 			recordsFiltered = recordsTotal;
 
 			return SUCCESS;

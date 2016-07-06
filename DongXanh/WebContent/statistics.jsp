@@ -220,8 +220,8 @@
             if(currMonth < 10) currMonth = '0'+currMonth;
             var currYear = d.getFullYear();
             var startDate = currDate + "/" + currMonth + "/" + currYear;
-            $("#single_cal1").attr("value", startDate);
-            $("#single_cal2").attr("value", startDate);
+           // $("#single_cal1").attr("value", startDate);
+           // $("#single_cal2").attr("value", startDate);
         });
 </script>
 

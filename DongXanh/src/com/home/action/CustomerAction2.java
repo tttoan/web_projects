@@ -42,7 +42,8 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 	public static void main(String[] args) {
 		try {
 			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
-			System.out.println(cusHome.getListCustomer(0, 100, "").size());
+			System.out.println(cusHome.getListCustomer(0, 100, "", "", 0, false).size());
+			System.out.println(cusHome.getTotalRecords("", "", 0, false));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -77,12 +78,19 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 	public String lisCustomerJson() throws Exception {
 		try {
 
-			Map sessionMap = (Map) ActionContext.getContext().get("session");
-			varCusByUser = sessionMap.get("varCusByUser") + "";
-			varCusAssign = (boolean) sessionMap.get("varCusAssign");
-			varCusNotAssign = (boolean) sessionMap.get("varCusNotAssign");
-			varCusByLevel1 = ((boolean) sessionMap.get("varCusByLevel1"));
-			System.out.println("Parameter: "+varCusByUser + " - "+ varCusAssign+" - "+varCusNotAssign+" - "+varCusByLevel1);
+			try {
+				Map sessionMap = (Map) ActionContext.getContext().get("session");
+				varCusByUser = StringUtil.replaceInvalidChar(StringUtil.notNull( sessionMap.get("varCusByUser")));
+				varCusAssign = (boolean) sessionMap.get("varCusAssign");
+				varCusNotAssign = (boolean) sessionMap.get("varCusNotAssign");
+				varCusByLevel1 = ((boolean) sessionMap.get("varCusByLevel1"));
+				System.out.println("Parameter: "+varCusByUser + " - "+ varCusAssign+" - "+varCusNotAssign+" - "+varCusByLevel1);
+			} catch (Exception e) {
+				varCusByUser = "";
+				varCusAssign = true;
+				varCusNotAssign = true;
+				varCusByLevel1 = false;
+			}
 			
 			
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
@@ -103,11 +111,11 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 			System.out.println("skip = " + skip);
 
 			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
-			data = cusHome.getListCustomer(skip, pageSize, search);
+			data = cusHome.getListCustomer(skip, pageSize, search, varCusByUser, varCusAssign&!varCusNotAssign?1:(!varCusAssign&varCusNotAssign?2:0), varCusByLevel1);
 			// Get Total Record Count for Pagination
-			recordsTotal = cusHome.getTotalRecords();
+			recordsTotal = cusHome.getTotalRecords(search, varCusByUser, varCusAssign&!varCusNotAssign?1:(!varCusAssign&varCusNotAssign?2:0), varCusByLevel1);
 			recordsFiltered = recordsTotal;
-			System.out.println("Records total " + data.size());
+			System.out.println("Records total " + data.size() + "/" + recordsTotal);
 			return SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();

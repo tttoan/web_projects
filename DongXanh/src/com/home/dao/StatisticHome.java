@@ -826,27 +826,27 @@ public class StatisticHome {
 
 			int range = startPageIndex+recordsPerPage;
 			searchValue = searchValue.toLowerCase().trim();
-			
 			String sql = 
-					"SELECT XX.*, c1.business_name as cus1name, c2.business_name as cus2name, product_name, unit_price, user_name, full_name, invoice_type "
-					+ " FROM (SELECT @i:=@i+1 AS iterator, t.* FROM statistic t,(SELECT @i:=0) foo "
-					+ " WHERE "
-					+ " (0="+(startday==null?0:1)+" Or (date_received >= ? And date_received <= ?))"
-					+ " AND (0="+type+" Or ("+ (type==1?"customer_code_level2 IS NULL OR customer_code_level2<=0":"1=1")+"))"
-					+ " Order By date_received desc) AS XX " + 
-							" LEFT JOIN customer c1 ON XX.customer_code_level1=c1.id " +
-							" LEFT JOIN customer c2 ON XX.customer_code_level2=c2.id " +
-							" LEFT JOIN product p ON XX.product_id=p.id " +
-							" LEFT JOIN user u ON XX.user_id=u.id " +
-							" LEFT JOIN invoice_type iv ON XX.invoice_type_id=iv.id " +
-						"WHERE iterator > "+startPageIndex+" AND iterator <= " + range +
-						" AND (''='"+searchValue+"' OR ("
-								+ " lower(c1.business_name) like '"+searchValue+"%'"
-								+ " OR lower(c2.business_name) like '"+searchValue+"%'"
-								+ " OR lower(product_name) like '"+searchValue+"%'"
-								+ " OR lower(user_name) like '"+searchValue+"%'"
-								+ ") ) "
-								+ " Order by date_received desc, id";
+					"SELECT * FROM ( "
+						+"SELECT @i:=@i+1 AS iterator, YY.* FROM ("
+							+"SELECT t.*, c1.business_name as cus1name, c2.business_name as cus2name, product_name, unit_price, user_name, full_name, invoice_type "
+							+" FROM statistic t "+
+									" LEFT JOIN customer c1 ON t.customer_code_level1=c1.id " +
+									" LEFT JOIN customer c2 ON t.customer_code_level2=c2.id " +
+									" LEFT JOIN product p ON t.product_id=p.id " +
+									" LEFT JOIN user u ON t.user_id=u.id " +
+									" LEFT JOIN invoice_type iv ON t.invoice_type_id=iv.id " +
+								" WHERE "
+								+ " (0="+(startday==null?0:1)+" Or (date_received >= ? And date_received <= ?))"
+								+ " AND (0="+type+" Or ("+ (type==1?"customer_code_level2 IS NULL OR customer_code_level2<=0":"1=1")+"))"
+								+ " AND (''='"+searchValue+"' OR ("
+										+ " lower(c1.business_name) like '"+searchValue+"%'"
+										+ " OR lower(c2.business_name) like '"+searchValue+"%'"
+										+ " OR lower(product_name) like '"+searchValue+"%'"
+										+ " OR lower(user_name) like '"+searchValue+"%'"
+										+ ") ) "
+										+ " Order by date_received desc, id) AS YY, (SELECT @i:=0) foo Order By date_received desc, id) AS XX "
+						+" WHERE iterator > "+startPageIndex+" AND iterator <= " + range + " order by date_received";
 			System.out.println(sql);
 			PreparedStatement pre = conn.prepareStatement(sql);
 			pre.setDate(1, startday);
@@ -973,6 +973,57 @@ public class StatisticHome {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
+		}
+	}
+	
+	public int getTotalRecords(String searchValue, java.sql.Date startday, java.sql.Date endday, int type) throws Exception{
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			String sql = "SELECT COUNT(*) "
+					+" FROM statistic t "+
+					" LEFT JOIN customer c1 ON t.customer_code_level1=c1.id " +
+					" LEFT JOIN customer c2 ON t.customer_code_level2=c2.id " +
+					" LEFT JOIN product p ON t.product_id=p.id " +
+					" LEFT JOIN user u ON t.user_id=u.id " +
+					" LEFT JOIN invoice_type iv ON t.invoice_type_id=iv.id " +
+				" WHERE "
+				+ " (0="+(startday==null?0:1)+" Or (date_received >= ? And date_received <= ?))"
+				+ " AND (0="+type+" Or ("+ (type==1?"customer_code_level2 IS NULL OR customer_code_level2<=0":"1=1")+"))"
+				+ " AND (''='"+searchValue+"' OR ("
+						+ " lower(c1.business_name) like '"+searchValue+"%'"
+						+ " OR lower(c2.business_name) like '"+searchValue+"%'"
+						+ " OR lower(product_name) like '"+searchValue+"%'"
+						+ " OR lower(user_name) like '"+searchValue+"%'"
+						+ ") ) ";
+					
+			System.out.println(sql);
+			int total = 0;
+			PreparedStatement pre = conn.prepareStatement(sql);
+			pre.setDate(1, startday);
+			pre.setDate(2, endday);
+			System.out.println(pre.toString());
+			ResultSet rs = pre.executeQuery();
+			if(rs.next()){
+				total = rs.getInt(1);
+			}
+			rs.close();
+			pre.close();
+			return total;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
 		}
 	}
 	

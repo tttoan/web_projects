@@ -589,7 +589,56 @@ public class CustomerHome {
 		}
 	}
 	
-	public List<Customer> getListCustomer(int startPageIndex, int recordsPerPage, String searchValue) throws Exception{
+	public int getTotalRecords(String searchValue, String nvtt, int assign_type, boolean cusL1) throws Exception{
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			
+			String sql = "SELECT COUNT(*) "
+					+ " FROM  customer c " + 
+					" LEFT JOIN customer c1 ON c.customer1_level1_id=c1.id " +
+					" LEFT JOIN customer c2 ON c.customer2_level1_id=c2.id " +
+					" LEFT JOIN customer c3 ON c.customer3_level1_id=c3.id " +
+					" LEFT JOIN customer c4 ON c.customer4_level1_id=c4.id " +
+					" LEFT JOIN customer c5 ON c.customer5_level1_id=c5.id " +
+					" LEFT JOIN user u ON c.user_id=u.id " +
+					" LEFT JOIN group_customer iv ON c.group_customer_id=iv.id " +
+					"WHERE "
+					+" (''='"+nvtt+"' OR (lower(user_name) like '"+nvtt+"%'))"
+					+" AND ("+(assign_type==1?"c.user_id > 0":"("+(assign_type==2?"c.user_id IS NULL":"(0=0)")+")")+")"
+					+" AND ("+(cusL1?"c.customer2_level1_id IS NULL AND c.customer1_level1_id >0":"(0=0)")+")"
+					+" AND (''='"+searchValue+"' OR ("
+							+ " lower(c1.business_name) like '"+searchValue+"%'"
+							+ " OR lower(c2.business_name) like '"+searchValue+"%'"
+							+ " OR lower(c.business_name) like '"+searchValue+"%'"
+							+ " OR lower(user_name) like '"+searchValue+"%'"
+							+ ") ) ";
+			System.out.println(sql);
+			int total = 0;
+			ResultSet rs = conn.createStatement().executeQuery(sql);
+			if(rs.next()){
+				total = rs.getInt(1);
+			}
+			rs.close();
+			return total;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public List<Customer> getListCustomer(int startPageIndex, int recordsPerPage, String searchValue, String nvtt, int assign_type, boolean cusL1) throws Exception{
 		log.debug("retrieve list Customer");
 		Session session = null;
 		List<Customer> results = new ArrayList<Customer>();
@@ -600,24 +649,32 @@ public class CustomerHome {
 
 			int range = startPageIndex+recordsPerPage;
 			searchValue = searchValue.toLowerCase().trim();
-			
+			nvtt = nvtt.toLowerCase().trim();
 			String sql = 
-					"SELECT XX.*, c1.business_name as cus1name, c2.business_name as cus2name, c3.business_name as cus3name, c4.business_name as cus4name, c5.business_name as cus5name, user_name, full_name, group_name "
-					+ " FROM (SELECT @i:=@i+1 AS iterator, t.* FROM customer t,(SELECT @i:=0) foo Order By business_name) AS XX " + 
-							" LEFT JOIN customer c1 ON XX.customer1_level1_id=c1.id " +
-							" LEFT JOIN customer c2 ON XX.customer2_level1_id=c2.id " +
-							" LEFT JOIN customer c3 ON XX.customer3_level1_id=c3.id " +
-							" LEFT JOIN customer c4 ON XX.customer4_level1_id=c4.id " +
-							" LEFT JOIN customer c5 ON XX.customer5_level1_id=c5.id " +
-							" LEFT JOIN user u ON XX.user_id=u.id " +
-							" LEFT JOIN group_customer iv ON XX.group_customer_id=iv.id " +
-						"WHERE iterator > "+startPageIndex+" AND iterator <= " + range +
-						" AND (''='"+searchValue+"' OR ("
-								+ " lower(c1.business_name) like '"+searchValue+"%'"
-								+ " OR lower(c2.business_name) like '"+searchValue+"%'"
-								+ " OR lower(XX.business_name) like '"+searchValue+"%'"
-								+ " OR lower(user_name) like '"+searchValue+"%'"
-								+ ") ) order by XX.business_name";
+					"SELECT * FROM ( "
+						+"SELECT @i:=@i+1 AS iterator, YY.* FROM ("
+							+ "SELECT c.*, c1.business_name as cus1name, c2.business_name as cus2name, c3.business_name as cus3name, c4.business_name as cus4name, c5.business_name as cus5name, user_name, full_name, group_name "
+							+ " FROM  customer c " + 
+									" LEFT JOIN customer c1 ON c.customer1_level1_id=c1.id " +
+									" LEFT JOIN customer c2 ON c.customer2_level1_id=c2.id " +
+									" LEFT JOIN customer c3 ON c.customer3_level1_id=c3.id " +
+									" LEFT JOIN customer c4 ON c.customer4_level1_id=c4.id " +
+									" LEFT JOIN customer c5 ON c.customer5_level1_id=c5.id " +
+									" LEFT JOIN user u ON c.user_id=u.id " +
+									" LEFT JOIN group_customer iv ON c.group_customer_id=iv.id " +
+								"WHERE "
+								+" (''='"+nvtt+"' OR (lower(user_name) like '"+nvtt+"%'))"
+								+" AND ("+(assign_type==1?"c.user_id > 0":"("+(assign_type==2?"c.user_id IS NULL":"(0=0)")+")")+")"
+								+" AND ("+(cusL1?"c.customer2_level1_id IS NULL AND c.customer1_level1_id >0":"(0=0)")+")"
+								+" AND (''='"+searchValue+"' OR ("
+										+ " lower(c1.business_name) like '"+searchValue+"%'"
+										+ " OR lower(c2.business_name) like '"+searchValue+"%'"
+										+ " OR lower(c.business_name) like '"+searchValue+"%'"
+										+ " OR lower(user_name) like '"+searchValue+"%'"
+										+ ") ) "
+								+ " Order by c.business_name) AS YY, (SELECT @i:=0) foo Order By business_name) AS XX "
+						+" WHERE iterator > "+startPageIndex+" AND iterator <= " + range + " order by business_name";
+								
 			System.out.println(sql);
 			ResultSet rs = conn.createStatement().executeQuery(sql);
 			int no = 1;
