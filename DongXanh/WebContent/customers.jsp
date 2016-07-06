@@ -285,8 +285,8 @@ th {
                  "datatype": "json"
              },
               "columns": [
-                     { "data": "no",  "autoWidth": true },
-                     { "data": "createTime", "autoWidth": true 
+                     /*1*/{ "data": "no",  "autoWidth": true },
+                     /*2*/{ "data": "createTime", "autoWidth": true 
                     	 ,  "render": function ( data, type, full, meta ) {
                     		 if(type == "display"){
                                  return moment(new Date(data)).format('DD-MM-YYYY')
@@ -294,13 +294,13 @@ th {
                          	return data;
        					}		 
                      },
-                     { "data": "customerCode", "autoWidth": true },
-                     { "data": "groupCustomer.groupName", "autoWidth": true },
-                     { "data": "user.fullName", "autoWidth": true },
-                     { "data": "statisticName", "autoWidth": true},
-                     { "data": "businessName", "autoWidth": true},
-                     { "data": "certificateNumber", "autoWidth": true},
-                     { "data": "certificateDate", "autoWidth":  true 
+                     /*3*/{ "data": "customerCode", "autoWidth": true },
+                     /*4*/{ "data": "groupCustomer.groupName", "autoWidth": true },
+                     /*5*/{ "data": "user.fullName", "autoWidth": true },
+                     /*6*/{ "data": "statisticName", "autoWidth": true},
+                     /*7*/{ "data": "businessName", "autoWidth": true},
+                     /*8*/{ "data": "certificateNumber", "autoWidth": true, "visible": false},
+                     /*9*/{ "data": "certificateDate", "autoWidth":  true, "visible": false 
                     	 ,  "render": function ( data, type, full, meta ) {
                     		 if(type == "display"){
                                  return moment(new Date(data)).format('DD-MM-YYYY')
@@ -308,18 +308,18 @@ th {
                          	return data;
        					}		 
                      },
-                     { "data": "certificateAddress", "autoWidth": true },
-                     { "data": "taxNumber", "autoWidth": true },
-                     { "data": "budgetRegister", "autoWidth": true },
-                     { "data": "telefone", "autoWidth": true },
-                     { "data": "fax", "autoWidth": true },
-                     { "data": "email", "autoWidth": true },
-                     { "data": "socialAddress", "autoWidth": true },
-                     { "data": "businessAddress", "autoWidth": true },
-                     { "data": "adviser", "autoWidth": true },
-                     { "data": "director", "autoWidth": true },
-                     { "data": "directorMobile", "autoWidth": true },
-                     { "data": "directorBirthday", "autoWidth":  true 
+                     /*10*/{ "data": "certificateAddress", "autoWidth": true, "visible": false },
+                     /*11*/{ "data": "taxNumber", "autoWidth": true, "visible": false },
+                     /*12*/{ "data": "budgetRegister", "autoWidth": true, "visible": false },
+                     /*13*/{ "data": "telefone", "autoWidth": true },
+                     /*14*/{ "data": "fax", "autoWidth": true, "visible": false },
+                     /*15*/{ "data": "email", "autoWidth": true },
+                     /*16*/{ "data": "socialAddress", "autoWidth": true, "visible": false },
+                     /*17*/{ "data": "businessAddress", "autoWidth": true, "visible": false },
+                     /*18*/{ "data": "adviser", "autoWidth": true, "visible": false },
+                     /*19*/{ "data": "director", "autoWidth": true, "visible": false },
+                     /*20*/{ "data": "directorMobile", "autoWidth": true, "visible": false },
+                     /*21*/{ "data": "directorBirthday", "autoWidth":  true, "visible": false 
                     	 ,  "render": function ( data, type, full, meta ) {
                     		 if(type == "display"){
                                  return moment(new Date(data)).format('DD-MM-YYYY')
@@ -327,35 +327,35 @@ th {
                          	return data;
        					}		 
                      },
-                     { "data": "directorDomicile", "autoWidth": true },
-                     { "data": "sellMan", "autoWidth": true },
-                     { "data": "sellManMobile", "autoWidth": true },
-                     { "data": "budgetOriginal", "autoWidth": true },
-                     { "data": "otherBusiness", "autoWidth": true },
-                     { "data": "customerByCustomer5Level1Id.businessName", "autoWidth": true },
-                     { "data": "customer5Percent", "autoWidth": true },
-                     { "data": "customerByCustomer4Level1Id.businessName", "autoWidth": true },
-                     { "data": "customer4Percent", "autoWidth": true },
-                     { "data": "customerByCustomer3Level1Id.businessName", "autoWidth": true },
-                     { "data": "customer3Percent", "autoWidth": true },
-                     { "data": "customerByCustomer2Level1Id.businessName", "autoWidth": true },
-                     { "data": "customer2Percent", "autoWidth": true },
-                     { "data": "customerByCustomer1Level1Id.businessName", "autoWidth": true },
-                     { "data": "customer1Percent", "autoWidth": true },
-                     { "data": "product1Hot", "autoWidth": true },
-                     { "data": "product2Hot", "autoWidth": true },
-                     { "data": "product3Hot", "autoWidth": true },
-                     { "data": "product4Hot", "autoWidth": true },
-                     { "data": "product5Hot", "autoWidth": true },
-                     { "data": "product6Hot", "autoWidth": true },
-                     { "data": "farmProduct1", "autoWidth": true },
-                     { "data": "farmProduct1Session", "autoWidth": true },
-                     { "data": "farmProduct2", "autoWidth": true },
-                     { "data": "farmProduct2Session", "autoWidth": true },
-                     { "data": "farmProduct3", "autoWidth": true },
-                     { "data": "farmProduct3Session", "autoWidth": true },
-                     { "data": "farmProduct4", "autoWidth": true },
-                     { "data": "farmProduct4Session", "autoWidth": true },
+                     /*22*/{ "data": "directorDomicile", "autoWidth": true, "visible": false },
+                     /*23*/{ "data": "sellMan", "autoWidth": true, "visible": false },
+                     /*24*/{ "data": "sellManMobile", "autoWidth": true, "visible": false },
+                     /*25*/{ "data": "budgetOriginal", "autoWidth": true, "visible": false },
+                     /*26*/{ "data": "otherBusiness", "autoWidth": true, "visible": false },
+                     /*27*/{ "data": "customerByCustomer5Level1Id.businessName", "autoWidth": true, "visible": false },
+                     /*28*/{ "data": "customer5Percent", "autoWidth": true, "visible": false },
+                     /*29*/{ "data": "customerByCustomer4Level1Id.businessName", "autoWidth": true, "visible": false },
+                     /*30*/{ "data": "customer4Percent", "autoWidth": true, "visible": false },
+                     /*31*/{ "data": "customerByCustomer3Level1Id.businessName", "autoWidth": true, "visible": false },
+                     /*32*/{ "data": "customer3Percent", "autoWidth": true, "visible": false },
+                     /*33*/{ "data": "customerByCustomer2Level1Id.businessName", "autoWidth": true, "visible": false },
+                     /*34*/{ "data": "customer2Percent", "autoWidth": true, "visible": false },
+                     /*35*/{ "data": "customerByCustomer1Level1Id.businessName", "autoWidth": true, "visible": false },
+                     /*36*/{ "data": "customer1Percent", "autoWidth": true, "visible": false },
+                     /*37*/{ "data": "product1Hot", "autoWidth": true, "visible": false },
+                     /*38*/{ "data": "product2Hot", "autoWidth": true, "visible": false },
+                     /*39*/{ "data": "product3Hot", "autoWidth": true, "visible": false },
+                     /*40*/{ "data": "product4Hot", "autoWidth": true, "visible": false },
+                     /*41*/{ "data": "product5Hot", "autoWidth": true, "visible": false },
+                     /*42*/{ "data": "product6Hot", "autoWidth": true, "visible": false },
+                     /*43*/{ "data": "farmProduct1", "autoWidth": true, "visible": false },
+                     /*44*/{ "data": "farmProduct1Session", "autoWidth": true, "visible": false },
+                     /*45*/{ "data": "farmProduct2", "autoWidth": true, "visible": false },
+                     /*46*/{ "data": "farmProduct2Session", "autoWidth": true, "visible": false },
+                     /*47*/{ "data": "farmProduct3", "autoWidth": true, "visible": false },
+                     /*48*/{ "data": "farmProduct3Session", "autoWidth": true, "visible": false },
+                     /*49*/{ "data": "farmProduct4", "autoWidth": true, "visible": false },
+                     /*50*/{ "data": "farmProduct4Session", "autoWidth": true, "visible": false },
                      
                      
                      { "data": "id"

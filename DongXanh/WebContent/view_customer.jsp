@@ -12,6 +12,7 @@
 
 <!-- page content -->
 <div class="right_col" role="main">
+	<input type="hidden" id="cusId" name="cusId" value="<%=request.getParameter("custId")%>">
 	<div class="">
 		<div class="page-title">
 			<div class="title_left">
@@ -618,9 +619,39 @@
 						<sx:div label="Số liệu bán hàng 3 năm qua"
 							id="createCustomerInfo4">
 							<div class="x_panel">
-								<div class="x_content">
 								
+								<div id="x_content_view" class="x_content_view">
+									<table id="example_view"
+										class="table table-striped responsive-utilities jambo_table display nowrap cell-border" style="width: 100%">
+										<thead>
+											<tr class="headings">
+												<th rowspan="3">STT</th>
+												<th>NIÊN VỤ</th>
+												<th><%=(yearNow - 2)%></th>
+												<th><%=(yearNow - 1)%></th>
+												<th><%=(yearNow)%></th>
+												<th rowspan="3">Ghi Chú</th>
+											</tr>
+											<tr class="headings">
+												<th>DOANH SỐ(triệu)</th>
+												<th></th>
+												<th></th>
+												<th></th>
+											</tr>
+											<tr class="headings">
+												<th>MẶT HÀNG(thùng)</th>
+												<th></th>
+												<th></th>
+												<th></th>
+											</tr>
+										</thead>
+			
+										<tbody>
+										</tbody>
+			
+									</table>
 								</div>
+								
 							</div>
 						</sx:div>
 					</s:form>
@@ -856,6 +887,22 @@
 		var actionUrl = "promotionCusFilterAction?type=" + type
 				+ "&filterValue=" + filterValue + "&resultType=" + resultType;
 	}
+</script>
+
+<script type="text/javascript">
+ 		var vCusId 	= $('[name="cusId"]').val();
+        $(document).ready(function () {
+        	 $.ajax({
+ 	            type: "POST",
+ 	            url : 'customerStatisticHistoryAction?cusId='+vCusId, 
+ 	            success : function(responseText) {
+ 	              $('#x_content_view').html(responseText);
+ 	              $('#example_view').DataTable({
+ 	            	 scrollX: true,
+ 	              });
+ 	            }
+ 	        });    
+        });
 </script>
 
 <style>

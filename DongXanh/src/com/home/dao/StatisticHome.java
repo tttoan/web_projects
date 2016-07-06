@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -34,7 +35,7 @@ import com.home.entities.RevenuesCustomerL1;
 import com.home.entities.RevenuesCustomerL2;
 import com.home.entities.RevenuesSellman;
 import com.home.entities.StatisticCustom;
-import com.home.model.Category;
+import com.home.entities.StatisticHistory;
 import com.home.model.Customer;
 import com.home.model.InvoiceType;
 import com.home.model.Product;
@@ -1035,6 +1036,66 @@ public class StatisticHome {
 			Query query = session.createQuery(sql);
 			List results = query.list();
 			return Integer.parseInt(results.get(0).toString());
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public LinkedHashMap<String, HashMap<Integer, StatisticHistory>> getStatisticHistory(int cus_id) throws Exception{
+		Session session = null;
+		LinkedHashMap<String, HashMap<Integer, StatisticHistory>> hmStatistic = new LinkedHashMap<String, HashMap<Integer, StatisticHistory>>();
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			String sql = "SELECT YEAR( date_received ) AS import_date, sum( total ) AS total, sum( XX.quantity ) AS quantity, product_name, unit_price "
+						+" FROM `statistic` XX "
+						+" LEFT JOIN customer c2 ON XX.customer_code_level2 = c2.id "
+						+" LEFT JOIN product p ON XX.product_id = p.id "
+						+" WHERE XX.customer_code_level2 = " + cus_id
+						+" AND date_received <= CURDATE( ) "
+						+" AND date_received >= CURDATE( ) - INTERVAL 2 YEAR "
+						+" GROUP BY YEAR( date_received ) , product_name, unit_price "
+						+" ORDER BY product_name, date_received";
+					
+			System.out.println(sql);
+			PreparedStatement pre = conn.prepareStatement(sql);
+			System.out.println(pre.toString());
+			ResultSet rs = pre.executeQuery();
+			while(rs.next()){
+				String product_name = StringUtil.notNull(rs.getString("product_name"));
+				int import_date = rs.getInt("import_date");
+				BigDecimal total = rs.getBigDecimal("total");
+				int quantity = rs.getInt("quantity");
+				BigDecimal unit_price = rs.getBigDecimal("unit_price");
+				
+				StatisticHistory s = new StatisticHistory();
+				s.setProduct_name(product_name);
+				s.setImport_date(import_date);
+				s.setTotal(total);
+				s.setQuantity(quantity);
+				s.setUnit_price(unit_price);
+				
+				if(hmStatistic.containsKey(product_name)){
+					hmStatistic.get(product_name).put(import_date, s);
+				}else{
+					hmStatistic.put(product_name, new HashMap<Integer, StatisticHistory>());
+					hmStatistic.get(product_name).put(import_date, s);
+				}
+			}
+			rs.close();
+			pre.close();
+			return hmStatistic;
 		} catch (Exception re) {
 			re.printStackTrace();
 			log.error("retrieve list Product failed", re);
