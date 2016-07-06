@@ -99,8 +99,8 @@ public class StatisticAction2  implements Action, ServletContextAware{
 	
 	public String getCustomerStatisticHistory() {
 		try {
-			//HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
-			int cus_id = 127;//Integer.parseInt(StringUtil.notNull(request.getParameter("cusId")));
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
+			int cus_id = Integer.parseInt(StringUtil.notNull(request.getParameter("cusId")));
 
 			StatisticHome statisticHome = new StatisticHome(HibernateUtil.getSessionFactory());
 			LinkedHashMap<String, HashMap<Integer, StatisticHistory>> hmStatisticHistory = statisticHome.getStatisticHistory(cus_id);
