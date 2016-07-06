@@ -463,10 +463,11 @@ public class CustomerHome {
 					while (rs.next()) {
 						Customer cus = new Customer();
 						cus.setId(rs.getInt("id"));
-						cus.setCustomerCode(rs.getString("customer_code"));
-						cus.setDirector(rs.getString("director"));
-						cus.setBusinessName(rs.getString("business_name"));
-						results.add(new Object[]{cus.getId(), cus.getCustomerCode(), cus.getBusinessName()});
+						cus.setCustomerCode(StringUtil.notNull(rs.getString("customer_code")));
+						cus.setDirector(StringUtil.notNull(rs.getString("director")));
+						cus.setBusinessName(StringUtil.notNull(rs.getString("business_name")));
+						cus.setStatisticName(StringUtil.notNull(rs.getString("statistic_name")));
+						results.add(new Object[]{cus.getId(), cus.getCustomerCode(), cus.getBusinessName().replace("0.0", "").isEmpty()?cus.getStatisticName():cus.getBusinessName()});
 					}
 				} 
 			} catch (Exception e) {
@@ -501,10 +502,11 @@ public class CustomerHome {
 					while (rs.next()) {
 						Customer cus = new Customer();
 						cus.setId(rs.getInt("id"));
-						cus.setCustomerCode(rs.getString("customer_code"));
-						cus.setDirector(rs.getString("director"));
-						cus.setBusinessName(rs.getString("business_name"));
-						results.add(new Object[]{cus.getId(), cus.getCustomerCode(), cus.getBusinessName()});
+						cus.setCustomerCode(StringUtil.notNull(rs.getString("customer_code")));
+						cus.setDirector(StringUtil.notNull(rs.getString("director")));
+						cus.setBusinessName(StringUtil.notNull(rs.getString("business_name")));
+						cus.setStatisticName(StringUtil.notNull(rs.getString("statistic_name")));
+						results.add(new Object[]{cus.getId(), cus.getCustomerCode(), cus.getBusinessName().replace("0.0", "").isEmpty()?cus.getStatisticName():cus.getBusinessName()});
 					}
 				} 
 			} catch (Exception e) {
@@ -690,6 +692,7 @@ public class CustomerHome {
 										+ " lower(c1.business_name) like '"+searchValue+"%'"
 										+ " OR lower(c2.business_name) like '"+searchValue+"%'"
 										+ " OR lower(c.business_name) like '"+searchValue+"%'"
+										+ " OR lower(c.statistic_name) like '"+searchValue+"%'"
 										+ " OR lower(user_name) like '"+searchValue+"%'"
 										+ ") ) "
 								+" AND c.customer_is_active = "+CUSTOMER_IS_ACTIVE+" "
