@@ -14,10 +14,8 @@
 <div class="right_col" role="main">
 	<input type="hidden" id="cusId" name="cusId" value="<%=request.getParameter("custId")%>">
 	<div class="">
-		<div class="page-title">
-			<div class="title_left">
-				<h3>Thông tin khách hàng</h3>
-			</div>
+		<div class="title_left">
+				<h4><s:property value="cust.customerCode"/>: <s:property value="cust.statisticName"/></h4>
 		</div>
 		<div class="clearfix"></div>
 		<div class="row">

@@ -367,6 +367,13 @@ th {
                      }
              ] 
          });
+         
+         var table = $('#example').DataTable();
+         $('#example').on('dblclick', 'tr', function () {
+              var data = table.row( this ).data();
+              //alert( 'You dblclick on '+data.id+' row' );
+               window.location = 'view_customer?custId='+data.id;
+           } );
      });
      
      function formatCurrency(num){
