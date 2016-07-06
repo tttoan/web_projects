@@ -6,9 +6,11 @@
 	<div>
 		<div class="modalHeader">
 			<h2>Cấu Hình Import Cho Khách Hàng Cấp I</h2>
-			<a href="#close" title="Close" class="close">X</a>
+			<a href="#close" title="Tắt cửa sổ" class="close">X</a>
 		</div>
 		<div class="modalContent">
+		<div class="x_panel">
+					<div class="x_content">
 			<s:form action="import_customer" method="post"
 				enctype="multipart/form-data"
 				cssClass="form-horizontal form-label-left">
@@ -67,12 +69,14 @@
 				<button id="send2" type="submit" class="btn btn-primary">Cập
 					nhật</button>
 			</s:form>
+			</div>
+			</div>
 		</div>
-		<div class="modalFooter">
-			<a href="#close" title="Close" class="close">Đóng</a>
-			<!-- 						<a href="#Apply" title="Apply" class="ok">Cập nhật</a> -->
-			<div class="clear"></div>
-		</div>
+<!-- 		<div class="modalFooter"> -->
+<!-- 			<a href="#close" title="Đóng" class="close">Đóng</a> -->
+	
+<!-- 			<div class="clear"></div> -->
+<!-- 		</div> -->
 	</div>
 </div>
 

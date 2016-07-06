@@ -36,7 +36,7 @@ import com.home.util.StringUtil;
 public class CustomerHome {
 
 	private static final Log log = LogFactory.getLog(CustomerHome.class);
-
+	private static final int CUSTOMER_IS_ACTIVE = 1;
 	private SessionFactory sessionFactory;
 
 	public CustomerHome(SessionFactory sessionFactory) {
@@ -175,6 +175,25 @@ public class CustomerHome {
 		}
 	}
 
+	public void updateCustomerStatus(int custId) {
+		log.debug("Updating status instance");
+		Transaction tx = null;
+		try {
+			Session session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			String query = "update Customer set customer_is_active = 0 where id=:customerId";
+			session.createQuery( query )
+			        .setInteger( "customerId", custId )
+			        .executeUpdate();
+			tx.commit();
+			session.close();
+			log.debug("Update successful");
+		} catch (RuntimeException re) {
+			log.error("Update failed", re);
+			throw re;
+		}
+	}
+	
 	public void delete(Customer persistentInstance) {
 		log.debug("deleting Customer instance");
 		Transaction tx = null;
@@ -614,7 +633,8 @@ public class CustomerHome {
 							+ " OR lower(c2.business_name) like '"+searchValue+"%'"
 							+ " OR lower(c.business_name) like '"+searchValue+"%'"
 							+ " OR lower(user_name) like '"+searchValue+"%'"
-							+ ") ) ";
+							+ ") ) "
+					+" AND c.customer_is_active = "+CUSTOMER_IS_ACTIVE+" ";
 			System.out.println(sql);
 			int total = 0;
 			ResultSet rs = conn.createStatement().executeQuery(sql);
@@ -655,11 +675,11 @@ public class CustomerHome {
 						+"SELECT @i:=@i+1 AS iterator, YY.* FROM ("
 							+ "SELECT c.*, c1.business_name as cus1name, c2.business_name as cus2name, c3.business_name as cus3name, c4.business_name as cus4name, c5.business_name as cus5name, user_name, full_name, group_name "
 							+ " FROM  customer c " + 
-									" LEFT JOIN customer c1 ON c.customer1_level1_id=c1.id " +
-									" LEFT JOIN customer c2 ON c.customer2_level1_id=c2.id " +
-									" LEFT JOIN customer c3 ON c.customer3_level1_id=c3.id " +
-									" LEFT JOIN customer c4 ON c.customer4_level1_id=c4.id " +
-									" LEFT JOIN customer c5 ON c.customer5_level1_id=c5.id " +
+									" LEFT JOIN customer c1 ON c.customer1_level1_id=c1.id AND c1.customer_is_active = "+CUSTOMER_IS_ACTIVE+"" +
+									" LEFT JOIN customer c2 ON c.customer2_level1_id=c2.id AND c2.customer_is_active = "+CUSTOMER_IS_ACTIVE+"" +
+									" LEFT JOIN customer c3 ON c.customer3_level1_id=c3.id AND c3.customer_is_active = "+CUSTOMER_IS_ACTIVE+"" +
+									" LEFT JOIN customer c4 ON c.customer4_level1_id=c4.id AND c4.customer_is_active = "+CUSTOMER_IS_ACTIVE+"" +
+									" LEFT JOIN customer c5 ON c.customer5_level1_id=c5.id AND c5.customer_is_active = "+CUSTOMER_IS_ACTIVE+"" +
 									" LEFT JOIN user u ON c.user_id=u.id " +
 									" LEFT JOIN group_customer iv ON c.group_customer_id=iv.id " +
 								"WHERE "
@@ -672,6 +692,7 @@ public class CustomerHome {
 										+ " OR lower(c.business_name) like '"+searchValue+"%'"
 										+ " OR lower(user_name) like '"+searchValue+"%'"
 										+ ") ) "
+								+" AND c.customer_is_active = "+CUSTOMER_IS_ACTIVE+" "
 								+ " Order by c.business_name) AS YY, (SELECT @i:=0) foo Order By business_name) AS XX "
 						+" WHERE iterator > "+startPageIndex+" AND iterator <= " + range + " order by business_name";
 								

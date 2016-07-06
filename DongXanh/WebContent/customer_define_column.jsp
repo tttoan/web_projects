@@ -6,9 +6,11 @@
 	<div>
 		<div class="modalHeader">
 			<h2>Chọn cột muốn Ẩn/Hiện</h2>
-			<a href="#close" title="Close" class="close">X</a>
+			<a href="#close" title="Tắt cửa sổ" class="close">X</a>
 		</div>
 		<div class="modalContent">
+				<div class="x_panel">
+					<div class="x_content">
 			<table id="tableDefineColumn"
 				class="jambo_table display nowrap cell-border" style="width: 100%">
 				<thead>
@@ -37,22 +39,19 @@
 					</s:iterator>
 				</tbody>
 			</table>
+			</div>
+			</div>
 		</div>
-		<div class="modalFooter">
-			<a href="#Apply" title="Apply" class="ok">Cập nhật</a>
-			<div class="clear"></div>
-		</div>
+<!-- 		<div class="modalFooter"> -->
+<!-- 			<a href="#Apply" title="Apply" class="ok">Cập nhật</a> -->
+<!-- 			<div class="clear"></div> -->
+<!-- 		</div> -->
 	</div>
 </div>
 
 <script>
 	$(document).ready(
 			function() {
-				$('#tableDefineColumn').DataTable({
-					scrollY : 250,
-					paging : false
-				});
-
 				$('input.show_hidden').on(
 						'click',
 						function(e) {
@@ -60,7 +59,9 @@
 									$(this).parents('td').attr('data-column'));
 							column.visible(!column.visible());
 						});
+				$('#tableDefineColumn').DataTable({
+					scrollY : 250,
+					paging : false
+				});
 			});
-
-	
 </script>

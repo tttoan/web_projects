@@ -397,8 +397,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	public String deleteCustomerById() throws Exception {
 		try {
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
-			Customer customer = cusHome.findById(custId);
-			cusHome.delete(customer);
+			cusHome.updateCustomerStatus(custId);
 			return SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();

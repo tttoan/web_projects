@@ -78,9 +78,9 @@
 						</s:form>
 
 						<div class="clearfix"></div>
-						<s:set var="rId">
-							<s:property value="%{userSes.role.roleId}" />
-						</s:set>
+<%-- 						<s:set var="rId"> --%>
+<%-- 							<s:property value="%{userSes.role.roleId}" /> --%>
+<%-- 						</s:set> --%>
 						<table id="example" class="jambo_table display nowrap cell-border"
 							style="width: 100%">
 							<thead>

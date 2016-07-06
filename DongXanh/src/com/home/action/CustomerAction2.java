@@ -64,10 +64,14 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 			if (sessionMap.containsKey("varCusByLevel1")) {
 				sessionMap.remove("varCusByLevel1");
 			}
-			sessionMap.put("varCusByUser", getVarCusByUser());
-			sessionMap.put("varCusAssign", isVarCusAssign());
-			sessionMap.put("varCusNotAssign", isVarCusNotAssign());
-			sessionMap.put("varCusByLevel1", isVarCusByLevel1());
+			try{
+				sessionMap.put("varCusByUser", getVarCusByUser());
+				sessionMap.put("varCusAssign", isVarCusAssign());
+				sessionMap.put("varCusNotAssign", isVarCusNotAssign());
+				sessionMap.put("varCusByLevel1", isVarCusByLevel1());
+			}catch(Exception e){
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ERROR;

@@ -1,32 +1,32 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Apr 29, 2016 10:47:38 PM by Hibernate Tools 4.3.1 -->
+<!-- Generated Jul 6, 2016 9:26:43 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="com.home.model.Customer" table="customer" catalog="db_promotion" optimistic-lock="version">
         <id name="id" type="java.lang.Integer">
             <column name="id" />
             <generator class="identity" />
         </id>
-        <many-to-one name="customerByCustomer5Level1Id" class="com.home.model.Customer" fetch="join">
+        <many-to-one name="customerByCustomer5Level1Id" class="com.home.model.Customer" fetch="select">
             <column name="customer5_level1_id" />
         </many-to-one>
-        <many-to-one name="customerByCustomer4Level1Id" class="com.home.model.Customer" fetch="join">
+        <many-to-one name="customerByCustomer4Level1Id" class="com.home.model.Customer" fetch="select">
             <column name="customer4_level1_id" />
         </many-to-one>
-        <many-to-one name="customerByCustomer2Level1Id" class="com.home.model.Customer" fetch="join">
+        <many-to-one name="customerByCustomer2Level1Id" class="com.home.model.Customer" fetch="select">
             <column name="customer2_level1_id" />
         </many-to-one>
-        <many-to-one name="customerByCustomer3Level1Id" class="com.home.model.Customer" fetch="join">
+        <many-to-one name="customerByCustomer3Level1Id" class="com.home.model.Customer" fetch="select">
             <column name="customer3_level1_id" />
         </many-to-one>
-        <many-to-one name="customerByCustomer1Level1Id" class="com.home.model.Customer" fetch="join">
+        <many-to-one name="customerByCustomer1Level1Id" class="com.home.model.Customer" fetch="select">
             <column name="customer1_level1_id" />
         </many-to-one>
-        <many-to-one name="groupCustomer" class="com.home.model.GroupCustomer" fetch="join">
+        <many-to-one name="groupCustomer" class="com.home.model.GroupCustomer" fetch="select">
             <column name="group_customer_id" />
         </many-to-one>
-        <many-to-one name="user" class="com.home.model.User" fetch="join">
+        <many-to-one name="user" class="com.home.model.User" fetch="select">
             <column name="user_id" />
         </many-to-one>
         <property name="createTime" type="timestamp">
@@ -196,6 +196,9 @@
         </property>
         <property name="pathDocScan" type="string">
             <column name="path_doc_scan" length="65535" />
+        </property>
+        <property name="customerIsActive" type="java.lang.Boolean">
+            <column name="customer_is_active" />
         </property>
         <set name="promotionRegisters" table="promotion_register" inverse="true" lazy="true" fetch="select">
             <key>
