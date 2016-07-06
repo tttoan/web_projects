@@ -217,6 +217,8 @@
 </div>
 
 
+<script src="js/bootstrap.min.js"></script>
+<script src="js/custom.js"></script>
 
 <!-- Datatables -->
 <script src="js/jquery-1.12.3.min.js"></script>
