@@ -419,13 +419,13 @@ public class CustomerHome {
 				if (groupCustomerId > 0)
 					addCondition = " and group_customer_id = " + groupCustomerId + "";
 
-				String query = "Select id, customer_code, business_name From customer where id <> " + skipCusId + addCondition;
+				String query = "Select id, customer_code, business_name, statistic_name  From customer where id <> " + skipCusId + addCondition;
 				try (ResultSet rs = sta.executeQuery(query)) {
 					while (rs.next()) {
 						Customer cus = new Customer();
 						cus.setId(rs.getInt("id"));
 						cus.setCustomerCode(rs.getString("customer_code"));
-						cus.setDirector(rs.getString("business_name"));
+						cus.setBusinessName(rs.getString("business_name") == null?rs.getString("statistic_name"):rs.getString("business_name"));
 						results.add(cus);
 					}
 				}

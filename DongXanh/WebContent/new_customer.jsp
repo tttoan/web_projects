@@ -457,9 +457,16 @@
 											for="cus1Phone">Ðiện thoại <span class="required">(1)</span>
 										</label>
 										<div class="col-md-3 col-sm-6 col-xs-12">
-											<input id="cus1Phone" type="text" readonly name="cus1Phone"
-												value="${cust.customerByCustomer1Level1Id.telefone}"
-												class="form-control col-md-7 col-xs-12">
+											<s:if test="%{cust.customerByCustomer1Level1Id.telefone != null}">
+												<input id="cus1Phone" type="text" readonly name="cus1Phone"
+													value="${cust.customerByCustomer1Level1Id.telefone}"
+													class="form-control col-md-7 col-xs-12">
+											</s:if>
+											<s:else>
+												<input id="cus1Phone" type="text" readonly name="cus1Phone"
+													value=""
+													class="form-control col-md-7 col-xs-12">
+											</s:else>
 										</div>
 									</div>
 									<div class="item form-group">
@@ -494,9 +501,16 @@
 											for="cus2Phone">Ðiện thoại <span class="required">(2)</span>
 										</label>
 										<div class="col-md-3 col-sm-6 col-xs-12">
-											<input id="cus2Phone" name="cus2Phone" type="text" readonly
-												value="${cust.customerByCustomer2Level1Id.telefone}"
-												class="form-control col-md-7 col-xs-12">
+											<s:if test="%{cust.customerByCustomer2Level1Id.telefone != null}">
+												<input id="cus2Phone" name="cus2Phone" type="text" readonly
+													value="${cust.customerByCustomer2Level1Id.telefone}"
+													class="form-control col-md-7 col-xs-12">
+											</s:if>
+											<s:else>
+												<input id="cus2Phone" name="cus2Phone" type="text" readonly
+													value=""
+													class="form-control col-md-7 col-xs-12">
+											</s:else>
 										</div>
 									</div>
 									<div class="item form-group">
@@ -531,9 +545,16 @@
 											for="cus3Phone">Ðiện thoại <span class="required">(3)</span>
 										</label>
 										<div class="col-md-3 col-sm-6 col-xs-12">
-											<input id="cus3Phone" name="cus3Phone" type="text" readonly
-												value="${cust.customerByCustomer3Level1Id.telefone}"
-												class="form-control col-md-7 col-xs-12">
+											<s:if test="%{cust.customerByCustomer3Level1Id.telefone != null}">
+												<input id="cus3Phone" name="cus3Phone" type="text" readonly
+													value="${cust.customerByCustomer3Level1Id.telefone}"
+													class="form-control col-md-7 col-xs-12">
+											</s:if>
+											<s:else>
+												<input id="cus3Phone" name="cus3Phone" type="text" readonly
+													value=""
+													class="form-control col-md-7 col-xs-12">
+											</s:else>
 										</div>
 									</div>
 									<div class="item form-group">

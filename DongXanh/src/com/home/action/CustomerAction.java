@@ -425,6 +425,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			cust.setCreateTime(SDF.parse(varCreateTime));
 			cust.setCertificateDate(SDF.parse(varCertificateDate));
 			cust.setDirectorBirthday(SDF.parse(varDirectorBirthday));
+			cust.setCustomerIsActive(true);
 			if (emp.getId() > 0)
 				getCust().setUser(emp);
 			if (grpCustomer.getId() > 0)
@@ -490,6 +491,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 					Row row = rowIterator.next();
 					processIndexExcel = row.getRowNum() + 1;
 					cust = new Customer();
+					cust.setCustomerIsActive(true);
 					cell = row.getCell(0);
 					if (cell == null)
 						break;
