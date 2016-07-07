@@ -252,6 +252,7 @@ th {
 <script>
  	$(document).ready(function() {
  		$('#col4_filter').on('keyup click', function() {
+ 	 		//alert(getCookie("columnActive"));
 			filterColumn($(this).attr('step'));
 		});
 		$('#col4_filter,#col1_filter,#col2_filter,#col3_filter').change(function() {
@@ -271,8 +272,36 @@ th {
 			});
 			var table = $('#example').DataTable();
 			table.ajax.reload( null, false );
+			
 		});
 	});
+
+ 	
+ 	
+	
+ 	function getCookieColumnVisible(cname) {
+ 	    var name = cname + "=";
+ 	    var ca = document.cookie.split(';');
+ 	    for(var i = 0; i <ca.length; i++) {
+ 	        var c = ca[i];
+ 	        while (c.charAt(0)==' ') {
+ 	            c = c.substring(1);
+ 	        }
+ 	        if (c.indexOf(name) == 0) {
+ 	            return c.substring(name.length,c.length);
+ 	        }
+ 	    }
+ 	    return "";
+ 	}
+
+ 	function isColumnVisible(index) {
+ 	    var value = getCookieColumnVisible("columnActive");
+ 	    var ca = value.split('-');
+ 	        if (ca[index-1].indexOf(1) > -1) {
+ 	            return true;
+ 	        }
+ 	    return false;
+ 	}
 	
      $(document).ready(function () {
          $("#example").DataTable({
@@ -287,8 +316,8 @@ th {
                  "datatype": "json"
              },
               "columns": [
-                     /*1*/{ "data": "no",  "autoWidth": true },
-                     /*2*/{ "data": "createTime", "autoWidth": true 
+                     /*1*/{ "data": "no",  "autoWidth": true,"visible": isColumnVisible(1) },
+                     /*2*/{ "data": "createTime", "autoWidth": true ,"visible": isColumnVisible(2)
                     	 ,  "render": function ( data, type, full, meta ) {
                     		 if(type == "display"){
                                  return moment(new Date(data)).format('DD-MM-YYYY')
@@ -296,13 +325,13 @@ th {
                          	return data;
        					}		 
                      },
-                     /*3*/{ "data": "customerCode", "autoWidth": true },
-                     /*4*/{ "data": "groupCustomer.groupName", "autoWidth": true },
-                     /*5*/{ "data": "user.fullName", "autoWidth": true },
-                     /*6*/{ "data": "statisticName", "autoWidth": true},
-                     /*7*/{ "data": "businessName", "autoWidth": true},
-                     /*8*/{ "data": "certificateNumber", "autoWidth": true, "visible": false},
-                     /*9*/{ "data": "certificateDate", "autoWidth":  true, "visible": false 
+                     /*3*/{ "data": "customerCode", "autoWidth": true,"visible": isColumnVisible(3) },
+                     /*4*/{ "data": "groupCustomer.groupName", "autoWidth": true,"visible": isColumnVisible(4) },
+                     /*5*/{ "data": "user.fullName", "autoWidth": true,"visible": isColumnVisible(5) },
+                     /*6*/{ "data": "statisticName", "autoWidth": true,"visible": isColumnVisible(6)},
+                     /*7*/{ "data": "businessName", "autoWidth": true,"visible": isColumnVisible(7)},
+                     /*8*/{ "data": "certificateNumber", "autoWidth": true,"visible": isColumnVisible(8)},
+                     /*9*/{ "data": "certificateDate", "autoWidth":  true,"visible": isColumnVisible(9) 
                     	 ,  "render": function ( data, type, full, meta ) {
                     		 if(type == "display"){
                                  return moment(new Date(data)).format('DD-MM-YYYY')
@@ -310,18 +339,18 @@ th {
                          	return data;
        					}		 
                      },
-                     /*10*/{ "data": "certificateAddress", "autoWidth": true, "visible": false },
-                     /*11*/{ "data": "taxNumber", "autoWidth": true, "visible": false },
-                     /*12*/{ "data": "budgetRegister", "autoWidth": true, "visible": false },
-                     /*13*/{ "data": "telefone", "autoWidth": true },
-                     /*14*/{ "data": "fax", "autoWidth": true, "visible": false },
-                     /*15*/{ "data": "email", "autoWidth": true },
-                     /*16*/{ "data": "socialAddress", "autoWidth": true, "visible": false },
-                     /*17*/{ "data": "businessAddress", "autoWidth": true, "visible": false },
-                     /*18*/{ "data": "adviser", "autoWidth": true, "visible": false },
-                     /*19*/{ "data": "director", "autoWidth": true, "visible": false },
-                     /*20*/{ "data": "directorMobile", "autoWidth": true, "visible": false },
-                     /*21*/{ "data": "directorBirthday", "autoWidth":  true, "visible": false 
+                     /*10*/{ "data": "certificateAddress", "autoWidth": true,"visible": isColumnVisible(10) },
+                     /*11*/{ "data": "taxNumber", "autoWidth": true,"visible": isColumnVisible(11) },
+                     /*12*/{ "data": "budgetRegister", "autoWidth": true,"visible": isColumnVisible(12) },
+                     /*13*/{ "data": "telefone", "autoWidth": true,"visible": isColumnVisible(13) },
+                     /*14*/{ "data": "fax", "autoWidth": true,"visible": isColumnVisible(14) },
+                     /*15*/{ "data": "email", "autoWidth": true,"visible": isColumnVisible(15) },
+                     /*16*/{ "data": "socialAddress", "autoWidth": true,"visible": isColumnVisible(16) },
+                     /*17*/{ "data": "businessAddress", "autoWidth": true,"visible": isColumnVisible(17) },
+                     /*18*/{ "data": "adviser", "autoWidth": true,"visible": isColumnVisible(18) },
+                     /*19*/{ "data": "director", "autoWidth": true,"visible": isColumnVisible(19) },
+                     /*20*/{ "data": "directorMobile", "autoWidth": true,"visible": isColumnVisible(20) },
+                     /*21*/{ "data": "directorBirthday", "autoWidth":  true,"visible": isColumnVisible(21) 
                     	 ,  "render": function ( data, type, full, meta ) {
                     		 if(type == "display"){
                                  return moment(new Date(data)).format('DD-MM-YYYY')
@@ -329,35 +358,35 @@ th {
                          	return data;
        					}		 
                      },
-                     /*22*/{ "data": "directorDomicile", "autoWidth": true, "visible": false },
-                     /*23*/{ "data": "sellMan", "autoWidth": true, "visible": false },
-                     /*24*/{ "data": "sellManMobile", "autoWidth": true, "visible": false },
-                     /*25*/{ "data": "budgetOriginal", "autoWidth": true, "visible": false },
-                     /*26*/{ "data": "otherBusiness", "autoWidth": true, "visible": false },
-                     /*27*/{ "data": "customerByCustomer5Level1Id.businessName", "autoWidth": true, "visible": false },
-                     /*28*/{ "data": "customer5Percent", "autoWidth": true, "visible": false },
-                     /*29*/{ "data": "customerByCustomer4Level1Id.businessName", "autoWidth": true, "visible": false },
-                     /*30*/{ "data": "customer4Percent", "autoWidth": true, "visible": false },
-                     /*31*/{ "data": "customerByCustomer3Level1Id.businessName", "autoWidth": true, "visible": false },
-                     /*32*/{ "data": "customer3Percent", "autoWidth": true, "visible": false },
-                     /*33*/{ "data": "customerByCustomer2Level1Id.businessName", "autoWidth": true, "visible": false },
-                     /*34*/{ "data": "customer2Percent", "autoWidth": true, "visible": false },
-                     /*35*/{ "data": "customerByCustomer1Level1Id.businessName", "autoWidth": true, "visible": false },
-                     /*36*/{ "data": "customer1Percent", "autoWidth": true, "visible": false },
-                     /*37*/{ "data": "product1Hot", "autoWidth": true, "visible": false },
-                     /*38*/{ "data": "product2Hot", "autoWidth": true, "visible": false },
-                     /*39*/{ "data": "product3Hot", "autoWidth": true, "visible": false },
-                     /*40*/{ "data": "product4Hot", "autoWidth": true, "visible": false },
-                     /*41*/{ "data": "product5Hot", "autoWidth": true, "visible": false },
-                     /*42*/{ "data": "product6Hot", "autoWidth": true, "visible": false },
-                     /*43*/{ "data": "farmProduct1", "autoWidth": true, "visible": false },
-                     /*44*/{ "data": "farmProduct1Session", "autoWidth": true, "visible": false },
-                     /*45*/{ "data": "farmProduct2", "autoWidth": true, "visible": false },
-                     /*46*/{ "data": "farmProduct2Session", "autoWidth": true, "visible": false },
-                     /*47*/{ "data": "farmProduct3", "autoWidth": true, "visible": false },
-                     /*48*/{ "data": "farmProduct3Session", "autoWidth": true, "visible": false },
-                     /*49*/{ "data": "farmProduct4", "autoWidth": true, "visible": false },
-                     /*50*/{ "data": "farmProduct4Session", "autoWidth": true, "visible": false },
+                     /*22*/{ "data": "directorDomicile", "autoWidth": true,"visible": isColumnVisible(22) },
+                     /*23*/{ "data": "sellMan", "autoWidth": true,"visible": isColumnVisible(23) },
+                     /*24*/{ "data": "sellManMobile", "autoWidth": true,"visible": isColumnVisible(24) },
+                     /*25*/{ "data": "budgetOriginal", "autoWidth": true,"visible": isColumnVisible(25)},
+                     /*26*/{ "data": "otherBusiness", "autoWidth": true,"visible": isColumnVisible(26)},
+                     /*27*/{ "data": "customerByCustomer5Level1Id.businessName", "autoWidth": true,"visible": isColumnVisible(27) },
+                     /*28*/{ "data": "customer5Percent", "autoWidth": true,"visible": isColumnVisible(28) },
+                     /*29*/{ "data": "customerByCustomer4Level1Id.businessName", "autoWidth": true,"visible": isColumnVisible(29)},
+                     /*30*/{ "data": "customer4Percent", "autoWidth": true,"visible": isColumnVisible(30) },
+                     /*31*/{ "data": "customerByCustomer3Level1Id.businessName", "autoWidth": true,"visible": isColumnVisible(31) },
+                     /*32*/{ "data": "customer3Percent", "autoWidth": true,"visible": isColumnVisible(32) },
+                     /*33*/{ "data": "customerByCustomer2Level1Id.businessName", "autoWidth": true,"visible": isColumnVisible(33) },
+                     /*34*/{ "data": "customer2Percent", "autoWidth": true,"visible": isColumnVisible(34) },
+                     /*35*/{ "data": "customerByCustomer1Level1Id.businessName", "autoWidth": true,"visible": isColumnVisible(35) },
+                     /*36*/{ "data": "customer1Percent", "autoWidth": true,"visible": isColumnVisible(36) },
+                     /*37*/{ "data": "product1Hot", "autoWidth": true,"visible": isColumnVisible(37) },
+                     /*38*/{ "data": "product2Hot", "autoWidth": true,"visible": isColumnVisible(38) },
+                     /*39*/{ "data": "product3Hot", "autoWidth": true,"visible": isColumnVisible(39) },
+                     /*40*/{ "data": "product4Hot", "autoWidth": true,"visible": isColumnVisible(40) },
+                     /*41*/{ "data": "product5Hot", "autoWidth": true,"visible": isColumnVisible(41) },
+                     /*42*/{ "data": "product6Hot", "autoWidth": true,"visible": isColumnVisible(42)},
+                     /*43*/{ "data": "farmProduct1", "autoWidth": true,"visible": isColumnVisible(43) },
+                     /*44*/{ "data": "farmProduct1Session", "autoWidth": true,"visible": isColumnVisible(44) },
+                     /*45*/{ "data": "farmProduct2", "autoWidth": true,"visible": isColumnVisible(45) },
+                     /*46*/{ "data": "farmProduct2Session", "autoWidth": true,"visible": isColumnVisible(46) },
+                     /*47*/{ "data": "farmProduct3", "autoWidth": true,"visible": isColumnVisible(47)},
+                     /*48*/{ "data": "farmProduct3Session", "autoWidth": true,"visible": isColumnVisible(48) },
+                     /*49*/{ "data": "farmProduct4", "autoWidth": true,"visible": isColumnVisible(49)},
+                     /*50*/{ "data": "farmProduct4Session", "autoWidth": true,"visible": isColumnVisible(50) },
                      
                      
                      { "data": "id"

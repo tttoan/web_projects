@@ -34,7 +34,7 @@
 					<li><s:url action="move_to_add_customer" var="macURL"></s:url>
 						<s:a href="%{macURL}"> Thêm mới </s:a></li>
 					<li><s:url action="list_customer.action" var="lcURL" /> <s:a
-							href="%{lcURL}" theme="bootstrap"> Danh sách </s:a></li>
+							href="%{lcURL}"> Danh sách </s:a></li>
 					<li><s:url action="move_to_assign_customer" var="assignCusURL"></s:url>
 						<s:a href="%{assignCusURL}"> Phân công theo dõi </s:a></li>
 				</ul></li>

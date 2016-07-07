@@ -5,25 +5,32 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
+import org.apache.struts2.interceptor.ServletResponseAware;
 import org.apache.struts2.interceptor.SessionAware;
 import org.apache.struts2.util.ServletContextAware;
 
 import com.home.dao.CustomerHome;
 import com.home.dao.UserHome;
 import com.home.entities.DefineColumnImport;
+import com.home.entities.UserAware;
 import com.home.model.Customer;
+import com.home.model.User;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
+import com.mysql.jdbc.jdbc2.optional.SuspendableXAConnection;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
-public class CustomerAction2 extends ActionSupport implements Action, ServletContextAware {
+public class CustomerAction2 extends ActionSupport implements Action, ServletContextAware, ServletResponseAware, ServletRequestAware, UserAware {
 	private ServletContext ctx;
+	private User userSes;
 	private List<Customer> data;
 	private int recordsFiltered;
 	private int recordsTotal;
@@ -38,16 +45,30 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 	private List<DefineColumnImport> listDefineColumnsLevel1;
 	private List<DefineColumnImport> listDefineColumnsLevel2;
 	private List<String> listColumnExcel;
+	protected HttpServletResponse servletResponse;
 
-	public static void main(String[] args) {
-		try {
-			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
-			System.out.println(cusHome.getListCustomer(0, 100, "", "", 0, false).size());
-			System.out.println(cusHome.getTotalRecords("", "", 0, false));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	@Override
+	public void setServletResponse(HttpServletResponse servletResponse) {
+		this.servletResponse = servletResponse;
 	}
+
+	protected HttpServletRequest servletRequest;
+
+	@Override
+	public void setServletRequest(HttpServletRequest servletRequest) {
+		this.servletRequest = servletRequest;
+	}
+
+	public User getUserSes() {
+		return userSes;
+	}
+
+	@Override
+	public void setUserSes(User user) {
+		this.userSes = user;
+	}
+
+	
 
 	public String storeParameterSession() {
 		try {
@@ -64,14 +85,14 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 			if (sessionMap.containsKey("varCusByLevel1")) {
 				sessionMap.remove("varCusByLevel1");
 			}
-			try{
+			try {
 				sessionMap.put("varCusByUser", getVarCusByUser());
 				sessionMap.put("varCusAssign", isVarCusAssign());
 				sessionMap.put("varCusNotAssign", isVarCusNotAssign());
 				sessionMap.put("varCusByLevel1", isVarCusByLevel1());
-			}catch(Exception e){
+			} catch (Exception e) {
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ERROR;
@@ -84,22 +105,21 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 
 			try {
 				Map sessionMap = (Map) ActionContext.getContext().get("session");
-				varCusByUser = StringUtil.replaceInvalidChar(StringUtil.notNull( sessionMap.get("varCusByUser")));
+				varCusByUser = StringUtil.replaceInvalidChar(StringUtil.notNull(sessionMap.get("varCusByUser")));
 				varCusAssign = (boolean) sessionMap.get("varCusAssign");
 				varCusNotAssign = (boolean) sessionMap.get("varCusNotAssign");
 				varCusByLevel1 = ((boolean) sessionMap.get("varCusByLevel1"));
-				System.out.println("Parameter: "+varCusByUser + " - "+ varCusAssign+" - "+varCusNotAssign+" - "+varCusByLevel1);
+				System.out.println("Parameter: " + varCusByUser + " - " + varCusAssign + " - " + varCusNotAssign + " - " + varCusByLevel1);
 			} catch (Exception e) {
 				varCusByUser = "";
 				varCusAssign = true;
 				varCusNotAssign = true;
 				varCusByLevel1 = false;
 			}
-			
-			
+
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
 			// Fetch Data from User Table
-			
+
 			String start = (request.getParameter("start"));
 			String length = (request.getParameter("length"));
 			String strDraw = (request.getParameter("draw"));
@@ -115,9 +135,9 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 			System.out.println("skip = " + skip);
 
 			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
-			data = cusHome.getListCustomer(skip, pageSize, search, varCusByUser, varCusAssign&!varCusNotAssign?1:(!varCusAssign&varCusNotAssign?2:0), varCusByLevel1);
+			data = cusHome.getListCustomer(skip, pageSize, search, varCusByUser, varCusAssign & !varCusNotAssign ? 1 : (!varCusAssign & varCusNotAssign ? 2 : 0), varCusByLevel1);
 			// Get Total Record Count for Pagination
-			recordsTotal = cusHome.getTotalRecords(search, varCusByUser, varCusAssign&!varCusNotAssign?1:(!varCusAssign&varCusNotAssign?2:0), varCusByLevel1);
+			recordsTotal = cusHome.getTotalRecords(search, varCusByUser, varCusAssign & !varCusNotAssign ? 1 : (!varCusAssign & varCusNotAssign ? 2 : 0), varCusByLevel1);
 			recordsFiltered = recordsTotal;
 			System.out.println("Records total " + data.size() + "/" + recordsTotal);
 			return SUCCESS;
@@ -192,6 +212,7 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 	}
 
 	private void defineTableViewCustomer() {
+
 		listTableColumn = new ArrayList<Object[]>();
 		listTableColumn.add(new Object[] { "STT", true });
 		listTableColumn.add(new Object[] { "Ngày lập", true });
@@ -243,6 +264,58 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 		listTableColumn.add(new Object[] { "3 Mùa vụ Cây ăn trái", false });
 		listTableColumn.add(new Object[] { "Khác (%)", false });
 		listTableColumn.add(new Object[] { "3 Mùa vụ Khác", false });
+
+		// Save and Load to cookie
+		generateCookieColumnVisible();
+	}
+	public static void main(String[] args) {
+		try {
+			
+			int index = 0;
+			String abc = "1-0-0-1-1-1-1-1-1-0";
+			System.out.println(abc.substring(0,(index)*2)+"5"+abc.substring(((index)*2)+1,abc.length()));
+			
+//			CustomerAction2 c = new CustomerAction2();
+//			c.defineTableViewCustomer();
+//			c.generateCookieColumnVisible();
+			
+//			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
+//			System.out.println(cusHome.getListCustomer(0, 100, "", "", 0, false).size());
+//			System.out.println(cusHome.getTotalRecords("", "", 0, false));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	private void generateCookieColumnVisible() {
+		boolean isExist = false;
+		String columnActive = "";
+		for (Cookie c : servletRequest.getCookies()) {
+			if (c.getName().equals("columnActive")) {
+				columnActive = c.getValue();
+				System.out.println(columnActive);
+				isExist = true;
+			}
+		}
+		String splitSep = "";
+		for (int i = 0; i < listTableColumn.size(); i++) {
+			if(isExist){
+				if(columnActive.split("-")[i].equals("1"))
+					listTableColumn.get(i)[1] = true;
+				else
+					listTableColumn.get(i)[1] = false;
+			}else{
+				if((boolean)listTableColumn.get(i)[1] == true)
+					columnActive += splitSep +"1";
+				else
+					columnActive += splitSep +"0";
+			}
+			splitSep = "-";
+		}
+		
+		Cookie div = new Cookie("columnActive", columnActive);
+		System.out.println(columnActive);
+		div.setMaxAge(60 * 60 * 24 * 1); // Make the cookie last a day!
+		servletResponse.addCookie(div);
 	}
 
 	@Override
@@ -378,6 +451,5 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 	public void setVarCusByLevel1(boolean varCusByLevel1) {
 		this.varCusByLevel1 = varCusByLevel1;
 	}
-
 
 }

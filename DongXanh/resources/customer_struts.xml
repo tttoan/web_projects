@@ -114,13 +114,11 @@
 		</action>
 		<action name="listCustomerJSonAction" class="com.home.action.CustomerAction2"
 			method="lisCustomerJson">
-			<result type="json">/customers.jsp</result>
+			<result type="json" />
 		</action>
 		<action name="ParameterSession" class="com.home.action.CustomerAction2"
 			method="storeParameterSession">
-			<result type="json">
-				<param name="root">varUserName</param>
-			</result>
+			<result type="json" />
 		</action>
 	</package>
 </struts>
