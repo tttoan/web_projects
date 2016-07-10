@@ -616,6 +616,8 @@ public class CustomerHome {
 			session = sessionFactory.openSession();
 			SessionImpl sessionImpl = (SessionImpl) session;
 			Connection conn = sessionImpl.connection();
+			searchValue = searchValue.toLowerCase().trim();
+			nvtt = nvtt.toLowerCase().trim();
 			
 			String sql = "SELECT COUNT(*) "
 					+ " FROM  customer c " + 
@@ -629,11 +631,13 @@ public class CustomerHome {
 					"WHERE "
 					+" (''='"+nvtt+"' OR (lower(user_name) like '"+nvtt+"%'))"
 					+" AND ("+(assign_type==1?"c.user_id > 0":"("+(assign_type==2?"c.user_id IS NULL":"(0=0)")+")")+")"
-					+" AND ("+(cusL1?"c.customer2_level1_id IS NULL AND c.customer1_level1_id >0":"(0=0)")+")"
+					+" AND ("+(cusL1?"c.group_customer_id=1":"(0=0)")+")"
 					+" AND (''='"+searchValue+"' OR ("
 							+ " lower(c1.business_name) like '"+searchValue+"%'"
 							+ " OR lower(c2.business_name) like '"+searchValue+"%'"
 							+ " OR lower(c.business_name) like '"+searchValue+"%'"
+							+ " OR lower(c.statistic_name) like '"+searchValue+"%'"
+							+ " OR lower(c.customer_code) = '"+searchValue+"'"
 							+ " OR lower(user_name) like '"+searchValue+"%'"
 							+ ") ) "
 					+" AND c.customer_is_active = "+CUSTOMER_IS_ACTIVE+" ";
@@ -687,12 +691,13 @@ public class CustomerHome {
 								"WHERE "
 								+" (''='"+nvtt+"' OR (lower(user_name) like '"+nvtt+"%'))"
 								+" AND ("+(assign_type==1?"c.user_id > 0":"("+(assign_type==2?"c.user_id IS NULL":"(0=0)")+")")+")"
-								+" AND ("+(cusL1?"c.customer2_level1_id IS NULL AND c.customer1_level1_id >0":"(0=0)")+")"
+								+" AND ("+(cusL1?"c.group_customer_id=1":"(0=0)")+")"
 								+" AND (''='"+searchValue+"' OR ("
 										+ " lower(c1.business_name) like '"+searchValue+"%'"
 										+ " OR lower(c2.business_name) like '"+searchValue+"%'"
 										+ " OR lower(c.business_name) like '"+searchValue+"%'"
 										+ " OR lower(c.statistic_name) like '"+searchValue+"%'"
+										+ " OR lower(c.customer_code) = '"+searchValue+"'"
 										+ " OR lower(user_name) like '"+searchValue+"%'"
 										+ ") ) "
 								+" AND c.customer_is_active = "+CUSTOMER_IS_ACTIVE+" "
