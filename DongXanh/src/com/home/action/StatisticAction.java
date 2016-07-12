@@ -538,8 +538,8 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 					}
 
 					// ---------------------------
-					boolean isDuplicated = false;//sttHome.isStatictisDuplicateLevel1(session, getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1() == null ? null : getStat()
-							//.getCustomerByCustomerCodeLevel1().getId(), getStat().getProduct() == null ? null : getStat().getProduct().getId(), getStat().getInvoiceType().getId());
+					boolean isDuplicated = sttHome.isStatictisDuplicateLevel1(session, getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1() == null ? null : getStat()
+							.getCustomerByCustomerCodeLevel1().getId(), getStat().getProduct() == null ? null : getStat().getProduct().getId(), getStat().getInvoiceType().getId());
 					if (!isDuplicated)
 						sttHome.attachDirty(session, getStat());
 					else
