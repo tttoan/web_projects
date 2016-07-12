@@ -228,13 +228,13 @@ public class ProductHome {
 	}
 	
 	public Product findProductByCode(Session session, String productCode) throws Exception {
-		log.debug("getting Product instance with code: " + productCode);
+		//log.debug("getting Product instance with code: " + productCode);
 		try {
 			Product instance = (Product) session.createCriteria(Product.class).add(Restrictions.eq("productCode", productCode)).uniqueResult();
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
-				log.debug("get successful, instance found");
+				//log.debug("get successful, instance found");
 			}
 			return instance;
 		} catch (Exception re) {

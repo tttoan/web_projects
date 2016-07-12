@@ -335,11 +335,13 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 				StatisticHome sttHome = new StatisticHome(getSessionFactory());
 				CustomerHome custHome = new CustomerHome(getSessionFactory());
 				ProductHome proHome = new ProductHome(getSessionFactory());
+				Session session = getSessionFactory().openSession();
+				Transaction tx  = session.beginTransaction();
 				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
 				Sheet sheet = workbook.getSheetAt(0);
 				Iterator<Row> rowIterator = sheet.iterator();
 				totalRecordExcel = sheet.getPhysicalNumberOfRows();
-				for (int i = 0; i < Integer.parseInt(varIndexRow) - 1; i++) {
+				for (int i = 0; i <= Integer.parseInt(varIndexRow) - 1; i++) {
 					rowIterator.next();
 				}
 				while (rowIterator.hasNext()) {
@@ -360,13 +362,13 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 						cell = row.getCell(Integer.parseInt(arrIndexColumn[i].trim()));
 						value = xls.getValue(cell);
 						if (arrFieldEntName[i].trim().equals("customerByCustomerCodeLevel1")) {
-							Customer cus = custHome.findCustomerByCode(StringUtil.notNull(arrIndexColumn[i].trim()));
+							Customer cus = custHome.findCustomerByCode(session, StringUtil.notNull(arrIndexColumn[i].trim()));
 							stat.setCustomerByCustomerCodeLevel1(cus);
 						} else if (arrFieldEntName[i].trim().equals("customerByCustomerCodeLevel2")) {
-							Customer cus = custHome.findCustomerByCode(StringUtil.notNull(arrIndexColumn[i].trim()));
+							Customer cus = custHome.findCustomerByCode(session, StringUtil.notNull(arrIndexColumn[i].trim()));
 							stat.setCustomerByCustomerCodeLevel2(cus);
 						} else if (arrFieldEntName[i].trim().equals("product")) {
-							Product pro = proHome.findProductByCode(StringUtil.notNull(value));
+							Product pro = proHome.findProductByCode(session, StringUtil.notNull(value));
 							stat.setProduct(pro);
 						} else {
 							Field f = stat.getClass().getField(arrFieldEntName[i].trim());
@@ -402,13 +404,18 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 					invoiceType.setId(4);
 					stat.setInvoiceType(invoiceType);
 					// ---------------------------
-					boolean isDuplicated = sttHome.isStatictisDuplicateLevel1(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1() == null ? null : getStat()
+					boolean isDuplicated = sttHome.isStatictisDuplicateLevel1(session, getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1() == null ? null : getStat()
 							.getCustomerByCustomerCodeLevel1().getId(), getStat().getProduct() == null ? null : getStat().getProduct().getId(), getStat().getInvoiceType().getId());
 					if (!isDuplicated)
-						sttHome.attachDirty(getStat());
+						sttHome.attachDirty(session, getStat());
 					else
 						logDuplicate.append("<li>Cảnh báo: Dữ liệu dòng " + (cell.getRowIndex() + 1) + " đã được cập nhật rồi!</li>");
 					setStat(new Statistic());
+				}
+				if (session != null) {
+					tx.commit();
+					session.flush();
+					session.close();
 				}
 				addActionMessage("<h3>Cập nhật hoàn thành</h3><ul>" + logDuplicate + "</ul>");
 			} catch (Exception e) {
@@ -444,12 +451,12 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 				CustomerHome custHome = new CustomerHome(getSessionFactory());
 				ProductHome proHome = new ProductHome(getSessionFactory());
 				Session session = getSessionFactory().openSession();
-				Transaction tx = session.beginTransaction();
+				Transaction tx  = session.beginTransaction();
 				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
 				Sheet sheet = workbook.getSheetAt(0);
 				Iterator<Row> rowIterator = sheet.iterator();
 				totalRecordExcel = sheet.getPhysicalNumberOfRows();
-				for (int i = 0; i < Integer.parseInt(varIndexRow) - 1; i++) {
+				for (int i = 0; i <= Integer.parseInt(varIndexRow) - 1; i++) {
 					rowIterator.next();
 				}
 				while (rowIterator.hasNext()) {
@@ -474,16 +481,19 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 						value = xls.getValue(cell);
 						//System.out.println(arrFieldEntName[i] + "=" + value);
 						if (arrFieldEntName[i].trim().equals("customerByCustomerCodeLevel1")) {
-							Customer cus = custHome.findCustomerByCode(session, StringUtil.notNull(value));
+							//Customer cus = custHome.findCustomerByCode(session, StringUtil.notNull(value));
+							Customer cus = lookupCustomer(getListCustomerLevel1(), StringUtil.notNull(value));
 							stat.setCustomerByCustomerCodeLevel1(cus);
 							flagLevel1 = true;
 						} else if (arrFieldEntName[i].trim().equals("customerByCustomerCodeLevel2")) {
-							Customer cus = custHome.findCustomerByCode(session, StringUtil.notNull(value));
+							//Customer cus = custHome.findCustomerByCode(session, StringUtil.notNull(value));
+							Customer cus = lookupCustomer(getListCustomerLevel2(), StringUtil.notNull(value));
 							stat.setCustomerByCustomerCodeLevel2(cus);
 							flagLevel2 = true;
 
 						} else if (arrFieldEntName[i].trim().equals("product")) {
-							Product pro = proHome.findProductByCode(session, StringUtil.notNull(value));
+							//Product pro = proHome.findProductByCode(session, StringUtil.notNull(value));
+							Product pro = lookupProduct(getListProduct(), StringUtil.notNull(value));
 							stat.setProduct(pro);
 						} else {
 							Field f = stat.getClass().getField(arrFieldEntName[i].trim());
@@ -528,8 +538,8 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 					}
 
 					// ---------------------------
-					boolean isDuplicated = sttHome.isStatictisDuplicateLevel1(session, getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1() == null ? null : getStat()
-							.getCustomerByCustomerCodeLevel1().getId(), getStat().getProduct() == null ? null : getStat().getProduct().getId(), getStat().getInvoiceType().getId());
+					boolean isDuplicated = false;//sttHome.isStatictisDuplicateLevel1(session, getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1() == null ? null : getStat()
+							//.getCustomerByCustomerCodeLevel1().getId(), getStat().getProduct() == null ? null : getStat().getProduct().getId(), getStat().getInvoiceType().getId());
 					if (!isDuplicated)
 						sttHome.attachDirty(session, getStat());
 					else
@@ -540,9 +550,11 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 					
 					//System.out.println(processIndexExcel + " -> " + (float)(t2-t1)/1000 + "/" + (float)(t3-t2)/1000 + "/" + (float)(t3-t1)/1000);
 				}
-				tx.commit();
-				session.flush();
-				session.close();
+				if(session != null){
+					tx.commit();
+					session.flush();
+					session.close();
+				}
 				addActionMessage("<h3>Cập nhật hoàn thành</h3><ul>" + logDuplicate + "</ul>");
 			} catch (Exception e) {
 				String ms = "";
@@ -562,6 +574,24 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		}
 		return SUCCESS;
 		
+	}
+	
+	private Customer lookupCustomer(List<Customer> listCuss, String cusCode){
+		for (Customer customer : listCuss) {
+			if(cusCode.equalsIgnoreCase(customer.getCustomerCode())){
+				return customer;
+			}
+		}
+		return null;
+	}
+	
+	private Product lookupProduct(List<Product> listProduct, String productCode){
+		for (Product p : listProduct) {
+			if(productCode.equalsIgnoreCase(p.getProductCode())){
+				return p;
+			}
+		}
+		return null;
 	}
 	
 	public String exportStatistic() {

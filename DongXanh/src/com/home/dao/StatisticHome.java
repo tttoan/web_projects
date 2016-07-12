@@ -105,11 +105,11 @@ public class StatisticHome {
 	}
 	
 	public void attachDirty(Session session, Statistic instance) {
-		Transaction tx = null;
+		//Transaction tx = null;
 		try {
-			tx = session.beginTransaction();
+			//tx = session.beginTransaction();
 			session.save(instance);
-			tx.commit();
+			//tx.commit();
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;

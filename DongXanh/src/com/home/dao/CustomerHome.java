@@ -258,7 +258,7 @@ public class CustomerHome {
 	}
 	
 	public Customer findCustomerByCode(Session session, String customerCode) throws Exception {
-		log.debug("getting Customer instance with code: " + customerCode);
+		//log.debug("getting Customer instance with code: " + customerCode);
 		//System.out.println("getting Customer instance with code: " + customerCode);
 		try {
 			Query query = session.createQuery("from Customer where customer_code =:customerCode");
@@ -269,7 +269,7 @@ public class CustomerHome {
 				log.debug("get Customer successful, no instance found");
 				//throw new Exception("Không tìm thấy khách hàng ("+customerCode+")");
 			} else {
-				log.debug("get successful, instance found");
+				//log.debug("get successful, instance found");
 			}
 			return instance;
 		} catch (Exception re) {
