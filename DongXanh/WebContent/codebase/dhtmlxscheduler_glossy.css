@@ -423,7 +423,7 @@ div.dhx_modal_cover {
 	border:1px solid #B7A543;
 	color:#887A2E;
 	overflow:hidden;
-	width:100%;
+	width:100%  !important;
 	
 	font-family:Tahoma;
 	font-size:8pt;
