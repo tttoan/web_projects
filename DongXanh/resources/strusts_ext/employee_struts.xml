@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="employee" namespace="/" extends="struts-default">
+		<interceptors>
+			<interceptor name="authentication"
+				class="com.home.listener.AuthenticationInterceptor"></interceptor>
+			<interceptor-stack name="authStack">
+				<interceptor-ref name="authentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref name="authStack"></default-interceptor-ref>
+
+		<global-results>
+			<result name="login" type="redirect">/dongxanh.action</result>
+		</global-results>
+
+		<action name="dongxanh">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result>/login.jsp</result>
+		</action>
+
+		<action name="list_employee" method="listEmployee"
+			class="com.home.action.UserAction">
+			<result name="success">/employees.jsp</result>
+			<result name="input">/employees.jsp</result>
+		</action>
+		
+		<action name="add_employee" method="addEmployee" class="com.home.action.UserAction">
+			<result name="success" type="redirectAction">list_employee</result>
+			<result name="input">/new_employee.jsp</result>
+		</action>
+
+		<action name="delete_employee" method="deleteEmployeeById"
+			class="com.home.action.UserAction">
+			<result name="success" type="redirectAction">list_employee</result>
+		</action>
+		<action name="move_to_add_employee" class="com.home.action.UserAction">
+			<result name="success">/new_employee.jsp</result>
+		</action>
+		<action name="test_user" method="testUser" class="com.home.action.UserAction">
+			<result name="success" type="redirectAction">list_employee</result>
+		</action>
+	</package>
+	<package name="employeeJson" namespace="/" extends="json-default">
+		<interceptors>
+			<interceptor-stack name="defaultStack">
+				<interceptor-ref name="json">
+					<param name="enableSMD">true</param>
+				</interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="defaultStack" />
+		<action name="generateEmpUserName" class="com.home.action.UserAction"
+			method="generateUserName">
+			<result type="json">
+				<param name="root">varUserName</param>
+			</result>
+		</action>
+	</package>
+</struts>

@@ -1,11 +1,10 @@
 package com.home.model;
 
-public class MessageStore  implements java.io.Serializable {
+public class MessageStore {
 
 	private String scheduler;
 	private String sample_name;
 	private String sample_dsc;
-	private String data;
 
 	public String getScheduler() {
 		return scheduler;
@@ -13,7 +12,8 @@ public class MessageStore  implements java.io.Serializable {
 	public void setScheduler(String scheduler) {
 		this.scheduler = scheduler;
 	}
-	
+
+	private String data;
 	public String getData() {
 		return data;
 	}

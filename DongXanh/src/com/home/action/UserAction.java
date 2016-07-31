@@ -133,11 +133,9 @@ public class UserAction extends ActionSupport implements Action, ModelDriven<Use
 		return SUCCESS;
 	}
 	public String addEmployee1() {
-		System.out.println("asdassssssssssssssssssssssssssssssss");
 		return SUCCESS;
 	}
 	public String addEmployee() {
-		System.out.println("asdassssssssssssssssssssssssssssssss");
 		try {
 			UserHome userHome = new UserHome(getSessionFactory());
 			if (!edit) {

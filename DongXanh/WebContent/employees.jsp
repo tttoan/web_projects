@@ -45,7 +45,8 @@
 								<td class=""><a class="btn btn-success btn-xs"><i
 										class="fa"></i> <s:property value="%{role.roleName}" /> </a></td>
 								<s:if test="%{#rId == 1}">
-									<td class="last"><s:url action="move_to_add_employee"
+									<td class="last">
+									<s:url action="move_to_add_employee"
 											var="editURL">
 											<s:param name="userId" value="%{id}"></s:param>
 										</s:url> <s:a href="%{editURL}" class="btn btn-info btn-xs"

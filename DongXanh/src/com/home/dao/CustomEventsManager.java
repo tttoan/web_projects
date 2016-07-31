@@ -2,37 +2,52 @@ package com.home.dao;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.xmlbeans.impl.xb.xsdschema.RestrictionDocument.Restriction;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import com.dhtmlx.planner.DHXEv;
 import com.dhtmlx.planner.DHXEventsManager;
 import com.dhtmlx.planner.DHXStatus;
 import com.home.model.Event;
+import com.home.model.Statistic;
+import com.home.model.User;
 import com.home.util.HibernateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CustomEventsManager extends DHXEventsManager {
-
+	private User userSes;
 	public CustomEventsManager(HttpServletRequest request) {
 		super(request);
 	}
-
+	public CustomEventsManager(HttpServletRequest request, User userSes) {
+		super(request);
+		this.userSes = userSes;
+	}
+	@SuppressWarnings("unchecked")
+	@Override
 	public Iterable<DHXEv> getEvents() {
+		DHXEventsManager.date_format = "yyyy-MM-dd HH:mm:ss";
 		HibernateUtil.getSessionFactory();
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		List<DHXEv> evs = new ArrayList<DHXEv>();
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
-			evs = session.createCriteria(Event.class).list();
+			Criteria cre = session.createCriteria(Event.class);
+			if(userSes !=null)
+				cre.add(Restrictions.eq("employeeId", userSes.getId()));
+			evs = cre.list();
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 		} finally{
 			session.flush();
 			session.close();
 		}
-		
+		DHXEventsManager.date_format = "MM/dd/yyyy HH:mm";
+		System.out.println("sasdasdasd "+evs.size());
     	return evs;
 	}
 
@@ -43,8 +58,12 @@ public class CustomEventsManager extends DHXEventsManager {
 			session = HibernateUtil.getSessionFactory().openSession();
 			session.beginTransaction();
 
-			if (status == DHXStatus.UPDATE)
+			if (status == DHXStatus.UPDATE){
+				System.out.println(event.toString());
 				session.update(event);
+				
+			}
+				
 			else if (status == DHXStatus.DELETE)
 				session.delete(event);
 			else if (status == DHXStatus.INSERT)

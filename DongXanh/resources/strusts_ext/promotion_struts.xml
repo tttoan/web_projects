@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	
+	<package name="product" namespace="/" extends="json-default">
+			<interceptors>
+			<interceptor name="authentication"
+				class="com.home.listener.AuthenticationInterceptor"></interceptor>
+			<interceptor-stack name="authStack">
+				<interceptor-ref name="authentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="authStack"></default-interceptor-ref>
+		<global-results>
+			<result name="login" type="redirect">/dongxanh.action</result>
+		</global-results>
+		<action name="dongxanh">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result>/login.jsp</result>
+		</action>
+	
+		<action name="*Action" class="com.home.action.ProductAction"
+			method="{1}">
+			<result type="json">/product.jsp</result>
+		</action>
+		<action name="getProducts" class="com.home.action.ProductAction"
+			method="list">
+			<result type="json" />
+		</action>
+		<action name="addProduct" class="com.home.action.ProductAction"
+			method="create">
+			<result type="json" />
+		</action>
+		<action name="editProduct" class="com.home.action.ProductAction"
+			method="update">
+			<result type="json" />
+		</action>
+		<action name="deleteProduct" class="com.home.action.ProductAction"
+			method="delete">
+			<result type="json" />
+		</action>
+		<action name="getAllCategoriesAction" class="com.home.action.ProductAction"
+			method="getAllCategories">
+			<result type="json" />
+		</action>
+		<action name="importProductsAction" class="com.home.action.ProductAction"
+			method="importProducts">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="fileUpload">
+				<param name="allowedTypes">application/ms-excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
+				<param name="maximumSize">10240</param>
+			</interceptor-ref>
+			<result name="wait">/waiting.jsp</result>
+			<result name="success">/product.jsp</result>
+		</action>
+	</package>
+
+	<package name="gift" namespace="/" extends="json-default">
+		<action name="*GiftAction" class="com.home.action.GiftAction"
+			method="{1}">
+			<result type="json">/gift.jsp</result>
+		</action>
+		<action name="listGiftAction" class="com.home.action.GiftAction"
+			method="list">
+			<result type="json">/gift.jsp</result>
+		</action>
+		<action name="createGiftAction" class="com.home.action.GiftAction"
+			method="create">
+			<result type="json">/gift.jsp</result>
+		</action>
+		<action name="updateGiftAction" class="com.home.action.GiftAction"
+			method="update">
+			<result type="json">/gift.jsp</result>
+		</action>
+		<action name="deleteGiftAction" class="com.home.action.GiftAction"
+			method="delete">
+			<result type="json">/gift.jsp</result>
+		</action>
+	</package>
+
+	<package name="promotion" namespace="/" extends="json-default">
+		<action name="*PromotionAction" class="com.home.action.PromotionAction"
+			method="{1}">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="listPromotionAction" class="com.home.action.PromotionAction"
+			method="list">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="createPromotionAction" class="com.home.action.PromotionAction"
+			method="create">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="updatePromotionAction" class="com.home.action.PromotionAction"
+			method="update">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="deletePromotionAction" class="com.home.action.PromotionAction"
+			method="delete">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="getAllGroupCustomerAction" class="com.home.action.PromotionAction"
+			method="getAllGroupCustomer">
+			<result type="json" />
+		</action>
+		<action name="listPromotionProductAction" class="com.home.action.PromotionProductAction"
+			method="list">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="createPromotionProductAction" class="com.home.action.PromotionProductAction"
+			method="create">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="updatePromotionProductAction" class="com.home.action.PromotionProductAction"
+			method="update">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="deletePromotionProductAction" class="com.home.action.PromotionProductAction"
+			method="delete">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="getAllProductsAction" class="com.home.action.PromotionProductAction"
+			method="getAllProducts">
+			<result type="json" />
+		</action>
+		<action name="listPromotionGiftAction" class="com.home.action.PromotionGiftAction"
+			method="list">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="createPromotionGiftAction" class="com.home.action.PromotionGiftAction"
+			method="create">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="updatePromotionGiftAction" class="com.home.action.PromotionGiftAction"
+			method="update">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="deletePromotionGiftAction" class="com.home.action.PromotionGiftAction"
+			method="delete">
+			<result type="json">/promotion.jsp</result>
+		</action>
+		<action name="getAllGiftsAction" class="com.home.action.PromotionGiftAction"
+			method="getAllGifts">
+			<result type="json" />
+		</action>
+		<action name="promotionFilterValues" method="getFilterValues"
+			class="com.home.action.ResultPromotionAction">
+			<result type="json" />
+		</action>
+	</package>
+	
+	
+	<package name="promotion_register" namespace="/" extends="json-default">
+		<action name="*PromotionRegisterAction" class="com.home.action.PromotionRegistAction"
+			method="{1}">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="listPromotionRegisterAction" class="com.home.action.PromotionRegistAction"
+			method="list">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="createPromotionRegisterAction" class="com.home.action.PromotionRegistAction"
+			method="create">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="updatePromotionRegisterAction" class="com.home.action.PromotionRegistAction"
+			method="update">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="deletePromotionRegisterAction" class="com.home.action.PromotionRegistAction"
+			method="delete">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="getCustomerRegisterAction" class="com.home.action.PromotionRegistAction"
+			method="getCustomerRegister">
+			<result type="json" />
+		</action>
+		
+		<action name="*RegisterGiftAction" class="com.home.action.RegisterGiftAction"
+			method="{1}">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="listRegisterGiftAction" class="com.home.action.RegisterGiftAction"
+			method="list">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="createRegisterGiftAction" class="com.home.action.RegisterGiftAction"
+			method="create">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="updateRegisterGiftAction" class="com.home.action.RegisterGiftAction"
+			method="update">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="deleteRegisterGiftAction" class="com.home.action.RegisterGiftAction"
+			method="delete">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="getRegisterGiftsAction" class="com.home.action.RegisterGiftAction"
+			method="getRegisterGifts">
+			<result type="json" />
+		</action>
+		
+		<action name="*RegisterProductAction" class="com.home.action.RegisterProductAction"
+			method="{1}">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="listRegisterProductAction" class="com.home.action.RegisterProductAction"
+			method="list">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="createRegisterProductAction" class="com.home.action.RegisterProductAction"
+			method="create">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="updateRegisterProductAction" class="com.home.action.RegisterProductAction"
+			method="update">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="deleteRegisterProductAction" class="com.home.action.RegisterProductAction"
+			method="delete">
+			<result type="json">/promotion_register.jsp</result>
+		</action>
+		<action name="getRegisterProductsAction" class="com.home.action.RegisterProductAction"
+			method="getRegisterProducts">
+			<result type="json" />
+		</action>
+		<action name="statisticPromotions" method="getStatisticPromotions"
+			class="com.home.action.DashboardAction">
+			<result type="json" />
+		</action>
+		<action name="listCustomerByBirthday1" method="getListCustomerByBirthday"
+			class="com.home.action.DashboardAction">
+			<result type="json" />
+		</action>
+		<action name="currentUserLogin" method="getCurrentUser"
+			class="com.home.action.DashboardAction">
+			<result type="json" name="success"/>
+			<result type="redirect" name="login">/login.jsp</result>
+		</action>
+	</package>
+	
+	<package name="promotion-result" namespace="/" extends="struts-default">
+	
+		<interceptors>
+			<interceptor name="authentication"
+				class="com.home.listener.AuthenticationInterceptor"></interceptor>
+			<interceptor-stack name="authStack">
+				<interceptor-ref name="authentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref name="authStack"></default-interceptor-ref>
+
+		<global-results>
+			<result name="login" type="redirect">/dongxanh.action</result>
+		</global-results>
+
+		<action name="dongxanh">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result>/login.jsp</result>
+		</action>
+		
+		<action name="promotions"
+			class="com.home.action.ResultPromotionAction">
+			<result name="success">/promotion.jsp</result>
+		</action>
+		<action name="gifts"
+			class="com.home.action.ResultPromotionAction">
+			<result name="success">/gift.jsp</result>
+		</action>
+		<action name="products"
+			class="com.home.action.ResultPromotionAction">
+			<result name="success">/product.jsp</result>
+		</action>
+		
+		<action name="promotionResultAction" method="listPromotionActive"
+			class="com.home.action.ResultPromotionAction">
+			<result name="success">/promotion_result.jsp</result>
+		</action>
+		<action name="listPromotionResultAction" method="listPromotionResult"
+			class="com.home.action.ResultPromotionAction">
+			<result name="success">/promotion_result.jsp</result>
+		</action>
+		<action name="promotionCusResultAction" method="listPromotionCusResult"
+			class="com.home.action.ResultPromotionAction">
+			<result name="success">/promotion_cus.jsp</result>
+		</action>
+		<action name="promotionResultDownload" method="exportPromotionReport"
+			class="com.home.action.ResultPromotionAction">
+	        <result name="success" type="stream">
+	                <param name="contentDisposition">attachment;filename=${filenameDownload}</param>
+	                <param name="contentType">application/vnd.ms-excel</param>
+	                <param name="inputName">inputStream</param>
+	                <param name="bufferSize">1024</param>
+	        </result>
+        </action>
+        <action name="promotionCusFilterAction" method="listPromotionCusFilter"
+			class="com.home.action.ResultPromotionAction">
+			<result name="success">/promotion_cus.jsp</result>
+		</action>
+	</package>
+	
+</struts>

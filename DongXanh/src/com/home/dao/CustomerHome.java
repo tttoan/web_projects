@@ -448,6 +448,20 @@ public class CustomerHome {
 
 	}
 	
+	public List<Customer> getListCustomerByUserId(int userId){
+		List<Customer> listCustomer = new ArrayList<>();
+		List<Object[]> results = getCustomersByNVTT(userId);
+		for (Object[] objects : results) {
+			Customer cus = new Customer();
+			cus.setId((int)objects[0]);
+			cus.setCustomerCode((String)objects[1]);
+			cus.setBusinessName((String)objects[2]);
+			cus.setDirector((String)objects[2]);
+			listCustomer.add(cus);
+		}
+		return listCustomer;
+	}
+	
 	public List<Object[]> getCustomersByNVTT(int user_id) {
 		log.debug("finding List Customer instance by full name");
 		List<Object[]> results = new ArrayList<Object[]>();
@@ -457,7 +471,7 @@ public class CustomerHome {
 			SessionImpl sessionImpl = (SessionImpl) session;
 			Connection conn = sessionImpl.connection();
 			try (Statement sta = conn.createStatement()) {
-				String query = "Select id, customer_code, business_name, director From customer where user_id= "+user_id + " order by business_name";
+				String query = "Select id, customer_code, business_name, director, statistic_name From customer where user_id= "+user_id + " order by business_name";
 				System.out.println(query);
 				try (ResultSet rs = sta.executeQuery(query)) {
 					while (rs.next()) {

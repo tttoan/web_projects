@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="statistic" namespace="/" extends="struts-default">
+		<interceptors>
+			<interceptor name="authentication"
+				class="com.home.listener.AuthenticationInterceptor"></interceptor>
+			<interceptor-stack name="authStack">
+				<interceptor-ref name="authentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref name="authStack"></default-interceptor-ref>
+
+		<global-results>
+			<result name="login" type="redirect">/dongxanh.action</result>
+		</global-results>
+
+		<action name="dongxanh">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result>/login.jsp</result>
+		</action>
+
+		<action name="list_statistic"
+			class="com.home.action.StatisticAction2">
+			<result name="success">/statistics.jsp</result>
+			<result name="error" type="redirectAction">move_to_add_statistic</result>
+		</action>
+
+		<action name="move_to_add_statistic" class="com.home.action.StatisticAction">
+			<result name="success">/new_statistic.jsp</result>
+		</action>
+		<action name="move_to_compare_statistic" class="com.home.action.StatisticAction">
+			<result name="success">/invoice_comparison.jsp</result>
+		</action>
+		<action name="compare_statistic" method="compareStatistic"
+			class="com.home.action.StatisticAction">
+			<result name="success">/invoice_comparison.jsp</result>
+		</action>
+		<action name="add_statistic" method="addStatistic"
+			class="com.home.action.StatisticAction">
+			<result name="success" type="redirectAction">list_statistic</result>
+			<result name="input">/new_statistic.jsp</result>
+		</action>
+		<action name="delete_statistic" method="deleteStatistic"
+			class="com.home.action.StatisticAction">
+			<result name="success" type="redirectAction">list_statistic</result>
+		</action>
+		
+		<action name="import_statistic" method="importStatistic"
+			class="com.home.action.StatisticAction">
+			<interceptor-ref name="fileUpload">
+				<param name="allowedTypes">application/ms-excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<interceptor-ref name="execAndWait">
+				<param name="delay">1000</param>
+				<param name="delaySleepInterval">10000</param>
+			</interceptor-ref>
+			<result name="wait">/waiting.jsp</result>
+			<result name="success" type="redirectAction">list_statistic</result>
+			<result name="error">/import_statistic.jsp</result>
+		</action>
+		
+		<action name="move_to_accept_statistic" class="com.home.action.StatisticAction">
+			<result name="success">/import_statistic.jsp</result>
+		</action>
+		
+		<action name="export_statistic" method="exportStatistic"
+			class="com.home.action.StatisticAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename="export.xlsx"</param>
+			</result>
+		</action>
+
+		<action name="import_balance" method="importBalance"
+			class="com.home.action.StatisticAction">
+			<interceptor-ref name="fileUpload">
+				<param name="allowedTypes">application/ms-excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<interceptor-ref name="execAndWait">
+				<param name="delay">500</param>
+				<param name="delaySleepInterval">5000</param>
+			</interceptor-ref>
+			<result name="wait">/waiting.jsp</result>
+			<result name="success" type="redirectAction">list_statistic</result>
+		</action>
+	</package>
+
+	<package name="statisticJson" namespace="/" extends="json-default">
+		<interceptors>
+			<interceptor-stack name="defaultStack">
+				<interceptor-ref name="json">
+					<param name="enableSMD">true</param>
+				</interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="defaultStack" />
+		<action name="readInfoStatistic" class="com.home.action.ProductAction"
+			method="retrieveUnitPriceById">
+			<result type="json">
+				<param name="root">unitPrice</param>
+			</result>
+		</action>
+		<action name="listStatisticJSonAction" class="com.home.action.StatisticAction2"
+			method="listStatisticJson">
+			<result type="json">/statistics.jsp</result>
+		</action>
+	</package>
+</struts>

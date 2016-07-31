@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<package name="customer" namespace="/" extends="struts-default">
+		<interceptors>
+			<interceptor name="authentication"
+				class="com.home.listener.AuthenticationInterceptor"></interceptor>
+			<interceptor-stack name="authStack">
+				<interceptor-ref name="authentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="authStack"></default-interceptor-ref>
+		<global-results>
+			<result name="login" type="redirect">/dongxanh.action</result>
+		</global-results>
+		<action name="dongxanh">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result>/login.jsp</result>
+		</action>
+
+		<action name="move_to_add_customer" class="com.home.action.CustomerAction">
+			<result name="success">/new_customer.jsp</result>
+			<result name="error">/customers.jsp</result>
+		</action>
+		<action name="notify_list_customer" method="notifyListCutomer"
+			class="com.home.action.CustomerAction">
+			<result name="success">/index.jsp</result>
+			<result name="error">/login.jsp</result>
+		</action>
+		<action name="add_customer" method="addCustomer"
+			class="com.home.action.CustomerAction">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="fileUpload">
+				<param name="allowedTypes">image/png,image/gif,image/jpeg</param>
+				<param name="maximumSize">4096</param>
+			</interceptor-ref>
+			<result name="success" type="redirectAction">list_customer</result>
+			<result name="input">/new_customer.jsp</result>
+		</action>
+		<action name="find_customer" method="findCustomer"
+			class="com.home.action.CustomerAction">
+			<result name="success">/new_customer.jsp</result>
+		</action>
+		<action name="view_customer" method="findCustomer"
+			class="com.home.action.CustomerAction">
+			<result name="success">/view_customer.jsp</result>
+		</action>
+		<action name="list_customer" class="com.home.action.CustomerAction2">
+			<result name="success">/customers.jsp</result>
+			<result name="error">/index.jsp</result>
+		</action>
+		<action name="delete_customer" method="deleteCustomerById"
+			class="com.home.action.CustomerAction">
+			<result name="success" type="redirectAction">list_customer</result>
+			<result name="error">/error.jsp</result>
+		</action>
+		<action name="move_to_accept_customer" class="com.home.action.CustomerAction">
+			<result name="success">/import_customer.jsp</result>
+			<result name="error">/index.jsp</result>
+		</action>
+		
+		<action name="import_customer" method="importCustomer"
+			class="com.home.action.CustomerAction">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="fileUpload">
+				<param name="allowedTypes">application/ms-excel,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
+			</interceptor-ref>
+			<interceptor-ref name="execAndWait">
+				<param name="delay">500</param>
+				<param name="delaySleepInterval">3000</param>
+			</interceptor-ref>
+			<result name="wait">/waiting.jsp</result>
+			<result name="success" type="redirectAction">list_customer</result>
+		</action>
+		<action name="move_to_assign_customer" class="com.home.action.AssignCustomerAction">
+			<result name="success">/assign_customer.jsp</result>
+			<result name="error">/customers.jsp</result>
+		</action>
+	</package>
+	<package name="customerJson" namespace="/" extends="json-default">
+		<interceptors>
+			<interceptor-stack name="defaultStack">
+				<interceptor-ref name="json">
+					<param name="enableSMD">true</param>
+				</interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="defaultStack" />
+		<action name="readInfoCustomer" class="com.home.action.CustomerAction"
+			method="retrievePhoneById">
+			<result type="json">
+				<param name="root">commonCusPhone</param>
+			</result>
+		</action>
+		<action name="getAssignCusByNVTTAction" method="getCustomerByNVTT"
+			class="com.home.action.AssignCustomerAction">
+			<result type="json" />
+		</action>
+		<action name="getAssignFreeCusAction" method="getCustomerFree"
+			class="com.home.action.AssignCustomerAction">
+			<result type="json" />
+		</action>
+		<action name="setAssignFreeCusAction" method="setUnAssignCustomer2NVTT"
+			class="com.home.action.AssignCustomerAction">
+			<result type="json" />
+		</action>
+		<action name="setAssignCusByNVTTAction" method="setAssignCustomer2NVTT"
+			class="com.home.action.AssignCustomerAction">
+			<result type="json" />
+		</action>
+		<action name="listCustomerJSonAction" class="com.home.action.CustomerAction2"
+			method="lisCustomerJson">
+			<result type="json" />
+		</action>
+		<action name="ParameterSession" class="com.home.action.CustomerAction2"
+			method="storeParameterSession">
+			<result type="json" />
+		</action>
+	</package>
+</struts>

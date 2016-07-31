@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+<constant name="struts.devMode" value="true" />
+	<constant name="struts.action.excludePattern" value=".*/static/.*" />
+	<package name="user_plan" namespace="/" extends="struts-default">
+		<interceptors>
+			<interceptor name="authentication"
+				class="com.home.listener.AuthenticationInterceptor"></interceptor>
+			<interceptor-stack name="authStack">
+				<interceptor-ref name="authentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="authStack"></default-interceptor-ref>
+		<global-results>
+			<result name="login" type="redirect">/dongxanh.action</result>
+		</global-results>
+		<action name="dongxanh">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result>/login.jsp</result>
+		</action>
+		
+		<action name="UserPlan" class="com.home.action.UserPlanAction" method="getUserPlan">
+			<result name="success">/user_plan.jsp</result>
+		</action>
+		<action name="custom_editor" class="com.home.action.UserPlanAction" method="editor_custom">
+			<result name="success">/custom_editor.jsp</result>
+		</action>
+		<action name="events" class="com.home.action.UserPlanAction" method="planEvents">
+			<result name="success">/user_plan_data.jsp</result>
+		</action>
+			<action name="16_ical" class="com.home.action.UserPlanAction" method="ical_16">
+			<result name="success" type="stream">
+				<param name="contentType">calendar/ical</param>
+				<param name="inputName">ical</param>
+				<param name="contentDisposition">attachment;filename="calendar.ics"</param>
+				<param name="bufferSize">1024</param>
+			</result>
+		</action>
+		<action name="export_event" method="exportEvent"
+			class="com.home.action.UserPlanAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="contentDisposition">attachment;filename="event_export.xlsx"</param>
+				<param name="bufferSize">2048</param>
+			</result>
+		</action>
+	</package>
+	
+</struts>

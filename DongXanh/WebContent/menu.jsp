@@ -10,12 +10,12 @@
 		<hr />
 		<ul class="nav side-menu">
 			<li><s:url action="homeAction" var="homeURL" /> <s:a
-							href="%{homeURL}" theme="bootstrap"> Trang chủ </s:a></li>
+					href="%{homeURL}" theme="bootstrap"> Trang chủ </s:a></li>
 			<li><a><i class="fa fa-cubes"></i> Khuyến Mãi <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
-					<li><s:url action="promotionResultAction" var="p_resultURL" /> <s:a
-							href="%{p_resultURL}" theme="bootstrap"> Kết quả </s:a></li>
+					<li><s:url action="promotionResultAction" var="p_resultURL" />
+						<s:a href="%{p_resultURL}" theme="bootstrap"> Kết quả </s:a></li>
 					<li><s:url action="promotions" var="promotionURL" /> <s:a
 							href="%{promotionURL}" theme="bootstrap"> Danh sách </s:a></li>
 					<li><s:url action="gifts" var="giftURL" /> <s:a
@@ -51,8 +51,8 @@
 			<li><a><i class="fa fa-bar-chart"></i> Báo cáo <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
-					<li><s:url action="move_to_compare_statistic" var="csURL" /> <s:a
-							href="%{csURL}" theme="bootstrap"> So sánh bảng kê </s:a></li>
+					<li><s:url action="move_to_compare_statistic" var="csURL" />
+						<s:a href="%{csURL}" theme="bootstrap"> So sánh bảng kê </s:a></li>
 					<li><s:url action="showReportRevenues1" var="csURL1" /> <s:a
 							href="%{csURL1}" theme="bootstrap"> So sánh doanh số cùng kỳ </s:a></li>
 					<li><s:url action="showReportRevenues2" var="csURL2" /> <s:a
@@ -61,11 +61,11 @@
 							href="%{csURL3}" theme="bootstrap"> Doanh số cấp2 </s:a></li>
 					<li><s:url action="showReportRevenues4" var="csURL4" /> <s:a
 							href="%{csURL4}" theme="bootstrap"> Doanh số NVTT </s:a></li>
-			</ul></li>
+				</ul></li>
 			<li><a><i class="fa fa-calendar"></i> Lịch công tác <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
-					<li><s:url action="getUserPlanAction" var="getUserPlanURL" /> <s:a
+					<li><s:url action="UserPlan" var="getUserPlanURL" /> <s:a
 							href="%{getUserPlanURL}" theme="bootstrap"> Xem lịch của tôi </s:a></li>
 
 				</ul></li>
@@ -107,7 +107,10 @@
 				</a>
 					<ul
 						class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">
-						<li><a href="#"> Thông tin cá nhân</a></li>
+						<s:url action="move_to_add_employee" var="editUserURL">
+							<s:param name="userId" value="%{userSes.id}"></s:param>
+						</s:url>
+						<li><s:a href="%{editUserURL}"> Thông tin cá nhân</s:a></li>
 						<s:url action="logout_wanted.action" var="loURL"></s:url>
 						<li><s:a href="%{loURL}">
 								<i class="fa fa-sign-out pull-right"></i> Đăng xuất

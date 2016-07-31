@@ -46,10 +46,10 @@
 		</action>
 	</package>
 	
-	<include file="promotion_struts.xml"></include>
-	<include file="userplan_struts.xml"></include>
-	<include file="report_struts.xml"></include>
-	<include file="employee_struts.xml"></include>
-	<include file="customer_struts.xml"></include>
-	<include file="statistic_struts.xml"></include>
+	<include file="strusts_ext/promotion_struts.xml"></include>
+	<include file="strusts_ext/user_plan_struts.xml"></include>
+	<include file="strusts_ext/report_struts.xml"></include>
+	<include file="strusts_ext/employee_struts.xml"></include>
+	<include file="strusts_ext/customer_struts.xml"></include>
+	<include file="strusts_ext/statistic_struts.xml"></include>
 </struts>
