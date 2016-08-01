@@ -20,7 +20,7 @@
 			<tbody>
 
 				<tr class="even pointer">
-					<td class="" form="event_text">Mô tả nhiệm vụ:</td>
+					<td class="" form="event_text">Mô tả:</td>
 					<td><input id="event_text" name="text" type="text" /></td>
 				</tr>
 
@@ -33,16 +33,22 @@
 					<td><input id="event_end_date" name="end_date" type="text" /></td>
 				</tr>
 				<tr class="even pointer">
-					<td><s:select label="Khách hàng" id="customerIdTemp"
+					<td><s:select label="Khách hàng" id="customerId"
 							showDownArrow="false" autoComplete="true" list="listCustomer"
 							listKey="id" name="customerId"
 							listValue="businessName +' - '+ customerCode" /></td>
 				</tr>
 
 				<tr class="even pointer">
-					<td class="">Hình thức liên hệ:</td>
-					<td><input id="event_contact_type" name="contactType"
-						type="text" /></td>
+					<td><s:select label="Hình thức liên hệ" id="contactType"
+							headerKey="-1" headerValue="Gặp trực tiếp" name="contactType"
+							list="listCustomer" showDownArrow="false" disabled="true"
+							listKey="id" listValue="telefone" /></td>
+				</tr>
+				<tr class="even pointer">
+					<td class=""></td>
+					<td><label for="customerPhone">Điện thoại:</label><input
+						type="checkbox" id="customerPhone"></td>
 				</tr>
 				<tr class="even pointer">
 					<td><s:select label="Người QĐCV" id="directorTemp"
@@ -110,15 +116,31 @@
 		var selectBoxes = document.body.getElementsByTagName('select');
 		for (var i = 0; i < selectBoxes.length; i++) {
 			var name = selectBoxes[i].getAttribute('name');
-			selectBoxes[i].value = obj[name];
+			if (name == "contactType") {
+				if (obj[name] > 0 && obj[name] != null) {
+					selectBoxes[i].value = obj[name];
+					document.getElementById("customerPhone").checked = true;
+				}
+				else
+					selectBoxes[i].value = -1;
+			} else if (name == "directorTemp")
+				selectBoxes[i].value = obj["customerId"];
+			else
+				selectBoxes[i].value = obj[name];
 		}
-		document.getElementById('directorTemp').value = obj["customerId"];
 	};
 
 	$(document).ready(function() {
-		$('#customerIdTemp').change(function() {
-			$('#directorTemp').val($(this).val());
-
+		$('#customerId').change(function() {
+			$('#directorTemp,#contactType').val($(this).val());
+		});
+		$('#customerPhone').change(function() {
+			if ($(this).prop('checked') == false)
+				$('#contactType').val(-1);
+			else
+				$('#contactType').val($('#customerId').val());
 		});
 	});
+
+	
 </script>

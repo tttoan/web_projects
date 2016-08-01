@@ -107,6 +107,25 @@ public class ExcelUtil {
 			sheet.autoSizeColumn(startIndexCell + i);
 		}
 	}
+	public void addRowData(Sheet sheet, int startIndexRow, int startIndexCell, Object... valPerCells) throws Exception{
+		Row row = sheet.createRow(startIndexRow);
+		int markIndex = 0;
+		for (int i = 0; i<valPerCells.length;i++) {
+			//If value is null. That mean is merge cell
+			if(valPerCells[i] == null){
+				sheet.addMergedRegion(new CellRangeAddress(startIndexRow, startIndexRow, markIndex, i));
+				continue;
+			}
+			markIndex = i;
+			Cell cell = row.createCell(startIndexCell + i);
+			cell.setCellType(Cell.CELL_TYPE_STRING);
+			if(valPerCells[i] instanceof Integer )
+				cell.setCellValue((int)valPerCells[i]);
+			else
+				cell.setCellValue(valPerCells[i]+"");
+			//sheet.autoSizeColumn(startIndexCell + i);
+		}
+	}
 	
 	/**
 	 * @param sheetNames

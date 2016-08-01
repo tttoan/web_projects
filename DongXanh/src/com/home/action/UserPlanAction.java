@@ -48,6 +48,7 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 	private List<Customer> listCustomer = new ArrayList<Customer>();
 	private InputStream ical;
 	private InputStream fileInputStream;
+
 	public InputStream getFileInputStream() {
 		return fileInputStream;
 	}
@@ -55,7 +56,9 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 	public void setFileInputStream(InputStream fileInputStream) {
 		this.fileInputStream = fileInputStream;
 	}
+
 	private Workbook workbook;
+
 	public List<Customer> getListCustomer() {
 		return listCustomer;
 	}
@@ -75,12 +78,13 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 	public void setMessageStore(MessageStore messageStore) {
 		this.messageStore = messageStore;
 	}
-	
-	private void getListCustomerByUserId(){
-		CustomerHome custHome= new CustomerHome(HibernateUtil.getSessionFactory());
+
+	private void getListCustomerByUserId() {
+		CustomerHome custHome = new CustomerHome(
+				HibernateUtil.getSessionFactory());
 		setListCustomer(custHome.getListCustomerByUserId(userSes.getId()));
 	}
-	
+
 	public InputStream getIcal() {
 		return ical;
 	}
@@ -91,94 +95,103 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 		ical = new ByteArrayInputStream(bytes);
 		return SUCCESS;
 	}
-	private DHXGridView customGridView(){
+
+	private DHXGridView customGridView() {
 		DHXGridView grid = new DHXGridView();
-    	grid.setLabel("Chi tiết");
-    	grid.addOption(new DHXGridViewColumn("text", "Mô tả"));
-    	grid.addOption(new DHXGridViewColumn("start_date", "Bắt đầu", 150));
-    	grid.addOption(new DHXGridViewColumn("end_date", "Kết thúc", 150));
-    	grid.addOption(new DHXGridViewColumn("contactType", "Hình thức liên hệ", 150));
-    	grid.addOption(new DHXGridViewColumn("customerId", "Khách hàng", 150));
-    	Calendar cal = Calendar.getInstance();
-    	grid.setFrom(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-    	return grid;
+		grid.setLabel("Chi tiết");
+		grid.addOption(new DHXGridViewColumn("text", "Mô tả"));
+		grid.addOption(new DHXGridViewColumn("start_date", "Bắt đầu", 150));
+		grid.addOption(new DHXGridViewColumn("end_date", "Kết thúc", 150));
+		grid.addOption(new DHXGridViewColumn("contactType",
+				"Hình thức liên hệ", 150));
+		grid.addOption(new DHXGridViewColumn("customerId", "Khách hàng", 150));
+		Calendar cal = Calendar.getInstance();
+		grid.setFrom(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
+				cal.get(Calendar.DAY_OF_MONTH));
+		return grid;
 	}
-	
+
 	public String getUserPlan() throws Exception {
 		try {
 			// creates and configures scheduler instance
-			DHXPlanner s = new DHXPlanner("./codebase/", DHXSkin.GLOSSY);
-	
-			s.setInitialDate(new Date());
-			s.config.setScrollHour(8);
-			s.setWidth(950);
-			s.config.setDetailsOnCreate(true);
-	    	s.config.setDblClickCreate(true);
-	    	s.config.setDetailsOnDblClick(true);
-			s.load("events", DHXDataFormat.JSON);
-	    	s.data.dataprocessor.setURL("events");
-	    	//Xem chi tiết
-	    	s.views.add(customGridView());
-	    	//Xem tóm tắt
-	    	DHXAgendaView agen = new DHXAgendaView();
-	    	agen.setLabel("Danh sách");
-	    	s.views.add(agen);
-	    
-	    	s.calendars.attachMiniCalendar();
-	    	s.lightbox.add(new DHXLightboxMiniCalendar("cal", "Time period"));
-	    
-	    	s.setInitialView("week");
+			DHXPlanner planner = new DHXPlanner("./codebase/", DHXSkin.GLOSSY);
+			planner.templates.setDayScaleDate("{date:date(%d/%m/%Y)}");
+			planner.templates.setWeekScaleDate("{date:date(%d/%m/%Y)}");
+			planner.setInitialDate(new Date());
+			planner.config.setScrollHour(8);
+			planner.setWidth(950);
+			planner.config.setDetailsOnCreate(true);
+			planner.config.setDblClickCreate(true);
+			planner.config.setDetailsOnDblClick(true);
+			planner.load("events", DHXDataFormat.JSON);
+			planner.data.dataprocessor.setURL("events");
+			// Xem chi tiết
+			planner.views.add(customGridView());
+			// Xem tóm tắt
+			DHXAgendaView agen = new DHXAgendaView();
+			agen.setLabel("Danh sách");
+			planner.views.add(agen);
 
-	    	DHXExternalLightboxForm box = s.lightbox.setExternalLightboxForm("./custom_editor.action", 400, 230);    
-	    	box.setClassName("custom_lightbox");
-	    	
-	    	s.toPDF();
-	    	s.toICal("16_ical");
-	    	
-			messageStore.setScheduler(s.render());
-			
+			planner.calendars.attachMiniCalendar();
+			planner.lightbox.add(new DHXLightboxMiniCalendar("cal",
+					"Time period"));
+
+			planner.setInitialView("week");
+
+			DHXExternalLightboxForm box = planner.lightbox
+					.setExternalLightboxForm("./custom_editor.action", 400, 260);
+			box.setClassName("custom_lightbox");
+
+			planner.toPDF();
+			planner.toICal("16_ical");
+
+			messageStore.setScheduler(planner.render());
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return Action.SUCCESS;
 	}
+
 	public String editor_custom() throws Exception {
 		getListCustomerByUserId();
 		return SUCCESS;
 	}
+
 	public String planEvents() throws Exception {
-		CustomEventsManager evs = new CustomEventsManager(ServletActionContext.getRequest(), userSes);
+		CustomEventsManager evs = new CustomEventsManager(
+				ServletActionContext.getRequest(), userSes);
 		messageStore.setData(evs.run());
 		return Action.SUCCESS;
 	}
+
 	public String exportEvent() {
 		try {
-			ServletContext servletContext = ServletActionContext.getServletContext();
-			String pathname = servletContext.getRealPath("/WEB-INF/template/excel/event_template.xlsx");
+			ServletContext servletContext = ServletActionContext
+					.getServletContext();
+			String pathname = servletContext
+					.getRealPath("/WEB-INF/template/excel/event_template.xlsx");
 			File theFile = new File(pathname);
 			ExcelUtil xls = new ExcelUtil();
-			UserPlanHome upHome = new UserPlanHome(HibernateUtil.getSessionFactory());
+			UserPlanHome upHome = new UserPlanHome(
+					HibernateUtil.getSessionFactory());
 			List<Object[]> listEvent = upHome.getEventExport();
-			try (FileInputStream fis = new FileInputStream( theFile)) {
-				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
+			try (FileInputStream fis = new FileInputStream(theFile)) {
+				workbook = xls.getWorkbook(fis,
+						FilenameUtils.getExtension(theFile.getAbsolutePath()));
 				Sheet sheet = workbook.getSheetAt(0);
 				int startIndexRow = 5;
 				int startIndexCell = 0;
 				startIndexRow++;
-			for (int i = 0; i < listEvent.size(); i++) {
-				xls.addRowData(sheet, startIndexRow, startIndexCell,
-						(i+1)+"", 
-						listEvent.get(i)[0]+"",
-						listEvent.get(i)[1]+"",
-						listEvent.get(i)[2]+"",
-						listEvent.get(i)[3]+"",
-						listEvent.get(i)[4]+"",
-						listEvent.get(i)[5]+"",
-						listEvent.get(i)[6]+""
-						);
-				startIndexRow++;
-				
-			}
+				for (int i = 0; i < listEvent.size(); i++) {
+					xls.addRowData(sheet, startIndexRow, startIndexCell,
+							(i + 1), listEvent.get(i)[0], listEvent.get(i)[1],
+							listEvent.get(i)[2], listEvent.get(i)[3],
+							listEvent.get(i)[4], listEvent.get(i)[5],
+							listEvent.get(i)[6]);
+					startIndexRow++;
+
+				}
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				workbook.write(baos);
 				fileInputStream = new ByteArrayInputStream(baos.toByteArray());
@@ -189,9 +202,10 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 		}
 		return SUCCESS;
 	}
+
 	@Override
 	public void setUserSes(User user) {
 		this.userSes = user;
-		
+
 	}
 }

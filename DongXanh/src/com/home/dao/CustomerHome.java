@@ -457,6 +457,7 @@ public class CustomerHome {
 			cus.setCustomerCode((String)objects[1]);
 			cus.setBusinessName((String)objects[2]);
 			cus.setDirector((String)objects[2]);
+			cus.setTelefone(objects[3].equals("")?"Cập nhật...":((String)objects[3]));
 			listCustomer.add(cus);
 		}
 		return listCustomer;
@@ -471,7 +472,7 @@ public class CustomerHome {
 			SessionImpl sessionImpl = (SessionImpl) session;
 			Connection conn = sessionImpl.connection();
 			try (Statement sta = conn.createStatement()) {
-				String query = "Select id, customer_code, business_name, director, statistic_name From customer where user_id= "+user_id + " order by business_name";
+				String query = "Select id, customer_code, business_name, director, statistic_name, telefone From customer where user_id= "+user_id + " order by business_name";
 				System.out.println(query);
 				try (ResultSet rs = sta.executeQuery(query)) {
 					while (rs.next()) {
@@ -481,7 +482,8 @@ public class CustomerHome {
 						cus.setDirector(StringUtil.notNull(rs.getString("director")));
 						cus.setBusinessName(StringUtil.notNull(rs.getString("business_name")));
 						cus.setStatisticName(StringUtil.notNull(rs.getString("statistic_name")));
-						results.add(new Object[]{cus.getId(), cus.getCustomerCode(), cus.getBusinessName().replace("0.0", "").isEmpty()?cus.getStatisticName():cus.getBusinessName()});
+						cus.setTelefone(StringUtil.notNull(rs.getString("telefone")));
+						results.add(new Object[]{cus.getId(), cus.getCustomerCode(), cus.getBusinessName().replace("0.0", "").isEmpty()?cus.getStatisticName():cus.getBusinessName(), cus.getTelefone()});
 					}
 				} 
 			} catch (Exception e) {
