@@ -11,6 +11,14 @@
 	width: 100px;
 	display: inline-block;
 }
+
+.div_right {
+    position: absolute;
+    right: 5px;
+    width: 250px;
+    padding: 5px;
+}
+
 </style>
 <div>
 	<form id='form1'>
@@ -20,30 +28,30 @@
 			<tbody>
 
 				<tr class="even pointer">
-					<td class="" form="event_text">Mô tả:</td>
-					<td><input id="event_text" name="text" type="text" /></td>
+					<td class="" form="event_text">Công việc:</td>
+					<td><input id="event_text" name="text" type="text" style="width: 100%"/></td>
 				</tr>
 
 				<tr class="even pointer">
-					<td class="">Thời gian:</td>
-					<td><input id="event_start_date" name="start_date" type="text" /></td>
+					<td class="">Bắt đầu:</td>
+					<td><input id="event_start_date" name="start_date" type="text" style="width: 100%"/></td>
 				</tr>
 				<tr class="even pointer">
-					<td class="">Tới:</td>
-					<td><input id="event_end_date" name="end_date" type="text" /></td>
+					<td class="">Kết thúc:</td>
+					<td><input id="event_end_date" name="end_date" type="text" style="width: 100%"/></td>
 				</tr>
 				<tr class="even pointer">
 					<td><s:select label="Khách hàng" id="customerId"
 							showDownArrow="false" autoComplete="true" list="listCustomer"
 							listKey="id" name="customerId"
-							listValue="businessName +' - '+ customerCode" /></td>
+							listValue="businessName +' - '+ customerCode" style="width: 100%"/></td>
 				</tr>
 
 				<tr class="even pointer">
 					<td><s:select label="Hình thức liên hệ" id="contactType"
 							headerKey="-1" headerValue="Gặp trực tiếp" name="contactType"
 							list="listCustomer" showDownArrow="false" disabled="true"
-							listKey="id" listValue="telefone" /></td>
+							listKey="id" listValue="telefone" style="width: 100%"/></td>
 				</tr>
 				<tr class="even pointer">
 					<td class=""></td>
@@ -53,7 +61,7 @@
 				<tr class="even pointer">
 					<td><s:select label="Người QĐCV" id="directorTemp"
 							name="directorName" disabled="true" list="listCustomer"
-							listKey="id" listValue="director" /></td>
+							listKey="id" listValue="director" style="width: 100%"/></td>
 				</tr>
 			</tbody>
 		</table>
@@ -61,11 +69,11 @@
 			value="${userSes.id}" /> <input id="hiddenEventId" name="id"
 			type="hidden" />
 	</form>
-	<div>
-		<input type="button" value="Cập nhật" onclick="lightbox.save()" /> <input
-			type="button" value="Đóng" onclick="lightbox.close()" /> <input
-			style="margin-left: 86px" type="button" value="Xoá"
-			onclick="lightbox.remove()" />
+	<br>
+	<div class="div_right">
+		<input type="button" value="Cập nhật" onclick="lightbox.save()" style="width: 80px" /> 
+		<input type="button" value="Đóng" onclick="lightbox.close()" style="width: 80px"/> 
+		<!-- <input type="button" value="Xoá" onclick="lightbox.remove()" style="width: 80px"/>  -->
 	</div>
 </div>
 <script src="js/jquery.min.js"></script>

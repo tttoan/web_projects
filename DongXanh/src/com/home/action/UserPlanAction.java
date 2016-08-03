@@ -108,12 +108,11 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 	private DHXGridView customGridView() {
 		DHXGridView grid = new DHXGridView();
 		grid.setLabel("Chi tiết");
-		grid.addOption(new DHXGridViewColumn("text", "Mô tả"));
-		grid.addOption(new DHXGridViewColumn("start_date", "Bắt đầu", 150));
-		grid.addOption(new DHXGridViewColumn("end_date", "Kết thúc", 150));
-		grid.addOption(new DHXGridViewColumn("contactType",
-				"Hình thức liên hệ", 150));
-		grid.addOption(new DHXGridViewColumn("customerId", "Khách hàng", 150));
+		grid.addOption(new DHXGridViewColumn("text", "Mô tả", 200));
+		grid.addOption(new DHXGridViewColumn("start_date", "Bắt đầu", 200));
+		grid.addOption(new DHXGridViewColumn("end_date", "Kết thúc", 200));
+		grid.addOption(new DHXGridViewColumn("contactType",	"Hình thức liên hệ", 200));
+		grid.addOption(new DHXGridViewColumn("customerId", "Khách hàng", 200));
 		Calendar cal = Calendar.getInstance();
 		grid.setFrom(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
 				cal.get(Calendar.DAY_OF_MONTH));
@@ -154,6 +153,7 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 			planner.toPDF();
 			planner.toICal("16_ical");
 
+			//System.out.println(planner.render());
 			messageStore.setScheduler(planner.render());
 
 		} catch (Exception e) {
