@@ -18,16 +18,22 @@
 			style="width: 100%">
 
 			<tbody>
-
 				<tr class="even pointer">
 					<td class="" form="event_text">Mô tả:</td>
 					<td><input id="event_text" name="text" type="text" /></td>
 				</tr>
-
 				<tr class="even pointer">
-					<td class="">Thời gian:</td>
+					<td><s:select label="NVTT" id="employeeId"
+							name="employeeId" list="listEmployee" disabled="%{isPermissionAccept}"
+							listKey="id" listValue="fullName +' - '+ userName" /></td>
+				</tr>
+				
+				<tr class="even pointer">
+					<td class="">Thời gian: </td>
 					<td><input id="event_start_date" name="start_date" type="text" /></td>
 				</tr>
+				
+				
 				<tr class="even pointer">
 					<td class="">Tới:</td>
 					<td><input id="event_end_date" name="end_date" type="text" /></td>
@@ -57,8 +63,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<input id="hiddenEmployeeId" name="employeeId" type="hidden"
-			value="${userSes.id}" /> <input id="hiddenEventId" name="id"
+		<input id="hiddenEventId" name="id"
 			type="hidden" />
 	</form>
 	<div>
@@ -100,8 +105,6 @@
 		for (var i = 0; i < inputs.length; i++) {
 			if (inputs[i].type != "button") {
 				var name = inputs[i].getAttribute('name');
-				if (name == "employeeId")
-					continue;
 				if (name == "start_date" || name == "end_date")
 					inputs[i].value = parent.scheduler.date.date_to_str(
 							parent.scheduler.config.api_date)(obj[name]);
@@ -123,8 +126,10 @@
 				}
 				else
 					selectBoxes[i].value = -1;
-			} else if (name == "directorTemp")
+			} else if (name == 'directorName'){
 				selectBoxes[i].value = obj["customerId"];
+				}
+				
 			else
 				selectBoxes[i].value = obj[name];
 		}
@@ -132,10 +137,10 @@
 
 	$(document).ready(function() {
 		$('#customerId').change(function() {
-			$('#directorTemp,#contactType').val($(this).val());
+			$('#directorTemp').val($(this).val());
 		});
-		$('#customerPhone').change(function() {
-			if ($(this).prop('checked') == false)
+		$('#customerPhone,#customerId').change(function() {
+			if ($('#customerPhone').prop('checked') == false)
 				$('#contactType').val(-1);
 			else
 				$('#contactType').val($('#customerId').val());

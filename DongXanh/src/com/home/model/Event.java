@@ -1,5 +1,7 @@
 package com.home.model;
 
+
+
 import com.dhtmlx.planner.DHXEvent;
 
 public class Event extends DHXEvent {
@@ -22,7 +24,7 @@ public class Event extends DHXEvent {
 		this.employeeId = employeeId;
 	}
 	public void setEmployeeId(String employeeId) {
-		this.employeeId = Integer.parseInt(employeeId);
+		this.employeeId = Integer.parseInt(employeeId==null?"0":employeeId);
 	}
 	public int getCustomerId() {
 		return customerId;
@@ -32,7 +34,7 @@ public class Event extends DHXEvent {
 		this.customerId = customerId;
 	}
 	public void setCustomerId(String customerId) {
-		this.customerId = Integer.parseInt(customerId);
+		this.customerId = Integer.parseInt(customerId==null?"0":customerId);
 	}
 
 	@Override

@@ -16,6 +16,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.struts2.ServletActionContext;
+
 import com.dhtmlx.planner.DHXPlanner;
 import com.dhtmlx.planner.DHXSkin;
 import com.dhtmlx.planner.controls.DHXAgendaView;
@@ -29,6 +30,7 @@ import com.home.dao.CategoryHome;
 import com.home.dao.CustomEventsManager;
 import com.home.dao.CustomerHome;
 import com.home.dao.StatisticHome;
+import com.home.dao.UserHome;
 import com.home.dao.UserPlanHome;
 import com.home.entities.UserAware;
 import com.home.model.Category;
@@ -46,8 +48,10 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 	private MessageStore messageStore = new MessageStore();
 	private User userSes;
 	private List<Customer> listCustomer = new ArrayList<Customer>();
+	private List<User> listEmployee = new ArrayList<User>();
 	private InputStream ical;
 	private InputStream fileInputStream;
+	public boolean isPermissionAccept = false;
 
 	public InputStream getFileInputStream() {
 		return fileInputStream;
@@ -83,6 +87,11 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 		CustomerHome custHome = new CustomerHome(
 				HibernateUtil.getSessionFactory());
 		setListCustomer(custHome.getListCustomerByUserId(userSes.getId()));
+	}
+
+	private void getEmployees() {
+		UserHome userHome = new UserHome(HibernateUtil.getSessionFactory());
+		setListEmployee(userHome.getLookupEmployee());
 	}
 
 	public InputStream getIcal() {
@@ -155,6 +164,10 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 
 	public String editor_custom() throws Exception {
 		getListCustomerByUserId();
+		getEmployees();
+		isPermissionAccept = !(userSes.getRole().getRoleId() == ROLE_ADMIN
+				| userSes.getRole().getRoleId() == ROLE_LEADER);
+		System.out.println("UserPlanAction.editor_custom() "+isPermissionAccept);
 		return SUCCESS;
 	}
 
@@ -207,5 +220,21 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 	public void setUserSes(User user) {
 		this.userSes = user;
 
+	}
+
+	public List<User> getListEmployee() {
+		return listEmployee;
+	}
+
+	public void setListEmployee(List<User> listEmployee) {
+		this.listEmployee = listEmployee;
+	}
+
+	public boolean isPermissionAccept() {
+		return isPermissionAccept;
+	}
+
+	public void setPermissionAccept(boolean isPermissionAccept) {
+		this.isPermissionAccept = isPermissionAccept;
 	}
 }
