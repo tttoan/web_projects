@@ -11,6 +11,15 @@
 	</s:url>
 	<s:a href="%{exportEventURL}" cssClass="btn btn-info btn-xs">
 		<i class="fa fa-exchange"></i> Kết xuất </s:a>
+
+	<label class="right" for="emp_id" style="padding-left:150px">Nhân viên TT: </label>
+	<s:select id="emp_id" name="emp_id" style="padding-left:10px"
+		showDownArrow="false"
+		autoComplete="true"
+		disabled="%{isPermissionAccept}
+		list="listEmployee" listKey="id" listValue="fullName +' - '+ userName"
+		value="userSes.id" />
+
 	<div class="content" id="content">
 		<div class="scheduler" id="scheduler">
 			<s:property escape="false" value="messageStore.scheduler" />
@@ -52,5 +61,6 @@
 		window.onload = resize;
 		window.onresize = resize;
 </script>
+
 </body>
 </html>

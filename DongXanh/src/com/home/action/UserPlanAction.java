@@ -155,7 +155,8 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 
 			//System.out.println(planner.render());
 			messageStore.setScheduler(planner.render());
-
+			getEmployees();
+			checkPermissionAccept();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -165,10 +166,14 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 	public String editor_custom() throws Exception {
 		getListCustomerByUserId();
 		getEmployees();
-		isPermissionAccept = !(userSes.getRole().getRoleId() == ROLE_ADMIN
-				| userSes.getRole().getRoleId() == ROLE_LEADER);
+		checkPermissionAccept();
 		System.out.println("UserPlanAction.editor_custom() "+isPermissionAccept);
 		return SUCCESS;
+	}
+	
+	private void checkPermissionAccept(){
+		isPermissionAccept = !(userSes.getRole().getRoleId() == ROLE_ADMIN
+				|| userSes.getRole().getRoleId() == ROLE_LEADER);
 	}
 
 	public String planEvents() throws Exception {

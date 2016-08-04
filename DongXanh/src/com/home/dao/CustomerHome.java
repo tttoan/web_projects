@@ -472,7 +472,8 @@ public class CustomerHome {
 			SessionImpl sessionImpl = (SessionImpl) session;
 			Connection conn = sessionImpl.connection();
 			try (Statement sta = conn.createStatement()) {
-				String query = "Select id, customer_code, business_name, director, statistic_name, telefone From customer where user_id= "+user_id + " order by business_name";
+				String query = "Select id, customer_code, business_name, director, statistic_name, telefone "
+						+ "From customer where user_id= "+user_id + " order by business_name";
 				System.out.println(query);
 				try (ResultSet rs = sta.executeQuery(query)) {
 					while (rs.next()) {
@@ -513,7 +514,8 @@ public class CustomerHome {
 			SessionImpl sessionImpl = (SessionImpl) session;
 			Connection conn = sessionImpl.connection();
 			try (Statement sta = conn.createStatement()) {
-				String query = "Select id, customer_code, business_name, director From customer where user_id is null order by business_name";
+				String query = "Select id, customer_code, business_name, director, statistic_name "
+						+ "From customer where user_id is null order by business_name";
 				try (ResultSet rs = sta.executeQuery(query)) {
 					while (rs.next()) {
 						Customer cus = new Customer();
