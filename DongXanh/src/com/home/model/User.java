@@ -290,4 +290,14 @@ public class User implements java.io.Serializable {
 		this.workingPlans = workingPlans;
 	}
 
+	@Override
+	public Object clone(){
+		User user = new User();
+		user.setId(id);
+		user.setUserName(userName);
+		user.setFullName(fullName);
+		user.setRole(role);
+		user.setPassword(password);
+		return user;
+	}
 }

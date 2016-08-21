@@ -185,7 +185,7 @@ pageEncoding="UTF-8"%>
             	 var select = $('#lstBox2');
                  select.find('option').remove();
                  for (var i = 0; i < data.listCustomer1.length; i++) {
-                	 $('<option>').val(data.listCustomer1[i][0]).text(data.listCustomer1[i][2]).appendTo(select);
+                	 $('<option>').val(data.listCustomer1[i][0]).text(data.listCustomer1[i][1] + ' - ' + data.listCustomer1[i][2]).appendTo(select);
                  }
              }
          });
@@ -202,7 +202,7 @@ pageEncoding="UTF-8"%>
            	 var select = $('#lstBox1');
                 select.find('option').remove();
                 for (var i = 0; i < data.listCustomer2.length; i++) {
-               	 $('<option>').val(data.listCustomer2[i][0]).text(data.listCustomer2[i][2]).appendTo(select);
+               	 $('<option>').val(data.listCustomer2[i][0]).text(data.listCustomer2[i][1] + ' - ' + data.listCustomer2[i][2]).appendTo(select);
                 }
             }
         });

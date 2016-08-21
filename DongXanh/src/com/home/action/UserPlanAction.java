@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -25,28 +26,25 @@ import com.dhtmlx.planner.controls.DHXGridView;
 import com.dhtmlx.planner.controls.DHXGridViewColumn;
 import com.dhtmlx.planner.controls.DHXLightboxMiniCalendar;
 import com.dhtmlx.planner.data.DHXDataFormat;
-import com.dhtmlx.planner.extensions.DHXExtension;
-import com.home.dao.CategoryHome;
 import com.home.dao.CustomEventsManager;
 import com.home.dao.CustomerHome;
-import com.home.dao.StatisticHome;
 import com.home.dao.UserHome;
 import com.home.dao.UserPlanHome;
 import com.home.entities.UserAware;
-import com.home.model.Category;
 import com.home.model.Customer;
 import com.home.model.MessageStore;
-import com.home.model.Statistic;
 import com.home.model.User;
 import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
 import com.opensymphony.xwork2.Action;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class UserPlanAction extends ActionSupport implements UserAware {
 	private static final long serialVersionUID = 1L;
 	private MessageStore messageStore = new MessageStore();
 	private User userSes;
+	private User selectedUserPlan;
 	private List<Customer> listCustomer = new ArrayList<Customer>();
 	private List<User> listEmployee = new ArrayList<User>();
 	private InputStream ical;
@@ -86,12 +84,20 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 	private void getListCustomerByUserId() {
 		CustomerHome custHome = new CustomerHome(
 				HibernateUtil.getSessionFactory());
-		setListCustomer(custHome.getListCustomerByUserId(userSes.getId()));
+		setListCustomer(custHome.getListCustomerByUserId(getSelectedUserPlan().getId()));
 	}
 
 	private void getEmployees() {
 		UserHome userHome = new UserHome(HibernateUtil.getSessionFactory());
 		setListEmployee(userHome.getLookupEmployee());
+		if(selectedUserPlan != null && selectedUserPlan.getId() != null){
+			for (User user : listEmployee) {
+				if(user.getId() == selectedUserPlan.getId()){
+					selectedUserPlan = user;
+					break;
+				}
+			}
+		}
 	}
 
 	public InputStream getIcal() {
@@ -121,6 +127,20 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 
 	public String getUserPlan() throws Exception {
 		try {
+			int emp_id = -1;
+			selectedUserPlan = null;
+			try {
+				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+				emp_id = Integer.parseInt(request.getParameter("emp_id"));
+				if(emp_id > 0){
+					//System.out.println("emp_id="+emp_id);
+					selectedUserPlan = new User();
+					selectedUserPlan.setId(emp_id);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 			// creates and configures scheduler instance
 			DHXPlanner planner = new DHXPlanner("./codebase/", DHXSkin.GLOSSY);
 			planner.templates.setDayScaleDate("{date:date(%d/%m/%Y)}");
@@ -131,8 +151,8 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 			planner.config.setDetailsOnCreate(true);
 			planner.config.setDblClickCreate(true);
 			planner.config.setDetailsOnDblClick(true);
-			planner.load("events", DHXDataFormat.JSON);
-			planner.data.dataprocessor.setURL("events");
+			planner.load("events?emp_id="+emp_id, DHXDataFormat.JSON);
+			planner.data.dataprocessor.setURL("events?emp_id="+emp_id);
 			// Xem chi tiết
 			planner.views.add(customGridView());
 			// Xem tóm tắt
@@ -155,12 +175,27 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 
 			//System.out.println(planner.render());
 			messageStore.setScheduler(planner.render());
-			getEmployees();
-			checkPermissionAccept();
+			editor_custom();
+			System.out.println("vao 2");
+			System.out.println("selectedUserPlan = " + selectedUserPlan.getId());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return Action.SUCCESS;
+	}
+
+	public User getSelectedUserPlan() {
+		if(selectedUserPlan != null){
+			System.out.println("get selectedUserPlan");
+			return selectedUserPlan;
+		}else{
+			System.out.println("get userSes");
+			return userSes;
+		}
+	}
+
+	public void setSelectedUserPlan(User selectedUserPlan) {
+		this.selectedUserPlan = selectedUserPlan;
 	}
 
 	public String editor_custom() throws Exception {
@@ -172,13 +207,29 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 	}
 	
 	private void checkPermissionAccept(){
-		isPermissionAccept = !(userSes.getRole().getRoleId() == ROLE_ADMIN
-				|| userSes.getRole().getRoleId() == ROLE_LEADER);
+		if(userSes.getRole() != null && userSes.getRole().getRoleId() != null && userSes.getRole().getRoleId() > 0){
+			isPermissionAccept = !(userSes.getRole().getRoleId() == ROLE_ADMIN
+					|| userSes.getRole().getRoleId() == ROLE_LEADER);
+		}
 	}
 
 	public String planEvents() throws Exception {
+		System.out.println("get planEvents...");
+		int emp_id = -1;
+		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			emp_id = Integer.parseInt(request.getParameter("emp_id"));
+			if(emp_id > 0){
+				System.out.println("emp_id="+emp_id);
+				selectedUserPlan = new User();
+				selectedUserPlan.setId(emp_id);
+				editor_custom();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		CustomEventsManager evs = new CustomEventsManager(
-				ServletActionContext.getRequest(), userSes);
+				ServletActionContext.getRequest(), getSelectedUserPlan());
 		messageStore.setData(evs.run());
 		return Action.SUCCESS;
 	}
@@ -224,7 +275,7 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 	@Override
 	public void setUserSes(User user) {
 		this.userSes = user;
-
+		System.out.println("vao 1");
 	}
 
 	public List<User> getListEmployee() {
