@@ -50,6 +50,15 @@
 				<param name="bufferSize">2048</param>
 			</result>
 		</action>
+		<action name="UserPlanStatisticAction" class="com.home.action.UserPlanAction" method="getPlanStatistic">
+			<result name="success">/plan_statistic.jsp</result>
+		</action>
+		<action name="UserPlanGeneralAction" class="com.home.action.UserPlanAction" method="getPlanGeneral">
+			<result name="success">/plan_general.jsp</result>
+		</action>
+		<action name="UserPlanDetailAction" class="com.home.action.UserPlanAction" method="getPlanDetail">
+			<result name="success">/plan_detail.jsp</result>
+		</action>
 	</package>
 	
 </struts>

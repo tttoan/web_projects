@@ -271,7 +271,20 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 		}
 		return SUCCESS;
 	}
+	
+	public String getPlanStatistic(){
+		return SUCCESS;
+	}
 
+	public String getPlanGeneral(){
+		return SUCCESS;
+	}
+
+	public String getPlanDetail(){
+		return SUCCESS;
+	}
+
+	
 	@Override
 	public void setUserSes(User user) {
 		this.userSes = user;
