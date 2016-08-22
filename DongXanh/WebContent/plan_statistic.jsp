@@ -61,20 +61,30 @@ pageEncoding="UTF-8"%>
 							class="table table-striped responsive-utilities jambo_table display nowrap cell-border" style="width: 100%">
 							<thead>
 								<tr class="headings">
-									<th colspan="6"></th>
-									<th colspan="3">Chi tiết mặt hàng</th>
+									<th colspan="8">BÁO CÁO THỐNG KÊ SỐ LẦN TIẾP XÚC KHÁCH HÀNG</th>
 								</tr>
 								<tr class="headings">
-									<th>No</th>
-									<th>Mã cấp 1</th>
-									<th>Tên cấp 1</th>
-									<th>SL câp 2<br>(thùng)</th>
-									<th>Tổng doanh số<br>(triệu)</th>
-									<th>Tổng mặt hàng<br>(thùng)</th>
-									
-									<th>SP 1</th>
-									<th>SP 2</th>
-									<th>SP 3</th>
+									<th rowspan="2">No</th>
+									<th rowspan="2">MKH</th>
+									<th rowspan="2">Tên khách hàng</th>
+									<th rowspan="2">NVTT</th>
+									<th colspan="2">Số lần tiếp xúc KH</th>
+									<th rowspan="2">Ngày tiếp xúc</th>
+									<th rowspan="2">Ghi chú</th>
+								</tr>
+								<tr class="headings">
+									<th>ĐT</th>
+									<th>Trực tiếp</th>
+								</tr>
+								<tr>
+									<th></th>
+									<th></th>
+									<th>TỔNG:</th>
+									<th></th>
+									<th>0</th>
+									<th>0</th>
+									<th></th>
+									<th></th>
 								</tr>
 							</thead>
 

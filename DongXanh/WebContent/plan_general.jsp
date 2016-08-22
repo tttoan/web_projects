@@ -61,20 +61,46 @@ pageEncoding="UTF-8"%>
 							class="table table-striped responsive-utilities jambo_table display nowrap cell-border" style="width: 100%">
 							<thead>
 								<tr class="headings">
-									<th colspan="6"></th>
-									<th colspan="3">Chi tiết mặt hàng</th>
+									<th colspan="20">TỔNG HỢP LỊCH CÔNG TÁC</th>
 								</tr>
 								<tr class="headings">
-									<th>No</th>
-									<th>Mã cấp 1</th>
-									<th>Tên cấp 1</th>
-									<th>SL câp 2<br>(thùng)</th>
-									<th>Tổng doanh số<br>(triệu)</th>
-									<th>Tổng mặt hàng<br>(thùng)</th>
+									<th rowspan="3">TUẦN</th>
+									<th rowspan="3">STT</th>
+									<th rowspan="3">NHÂN VIÊN</th>
 									
-									<th>SP 1</th>
-									<th>SP 2</th>
-									<th>SP 3</th>
+									<th colspan="2">THỨ 2</th>
+									<th colspan="2">THỨ 3</th>
+									<th colspan="2">THỨ 4</th>
+									<th colspan="2">THỨ 5</th>
+									<th colspan="2">THỨ 6</th>
+									<th colspan="2">THỨ 7</th>
+									<th colspan="2">CHỦ NHẬT</th>
+									
+									<th rowspan="3">SL KH làm việc trực tiếp</th>
+									<th rowspan="3">Số ngày đi Ctác</th>
+									<th rowspan="3">GHI CHÚ - Ý KIẾN - KẾT QUẢ CÔNG TÁC TUẦN</th>
+								</tr>
+								<tr class="headings">
+									
+									<th colspan="2">5/9/2016</th>
+									<th colspan="2">5/10/2016</th>
+									<th colspan="2">5/11/2016</th>
+									<th colspan="2">5/12/2016</th>
+									<th colspan="2">5/13/2016</th>
+									<th colspan="2">5/14/2016</th>
+									<th colspan="2">5/15/2016</th>
+									
+								</tr>
+								<tr class="headings">
+									
+									<th>LH</th>	<th>MKH</th>
+									<th>LH</th>	<th>MKH</th>
+									<th>LH</th>	<th>MKH</th>
+									<th>LH</th>	<th>MKH</th>
+									<th>LH</th>	<th>MKH</th>
+									<th>LH</th>	<th>MKH</th>
+									<th>LH</th>	<th>MKH</th>
+									
 								</tr>
 							</thead>
 

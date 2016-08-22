@@ -4,6 +4,12 @@ package com.home.dao;
 
 import static org.hibernate.criterion.Example.create;
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.naming.InitialContext;
@@ -11,9 +17,13 @@ import javax.naming.InitialContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.internal.SessionImpl;
 
+import com.home.entities.UserPlanGeneral;
 import com.home.model.WorkingPlan;
+import com.home.util.StringUtil;
 
 /**
  * Home object for domain model class WorkingPlan.
@@ -24,16 +34,18 @@ public class WorkingPlanHome {
 
 	private static final Log log = LogFactory.getLog(WorkingPlanHome.class);
 
-	private final SessionFactory sessionFactory = getSessionFactory();
+	private SessionFactory sessionFactory;
+
+	public WorkingPlanHome(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
 
 	protected SessionFactory getSessionFactory() {
 		try {
-			return (SessionFactory) new InitialContext()
-					.lookup("SessionFactory");
+			return sessionFactory;
 		} catch (Exception e) {
 			log.error("Could not locate SessionFactory in JNDI", e);
-			throw new IllegalStateException(
-					"Could not locate SessionFactory in JNDI");
+			throw new IllegalStateException("Could not locate SessionFactory in JNDI");
 		}
 	}
 
@@ -124,6 +136,68 @@ public class WorkingPlanHome {
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
 			throw re;
+		}
+	}
+	
+	public List<UserPlanGeneral> getAllUserPlan4Report(int user_id, Date startday, Date endday) throws Exception{
+		log.debug("finding List Event instance");
+		List<UserPlanGeneral> results = new ArrayList<UserPlanGeneral>();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			
+			String query = ""
+			+" SELECT u.user_name, u.full_name, c.customer_code, c.business_name, c.statistic_name, "
+				+ "DATE_FORMAT(e.start_date, '%d/%m/%Y') as start_date," 
+				+" case when e.contact_type > 0 then 1 else 0 end as phone, "
+				+" case when e.contact_type < 0 then 1 else 0 end as meet"
+			+" FROM events e"
+				+" left join user u on e.employee_id = u.id "
+				+" left join customer c on e.customer_id = c.id "
+			+" WHERE e.customer_id > 0"
+				+ " and (u.id=? or -1=?) and (e.start_date >= ? and e.start_date <= ?)"
+			+" ORDER BY u.user_name, start_date, c.customer_code";
+			
+			try (PreparedStatement pre = conn.prepareStatement(query)) {
+				pre.setInt(1, user_id);
+				pre.setInt(2, user_id);
+				pre.setDate(3, startday);
+				pre.setDate(4, endday);
+				System.out.println(pre.toString());
+				
+				try (ResultSet rs = pre.executeQuery()) {
+					while (rs.next()) {
+						UserPlanGeneral userPlanGeneral = new UserPlanGeneral();
+						userPlanGeneral.setUser_name(StringUtil.notNull(rs.getString("user_name")));
+						userPlanGeneral.setFull_name(StringUtil.notNull(rs.getString("full_name")));
+						userPlanGeneral.setCustomer_code(StringUtil.notNull(rs.getString("customer_code")));
+						userPlanGeneral.setBusiness_name(StringUtil.notNull(rs.getString("business_name")));
+						userPlanGeneral.setStatistic_name(StringUtil.notNull(rs.getString("statistic_name")));
+						userPlanGeneral.setStart_date(StringUtil.notNull(rs.getString("start_date")));
+						userPlanGeneral.setPhone((rs.getInt("phone")));
+						userPlanGeneral.setMeet((rs.getInt("meet")));
+						results.add(userPlanGeneral);
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw e;
+			}
+			return results;
+		} catch (Exception re) {
+			log.error("find by Customer failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
