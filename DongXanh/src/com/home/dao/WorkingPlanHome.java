@@ -149,8 +149,8 @@ public class WorkingPlanHome {
 			Connection conn = sessionImpl.connection();
 			
 			String query = ""
-			+" SELECT u.user_name, u.full_name, c.customer_code, c.business_name, c.statistic_name, "
-				+ "DATE_FORMAT(e.start_date, '%d/%m/%Y') as start_date," 
+			+" SELECT u.user_name, u.full_name, c.customer_code, c.business_name, c.statistic_name, e.start_date, e.end_date, "
+				//+ "DATE_FORMAT(e.start_date, '%d/%m/%Y') as start_date," 
 				+" case when e.contact_type > 0 then 1 else 0 end as phone, "
 				+" case when e.contact_type < 0 then 1 else 0 end as meet"
 			+" FROM events e"
@@ -175,7 +175,8 @@ public class WorkingPlanHome {
 						userPlanGeneral.setCustomer_code(StringUtil.notNull(rs.getString("customer_code")));
 						userPlanGeneral.setBusiness_name(StringUtil.notNull(rs.getString("business_name")));
 						userPlanGeneral.setStatistic_name(StringUtil.notNull(rs.getString("statistic_name")));
-						userPlanGeneral.setStart_date(StringUtil.notNull(rs.getString("start_date")));
+						userPlanGeneral.setStart_date(rs.getDate("start_date"));
+						userPlanGeneral.setEnd_date(rs.getDate("end_date"));
 						userPlanGeneral.setPhone((rs.getInt("phone")));
 						userPlanGeneral.setMeet((rs.getInt("meet")));
 						results.add(userPlanGeneral);

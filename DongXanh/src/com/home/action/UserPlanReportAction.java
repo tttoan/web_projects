@@ -1,15 +1,39 @@
 package com.home.action;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts2.ServletActionContext;
+
+import com.home.dao.StatisticHome;
 import com.home.dao.WorkingPlanHome;
+import com.home.entities.RevenuesComparison;
 import com.home.entities.UserAware;
+import com.home.entities.UserPlanGeneral;
 import com.home.model.User;
+import com.home.util.DateUtils;
 import com.home.util.HibernateUtil;
+import com.home.util.StringUtil;
+import com.home.util.SystemUtil;
+import com.opensymphony.xwork2.Action;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class UserPlanReportAction extends ActionSupport implements UserAware {
 	private User userSes;
+	private InputStream inputStream;
+
+	public InputStream getInputStream() {
+		return inputStream;
+	}
 	
 	public User getUserSes() {
 		return userSes;
@@ -29,15 +53,409 @@ public class UserPlanReportAction extends ActionSupport implements UserAware {
 		}
 	}
 	
+	private boolean isManager(){
+		if(userSes.getRole() != null && userSes.getRole().getRoleId() != null && userSes.getRole().getRoleId() > 0){
+			return (userSes.getRole().getRoleId() == ROLE_ADMIN
+					|| userSes.getRole().getRoleId() == ROLE_LEADER);
+		}
+		return false;
+	}
+	
 	public String getPlanStatistic(){
-		return SUCCESS;
+		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
+			String strWeek = StringUtil.notNull(request.getParameter("week"));
+
+			Date week = new Date(DateUtils.getDateFromString(strWeek, "dd/MM/yyyy").getTime());
+			Calendar cal = Calendar.getInstance();
+			
+			cal.setTime(week);
+			cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)-cal.get(Calendar.DAY_OF_WEEK)+1);
+			Date startday = new Date(cal.getTimeInMillis());
+
+			cal.setTime(week);
+			cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)-cal.get(Calendar.DAY_OF_WEEK)+7);
+			Date endday = new Date(cal.getTimeInMillis());
+			
+			Calendar cal2 = Calendar.getInstance();
+			cal2.setTime(startday);
+			WorkingPlanHome wpHome = new WorkingPlanHome(HibernateUtil.getSessionFactory());
+			List<UserPlanGeneral> results = wpHome.getAllUserPlan4Report(isManager()?-1:userSes.getId(), startday, endday);
+
+			StringBuilder html = new StringBuilder("<table id=\"example\" class=\"table table-striped responsive-utilities jambo_table display nowrap cell-border\" style=\"width: 100%\">");
+			html.append("<thead>");
+			
+			html.append("<tr class=\"headings\">");
+			html.append("<th colspan=\"8\">BÁO CÁO THỐNG KÊ SỐ LẦN TIẾP XÚC KHÁCH HÀNG</th>");
+			html.append("</tr>");
+			
+			html.append("<tr class=\"headings\">");
+			html.append("<th rowspan=\"2\">No</th>");
+			html.append("<th rowspan=\"2\">MKH</th>");
+			html.append("<th rowspan=\"2\">Tên khách hàng</th>");
+			html.append("<th rowspan=\"2\">NVTT</th>");
+			html.append("<th colspan=\"2\">Số lần tiếp xúc KH</th>");
+			html.append("<th rowspan=\"2\">Ngày tiếp xúc</th>");
+			html.append("<th rowspan=\"2\">Ghi chú</th>");
+			html.append("</tr>");
+				
+			html.append("<tr class=\"headings\">");
+			html.append("<th>ĐT</th>");
+			html.append("<th>Trực tiếp</th>");
+			html.append("</tr>");
+			
+			int sum_totalPhone = 0;
+			int sum_totalMeet = 0;
+			int no = 1;
+			StringBuilder tblContent = new StringBuilder();
+			LinkedHashMap<String, List<UserPlanGeneral>> hm = getUserPlanGeneral(results);
+			Set<String> set = hm.keySet();
+			for (String username_cuscode : set) {
+				 List<UserPlanGeneral> listPlan = hm.get(username_cuscode);
+				// renderer html content
+				tblContent.append("<tr class=\"even pointer\">");
+				tblContent.append("<th>" + (no) + "</th>");
+				tblContent.append("<th style=\"text-align:left\">" + (listPlan.get(0).getCustomer_code()) + "</th>");
+				tblContent.append("<th style=\"text-align:left\">" + (listPlan.get(0).getBusiness_name()) + "</th>");
+				tblContent.append("<th style=\"text-align:left\">" + (listPlan.get(0).getUser_name()) + "</th>");
+				
+				int totalPhone = 0;
+				int totalMeet = 0;
+				StringBuilder planDate  = new StringBuilder();
+				for (UserPlanGeneral userPlanGeneral : listPlan) {
+					if(userPlanGeneral.getPhone() > 0){
+						totalPhone++;
+						sum_totalPhone++;
+					}else{
+						totalMeet++;
+						sum_totalMeet++;
+					}
+					planDate.append(DateUtils.getStringFromDate(userPlanGeneral.getStart_date(), "dd/MM/yyyy")).append(";");
+				}
+				
+				tblContent.append("<th>" + (totalPhone) + "</th>");
+				tblContent.append("<th>" + (totalMeet) + "</th>");
+				tblContent.append("<th style=\"text-align:left\">" + planDate.toString() + "</th>");
+				tblContent.append("<th style=\"text-align:left\"></th>");
+				tblContent.append("</tr>");
+				no++;
+			}
+			
+			html.append("<tr");
+			html.append("<th></th><th></th>");
+			html.append("<th>TỔNG:</th>");
+			html.append("<th></th>");
+			html.append("<th>"+sum_totalPhone+"</th>");
+			html.append("<th>"+sum_totalMeet+"</th>");
+			html.append("<th></th><th></th>");
+			html.append("</tr>");
+			
+			html.append("</thead>");
+			
+			html.append("<tbody>");
+			html.append(tblContent);
+			html.append("</tbody>");
+			html.append("</table>");
+			inputStream = new ByteArrayInputStream(html.toString().getBytes("UTF-8"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Action.ERROR;
+		}
+		return Action.SUCCESS;
+	}
+	
+	private LinkedHashMap<String, List<UserPlanGeneral>> getUserPlanStatistic(List<UserPlanGeneral> result) throws Exception{
+		LinkedHashMap<String, List<UserPlanGeneral>> hm = new LinkedHashMap<String, List<UserPlanGeneral>>();
+		for (UserPlanGeneral userPlanGeneral : result) {
+			String key = userPlanGeneral.getUser_name() + userPlanGeneral.getCustomer_code();
+			if(!hm.containsKey(key)){
+				hm.put(key, new ArrayList<UserPlanGeneral>());
+			}
+			hm.get(key).add(userPlanGeneral);
+		}
+		return hm;
 	}
 
 	public String getPlanGeneral(){
-		return SUCCESS;
+		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
+			String strWeek = StringUtil.notNull(request.getParameter("week"));
+
+			Date week = new Date(DateUtils.getDateFromString(strWeek, "dd/MM/yyyy").getTime());
+			Calendar cal = Calendar.getInstance();
+			
+			cal.setTime(week);
+			cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)-cal.get(Calendar.DAY_OF_WEEK)+1);
+			Date startday = new Date(cal.getTimeInMillis());
+
+			cal.setTime(week);
+			cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)-cal.get(Calendar.DAY_OF_WEEK)+7);
+			Date endday = new Date(cal.getTimeInMillis());
+			
+			Calendar cal2 = Calendar.getInstance();
+			cal2.setTime(startday);
+			WorkingPlanHome wpHome = new WorkingPlanHome(HibernateUtil.getSessionFactory());
+			List<UserPlanGeneral> results = wpHome.getAllUserPlan4Report(isManager()?-1:userSes.getId(), startday, endday);
+
+			StringBuilder html = new StringBuilder("<table id=\"example\" class=\"table table-striped responsive-utilities jambo_table display nowrap cell-border\" style=\"width: 100%\">");
+			html.append("<thead>");
+			
+			html.append("<tr class=\"headings\">");
+			html.append("<th colspan=\"20\">TỔNG HỢP LỊCH CÔNG TÁC</th>");
+			html.append("</tr>");
+			
+			html.append("<tr class=\"headings\">");
+			html.append("<th rowspan=\"3\">TUẦN</th>");
+			html.append("<th rowspan=\"3\">STT</th>");
+			html.append("<th rowspan=\"3\">NHÂN VIÊN</th>");
+			html.append("<th colspan=\"2\">THỨ 2</th>");
+			html.append("<th colspan=\"2\">THỨ 3</th>");
+			html.append("<th colspan=\"2\">THỨ 4</th>");
+			html.append("<th colspan=\"2\">THỨ 5</th>");
+			html.append("<th colspan=\"2\">THỨ 6</th>");
+			html.append("<th colspan=\"2\">THỨ 7</th>");
+			html.append("<th colspan=\"2\">CHỦ NHẬT</th>");
+			html.append("<th rowspan=\"3\">SL KH làm việc trực tiếp</th>");
+			html.append("<th rowspan=\"3\">Số ngày đi Ctác</th>");
+			html.append("<th rowspan=\"3\">GHI CHÚ - Ý KIẾN - KẾT QUẢ CÔNG TÁC TUẦN</th>");
+			html.append("</tr>");
+				
+			html.append("<tr class=\"headings\">");
+			html.append("<th colspan=\"2\">"+ DateUtils.getStringFromDate(cal2.getTime(), "dd/MM/yyyy")+"</th>");
+			cal2.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)+1);
+			html.append("<th colspan=\"2\">"+ DateUtils.getStringFromDate(cal2.getTime(), "dd/MM/yyyy")+"</th>");
+			cal2.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)+1);
+			html.append("<th colspan=\"2\">"+ DateUtils.getStringFromDate(cal2.getTime(), "dd/MM/yyyy")+"</th>");
+			cal2.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)+1);
+			html.append("<th colspan=\"2\">"+ DateUtils.getStringFromDate(cal2.getTime(), "dd/MM/yyyy")+"</th>");
+			cal2.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)+1);
+			html.append("<th colspan=\"2\">"+ DateUtils.getStringFromDate(cal2.getTime(), "dd/MM/yyyy")+"</th>");
+			cal2.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)+1);
+			html.append("<th colspan=\"2\">"+ DateUtils.getStringFromDate(cal2.getTime(), "dd/MM/yyyy")+"</th>");
+			cal2.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)+1);
+			html.append("<th colspan=\"2\">"+ DateUtils.getStringFromDate(cal2.getTime(), "dd/MM/yyyy")+"</th>");
+			html.append("</tr>");
+			
+			html.append("<tr class=\"headings\">");
+			html.append("<th>LH</th>	<th>MKH</th>");
+			html.append("<th>LH</th>	<th>MKH</th>");
+			html.append("<th>LH</th>	<th>MKH</th>");
+			html.append("<th>LH</th>	<th>MKH</th>");
+			html.append("<th>LH</th>	<th>MKH</th>");
+			html.append("<th>LH</th>	<th>MKH</th>");
+			html.append("<th>LH</th>	<th>MKH</th>");
+			html.append("</tr>");
+			
+			html.append("</thead>");
+
+			StringBuilder tblContent = new StringBuilder();
+			int no = 1;
+			LinkedHashMap<String, List<UserPlanGeneral>> hm = getUserPlanGeneral(results);
+			Set<String> set = hm.keySet();
+			for (String username : set) {
+				if(no==1){
+					tblContent.append("<tr class=\"even pointer\" colspan=\""+set.size()+"\">");
+					tblContent.append("<th>" + (cal2.get(Calendar.WEEK_OF_YEAR)) + "</th>");
+				}else{
+					tblContent.append("<tr class=\"even pointer\">");
+				}
+				tblContent.append("<th>" + (no) + "</th>");
+				tblContent.append("<th style=\"text-align:left\">" + (username) + "</th>");
+				
+				int totalPhone = 0;
+				int totalMeet  = 0;
+				StringBuilder lht2 = new StringBuilder("<ul type=\"i\">");
+				StringBuilder lht3 = new StringBuilder("<ul type=\"i\">");
+				StringBuilder lht4 = new StringBuilder("<ul type=\"i\">");
+				StringBuilder lht5 = new StringBuilder("<ul type=\"i\">");
+				StringBuilder lht6 = new StringBuilder("<ul type=\"i\">");
+				StringBuilder lht7 = new StringBuilder("<ul type=\"i\">");
+				StringBuilder lhcn = new StringBuilder("<ul type=\"i\">");
+				StringBuilder mkh2 = new StringBuilder("<ul type=\"i\">");
+				StringBuilder mkh3 = new StringBuilder("<ul type=\"i\">");
+				StringBuilder mkh4 = new StringBuilder("<ul type=\"i\">");
+				StringBuilder mkh5 = new StringBuilder("<ul type=\"i\">");
+				StringBuilder mkh6 = new StringBuilder("<ul type=\"i\">");
+				StringBuilder mkh7 = new StringBuilder("<ul type=\"i\">");
+				StringBuilder mkhcn = new StringBuilder("<ul type=\"i\">");
+				List<UserPlanGeneral> listPlan = hm.get(username);
+				for (int i = 0; i < listPlan.size(); i++) {
+					if(listPlan.get(i).getPhone()>0){
+						totalPhone++;
+					}else{
+						totalMeet++;
+					}
+					cal2.setTime(listPlan.get(i).getStart_date());
+					if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY){
+						lht2.append("<li>"+(listPlan.get(i).getPhone()>0?"ĐT":"CT")+"</li>");
+						mkh2.append("<li>"+(listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
+					}
+					else if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY){
+						lht3.append("<li>"+(listPlan.get(i).getPhone()>0?"ĐT":"CT")+"</li>");
+						mkh3.append("<li>"+(listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
+					}
+					else if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY){
+						lht4.append("<li>"+(listPlan.get(i).getPhone()>0?"ĐT":"CT")+"</li>");
+						mkh4.append("<li>"+(listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");		
+										}
+					else if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY){
+						lht5.append("<li>"+(listPlan.get(i).getPhone()>0?"ĐT":"CT")+"</li>");
+						mkh5.append("<li>"+(listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
+					}
+					else if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY){
+						lht6.append("<li>"+(listPlan.get(i).getPhone()>0?"ĐT":"CT")+"</li>");
+						mkh6.append("<li>"+(listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
+					}
+					else if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
+						lhcn.append("<li>"+(listPlan.get(i).getPhone()>0?"ĐT":"CT")+"</li>");
+						mkhcn.append("<li>"+(listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
+					}
+					else if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
+						lht2.append("<li>"+(listPlan.get(i).getPhone()>0?"ĐT":"CT")+"</li>");
+						mkh2.append("<li>"+(listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
+					}
+				}
+				
+				//thu2
+				tblContent.append("<th style=\"text-align:left\">" + lht2.append("</ul>").toString() + "</th>");
+				tblContent.append("<th style=\"text-align:left\">" + mkh2.append("</ul>").toString() + "</th>");
+				//thu3
+				tblContent.append("<th style=\"text-align:left\">" + lht3.append("</ul>").toString() + "</th>");
+				tblContent.append("<th style=\"text-align:left\">" + mkh3.append("</ul>").toString() + "</th>");
+				//thu4
+				tblContent.append("<th style=\"text-align:left\">" + lht4.append("</ul>").toString() + "</th>");
+				tblContent.append("<th style=\"text-align:left\">" + mkh4.append("</ul>").toString() + "</th>");
+				//thu5
+				tblContent.append("<th style=\"text-align:left\">" + lht5.append("</ul>").toString() + "</th>");
+				tblContent.append("<th style=\"text-align:left\">" + mkh5.append("</ul>").toString() + "</th>");
+				//thu6
+				tblContent.append("<th style=\"text-align:left\">" + lht6.append("</ul>").toString() + "</th>");
+				tblContent.append("<th style=\"text-align:left\">" + mkh6.append("</ul>").toString() + "</th>");
+				//thu7
+				tblContent.append("<th style=\"text-align:left\">" + lht7.append("</ul>").toString() + "</th>");
+				tblContent.append("<th style=\"text-align:left\">" + mkh7.append("</ul>").toString() + "</th>");
+				//cn
+				tblContent.append("<th style=\"text-align:left\">" + lhcn.append("</ul>").toString() + "</th>");
+				tblContent.append("<th style=\"text-align:left\">" + mkhcn.append("</ul>").toString() + "</th>");
+				
+				tblContent.append("<th>" + totalPhone + "</th>");
+				tblContent.append("<th>" + totalMeet + "</th>");
+				tblContent.append("<th style=\"text-align:left\"></th>");
+				tblContent.append("</tr>");
+				no++;
+			}
+			html.append("<tbody>");
+			html.append(tblContent);
+			html.append("</tbody>");
+			html.append("</table>");
+			inputStream = new ByteArrayInputStream(html.toString().getBytes("UTF-8"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Action.ERROR;
+		}
+		return Action.SUCCESS;
+	}
+	
+	private LinkedHashMap<String, List<UserPlanGeneral>> getUserPlanGeneral(List<UserPlanGeneral> result) throws Exception{
+		LinkedHashMap<String, List<UserPlanGeneral>> hm = new LinkedHashMap<String, List<UserPlanGeneral>>();
+		for (UserPlanGeneral userPlanGeneral : result) {
+			if(!hm.containsKey(userPlanGeneral.getUser_name())){
+				hm.put(userPlanGeneral.getUser_name(), new ArrayList<UserPlanGeneral>());
+			}
+			hm.get(userPlanGeneral.getUser_name()).add(userPlanGeneral);
+		}
+		return hm;
 	}
 
 	public String getPlanDetail(){
-		return SUCCESS;
+		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
+			String strWeek = StringUtil.notNull(request.getParameter("week"));
+
+			Date week = new Date(DateUtils.getDateFromString(strWeek, "dd/MM/yyyy").getTime());
+			Calendar cal = Calendar.getInstance();
+			
+			cal.setTime(week);
+			cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)-cal.get(Calendar.DAY_OF_WEEK)+1);
+			Date startday = new Date(cal.getTimeInMillis());
+
+			cal.setTime(week);
+			cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)-cal.get(Calendar.DAY_OF_WEEK)+7);
+			Date endday = new Date(cal.getTimeInMillis());
+			
+			Calendar cal2 = Calendar.getInstance();
+			cal2.setTime(startday);
+			WorkingPlanHome wpHome = new WorkingPlanHome(HibernateUtil.getSessionFactory());
+			List<UserPlanGeneral> results = wpHome.getAllUserPlan4Report(isManager()?-1:userSes.getId(), startday, endday);
+
+			StringBuilder html = new StringBuilder("<table id=\"example\" class=\"table table-striped responsive-utilities jambo_table display nowrap cell-border\" style=\"width: 100%\">");
+			html.append("<thead>");
+			
+			html.append("<tr class=\"headings\">");
+			html.append("<th colspan=\"8\">CHI TIẾT LỊCH CÔNG TÁC NVTT</th>");
+			html.append("</tr>");
+			
+			html.append("<tr class=\"headings\">");
+			html.append("<th>No</th>");
+			html.append("<th>NVTT</th>");
+			html.append("<th>Ngày</th>");
+			html.append("<th>LH</th>");
+			html.append("<th>Buổi</th>");
+			html.append("<th>MKH</th>");
+			html.append("<th>Tên người QĐCV</th>");
+			html.append("<th>Ghi chú</th>");
+			html.append("</tr>");
+				
+			html.append("</thead>");
+			
+			StringBuilder tblContent = new StringBuilder();
+			int no = 1;
+			for (int i = 0; i < results.size(); i++) {
+				
+				// renderer html content
+				tblContent.append("<tr class=\"even pointer\">");
+				tblContent.append("<th>" + (no) + "</th>");
+				tblContent.append("<th style=\"text-align:left\">" + (results.get(i).getUser_name()) + "</th>");
+				
+				Date datePlan = results.get(i).getStart_date();
+				tblContent.append("<th style=\"text-align:right\">" + (getDayName(datePlan) + "," + DateUtils.getStringFromDate(datePlan, "dd/MM/yy")) + "</th>");
+				tblContent.append("<th>" + (results.get(i).getPhone()>0?"ĐT":"CT") + "</th>");
+				tblContent.append("<th>" + (getDaySection(datePlan)) + "</th>");
+				
+				tblContent.append("<th style=\"text-align:left\">" + (results.get(i).getCustomer_code()) + "</th>");
+				tblContent.append("<th style=\"text-align:left\">" + (results.get(i).getBusiness_name()) + "</th>");
+				tblContent.append("<th style=\"text-align:left\"></th>");
+				tblContent.append("</tr>");
+				no++;
+			}
+			
+			html.append("<tbody>");
+			html.append(tblContent);
+			html.append("</tbody>");
+			html.append("</table>");
+			inputStream = new ByteArrayInputStream(html.toString().getBytes("UTF-8"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Action.ERROR;
+		}
+		return Action.SUCCESS;
+	
+	}
+	
+	private String getDayName(Date datePlan) throws Exception{
+		String[] arr = new String[]{"Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy","Chủ Nhật"};
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(datePlan);
+		return arr[cal.get(Calendar.DAY_OF_WEEK-1)];
+	}
+	
+	private String getDaySection(Date datePlan) throws Exception{
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(datePlan);
+		if(cal.get(Calendar.HOUR_OF_DAY) >= 12){
+			return "C";
+		}else{
+			return "S";
+		}
 	}
 }
