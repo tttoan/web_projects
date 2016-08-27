@@ -67,12 +67,12 @@
 				<ul class="nav child_menu" style="display: none">
 					<li><s:url action="UserPlan" var="getUserPlanURL" /> <s:a
 							href="%{getUserPlanURL}" theme="bootstrap"> Xem lịch của tôi </s:a></li>
-					<li><s:url action="UserPlanStatisticAction" var="userPlanStatistic" /> <s:a
-							href="%{userPlanStatistic}" theme="bootstrap"> Thống kê </s:a></li>
-					<li><s:url action="UserPlanGeneralAction" var="userPlanGeneral" /> <s:a
-							href="%{userPlanGeneral}" theme="bootstrap"> Tổng hợp </s:a></li>
-					<li><s:url action="UserPlanDetailAction" var="userPlanDetail" /> <s:a
-							href="%{userPlanDetail}" theme="bootstrap"> Chi tiết </s:a></li>
+					<li><s:url action="OpenUserPlanStatisticAction" var="userPlanStatistic" /> <s:a
+							href="%{userPlanStatistic}" theme="bootstrap"> Báo cáo thống kê </s:a></li>
+					<li><s:url action="OpenUserPlanGeneralAction" var="userPlanGeneral" /> <s:a
+							href="%{userPlanGeneral}" theme="bootstrap"> Báo cáo tổng hợp </s:a></li>
+					<li><s:url action="OpenUserPlanDetailAction" var="userPlanDetail" /> <s:a
+							href="%{userPlanDetail}" theme="bootstrap"> Báo cáo chi tiết </s:a></li>
 				</ul></li>
 		</ul>
 	</div>

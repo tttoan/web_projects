@@ -15,7 +15,7 @@ pageEncoding="UTF-8"%>
 				<div class="view_pro">
 					<table style="width: 100%">
 						<tr>
-							<td width="120px" valign="middle"><label>Thời gian từ</label></td>
+							<td width="120px" valign="middle"><label>Chọn tuần:</label></td>
 							<td width="500px valign="bottom">
 							<fieldset>
 									<div class="control-group">
@@ -29,20 +29,11 @@ pageEncoding="UTF-8"%>
 													aria-hidden="true"></span> <span id="inputSuccess2Status"
 													class="sr-only">(success)</span>
 											</div>
-											<div
-												class="col-md-6 xdisplay_inputx form-group has-feedback">
-												<input type="text" class="form-control has-feedback-left"
-													id="single_cal2" name = "single_cal2"
-													aria-describedby="inputSuccess2Status2"> <span
-													class="fa fa-calendar-o form-control-feedback left"
-													aria-hidden="true"></span> <span id="inputSuccess2Status2"
-													class="sr-only">(success)</span>
-											</div>
 										</div>
 									</div>
 								</fieldset>
 							</td>
-							<td align="center" valign="middle">
+							<td align="left" valign="middle">
 								<button type="button" class="btn btn-primary" id="btnFilter" onclick="btnFilterValues()">Xem kết quả</button>
 							</td>
 						</tr>
@@ -194,12 +185,11 @@ $(document).ready(function() {
 <script type="text/javascript">
 	
 	function btnFilterValues(){
- 		var vStart 		= $('[name="single_cal1"]').val();
- 		var vEnd 		= $('[name="single_cal2"]').val();
+ 		var week 		= $('[name="single_cal1"]').val();
         $(document).ready(function () {
         	 $.ajax({
  	            type: "POST",
- 	            url : 'reportRevenuesCustomerL1Action?start='+vStart+'&end='+vEnd, 
+ 	            url : 'UserPlanStatisticAction?week='+week, 
  	            success : function(responseText) {
  	           		//alert(responseText);
  	              $('#x_content').html(responseText);

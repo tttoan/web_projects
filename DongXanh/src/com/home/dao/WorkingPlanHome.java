@@ -153,11 +153,11 @@ public class WorkingPlanHome {
 				//+ "DATE_FORMAT(e.start_date, '%d/%m/%Y') as start_date," 
 				+" case when e.contact_type > 0 then 1 else 0 end as phone, "
 				+" case when e.contact_type < 0 then 1 else 0 end as meet"
-			+" FROM events e"
-				+" left join user u on e.employee_id = u.id "
-				+" left join customer c on e.customer_id = c.id "
+			+" FROM events as e"
+				+" left join user as u on e.employee_id = u.id "
+				+" left join customer as c on e.customer_id = c.id "
 			+" WHERE e.customer_id > 0"
-				+ " and (u.id=? or -1=?) and (e.start_date >= ? and e.start_date <= ?)"
+				+ " and (u.id=? or -1=?) and (DATE(e.start_date) >= ? and DATE(e.start_date) <= ?)"
 			+" ORDER BY u.user_name, start_date, c.customer_code";
 			
 			try (PreparedStatement pre = conn.prepareStatement(query)) {
@@ -175,8 +175,11 @@ public class WorkingPlanHome {
 						userPlanGeneral.setCustomer_code(StringUtil.notNull(rs.getString("customer_code")));
 						userPlanGeneral.setBusiness_name(StringUtil.notNull(rs.getString("business_name")));
 						userPlanGeneral.setStatistic_name(StringUtil.notNull(rs.getString("statistic_name")));
-						userPlanGeneral.setStart_date(rs.getDate("start_date"));
-						userPlanGeneral.setEnd_date(rs.getDate("end_date"));
+						//System.out.println(rs.getTime("start_date"));
+						//System.out.println(rs.getTimestamp("start_date"));
+						//System.out.println(rs.getDate("start_date"));
+						userPlanGeneral.setStart_date(new Date(rs.getTimestamp("start_date").getTime()));
+						userPlanGeneral.setEnd_date(new Date(rs.getTimestamp("end_date").getTime()));
 						userPlanGeneral.setPhone((rs.getInt("phone")));
 						userPlanGeneral.setMeet((rs.getInt("meet")));
 						results.add(userPlanGeneral);
@@ -186,6 +189,7 @@ public class WorkingPlanHome {
 				e.printStackTrace();
 				throw e;
 			}
+			System.out.println("results size = " + results.size());
 			return results;
 		} catch (Exception re) {
 			log.error("find by Customer failed", re);
