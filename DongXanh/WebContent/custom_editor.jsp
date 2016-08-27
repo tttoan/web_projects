@@ -44,7 +44,7 @@
 					<td><s:select label="Khách hàng" id="customerId"
 							showDownArrow="false" autoComplete="true" list="listCustomer"
 							listKey="id" name="customerId"
-							listValue="businessName +' - '+ customerCode" style="width: 100%"/></td>
+							listValue="customerCode +' - '+ businessName" style="width: 100%"/></td>
 				</tr>
 
 				<tr class="even pointer">

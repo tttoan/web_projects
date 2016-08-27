@@ -146,8 +146,9 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 			planner.templates.setDayScaleDate("{date:date(%d/%m/%Y)}");
 			planner.templates.setWeekScaleDate("{date:date(%d/%m/%Y)}");
 			planner.setInitialDate(new Date());
-			planner.config.setScrollHour(8);
-			planner.setWidth(950);
+			planner.config.setScrollHour(7);
+			planner.setWidth(1000);
+			planner.setHeight(650);
 			planner.config.setDetailsOnCreate(true);
 			planner.config.setDblClickCreate(true);
 			planner.config.setDetailsOnDblClick(true);

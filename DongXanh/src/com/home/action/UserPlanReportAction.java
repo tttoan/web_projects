@@ -338,31 +338,31 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 					cal2.setTime(listPlan.get(i).getStart_date());
 					if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY){
 						lht2.append("<li>"+(listPlan.get(i).getPhone()>0?"ĐT":"CT")+"</li>");
-						mkh2.append("<li>"+(listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
+						mkh2.append("<li>"+(getDaySection(listPlan.get(i).getStart_date()) + ": " + listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
 					}
 					else if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY){
 						lht3.append("<li>"+(listPlan.get(i).getPhone()>0?"ĐT":"CT")+"</li>");
-						mkh3.append("<li>"+(listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
+						mkh3.append("<li>"+(getDaySection(listPlan.get(i).getStart_date()) + ": " + listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
 					}
 					else if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY){
 						lht4.append("<li>"+(listPlan.get(i).getPhone()>0?"ĐT":"CT")+"</li>");
-						mkh4.append("<li>"+(listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");		
+						mkh4.append("<li>"+(getDaySection(listPlan.get(i).getStart_date()) + ": " + listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");		
 										}
 					else if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY){
 						lht5.append("<li>"+(listPlan.get(i).getPhone()>0?"ĐT":"CT")+"</li>");
-						mkh5.append("<li>"+(listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
+						mkh5.append("<li>"+(getDaySection(listPlan.get(i).getStart_date()) + ": " + listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
 					}
 					else if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY){
 						lht6.append("<li>"+(listPlan.get(i).getPhone()>0?"ĐT":"CT")+"</li>");
-						mkh6.append("<li>"+(listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
+						mkh6.append("<li>"+(getDaySection(listPlan.get(i).getStart_date()) + ": " + listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
 					}
 					else if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
 						lhcn.append("<li>"+(listPlan.get(i).getPhone()>0?"ĐT":"CT")+"</li>");
-						mkhcn.append("<li>"+(listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
+						mkhcn.append("<li>"+(getDaySection(listPlan.get(i).getStart_date()) + ": " + listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
 					}
 					else if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
 						lht2.append("<li>"+(listPlan.get(i).getPhone()>0?"ĐT":"CT")+"</li>");
-						mkh2.append("<li>"+(listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
+						mkh2.append("<li>"+(getDaySection(listPlan.get(i).getStart_date()) + ": " + listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
 					}
 				}
 				
