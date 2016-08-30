@@ -28,17 +28,22 @@
 			<tbody>
 
 				<tr class="even pointer">
-					<td class="" form="event_text">Công việc:</td>
-					<td><input id="event_text" name="text" type="text" style="width: 100%"/></td>
-				</tr>
-
-				<tr class="even pointer">
-					<td class="">Bắt đầu:</td>
-					<td><input id="event_start_date" name="start_date" type="text" style="width: 100%"/></td>
+<!-- 					<td class="" form="event_text">Công việc:</td> -->
+					<td><input hidden="true" id="event_text" name="text" type="text" style="width: 100%" /></td>
 				</tr>
 				<tr class="even pointer">
-					<td class="">Kết thúc:</td>
-					<td><input id="event_end_date" name="end_date" type="text" style="width: 100%"/></td>
+					<td><s:select label="Hình thức liên hệ" id="contactType"
+							 name="contactType"
+							list="#{'1':'Gặp trực tiếp', '2':'Gọi điện thoại'}" showDownArrow="false" 
+							style="width: 100%"/></td>
+				</tr>
+				<tr class="even pointer">
+<!-- 					<td class="">Bắt đầu:</td> -->
+					<td><input hidden="true" id="event_start_date" name="start_date" type="text" style="width: 100%"/></td>
+				</tr>
+				<tr class="even pointer">
+<!-- 					<td class="">Kết thúc:</td> -->
+					<td><input hidden="true" id="event_end_date" name="end_date" type="text" style="width: 100%"/></td>
 				</tr>
 				<tr class="even pointer">
 					<td><s:select label="Khách hàng" id="customerId"
@@ -47,21 +52,24 @@
 							listValue="customerCode +' - '+ businessName" style="width: 100%"/></td>
 				</tr>
 
+				
 				<tr class="even pointer">
-					<td><s:select label="Hình thức liên hệ" id="contactType"
-							headerKey="-1" headerValue="Gặp trực tiếp" name="contactType"
-							list="listCustomer" showDownArrow="false" disabled="true"
-							listKey="id" listValue="telefone" style="width: 100%"/></td>
-				</tr>
-				<tr class="even pointer">
-					<td class=""></td>
-					<td><label for="customerPhone">Điện thoại:</label><input
+<!-- 					<td class=""></td> -->
+					<td>
+<!-- 					<label for="customerPhone">Điện thoại:</label> -->
+					<input hidden="true"
 						type="checkbox" id="customerPhone"></td>
 				</tr>
 				<tr class="even pointer">
-					<td><s:select label="Người QĐCV" id="directorTemp"
+					<td><s:select label="Người QĐCV" id="directorName"
 							name="directorName" disabled="true" list="listCustomer"
 							listKey="id" listValue="director" style="width: 100%"/></td>
+				</tr>
+				<tr class="even pointer">
+					<td><s:select label="Số điện thoại" id="directorPhone"
+							headerKey="-1" headerValue="" name="directorPhone"
+							list="listCustomer" showDownArrow="false" disabled="true"
+							listKey="id" listValue="telefone" style="width: 100%"/></td>
 				</tr>
 			</tbody>
 		</table>
@@ -124,14 +132,7 @@
 		var selectBoxes = document.body.getElementsByTagName('select');
 		for (var i = 0; i < selectBoxes.length; i++) {
 			var name = selectBoxes[i].getAttribute('name');
-			if (name == "contactType") {
-				if (obj[name] > 0 && obj[name] != null) {
-					selectBoxes[i].value = obj[name];
-					document.getElementById("customerPhone").checked = true;
-				}
-				else
-					selectBoxes[i].value = -1;
-			} else if (name == "directorTemp")
+			 if (name == "directorName" || name == "directorPhone")
 				selectBoxes[i].value = obj["customerId"];
 			else
 				selectBoxes[i].value = obj[name];
@@ -140,14 +141,16 @@
 
 	$(document).ready(function() {
 		$('#customerId').change(function() {
-			$('#directorTemp').val($(this).val());
+			$('#directorName').val($(this).val());
+			$('#directorPhone').val($(this).val());
+			$('#event_text').val($("#customerId option:selected").text());
 		});
-		$('#customerPhone,#customerId').change(function() {
-			if ($('#customerPhone').prop('checked') == false)
-				$('#contactType').val(-1);
-			else
-				$('#contactType').val($('#customerId').val());
-		});
+// 		$('#customerPhone,#customerId').change(function() {
+// 			if ($('#customerPhone').prop('checked') == false)
+// 				$('#contactType').val(-1);
+// 			else
+// 				$('#contactType').val($('#customerId').val());
+// 		});
 	});
 
 	

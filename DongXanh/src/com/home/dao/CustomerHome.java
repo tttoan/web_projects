@@ -457,7 +457,7 @@ public class CustomerHome {
 			cus.setCustomerCode((String)objects[1]);
 			cus.setBusinessName((String)objects[2]);
 			cus.setDirector((String)objects[2]);
-			cus.setTelefone(objects[3].equals("")?"Cập nhật...":((String)objects[3]));
+			cus.setTelefone((String)objects[3]);
 			listCustomer.add(cus);
 		}
 		return listCustomer;

@@ -25,6 +25,9 @@ import com.dhtmlx.planner.controls.DHXExternalLightboxForm;
 import com.dhtmlx.planner.controls.DHXGridView;
 import com.dhtmlx.planner.controls.DHXGridViewColumn;
 import com.dhtmlx.planner.controls.DHXLightboxMiniCalendar;
+import com.dhtmlx.planner.controls.DHXTimelineView;
+import com.dhtmlx.planner.controls.DHXTimelineView.RenderModes;
+import com.dhtmlx.planner.controls.DHXTimelineView.XScaleUnits;
 import com.dhtmlx.planner.data.DHXDataFormat;
 import com.home.dao.CustomEventsManager;
 import com.home.dao.CustomerHome;
@@ -88,8 +91,10 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 	}
 
 	private void getEmployees() {
+		boolean isAdmin = (userSes.getRole().getRoleId() == ROLE_ADMIN
+				|| userSes.getRole().getRoleId() == ROLE_LEADER);
 		UserHome userHome = new UserHome(HibernateUtil.getSessionFactory());
-		setListEmployee(userHome.getLookupEmployee());
+		setListEmployee(userHome.getLookupEmployee(userSes.getId(), isAdmin));
 		if(selectedUserPlan != null && selectedUserPlan.getId() != null){
 			for (User user : listEmployee) {
 				if(user.getId() == selectedUserPlan.getId()){
@@ -156,19 +161,37 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 			planner.data.dataprocessor.setURL("events?emp_id="+emp_id);
 			// Xem chi tiết
 			planner.views.add(customGridView());
+			
 			// Xem tóm tắt
 			DHXAgendaView agen = new DHXAgendaView();
 			agen.setLabel("Danh sách");
 			planner.views.add(agen);
 
+//			DHXTimelineView view = new DHXTimelineView("timeline", "table", "Booking");
+//			view.setRenderMode(RenderModes.TREE);
+//			view.setXScaleUnit(XScaleUnits.MINUTE);
+//			view.setXStep(60);
+//			view.setXSize(12);
+//			view.setSectionAutoheight(false);
+//			view.setXStart(11);
+//			view.setXLength(24);
+//			view.setDx(110);
+//			view.setDy(46);
+//			view.setFolderDy(20);
+//			view.setEventDy(41);
+//			view.setServerList("tables_tree");
+//			view.setTabClass("dhx_cal_tab_standalone");
+//			planner.views.clear();
+//			planner.views.add(view);
+//			view.setTabPosition(10);
+			
 			planner.calendars.attachMiniCalendar();
 			planner.lightbox.add(new DHXLightboxMiniCalendar("cal",
 					"Time period"));
 
 			planner.setInitialView("week");
-
 			DHXExternalLightboxForm box = planner.lightbox
-					.setExternalLightboxForm("./custom_editor.action", 400, 300);
+					.setExternalLightboxForm("./custom_editor.action", 400, 230);
 			box.setClassName("custom_lightbox");
 
 			planner.toPDF();
@@ -201,8 +224,8 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 
 	public String editor_custom() throws Exception {
 		getListCustomerByUserId();
-		getEmployees();
 		checkPermissionAccept();
+		getEmployees();
 		System.out.println("UserPlanAction.editor_custom() "+isPermissionAccept);
 		return SUCCESS;
 	}

@@ -6,39 +6,46 @@
 
 <!-- page content -->
 <div class="right_col" role="main">
+
+	<div class="page-title">
+		<div class="title_left">
+			<h3>Lịch Công Tác Tuần</h3>
+		</div>
+	</div>
+	<div class="clearfix"></div>
 	<s:url action="export_event" var="exportEventURL">
-<%-- 		<s:param name="custId" value="%{id}"></s:param> --%>
+		<%-- 		<s:param name="custId" value="%{id}"></s:param> --%>
 	</s:url>
 
 	<table style="width: 600px">
 		<tr>
-			<td width="200px" valign="middle"><s:a href="%{exportEventURL}" cssClass="btn btn-info btn-xs">
-				<i class="fa fa-exchange"></i> Kết xuất </s:a></td>
-			<td  width="100px" valign="middle"><label for="emp_id">Nhân viên TT: </label></td>
+			<td width="200px" valign="middle"><s:a href="%{exportEventURL}"
+					cssClass="btn btn-info btn-xs">
+					<i class="fa fa-exchange"></i> Kết xuất </s:a></td>
+			<td width="100px" valign="middle"><label for="emp_id">Nhân
+					viên TT: </label></td>
 			<td valign="top"><s:form name="userPlanForm"
 					class="form-horizontal form-label-left">
 					<s:select id="emp_id" name="emp_id" style="padding-left:10px"
-						onchange="onUserPlanChange()"
-						showDownArrow="false"
-						autoComplete="true"
-						disabled="%{isPermissionAccept}"
-						list="listEmployee" listKey="id" listValue="fullName +' - '+ userName"
+						onchange="onUserPlanChange()" showDownArrow="false"
+						autoComplete="true" disabled="%{isPermissionAccept}"
+						list="listEmployee" listKey="id"
+						listValue="fullName +' - '+ userName"
 						value="getSelectedUserPlan().id" />
 				</s:form></td>
 		</tr>
 	</table>
-	
+
 	<div class="content" id="content">
 		<div class="scheduler" id="scheduler">
 			<s:property escape="false" value="messageStore.scheduler" />
 		</div>
 	</div>
+
 	<!-- footer content -->
 	<%@ include file="footer.jsp"%>
 	<!-- /footer content -->
-
 </div>
-
 </div>
 
 </div>

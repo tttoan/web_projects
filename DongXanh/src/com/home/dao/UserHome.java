@@ -298,8 +298,13 @@ public class UserHome {
 			}
 		}
 	}
-
 	public List<User> getLookupEmployee() {
+		return getLookupEmployee(-1, true);
+	}
+	public List<User> getLookupEmployee(int employeeId) {
+		return getLookupEmployee(employeeId, false);
+	}
+	public List<User> getLookupEmployee(int employeeId, boolean isAllEmployee) {
 		log.debug("finding List User instance by full name");
 		List<User> results = new ArrayList<User>();
 		Session session = null;
@@ -308,7 +313,9 @@ public class UserHome {
 			SessionImpl sessionImpl = (SessionImpl) session;
 			Connection conn = sessionImpl.connection();
 			try (Statement sta = conn.createStatement()) {
-				String query = "Select id, user_name, full_name From user";
+				String query = "Select id, user_name, full_name From user where id = "+employeeId;
+				if(isAllEmployee)
+					query += " or id <> "+employeeId;
 				try (ResultSet rs = sta.executeQuery(query)) {
 					while (rs.next()) {
 						User user = new User();
