@@ -173,7 +173,7 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 
 			planner.setInitialView("week");
 			DHXExternalLightboxForm box = planner.lightbox
-					.setExternalLightboxForm("./custom_editor.action", 400, 260);
+					.setExternalLightboxForm("./custom_editor.action", 400, 310);
 			box.setClassName("custom_lightbox");
 
 			planner.toPDF();
@@ -237,6 +237,7 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 		CustomEventsManager evs = new CustomEventsManager(
 				ServletActionContext.getRequest(), getSelectedUserPlan());
 		messageStore.setData(evs.run());
+		System.out.println(messageStore.getData());
 		return Action.SUCCESS;
 	}
 
