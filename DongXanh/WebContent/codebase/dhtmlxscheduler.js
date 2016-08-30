@@ -199,11 +199,11 @@ dtmlXMLLoaderObject.prototype.loadXML=function(filePath, postMode, postVars, rpc
 
 	if (rpc){
 		this.xmlDoc.setRequestHeader("User-Agent", "dhtmlxRPC v0.1 ("+navigator.userAgent+")");
-		this.xmlDoc.setRequestHeader("Content-type", "text/xml");
+		this.xmlDoc.setRequestHeader("Content-type", "text/xml; charset=UTF-8");
 	}
 
 	else if (postMode)
-		this.xmlDoc.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		this.xmlDoc.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=UTF-8');
 
 	this.xmlDoc.setRequestHeader("X-Requested-With","XMLHttpRequest");
 	this.xmlDoc.send(null||postVars);
