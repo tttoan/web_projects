@@ -166,24 +166,6 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 			DHXAgendaView agen = new DHXAgendaView();
 			agen.setLabel("Danh sách");
 			planner.views.add(agen);
-
-//			DHXTimelineView view = new DHXTimelineView("timeline", "table", "Booking");
-//			view.setRenderMode(RenderModes.TREE);
-//			view.setXScaleUnit(XScaleUnits.MINUTE);
-//			view.setXStep(60);
-//			view.setXSize(12);
-//			view.setSectionAutoheight(false);
-//			view.setXStart(11);
-//			view.setXLength(24);
-//			view.setDx(110);
-//			view.setDy(46);
-//			view.setFolderDy(20);
-//			view.setEventDy(41);
-//			view.setServerList("tables_tree");
-//			view.setTabClass("dhx_cal_tab_standalone");
-//			planner.views.clear();
-//			planner.views.add(view);
-//			view.setTabPosition(10);
 			
 			planner.calendars.attachMiniCalendar();
 			planner.lightbox.add(new DHXLightboxMiniCalendar("cal",
@@ -191,7 +173,7 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 
 			planner.setInitialView("week");
 			DHXExternalLightboxForm box = planner.lightbox
-					.setExternalLightboxForm("./custom_editor.action", 400, 230);
+					.setExternalLightboxForm("./custom_editor.action", 400, 260);
 			box.setClassName("custom_lightbox");
 
 			planner.toPDF();
@@ -201,7 +183,7 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 			messageStore.setScheduler(planner.render());
 			editor_custom();
 			System.out.println("vao 2");
-			System.out.println("selectedUserPlan = " + selectedUserPlan.getId());
+			//System.out.println("selectedUserPlan = " + selectedUserPlan.getId());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
