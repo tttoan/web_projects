@@ -38,7 +38,7 @@
 
 	<div class="content" id="content">
 		<div class="scheduler" id="scheduler">
-			<s:property escape="false" value="messageStore.scheduler" />
+			<s:property escapeHtml="false" value="messageStore.scheduler" />
 		</div>
 	</div>
 
