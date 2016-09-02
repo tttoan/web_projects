@@ -236,8 +236,8 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 		}
 		
 		HttpServletRequest request = ServletActionContext.getRequest();
-		request.setCharacterEncoding("UTF-8");
-		request.setAttribute("Content-type", "text/html; charset=UTF-8");
+		//request.setCharacterEncoding("UTF-8");
+		//request.setAttribute("Content-type", "text/html; charset=UTF-8");
 		CustomEventsManager evs = new CustomEventsManager(
 				request, getSelectedUserPlan());
 		messageStore.setData(evs.run());
