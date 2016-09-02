@@ -240,8 +240,8 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 		request.setAttribute("Content-type", "text/html; charset=UTF-8");
 		CustomEventsManager evs = new CustomEventsManager(
 				request, getSelectedUserPlan());
-		//messageStore.setData(evs.run());
-		System.out.println(messageStore.getData());
+		messageStore.setData(evs.run());
+		//System.out.println(messageStore.getData());
 		return Action.SUCCESS;
 	}
 
