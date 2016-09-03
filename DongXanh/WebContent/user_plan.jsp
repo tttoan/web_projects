@@ -7,24 +7,17 @@
 <!-- page content -->
 <div class="right_col" role="main">
 
-	<div class="page-title">
-		<div class="title_left">
-			<h3>Lịch Công Tác Tuần</h3>
-		</div>
-	</div>
 	<div class="clearfix"></div>
 	<s:url action="export_event" var="exportEventURL">
 		<%-- 		<s:param name="custId" value="%{id}"></s:param> --%>
 	</s:url>
 
-	<table style="width: 600px">
+	<table style="width: 1000px">
 		<tr>
-			<td width="200px" valign="middle"><s:a href="%{exportEventURL}"
-					cssClass="btn btn-info btn-xs">
-					<i class="fa fa-exchange"></i> Kết xuất </s:a></td>
+			<td width="300px" valign="middle"><h3>Lịch Công Tác Tuần</h3></td>
 			<td width="100px" valign="middle"><label for="emp_id">Nhân
 					viên TT: </label></td>
-			<td valign="top"><s:form name="userPlanForm"
+			<td valign="middle"><s:form name="userPlanForm"
 					class="form-horizontal form-label-left">
 					<s:select id="emp_id" name="emp_id" style="padding-left:10px"
 						onchange="onUserPlanChange()" showDownArrow="false"
@@ -33,6 +26,9 @@
 						listValue="fullName +' - '+ userName"
 						value="getSelectedUserPlan().id" />
 				</s:form></td>
+			<td align="right"><s:a href="%{exportEventURL}"
+					cssClass="btn btn-info btn-xs">
+					<i class="fa fa-exchange"></i> Kết xuất </s:a></td>
 		</tr>
 	</table>
 
