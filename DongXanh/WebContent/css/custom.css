@@ -190,7 +190,8 @@ body.nav-sm .menu_section h3 {
     /*background: #F4F6F9;
     border-bottom: 1px solid #E6E9ED;*/
     
-    background: #EDEDED;
+   /*  background: #EDEDED; */
+    background: url('../images/banner_dongxanh.png') no-repeat scroll center center / contain ;
     border-bottom: 1px solid #D9DEE4;
     margin-bottom: 10px;
     width: 100%;

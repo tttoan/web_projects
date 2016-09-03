@@ -426,7 +426,7 @@ div.dhx_modal_cover {
 	width:100%  !important;
 	
 	font-family:Tahoma;
-	font-size:8pt;
+	font-size:10pt;
 }
 .dhx_move_denied .dhx_cal_event .dhx_header, .dhx_move_denied .dhx_cal_event .dhx_title{
 	cursor:default;
@@ -438,11 +438,11 @@ div.dhx_modal_cover {
 	cursor:pointer;
 }
 .dhx_cal_event .dhx_title {
-	height:12px;
+	height:15px;
 	border-width:0px 1px 1px 1px;
 	border-bottom-style:dotted;
 	
-	font-size:7pt;
+	font-size:8pt;
 	font-weight:bold;
 	text-align:center;
 	
@@ -451,8 +451,9 @@ div.dhx_modal_cover {
 	cursor:pointer;
 }
 .dhx_cal_event .dhx_body, .dhx_cal_event.dhx_cal_select_menu .dhx_body{
-	border-width:0 1px 1px 1px;
-	padding:5px;
+	border-width:0 1px 2px 1px;
+	padding:4px;
+	min-height: 65px;
 }
 .dhx_resize_denied, .dhx_resize_denied .dhx_event_resize {
 	cursor:default !important;

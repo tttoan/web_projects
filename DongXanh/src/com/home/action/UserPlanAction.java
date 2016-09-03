@@ -148,8 +148,8 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 			
 			// creates and configures scheduler instance
 			DHXPlanner planner = new DHXPlanner("./codebase/", DHXSkin.GLOSSY);
-			planner.templates.setDayScaleDate("{date:date(%d/%m/%Y)}");
-			planner.templates.setWeekScaleDate("{date:date(%d/%m/%Y)}");
+			planner.templates.setDayScaleDate("{date:date(%D, %d/%m/%Y)}");
+			planner.templates.setWeekScaleDate("{date:date(%D, %d/%m/%Y)}");
 			planner.setInitialDate(new Date());
 			planner.config.setScrollHour(7);
 			planner.setWidth(1000);

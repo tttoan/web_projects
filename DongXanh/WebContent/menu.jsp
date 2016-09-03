@@ -66,11 +66,11 @@
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
 					<li><s:url action="UserPlan" var="getUserPlanURL" /> <s:a
-							href="%{getUserPlanURL}" theme="bootstrap"> Xem lịch của tôi </s:a></li>
+							href="%{getUserPlanURL}" theme="bootstrap"> Lên lịch tuần </s:a></li>
 					<li><s:url action="OpenUserPlanStatisticAction" var="userPlanStatistic" /> <s:a
-							href="%{userPlanStatistic}" theme="bootstrap"> Báo cáo thống kê </s:a></li>
+							href="%{userPlanStatistic}" theme="bootstrap"> Thống kê lịch tiếp xúc </s:a></li>
 					<li><s:url action="OpenUserPlanGeneralAction" var="userPlanGeneral" /> <s:a
-							href="%{userPlanGeneral}" theme="bootstrap"> Báo cáo tổng hợp </s:a></li>
+							href="%{userPlanGeneral}" theme="bootstrap"> Kết quả công tác tuần </s:a></li>
 					<li><s:url action="OpenUserPlanDetailAction" var="userPlanDetail" /> <s:a
 							href="%{userPlanDetail}" theme="bootstrap"> Báo cáo chi tiết </s:a></li>
 				</ul></li>

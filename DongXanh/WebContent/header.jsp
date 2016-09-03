@@ -43,7 +43,7 @@
               <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
             <![endif]-->
             
-           
+<link rel="shortcut icon" type="image/x-icon" href="./images/logo_dongxanh.png" />
 </head>
 
 
@@ -53,7 +53,8 @@
 			<div class="col-md-3 left_col">
 				<div class="left_col scroll-view">
 					<div class="navbar nav_title" style="border: 0;">
-						<a href="index.jsp" class="site_title"><i class="fa fa-empire"></i>
+						<a href="homeAction" class="site_title">
+							<img src="./images/logo_dongxanh.png" alt="ĐỒNG XANH" height="50" width="50">
 							<span>ĐỒNG XANH</span></a>
 					</div>
 					<div class="clearfix"></div>
