@@ -50,6 +50,13 @@
 
 </div>
 
+<style>
+.scheduler > div {
+    border: 2px solid #cecece;
+}
+</style>
+
+
 <script src="js/bootstrap.min.js"></script>
 <script src="js/nprogress.js"></script>
 <!-- bootstrap progress js -->
