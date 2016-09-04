@@ -15,8 +15,8 @@
 	<table style="width: 1000px">
 		<tr>
 			<td width="300px" valign="middle"><h3>Lịch Công Tác Tuần</h3></td>
-			<td width="100px" valign="middle"><label for="emp_id">Nhân
-					viên TT: </label></td>
+			<td width="110px" valign="middle"><label for="emp_id">Nhân
+					viên TT : </label></td>
 			<td valign="middle"><s:form name="userPlanForm"
 					class="form-horizontal form-label-left">
 					<s:select id="emp_id" name="emp_id" style="padding-left:10px"

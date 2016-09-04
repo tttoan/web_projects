@@ -375,7 +375,7 @@ body {
     /*#ECF0F1; #FCFCFC*/
     
     font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 400;
     line-height: 1.471;
 }
@@ -845,8 +845,8 @@ li.current-page a {
 }
 
 .nav.child_menu > li > a {
-    color: rgba(255, 255, 255, 0.75) !important;
-    font-size: 12px;
+    color: rgba(255, 255, 255) !important;
+    font-size: 13px;
     padding: 9px;
 }
 
