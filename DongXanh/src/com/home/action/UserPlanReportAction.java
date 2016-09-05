@@ -181,7 +181,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			html.append("<th></th>");
 			html.append("<th>"+sum_totalPhone+"</th>");
 			html.append("<th>"+sum_totalMeet+"</th>");
-			html.append("<th></th><th></th><th></th>");
+			html.append("<th></th><th>-------------------------------------------------------------</th><th></th>");
 			html.append("</tr>");
 			
 			html.append("</thead>");
