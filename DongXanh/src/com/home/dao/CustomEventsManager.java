@@ -19,6 +19,7 @@ import com.home.util.HibernateUtil;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public class CustomEventsManager extends DHXEventsManager {
@@ -46,6 +47,11 @@ public class CustomEventsManager extends DHXEventsManager {
 			if (userSes != null)
 				cre.add(Restrictions.eq("employeeId", userSes.getId()));
 			evs = cre.list();
+			for (DHXEv dhxEv : evs) {
+				Event e = (Event) dhxEv;
+				((Event) dhxEv).setCustomerIdOld(e.getCustomerId());
+				((Event) dhxEv).setPlanDateOld(dhxEv.getStart_date());
+			}
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 		} finally {
@@ -64,27 +70,41 @@ public class CustomEventsManager extends DHXEventsManager {
 			session = HibernateUtil.getSessionFactory().openSession();
 			session.beginTransaction();
 			Event evt = (Event) event;
+			System.out.println(evt.toString());
 			int eventId = -1;
+			boolean flag = true;
 			if (status == DHXStatus.UPDATE) {
-				eventId = evt.getId();
 				session.update(event);
-			} else if (status == DHXStatus.DELETE) {
 				eventId = evt.getId();
+				//Checking changed
+				if (event.getStart_date().getTime() == evt.getPlanDateOld()
+						.getTime()
+						&& evt.getCustomerIdOld() == evt.getCustomerId()){
+					flag = false;
+				}
+					
+			} else if (status == DHXStatus.DELETE) {
 				session.delete(event);
+				eventId = evt.getId();
 			} else if (status == DHXStatus.INSERT) {
 				session.save(event);
-				BigInteger eventId1 =   (BigInteger) session.createSQLQuery(
-						"SELECT LAST_INSERT_ID()").uniqueResult();
-				System.out.println("asdasdasdasda "+eventId1);
+				eventId = ((BigInteger) session.createSQLQuery(
+						"SELECT LAST_INSERT_ID()").uniqueResult()).intValue();
+			}
+			if (status != DHXStatus.UPDATE) {
+				((Event) event).setPlanDateOld(event.getStart_date());
+				((Event) event).setCustomerIdOld(evt.getCustomerId());
 			}
 			try {
-				EventsHistory evth = new EventsHistory(eventId,
-						evt.getEmployeeId(), evt.getStart_date(),
-						evt.getStart_date(), evt.getCustomerId(),
-						evt.getCustomerId(), status.toString(),
-						new Date());
-				session.save(evth);
+				if (flag) {
+					EventsHistory evth = new EventsHistory(eventId,
+							evt.getEmployeeId(), evt.getPlanDateOld(),
+							evt.getStart_date(), evt.getCustomerIdOld(),
+							evt.getCustomerId(), status.toString(), new Date());
+					session.save(evth);
+				}
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			session.getTransaction().commit();
 		} catch (RuntimeException e) {

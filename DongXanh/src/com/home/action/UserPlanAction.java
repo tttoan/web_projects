@@ -12,12 +12,10 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.struts2.ServletActionContext;
-
 import com.dhtmlx.planner.DHXPlanner;
 import com.dhtmlx.planner.DHXSkin;
 import com.dhtmlx.planner.controls.DHXAgendaView;
@@ -25,9 +23,6 @@ import com.dhtmlx.planner.controls.DHXExternalLightboxForm;
 import com.dhtmlx.planner.controls.DHXGridView;
 import com.dhtmlx.planner.controls.DHXGridViewColumn;
 import com.dhtmlx.planner.controls.DHXLightboxMiniCalendar;
-import com.dhtmlx.planner.controls.DHXTimelineView;
-import com.dhtmlx.planner.controls.DHXTimelineView.RenderModes;
-import com.dhtmlx.planner.controls.DHXTimelineView.XScaleUnits;
 import com.dhtmlx.planner.data.DHXDataFormat;
 import com.home.dao.CustomEventsManager;
 import com.home.dao.CustomerHome;

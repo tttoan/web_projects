@@ -39,7 +39,10 @@
 				</tr>
 				<tr class="even pointer">
 					<!-- 					<td class="">Bắt đầu:</td> -->
-					<td><input hidden="true" id="event_start_date"
+					<td>
+					<input id="planDateOld"
+						name="planDateOld" type="text" style="width: 100%" />
+					<input hidden="true" id="event_start_date"
 						name="start_date" type="text" style="width: 100%" /></td>
 				</tr>
 				<tr class="even pointer">
@@ -48,7 +51,10 @@
 						type="text" style="width: 100%" /></td>
 				</tr>
 				<tr class="even pointer">
-					<td><s:select label="Khách hàng" id="customerId"
+					<td>
+					<input  id="customerIdOld"
+						name="customerIdOld" type="text" style="width: 100%" />
+					<s:select label="Khách hàng" id="customerId"
 							showDownArrow="false" autoComplete="true" list="listCustomer"
 							listKey="id" name="customerId"
 							listValue="customerCode +' - '+ businessName" style="width: 100%" /></td>
@@ -117,7 +123,7 @@
 				continue;
 			}
 			var name = inputs[i].getAttribute('name');
-			if (name == "start_date" || name == "end_date")
+			if (name == "start_date" || name == "end_date" || name == "planDateOld")
 				ev[name] = parent.scheduler.templates.api_date(inputs[i].value);
 			else
 				ev[name] = inputs[i].value;
@@ -139,9 +145,14 @@
 				var name = inputs[i].getAttribute('name');
 				if (name == "employeeId")
 					continue;
-				if (name == "start_date" || name == "end_date")
+				if (name == "start_date" || name == "end_date"){
 					inputs[i].value = parent.scheduler.date.date_to_str(
 							parent.scheduler.config.api_date)(obj[name]);
+					if(name == "start_date"){
+						$('#planDateOld').val(parent.scheduler.date.date_to_str(
+								parent.scheduler.config.api_date)(obj[name]));
+					}
+				}
 				else {
 					if (obj[name] == null)
 						inputs[i].value = "";
@@ -159,6 +170,7 @@
 				selectBoxes[i].value = obj["customerId"];
 				$('#directorAddress').val(
 						$("#directorAdressCbb option:selected").text());
+				$('#customerIdOld').val(obj["customerId"]);
 			} else
 				selectBoxes[i].value = obj[name];
 		}
