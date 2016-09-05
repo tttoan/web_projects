@@ -119,7 +119,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			html.append("<thead>");
 			
 			html.append("<tr class=\"headings\">");
-			html.append("<th colspan=\"8\">BÁO CÁO THỐNG KÊ SỐ LẦN TIẾP XÚC KHÁCH HÀNG</th>");
+			html.append("<th colspan=\"9\">BÁO CÁO THỐNG KÊ SỐ LẦN TIẾP XÚC KHÁCH HÀNG</th>");
 			html.append("</tr>");
 			
 			html.append("<tr class=\"headings\">");
@@ -129,7 +129,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			html.append("<th rowspan=\"2\">NVTT</th>");
 			html.append("<th colspan=\"2\">Số lần tiếp xúc KH</th>");
 			html.append("<th rowspan=\"2\">Ngày tiếp xúc</th>");
-			html.append("<th rowspan=\"2\">Ghi chú</th>");
+			html.append("<th rowspan=\"2\" colspan=\"2\">Ghi chú</th>");
 			html.append("</tr>");
 				
 			html.append("<tr class=\"headings\">");
@@ -170,6 +170,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 				tblContent.append("<th>" + (totalMeet) + "</th>");
 				tblContent.append("<th style=\"text-align:left\">" + planDate.toString() + "</th>");
 				tblContent.append("<th style=\"text-align:left\"></th>");
+				tblContent.append("<th><button class=\"btn btn-info btn-xs\">Ghi chú</button></th>");
 				tblContent.append("</tr>");
 				no++;
 			}
@@ -180,7 +181,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			html.append("<th></th>");
 			html.append("<th>"+sum_totalPhone+"</th>");
 			html.append("<th>"+sum_totalMeet+"</th>");
-			html.append("<th></th><th></th>");
+			html.append("<th></th><th></th><th></th>");
 			html.append("</tr>");
 			
 			html.append("</thead>");
@@ -235,7 +236,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			html.append("<thead>");
 			
 			html.append("<tr class=\"headings\">");
-			html.append("<th colspan=\"20\">TỔNG HỢP LỊCH CÔNG TÁC</th>");
+			html.append("<th colspan=\"21\">TỔNG HỢP LỊCH CÔNG TÁC</th>");
 			html.append("</tr>");
 			
 			html.append("<tr class=\"headings\">");
@@ -252,6 +253,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			html.append("<th rowspan=\"3\">SL KH làm việc trực tiếp</th>");
 			html.append("<th rowspan=\"3\">Số ngày đi Ctác</th>");
 			html.append("<th rowspan=\"3\">GHI CHÚ - Ý KIẾN - KẾT QUẢ CÔNG TÁC TUẦN</th>");
+			html.append("<th rowspan=\"3\"></th>");
 			html.append("</tr>");
 				
 			html.append("<tr class=\"headings\">");
@@ -391,6 +393,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 				tblContent.append("<th>" + totalPhone + "</th>");
 				tblContent.append("<th>" + totalMeet + "</th>");
 				tblContent.append("<th style=\"text-align:left\"></th>");
+				tblContent.append("<th><button class=\"btn btn-info btn-xs\">Ghi chú</button></th>");
 				tblContent.append("</tr>");
 				no++;
 			}

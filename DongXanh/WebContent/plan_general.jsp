@@ -212,6 +212,17 @@ $(document).ready(function() {
  	              $('#example').DataTable({
  	            	 scrollX: true,
  	              });
+ 	              
+ 	             var table = $('#example').DataTable();
+ 	             $('#example').on('dblclick', 'tr', function () {
+ 	                var data = table.row( this ).data();
+ 	                alert( 'You clicked on '+data[1]+' row' );
+ 	             } );
+ 	             
+ 	             $('#example tbody').on( 'click', 'button', function () {
+	                 var data = table.row( $(this).parents('tr') ).data();
+	                 alert( 'You clicked on '+data[1]+' row' );
+	             } ); 
  	            }
  	        });    
         });
