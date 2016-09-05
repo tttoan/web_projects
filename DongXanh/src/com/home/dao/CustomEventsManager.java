@@ -59,11 +59,8 @@ public class CustomEventsManager extends DHXEventsManager {
 			session.beginTransaction();
 
 			if (status == DHXStatus.UPDATE){
-				System.out.println(event.toString());
 				session.update(event);
-				
 			}
-				
 			else if (status == DHXStatus.DELETE)
 				session.delete(event);
 			else if (status == DHXStatus.INSERT)
