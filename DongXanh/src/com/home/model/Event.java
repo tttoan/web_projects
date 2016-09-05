@@ -41,7 +41,7 @@ public class Event extends DHXEvent {
 			this.planDateOld = new SimpleDateFormat(
 					DHXEventsManager.date_format).parse(planDateOld);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 

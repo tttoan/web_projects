@@ -40,7 +40,7 @@
 				<tr class="even pointer">
 					<!-- 					<td class="">Bắt đầu:</td> -->
 					<td>
-					<input id="planDateOld"
+					<input hidden="true" id="planDateOld"
 						name="planDateOld" type="text" style="width: 100%" />
 					<input hidden="true" id="event_start_date"
 						name="start_date" type="text" style="width: 100%" /></td>
@@ -52,7 +52,7 @@
 				</tr>
 				<tr class="even pointer">
 					<td>
-					<input  id="customerIdOld"
+					<input hidden="true"  id="customerIdOld"
 						name="customerIdOld" type="text" style="width: 100%" />
 					<s:select label="Khách hàng" id="customerId"
 							showDownArrow="false" autoComplete="true" list="listCustomer"
