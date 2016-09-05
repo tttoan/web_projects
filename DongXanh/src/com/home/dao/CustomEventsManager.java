@@ -63,20 +63,21 @@ public class CustomEventsManager extends DHXEventsManager {
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			session.beginTransaction();
-			int eventId = event.getId();
+			Event evt = (Event) event;
+			int eventId = -1;
 			if (status == DHXStatus.UPDATE) {
+				eventId = evt.getId();
 				session.update(event);
 			} else if (status == DHXStatus.DELETE) {
+				eventId = evt.getId();
 				session.delete(event);
 			} else if (status == DHXStatus.INSERT) {
 				session.save(event);
-				eventId =  (int) session.createSQLQuery(
+				BigInteger eventId1 =   (BigInteger) session.createSQLQuery(
 						"SELECT LAST_INSERT_ID()").uniqueResult();
-				System.out.println(eventId);
+				System.out.println("asdasdasdasda "+eventId1);
 			}
-
 			try {
-				Event evt = (Event) event;
 				EventsHistory evth = new EventsHistory(eventId,
 						evt.getEmployeeId(), evt.getStart_date(),
 						evt.getStart_date(), evt.getCustomerId(),
