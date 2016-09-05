@@ -42,5 +42,7 @@
         <mapping resource="com/home/model/RegisterProduct.hbm.xml" />
         <mapping resource="com/home/model/InvoiceType.hbm.xml" />
         <mapping resource="com/home/model/Event.hbm.xml" />
+        <mapping resource="com/home/model/EventsHistory.hbm.xml" />
+        <mapping resource="com/home/model/EventsNote.hbm.xml" />
     </session-factory>
 </hibernate-configuration>
