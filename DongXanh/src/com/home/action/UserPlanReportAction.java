@@ -169,7 +169,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 				tblContent.append("<th>" + (totalPhone) + "</th>");
 				tblContent.append("<th>" + (totalMeet) + "</th>");
 				tblContent.append("<th style=\"text-align:left\">" + planDate.toString() + "</th>");
-				tblContent.append("<th style=\"text-align:left\"></th>");
+				tblContent.append("<th style=\"text-align:left\" id=\"id_note\"></th>");
 				tblContent.append("<th><button class=\"btn btn-info btn-xs\">Ghi chú</button></th>");
 				tblContent.append("</tr>");
 				no++;
@@ -392,7 +392,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 				
 				tblContent.append("<th>" + totalPhone + "</th>");
 				tblContent.append("<th>" + totalMeet + "</th>");
-				tblContent.append("<th style=\"text-align:left\"></th>");
+				tblContent.append("<th style=\"text-align:left\" id=\"id_note\"></th>");
 				tblContent.append("<th><button class=\"btn btn-info btn-xs\">Ghi chú</button></th>");
 				tblContent.append("</tr>");
 				no++;

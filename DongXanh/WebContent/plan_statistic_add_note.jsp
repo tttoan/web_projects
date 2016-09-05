@@ -13,21 +13,22 @@
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
 					<h4 class="modal-title">Ghi chú</h4>
 				</div>
-				<div class="modal-body">
-					<s:form action="importProductsAction" method="post"
-						theme="bootstrap" enctype="multipart/form-data">
-						
-						 <div class="form-group">
-                              <div class="col-sm-12">
-                                  	<textarea class="form-control" style="height:100px;" id="descr" name="descr"></textarea>
-									<br>
-									<input type="submit" value="Cập nhật" style="float: right"
-										class="btn btn-primary">
-                          	</div>
-  						</div>
-						
-					</s:form>
-				</div>
+				 <div class="modal-body">
+	                    <div id="testmodal" style="padding: 5px 20px;">
+	                        <form id="antoform" class="form-horizontal calender" role="form">
+	                            <div class="form-group">
+	                                <div class="col-sm-12">
+                                  		<textarea class="form-control" style="height:100px;" id="descr" name="descr"></textarea>
+									</div>
+	                            </div>
+	                        </form>
+	                    </div>
+	                </div>
+	                <div class="modal-footer">
+	                   <button type="button" id="btnUpdateNote" style="float: right" onclick="updateNote()" data-dismiss="modal"
+										class="btn btn-primary">Cập nhật</button>
+	                </div>
+				
 			</div>
 
 		</div>

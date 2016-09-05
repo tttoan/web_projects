@@ -187,6 +187,9 @@ $(document).ready(function() {
     
 <script type="text/javascript">
 	
+	var table;
+	var selected_row = 0;
+
 	function btnFilterValues(){
  		var week 		= $('[name="single_cal1"]').val();
         $(document).ready(function () {
@@ -200,22 +203,33 @@ $(document).ready(function() {
  	            	 scrollX: true,
  	              });
  	              
- 	             var table = $('#example').DataTable();
+ 	             table = $('#example').DataTable();
  	             $('#example').on('dblclick', 'tr', function () {
- 	                var data = table.row( this ).data();
- 	                //alert( 'You clicked on '+data[1]+' row' );
- 	           		$('#fc_addNoteDialog').click();
+ 	            	 var data = table.row( this ).data();
+  	                selected_row =  table.row( this ).index();
+  	                
+  	                //alert( 'You clicked on '+data[1]+' row' );
+  	                 $('#descr').val(data[7]);
+  	               	$('#fc_addNoteDialog').click();
  	             } );
  	             
  	             $('#example tbody').on( 'click', 'button', function () {
-	                 var data = table.row( $(this).parents('tr') ).data();
+ 	            	 var data = table.row( $(this).parents('tr') ).data();
+	                 selected_row =  table.row( $(this).parents('tr') ).index();
 	                 //alert( 'You clicked on '+data[1]+' row' );
-	             	 $('#fc_addNoteDialog').click();
+	                  $('#descr').val(data[7])
+	                 $('#fc_addNoteDialog').click();
 	             } ); 
  	            }
  	        });    
         });
 	}
+	
+	function updateNote() {
+    	// $('#descr').val('tran thien toan');
+    	var cell = table.cell(selected_row, 7);
+		cell.data($('#descr').val());
+    }
 	
 </script>
 
