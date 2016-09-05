@@ -23,7 +23,7 @@ public class Event extends DHXEvent {
 	}
 
 	public void setCustomerIdOld(String customerIdOld) {
-		this.customerIdOld = Integer.parseInt(customerIdOld == null ? "0"
+		this.customerIdOld = Integer.parseInt(customerIdOld == "" ? "0"
 				: customerIdOld);
 	}
 
