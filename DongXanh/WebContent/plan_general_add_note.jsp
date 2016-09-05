@@ -18,15 +18,14 @@
 						theme="bootstrap" enctype="multipart/form-data">
 						
 						 <div class="form-group">
-                              <div class="col-sm-9">
-                                  <textarea class="form-control" style="height:55px;" id="descr" name="descr"></textarea>
-                              </div>
-                          </div>
-
-						<hr />
-
-						<input type="submit" value="Import" style="float: right"
-							class="btn btn-info btn-lg">
+                              <div class="col-sm-12">
+                                  	<textarea class="form-control" style="height:100px;" id="descr" name="descr"></textarea>
+									<br>
+									<input type="submit" value="Cập nhật" style="float: right"
+										class="btn btn-primary">
+                          	</div>
+  						</div>
+						
 					</s:form>
 				</div>
 			</div>
@@ -39,4 +38,25 @@
 <div id="fc_addNoteDialog" data-toggle="modal"
 	data-target="#addNoteDialog" data-backdrop="static"></div>
 
-
+<style>
+       .modal-header .close {
+    		margin-top: -2px;
+		}
+		button.close {
+		    padding: 0;
+		    cursor: pointer;
+		    background: transparent;
+		    border: 0;
+		    -webkit-appearance: none;
+		}
+		.close {
+		    float: right;
+		    font-size: 21px;
+		    font-weight: bold;
+		    line-height: 1;
+		    color: #000;
+		    text-shadow: 0 1px 0 #fff;
+		    opacity: .2;
+		    filter: alpha(opacity=20);
+		}
+</style>

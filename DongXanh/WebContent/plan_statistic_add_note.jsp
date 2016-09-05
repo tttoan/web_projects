@@ -3,94 +3,29 @@
 <%@ taglib uri="/struts-tags" prefix="s"%>
 
 <div class="container">
-	<!-- Trigger the modal with a button -->
-	<!-- <button type="button" class="btn btn-info btn-lg" id="btnImport">Import
-		excel</button> -->
-
 	<!-- Modal -->
-	<div class="modal fade" id="importDialog" role="dialog">
+	<div class="modal fade" id="addNoteDialog" role="dialog">
 		<div class="modal-dialog">
 
 			<!-- Modal content-->
 			<div class="modal-content">
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Cấu hình import</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+					<h4 class="modal-title">Ghi chú</h4>
 				</div>
 				<div class="modal-body">
 					<s:form action="importProductsAction" method="post"
 						theme="bootstrap" enctype="multipart/form-data">
-						<fieldset>
-							<legend>Import sản phẩm:</legend>
-
-							<table style="width: 500px">
-								<tr>
-									<td>Mã hàng</td>
-									<td>Tên thuốc</td>
-									<td>Số lượng/thùng</td>
-									<td>Điểm/thùng</td>
-									<td>Giá đề xuất</td>
-								</tr>
-								<tr>
-									<td><select id="colProductCode" name="colProductCode">
-											<option value="0">Column A</option>
-											<option value="1" selected>Column B</option>
-											<option value="2">Column C</option>
-											<option value="3">Column D</option>
-											<option value="4">Column E</option>
-											<option value="5">Column F</option>
-									</select></td>
-									<td><select id="colProductName" name="colProductName">
-											<option value="0">Column A</option>
-											<option value="1">Column B</option>
-											<option value="2" selected>Column C</option>
-											<option value="3">Column D</option>
-											<option value="4">Column E</option>
-											<option value="5">Column F</option>
-									</select></td>
-									<td><select id="colProductQuantity"
-										name="colProductQuantity">
-											<option value="0">Column A</option>
-											<option value="1">Column B</option>
-											<option value="2">Column C</option>
-											<option value="3" selected>Column D</option>
-											<option value="4">Column E</option>
-											<option value="5">Column F</option>
-									</select></td>
-									<td><select id="colProductPoint" name="colProductPoint">
-											<option value="0">Column A</option>
-											<option value="1">Column B</option>
-											<option value="2">Column C</option>
-											<option value="3">Column D</option>
-											<option value="4" selected>Column E</option>
-											<option value="5">Column F</option>
-									</select></td>
-									<td><select id="colProductPrice" name="colProductPrice">
-											<option value="0">Column A</option>
-											<option value="1">Column B</option>
-											<option value="2">Column C</option>
-											<option value="3">Column D</option>
-											<option value="4">Column E</option>
-											<option value="5" selected>Column F</option>
-									</select></td>
-								</tr>
-							</table>
-
-						</fieldset>
-						<br />
-						<div class="item form-group">
-							<label>Bắt đầu từ dòng:</label>
-							<div>
-								<input type="number" id="rowProductStart" name="rowProductStart"
-									data-validate-minmax="0,100" value="5">
-							</div>
-						</div>
-
-						<hr />
-
-						<input type="file" name="upload_excel" required="required">
-						<input type="submit" value="Import" style="float: right"
-							class="btn btn-info btn-lg">
+						
+						 <div class="form-group">
+                              <div class="col-sm-12">
+                                  	<textarea class="form-control" style="height:100px;" id="descr" name="descr"></textarea>
+									<br>
+									<input type="submit" value="Cập nhật" style="float: right"
+										class="btn btn-primary">
+                          	</div>
+  						</div>
+						
 					</s:form>
 				</div>
 			</div>
@@ -100,14 +35,28 @@
 
 </div>
 
-<div id="fc_importProduct" data-toggle="modal"
-	data-target="#importDialog" data-backdrop="static"></div>
+<div id="fc_addNoteDialog" data-toggle="modal"
+	data-target="#addNoteDialog" data-backdrop="static"></div>
 
-<script>
-	$(document).ready(function() {
-		$("#btnImport").click(function() {
-			$('#fc_importProduct').click();
-		});
-	});
-</script>
-
+<style>
+       .modal-header .close {
+    		margin-top: -2px;
+		}
+		button.close {
+		    padding: 0;
+		    cursor: pointer;
+		    background: transparent;
+		    border: 0;
+		    -webkit-appearance: none;
+		}
+		.close {
+		    float: right;
+		    font-size: 21px;
+		    font-weight: bold;
+		    line-height: 1;
+		    color: #000;
+		    text-shadow: 0 1px 0 #fff;
+		    opacity: .2;
+		    filter: alpha(opacity=20);
+		}
+</style>
