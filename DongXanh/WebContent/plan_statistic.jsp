@@ -88,6 +88,9 @@ pageEncoding="UTF-8"%>
 			</div>
 		</div>
 	</div>
+	
+	<%@ include file="plan_statistic_add_note.jsp"%>
+	
 	<!-- footer content -->
 	<s:include value="footer.jsp" />
 	<!-- /footer content -->

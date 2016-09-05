@@ -104,6 +104,9 @@ pageEncoding="UTF-8"%>
 			</div>
 		</div>
 	</div>
+	
+	<%@ include file="plan_general_add_note.jsp"%>
+	
 	<!-- footer content -->
 	<s:include value="footer.jsp" />
 	<!-- /footer content -->
@@ -216,12 +219,14 @@ $(document).ready(function() {
  	             var table = $('#example').DataTable();
  	             $('#example').on('dblclick', 'tr', function () {
  	                var data = table.row( this ).data();
- 	                alert( 'You clicked on '+data[1]+' row' );
+ 	                //alert( 'You clicked on '+data[1]+' row' );
+ 	               	$('#fc_addNoteDialog').click();
  	             } );
  	             
  	             $('#example tbody').on( 'click', 'button', function () {
 	                 var data = table.row( $(this).parents('tr') ).data();
-	                 alert( 'You clicked on '+data[1]+' row' );
+	                 //alert( 'You clicked on '+data[1]+' row' );
+	                 $('#fc_addNoteDialog').click();
 	             } ); 
  	            }
  	        });    
