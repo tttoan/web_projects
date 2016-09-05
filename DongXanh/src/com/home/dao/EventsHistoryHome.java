@@ -1,6 +1,6 @@
 package com.home.dao;
 
-// Generated Sep 5, 2016 10:29:32 PM by Hibernate Tools 3.4.0.CR1
+// Generated Sep 5, 2016 10:48:57 PM by Hibernate Tools 3.4.0.CR1
 
 import java.util.List;
 

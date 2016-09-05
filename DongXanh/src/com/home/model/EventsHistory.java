@@ -1,6 +1,6 @@
 package com.home.model;
 
-// Generated Sep 5, 2016 10:29:32 PM by Hibernate Tools 3.4.0.CR1
+// Generated Sep 5, 2016 10:48:56 PM by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
 
@@ -16,6 +16,8 @@ public class EventsHistory implements java.io.Serializable {
 	private Date planDateNew;
 	private Integer customerIdOld;
 	private Integer customerIdNew;
+	private String action;
+	private Date lastModified;
 
 	public EventsHistory() {
 	}
@@ -27,13 +29,16 @@ public class EventsHistory implements java.io.Serializable {
 	}
 
 	public EventsHistory(int eventId, Integer employeeId, Date planDateOld,
-			Date planDateNew, Integer customerIdOld, Integer customerIdNew) {
+			Date planDateNew, Integer customerIdOld, Integer customerIdNew,
+			String action, Date lastModified) {
 		this.eventId = eventId;
 		this.employeeId = employeeId;
 		this.planDateOld = planDateOld;
 		this.planDateNew = planDateNew;
 		this.customerIdOld = customerIdOld;
 		this.customerIdNew = customerIdNew;
+		this.action = action;
+		this.lastModified = lastModified;
 	}
 
 	public Integer getId() {
@@ -90,6 +95,22 @@ public class EventsHistory implements java.io.Serializable {
 
 	public void setCustomerIdNew(Integer customerIdNew) {
 		this.customerIdNew = customerIdNew;
+	}
+
+	public String getAction() {
+		return this.action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
+	}
+
+	public Date getLastModified() {
+		return this.lastModified;
+	}
+
+	public void setLastModified(Date lastModified) {
+		this.lastModified = lastModified;
 	}
 
 }
