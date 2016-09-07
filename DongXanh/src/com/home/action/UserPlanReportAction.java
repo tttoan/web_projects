@@ -13,9 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
 
+import com.home.dao.EventsNoteHome;
 import com.home.dao.WorkingPlanHome;
 import com.home.entities.UserAware;
 import com.home.entities.UserPlanGeneral;
+import com.home.model.EventsNote;
 import com.home.model.User;
 import com.home.util.DateUtils;
 import com.home.util.HibernateUtil;
@@ -113,6 +115,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			Calendar cal2 = Calendar.getInstance();
 			cal2.setTime(startday);
 			WorkingPlanHome wpHome = new WorkingPlanHome(HibernateUtil.getSessionFactory());
+			EventsNoteHome enHome = new EventsNoteHome(HibernateUtil.getSessionFactory());
 			List<UserPlanGeneral> results = wpHome.getAllUserPlan4Report(isManager()?-1:userSes.getId(), startday, endday);
 
 			StringBuilder html = new StringBuilder("<table id=\"example\" class=\"table table-striped responsive-utilities jambo_table display nowrap cell-border\" style=\"width: 100%\">");
@@ -169,7 +172,12 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 				tblContent.append("<th>" + (totalPhone) + "</th>");
 				tblContent.append("<th>" + (totalMeet) + "</th>");
 				tblContent.append("<th style=\"text-align:left\">" + planDate.toString() + "</th>");
-				tblContent.append("<th style=\"text-align:left\" id=\"id_note\"></th>");
+				EventsNote eventNote = enHome.findEventNoteByCode(no+listPlan.get(0).getCustomer_code()+listPlan.get(0).getUser_name()+planDate.toString());
+				if(eventNote != null){
+					tblContent.append("<th style=\"text-align:left\" id=\"id_note\">"+eventNote.getENote()+"</th>");
+				}else{
+					tblContent.append("<th style=\"text-align:left\" id=\"id_note\"></th>");
+				}
 				tblContent.append("<th><button class=\"btn btn-info btn-xs\">Ghi chú</button></th>");
 				tblContent.append("</tr>");
 				no++;
@@ -230,6 +238,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			Calendar cal2 = Calendar.getInstance();
 			cal2.setTime(startday);
 			WorkingPlanHome wpHome = new WorkingPlanHome(HibernateUtil.getSessionFactory());
+			EventsNoteHome enHome = new EventsNoteHome(HibernateUtil.getSessionFactory());
 			List<UserPlanGeneral> results = wpHome.getAllUserPlan4Report(isManager()?-1:userSes.getId(), startday, endday);
 
 			StringBuilder html = new StringBuilder("<table id=\"example\" class=\"table table-striped responsive-utilities jambo_table display nowrap cell-border\" style=\"width: 100%\">");
@@ -392,7 +401,12 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 				
 				tblContent.append("<th>" + totalPhone + "</th>");
 				tblContent.append("<th>" + totalMeet + "</th>");
-				tblContent.append("<th style=\"text-align:left\" id=\"id_note\"></th>");
+				EventsNote eventNote = enHome.findEventNoteByCode(""+WEEK_OF_YEAR+no+username);
+				if(eventNote != null){
+					tblContent.append("<th style=\"text-align:left\" id=\"id_note\">"+eventNote.getENote()+"</th>");
+				}else{
+					tblContent.append("<th style=\"text-align:left\" id=\"id_note\"></th>");
+				}
 				tblContent.append("<th><button class=\"btn btn-info btn-xs\">Ghi chú</button></th>");
 				tblContent.append("</tr>");
 				no++;
@@ -513,5 +527,31 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 		}else{
 			return "S";
 		}
+	}
+	
+	public String updatePlanNote(){
+		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
+			String code = StringUtil.notNull(request.getParameter("code"));
+			String note = StringUtil.notNull(request.getParameter("note"));
+			
+			EventsNoteHome enHome = new EventsNoteHome(HibernateUtil.getSessionFactory());
+			EventsNote eventNote = enHome.findEventNoteByCode(code);
+			if(eventNote == null){
+				//Insert new
+				eventNote = new EventsNote();
+				eventNote.setECode(code);
+				eventNote.setENote(note);
+				enHome.attachDirty(eventNote);
+			}else{
+				//Update
+				eventNote.setENote(note);
+				enHome.update(eventNote);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Action.ERROR;
+		}
+		return Action.NONE;
 	}
 }

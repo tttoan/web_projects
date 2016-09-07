@@ -209,6 +209,8 @@ $(document).ready(function() {
   	                selected_row =  table.row( this ).index();
   	                
   	                //alert( 'You clicked on '+data[1]+' row' );
+  	                  var code = data[0]+data[1]+data[3]+data[6];
+ 	                 $('#plan_code').val(code);
   	                 $('#descr').val(data[7]);
   	               	$('#fc_addNoteDialog').click();
  	             } );
@@ -217,6 +219,8 @@ $(document).ready(function() {
  	            	 var data = table.row( $(this).parents('tr') ).data();
 	                 selected_row =  table.row( $(this).parents('tr') ).index();
 	                 //alert( 'You clicked on '+data[1]+' row' );
+	                   var code = data[0]+data[1]+data[3]+data[6];
+ 	                 $('#plan_code').val(code);
 	                  $('#descr').val(data[7])
 	                 $('#fc_addNoteDialog').click();
 	             } ); 
@@ -226,9 +230,17 @@ $(document).ready(function() {
 	}
 	
 	function updateNote() {
-    	// $('#descr').val('tran thien toan');
-    	var cell = table.cell(selected_row, 7);
-		cell.data($('#descr').val());
+    	var code = $('#plan_code').val();
+    	var note = $('#descr').val();
+		 $.ajax({
+	            type: "POST",
+	            url : 'UpdatePlanNoteStatisticAction?code='+code+'&note='+note, 
+	            success : function(responseText) {
+	           		//alert(responseText);
+	            	var cell = table.cell(selected_row, 7);
+	        		cell.data(note);
+	            }
+	        });  
     }
 	
 </script>

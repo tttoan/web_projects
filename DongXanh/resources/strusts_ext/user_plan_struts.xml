@@ -59,6 +59,9 @@
 				<param name="inputName">inputStream</param>
 			</result>
 		</action>
+		<action name="UpdatePlanNoteStatisticAction" class="com.home.action.UserPlanReportAction" method="updatePlanNote">
+			<result name="success">/plan_statistic.jsp</result>
+		</action>
 		<action name="OpenUserPlanGeneralAction" class="com.home.action.UserPlanReportAction">
 			<result name="success">/plan_general.jsp</result>
 		</action>
@@ -67,6 +70,9 @@
 				<param name="contentType">text/html</param>
 				<param name="inputName">inputStream</param>
 			</result>
+		</action>
+		<action name="UpdatePlanNoteGeneralAction" class="com.home.action.UserPlanReportAction" method="updatePlanNote">
+			<result name="success">/plan_general.jsp</result>
 		</action>
 		<action name="OpenUserPlanDetailAction" class="com.home.action.UserPlanReportAction">
 			<result name="success">/plan_detail.jsp</result>

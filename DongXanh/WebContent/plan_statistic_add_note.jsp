@@ -18,6 +18,7 @@
 	                        <form id="antoform" class="form-horizontal calender" role="form">
 	                            <div class="form-group">
 	                                <div class="col-sm-12">
+	                                	<input type="hidden" id="plan_code" name="plan_code">
                                   		<textarea class="form-control" style="height:100px;" id="descr" name="descr"></textarea>
 									</div>
 	                            </div>
