@@ -73,6 +73,8 @@
 							href="%{userPlanGeneral}" theme="bootstrap"> Kết quả công tác tuần </s:a></li>
 					<li><s:url action="OpenUserPlanDetailAction" var="userPlanDetail" /> <s:a
 							href="%{userPlanDetail}" theme="bootstrap"> Báo cáo chi tiết </s:a></li>
+					<li><s:url action="PlanHistoryAction" var="userPlanHistory" /> <s:a
+							href="%{userPlanHistory}" theme="bootstrap"> Lịch sử thay đổi </s:a></li>
 				</ul></li>
 		</ul>
 	</div>
