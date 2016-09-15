@@ -1,8 +1,13 @@
 package com.home.dao;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.xmlbeans.impl.xb.xsdschema.RestrictionDocument.Restriction;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -10,17 +15,11 @@ import org.hibernate.criterion.Restrictions;
 import com.dhtmlx.planner.DHXEv;
 import com.dhtmlx.planner.DHXEventsManager;
 import com.dhtmlx.planner.DHXStatus;
+import com.dhtmlx.planner.data.DHXCollection;
 import com.home.model.Event;
 import com.home.model.EventsHistory;
-import com.home.model.Statistic;
 import com.home.model.User;
 import com.home.util.HibernateUtil;
-
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 
 public class CustomEventsManager extends DHXEventsManager {
 	private User userSes;
@@ -33,7 +32,16 @@ public class CustomEventsManager extends DHXEventsManager {
 		super(request);
 		this.userSes = userSes;
 	}
-
+	@Override
+	public HashMap<String, Iterable<DHXCollection>> getCollections() {
+		ArrayList<DHXCollection> type_of_day = new ArrayList<DHXCollection>();
+		type_of_day.add(new DHXCollection("1", "SÁNG"));
+		type_of_day.add(new DHXCollection("2", "CHIỀU"));
+		HashMap<String,Iterable<DHXCollection>> c = 
+                          new HashMap<String,Iterable<DHXCollection>>();
+		c.put("type_of_day", type_of_day);
+		return c;
+	}
 	@SuppressWarnings("unchecked")
 	@Override
 	public Iterable<DHXEv> getEvents() {
@@ -99,8 +107,9 @@ public class CustomEventsManager extends DHXEventsManager {
 				if (flag) {
 					EventsHistory evth = new EventsHistory(eventId,
 							evt.getEmployeeId(), evt.getPlanDateOld(),
-							evt.getStart_date(), evt.getCustomerIdOld(),
-							evt.getCustomerId(), status.toString(), new Date());
+							evt.getStart_date(),
+							evt.getCustomerIdOld() == 0?evt.getCustomerId():evt.getCustomerIdOld(),
+							evt.getCustomerId(),evt.getContactType(), status.toString(),evt.getTypeOfDay(), new Date());
 					session.save(evth);
 				}
 			} catch (Exception e) {

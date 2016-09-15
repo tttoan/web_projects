@@ -26,8 +26,14 @@
         <property name="customerIdNew" type="java.lang.Integer">
             <column name="customer_id_new" />
         </property>
+          <property name="contactType" type="string">
+            <column name="contact_type" length="45" />
+        </property>
         <property name="action" type="string">
             <column name="action" length="45" />
+        </property>
+         <property name="typeOfDay" type="java.lang.Integer">
+            <column name="type_of_day" />
         </property>
         <property name="lastModified" type="timestamp">
             <column name="last_modified" length="0" />

@@ -37,6 +37,12 @@
 							list="#{'1':'Gặp trực tiếp', '2':'Gọi điện thoại'}"
 							showDownArrow="false" style="width: 100%" /></td>
 				</tr>
+					<tr class="even pointer">
+					<td><s:select label="Thời gian" id="typeOfDay"
+							name="typeOfDay"
+							list="#{'1':'Buối Sáng', '2':'Buổi Chiều'}"
+							showDownArrow="false" style="width: 100%" /></td>
+				</tr>
 				<tr class="even pointer">
 					<!-- 					<td class="">Bắt đầu:</td> -->
 					<td>

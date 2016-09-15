@@ -15,5 +15,6 @@
 		<property column="contact_type" name="contactType" type="java.lang.String" />
 		<property column="employee_id" name="employeeId" type="java.lang.Integer" />
 		<property column="customer_id" name="customerId" type="java.lang.Integer" />
+		<property column="type_of_day" name="typeOfDay" type="java.lang.Integer" />
 	</class>
 </hibernate-mapping>

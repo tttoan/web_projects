@@ -9,6 +9,7 @@ import java.util.Date;
  */
 public class EventsHistory implements java.io.Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private int eventId;
 	private Integer employeeId;
@@ -16,10 +17,32 @@ public class EventsHistory implements java.io.Serializable {
 	private Date planDateNew;
 	private Integer customerIdOld;
 	private Integer customerIdNew;
+	public String contactType;
 	private String action;
+	public int typeOfDay;
 	private Date lastModified;
+	
 
+	public int getTypeOfDay() {
+		return typeOfDay;
+	}
+
+	public void setTypeOfDay(int typeOfDay) {
+		this.typeOfDay = typeOfDay;
+	}
+	public void setTypeOfDay(String typeOfDay) {
+		this.typeOfDay = Integer.parseInt(typeOfDay == "" ? "0"
+				: typeOfDay);
+	}
 	public EventsHistory() {
+	}
+
+	public String getContactType() {
+		return contactType;
+	}
+
+	public void setContactType(String contactType) {
+		this.contactType = contactType;
 	}
 
 	public EventsHistory(int eventId, Date planDateOld, Date planDateNew) {
@@ -29,15 +52,17 @@ public class EventsHistory implements java.io.Serializable {
 	}
 
 	public EventsHistory(int eventId, Integer employeeId, Date planDateOld,
-			Date planDateNew, Integer customerIdOld, Integer customerIdNew,
-			String action, Date lastModified) {
+			Date planDateNew, Integer customerIdOld, Integer customerIdNew,String contactType,
+			String action,Integer typeOfDay, Date lastModified) {
 		this.eventId = eventId;
 		this.employeeId = employeeId;
 		this.planDateOld = planDateOld;
 		this.planDateNew = planDateNew;
 		this.customerIdOld = customerIdOld;
 		this.customerIdNew = customerIdNew;
+		this.contactType = contactType;
 		this.action = action;
+		this.typeOfDay = typeOfDay;
 		this.lastModified = lastModified;
 	}
 

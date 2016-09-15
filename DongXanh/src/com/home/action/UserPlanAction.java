@@ -23,6 +23,8 @@ import com.dhtmlx.planner.DHXSkin;
 import com.dhtmlx.planner.controls.DHXExternalLightboxForm;
 import com.dhtmlx.planner.controls.DHXGridView;
 import com.dhtmlx.planner.controls.DHXGridViewColumn;
+import com.dhtmlx.planner.controls.DHXGridViewColumn.Aligns;
+import com.dhtmlx.planner.controls.DHXGridViewColumn.VAligns;
 import com.dhtmlx.planner.controls.DHXLightboxMiniCalendar;
 import com.dhtmlx.planner.controls.DHXTimelineUnit;
 import com.dhtmlx.planner.controls.DHXTimelineView;
@@ -116,17 +118,25 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 	}
 
 	private DHXGridView customGridView() {
-		DHXGridView grid = new DHXGridView();
+		DHXGridView grid = new DHXGridView("grid");
+		grid.clearIgnore();
+		DHXGridViewColumn c1 = new DHXGridViewColumn("text", "Mô tả");
+		c1.setVAlign(VAligns.MIDDLE);
+		c1.setAlign(Aligns.LEFT);
+		grid.addOption(c1);
+		DHXGridViewColumn c2 = new DHXGridViewColumn("start_date", "Bắt đầu", 150);
+		c2.setVAlign(VAligns.MIDDLE);
+		c2.setAlign(Aligns.LEFT);
+		grid.addOption(c2);
+		grid.addOption(new DHXGridViewColumn("end_date", "Kết thúc", 150));
 		grid.setLabel("Chi tiết");
-		grid.addOption(new DHXGridViewColumn("text", "Mô tả", 200));
-		grid.addOption(new DHXGridViewColumn("start_date", "Bắt đầu", 200));
-		grid.addOption(new DHXGridViewColumn("end_date", "Kết thúc", 200));
-		grid.addOption(new DHXGridViewColumn("contactType",
-				"Hình thức liên hệ", 200));
-		grid.addOption(new DHXGridViewColumn("customerId", "Khách hàng", 200));
+//		grid.addOption(new DHXGridViewColumn("contactType",
+//				"Hình thức liên hệ"));
+//		grid.addOption(new DHXGridViewColumn("customerId", "Khách hàng"));
 		Calendar cal = Calendar.getInstance();
 		grid.setFrom(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
 				cal.get(Calendar.DAY_OF_MONTH));
+		grid.setPaging(true);
 		return grid;
 	}
 
@@ -143,10 +153,7 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 					selectedUserPlan = new User();
 					selectedUserPlan.setId(emp_id);
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
+			} catch (Exception e) {}
 			// creates and configures scheduler instance
 			DHXPlanner planner = new DHXPlanner("./codebase/", DHXSkin.GLOSSY);
 			// Planner
@@ -160,7 +167,6 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 			planner.templates.setWeekScaleDate("{date:date(%l, %d/%m/%Y)}");
 			// Config
 			planner.config.setDetailsOnCreate(true);
-
 			planner.config.setDblClickCreate(true);
 			planner.config.setDetailsOnDblClick(true);
 			planner.config.setDefaultDate("%d/%m/%Y");
@@ -171,8 +177,8 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 			planner.load("events?emp_id=" + emp_id, DHXDataFormat.JSON);
 			planner.data.dataprocessor.setURL("events?emp_id=" + emp_id);
 
-			// // Xem chi tiết
-			// planner.views.add(customGridView());
+			 // Xem chi tiết
+				planner.views.add(customGridView());
 
 			// // Xem tóm tắt
 			// DHXAgendaView agen = new DHXAgendaView();
@@ -181,27 +187,27 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 
 			// Xem Timline
 			DHXTimelineView view = new DHXTimelineView("Timeline",
-					"event_type", "Timeline");// initializes the view
+					"typeOfDay", "Timeline");
 			view.setRenderMode(DHXTimelineView.RenderModes.BAR);
-			view.addOption(new DHXTimelineUnit("1", "Buối Sáng"));// defines the
-																	// items of
-																	// the
-																	// folder
-			view.addOption(new DHXTimelineUnit("2", "Buối Chiều"));
 			view.addSecondScale(DHXTimelineView.XScaleUnits.DAY, "%l, %d/%m/%Y");
-			planner.views.add(view);// adds the view to the planner
+			view.setXStep(24);
+			view.setXSize(3);// (8PM - 8AM)/30min
+			view.setXStart(0);// 8AM/30min
+			view.setXLength(1);// 24/30min
+			view.setServerList("type_of_day");
+			planner.views.add(view);
 
 			planner.calendars.attachMiniCalendar();
 			planner.lightbox.add(new DHXLightboxMiniCalendar("cal",
 					"Time period"));
 			DHXExternalLightboxForm box = planner.lightbox
-					.setExternalLightboxForm("./custom_editor.action", 400, 300);
+					.setExternalLightboxForm("./custom_editor.action", 400, 350);
 			box.setClassName("custom_lightbox");
 
 			// planner.toPDF();
 			// planner.toICal("16_ical");
 
-			// System.out.println(planner.render());
+			System.out.println(planner.render());
 			messageStore.setScheduler(planner.render());
 			editor_custom();
 			// System.out.println("vao 2");
@@ -267,7 +273,7 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 		CustomEventsManager evs = new CustomEventsManager(request,
 				getSelectedUserPlan());
 		messageStore.setData(evs.run());
-		// System.out.println(messageStore.getData());
+		System.out.println(messageStore.getData());
 		return Action.SUCCESS;
 	}
 

@@ -3,7 +3,6 @@ package com.home.model;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import com.dhtmlx.planner.DHXEvent;
 import com.dhtmlx.planner.DHXEventsManager;
 
@@ -13,7 +12,20 @@ public class Event extends DHXEvent {
 	public int customerId;
 	public int customerIdOld;
 	public Date planDateOld;
+	public int typeOfDay;
 
+	public int getTypeOfDay() {
+		return typeOfDay;
+	}
+
+	public void setTypeOfDay(int typeOfDay) {
+		this.typeOfDay = typeOfDay;
+	}
+	public void setTypeOfDay(String typeOfDay) {
+		this.typeOfDay = Integer.parseInt(typeOfDay == "" ? "0"
+				: typeOfDay);
+	}
+	
 	public int getCustomerIdOld() {
 		return customerIdOld;
 	}
@@ -82,7 +94,7 @@ public class Event extends DHXEvent {
 
 	@Override
 	public String toString() {
-		return "Event [contactType=" + contactType + ", employeeId="
+		return "Event [contactType=" + contactType + ", typeOfDay=" + typeOfDay + " employeeId="
 				+ employeeId + ", customerId=" + customerId
 				+ ", customerIdOld=" + customerIdOld +", start_date=" + start_date + ", planDateOld="
 				+ planDateOld + "]";
