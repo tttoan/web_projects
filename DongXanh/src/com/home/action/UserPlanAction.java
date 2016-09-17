@@ -169,14 +169,16 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 			planner.templates.setMonthScaleDate("{date:date(%l, %d/%m/%Y)}");
 			planner.templates.setDayScaleDate("{date:date(%l, %d/%m/%Y)}");
 			planner.templates.setWeekScaleDate("{date:date(%l, %d/%m/%Y)}");
+			
 			// Config
 			planner.config.setDetailsOnCreate(true);
 			planner.config.setDblClickCreate(true);
 			planner.config.setDetailsOnDblClick(true);
 			planner.config.setDefaultDate("%d/%m/%Y");
 			planner.config.setMonthDate("%m/%Y");
-			planner.config.setScrollHour(24);
-			
+			planner.config.setScrollHour(8);
+			planner.config.setMaxMonthEvents(3);
+			planner.templates.setMonthEventsLink("<a>View more({count} events)</a>");
 			// View
 			planner.views.getView(0).setLabel("Tháng");
 			planner.views.getView(1).setLabel("Tuần");
@@ -221,10 +223,10 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 			// System.out.println("selectedUserPlan = " +
 			// selectedUserPlan.getId());
 			
-			ArrayList<DHXView> vv = planner.views.getViews();
-			for (DHXView dhxView : vv) {
-				System.out.println("UserPlanAction.getUserPlan() "+ dhxView.getLabel());
-			}
+//			ArrayList<DHXView> vv = planner.views.getViews();
+//			for (DHXView dhxView : vv) {
+//				System.out.println("UserPlanAction.getUserPlan() "+ dhxView.getLabel());
+//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
