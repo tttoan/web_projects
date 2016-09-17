@@ -2,6 +2,7 @@ package com.home.dao;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -16,12 +17,13 @@ import com.dhtmlx.planner.DHXEv;
 import com.dhtmlx.planner.DHXEventsManager;
 import com.dhtmlx.planner.DHXStatus;
 import com.dhtmlx.planner.data.DHXCollection;
+import com.home.conts.UserPlanDefine;
 import com.home.model.Event;
 import com.home.model.EventsHistory;
 import com.home.model.User;
 import com.home.util.HibernateUtil;
 
-public class CustomEventsManager extends DHXEventsManager {
+public class CustomEventsManager extends DHXEventsManager implements UserPlanDefine {
 	private User userSes;
 
 	public CustomEventsManager(HttpServletRequest request) {
@@ -35,8 +37,8 @@ public class CustomEventsManager extends DHXEventsManager {
 	@Override
 	public HashMap<String, Iterable<DHXCollection>> getCollections() {
 		ArrayList<DHXCollection> type_of_day = new ArrayList<DHXCollection>();
-		type_of_day.add(new DHXCollection("1", "SÁNG"));
-		type_of_day.add(new DHXCollection("2", "CHIỀU"));
+		type_of_day.add(new DHXCollection(MORNING_ID, "SÁNG"));
+		type_of_day.add(new DHXCollection(EVENING_ID, "CHIỀU"));
 		HashMap<String,Iterable<DHXCollection>> c = 
                           new HashMap<String,Iterable<DHXCollection>>();
 		c.put("type_of_day", type_of_day);
@@ -70,6 +72,29 @@ public class CustomEventsManager extends DHXEventsManager {
 		return evs;
 	}
 
+	private Date getDateByTypeOfDay(Date date, String typeOfDayId, boolean isStartDate){
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		if(typeOfDayId.equals(MORNING_ID)){
+			if(isStartDate){
+				c.set(Calendar.HOUR_OF_DAY, 0);
+				c.set(Calendar.MINUTE, 0);
+			}else{
+				c.set(Calendar.HOUR_OF_DAY, 12);
+				c.set(Calendar.MINUTE, 0);
+			}
+		}else{
+			if(isStartDate){
+				c.set(Calendar.HOUR_OF_DAY,13);
+				c.set(Calendar.MINUTE, 0);
+			}else{
+				c.set(Calendar.HOUR_OF_DAY, 23);
+				c.set(Calendar.MINUTE, 59);
+			}
+		}
+		return c.getTime();
+	}
+	
 	@Override
 	public DHXStatus saveEvent(DHXEv event, DHXStatus status) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
@@ -77,7 +102,9 @@ public class CustomEventsManager extends DHXEventsManager {
 			session = HibernateUtil.getSessionFactory().openSession();
 			session.beginTransaction();
 			Event evt = (Event) event;
-			System.out.println(evt.toString());
+			evt.setStart_date(getDateByTypeOfDay(evt.getStart_date(),evt.getTypeOfDay()+"",true));
+			evt.setEnd_date(getDateByTypeOfDay(evt.getStart_date(),evt.getTypeOfDay()+"",false));
+			
 			int eventId = -1;
 			boolean flag = true;
 			if (status == DHXStatus.UPDATE) {

@@ -28,6 +28,7 @@ import com.dhtmlx.planner.controls.DHXGridViewColumn.VAligns;
 import com.dhtmlx.planner.controls.DHXLightboxMiniCalendar;
 import com.dhtmlx.planner.controls.DHXTimelineUnit;
 import com.dhtmlx.planner.controls.DHXTimelineView;
+import com.dhtmlx.planner.controls.DHXTimelineView.XScaleUnits;
 import com.dhtmlx.planner.controls.DHXView;
 import com.dhtmlx.planner.data.DHXDataFormat;
 import com.home.dao.CustomEventsManager;
@@ -197,7 +198,7 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 			view.setRenderMode(DHXTimelineView.RenderModes.BAR);
 			view.addSecondScale(DHXTimelineView.XScaleUnits.DAY, "%l, %d/%m/%Y");
 			view.setXStep(24);
-			view.setXSize(3);// (8PM - 8AM)/30min
+			view.setXSize(2);// (8PM - 8AM)/30min
 			view.setXStart(0);// 8AM/30min
 			view.setXLength(1);// 24/30min
 			view.setServerList("type_of_day");
