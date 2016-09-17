@@ -195,12 +195,6 @@
 									$("#directorAdressCbb option:selected")
 											.text());
 						});
-				// 		$('#customerPhone,#customerId').change(function() {
-				// 			if ($('#customerPhone').prop('checked') == false)
-				// 				$('#contactType').val(-1);
-				// 			else
-				// 				$('#contactType').val($('#customerId').val());
-				// 		});
 			});
 
 	

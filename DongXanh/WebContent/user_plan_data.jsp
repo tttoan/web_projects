@@ -2,3 +2,4 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <s:property escapeHtml="false" value="messageStore.data" />
+

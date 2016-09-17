@@ -28,6 +28,7 @@ import com.dhtmlx.planner.controls.DHXGridViewColumn.VAligns;
 import com.dhtmlx.planner.controls.DHXLightboxMiniCalendar;
 import com.dhtmlx.planner.controls.DHXTimelineUnit;
 import com.dhtmlx.planner.controls.DHXTimelineView;
+import com.dhtmlx.planner.controls.DHXView;
 import com.dhtmlx.planner.data.DHXDataFormat;
 import com.home.dao.CustomEventsManager;
 import com.home.dao.CustomerHome;
@@ -124,15 +125,16 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 		c1.setVAlign(VAligns.MIDDLE);
 		c1.setAlign(Aligns.LEFT);
 		grid.addOption(c1);
-		DHXGridViewColumn c2 = new DHXGridViewColumn("start_date", "Bắt đầu", 150);
+		DHXGridViewColumn c2 = new DHXGridViewColumn("start_date", "Bắt đầu",
+				150);
 		c2.setVAlign(VAligns.MIDDLE);
 		c2.setAlign(Aligns.LEFT);
 		grid.addOption(c2);
 		grid.addOption(new DHXGridViewColumn("end_date", "Kết thúc", 150));
 		grid.setLabel("Chi tiết");
-//		grid.addOption(new DHXGridViewColumn("contactType",
-//				"Hình thức liên hệ"));
-//		grid.addOption(new DHXGridViewColumn("customerId", "Khách hàng"));
+		// grid.addOption(new DHXGridViewColumn("contactType",
+		// "Hình thức liên hệ"));
+		// grid.addOption(new DHXGridViewColumn("customerId", "Khách hàng"));
 		Calendar cal = Calendar.getInstance();
 		grid.setFrom(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
 				cal.get(Calendar.DAY_OF_MONTH));
@@ -153,7 +155,8 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 					selectedUserPlan = new User();
 					selectedUserPlan.setId(emp_id);
 				}
-			} catch (Exception e) {}
+			} catch (Exception e) {
+			}
 			// creates and configures scheduler instance
 			DHXPlanner planner = new DHXPlanner("./codebase/", DHXSkin.GLOSSY);
 			// Planner
@@ -172,13 +175,16 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 			planner.config.setDefaultDate("%d/%m/%Y");
 			planner.config.setMonthDate("%m/%Y");
 			planner.config.setScrollHour(24);
+			
 			// View
+			planner.views.getView(0).setLabel("Tháng");
 			planner.views.getView(1).setLabel("Tuần");
+			planner.views.getView(2).setLabel("Ngày");
 			planner.load("events?emp_id=" + emp_id, DHXDataFormat.JSON);
 			planner.data.dataprocessor.setURL("events?emp_id=" + emp_id);
 
-			 // Xem chi tiết
-				planner.views.add(customGridView());
+			// Xem chi tiết
+			// planner.views.add(customGridView());
 
 			// // Xem tóm tắt
 			// DHXAgendaView agen = new DHXAgendaView();
@@ -186,8 +192,8 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 			// planner.views.add(agen);
 
 			// Xem Timline
-			DHXTimelineView view = new DHXTimelineView("Timeline",
-					"typeOfDay", "Timeline");
+			DHXTimelineView view = new DHXTimelineView("Timeline", "typeOfDay",
+					"S/C");
 			view.setRenderMode(DHXTimelineView.RenderModes.BAR);
 			view.addSecondScale(DHXTimelineView.XScaleUnits.DAY, "%l, %d/%m/%Y");
 			view.setXStep(24);
@@ -213,6 +219,11 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 			// System.out.println("vao 2");
 			// System.out.println("selectedUserPlan = " +
 			// selectedUserPlan.getId());
+			
+			ArrayList<DHXView> vv = planner.views.getViews();
+			for (DHXView dhxView : vv) {
+				System.out.println("UserPlanAction.getUserPlan() "+ dhxView.getLabel());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

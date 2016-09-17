@@ -11,12 +11,12 @@
 	<s:url action="export_event" var="exportEventURL">
 		<%-- 		<s:param name="custId" value="%{id}"></s:param> --%>
 	</s:url>
-
 	<table style="width: 1000px">
 		<tr>
 			<td width="300px" valign="middle"><h3>Lịch Công Tác Tuần</h3></td>
 			<td width="110px" valign="middle"><label for="emp_id">Nhân
 					viên TT : </label></td>
+					
 			<td valign="middle"><s:form name="userPlanForm"
 					class="form-horizontal form-label-left">
 					<s:select id="emp_id" name="emp_id" style="padding-left:10px"
@@ -60,6 +60,9 @@
 <script src="js/nicescroll/jquery.nicescroll.min.js"></script>
 <script src="js/custom.js"></script>
 
+
+
+
 <script>
 	function resize() {
 		var menu = document.getElementById("sidebar-menu");
@@ -82,10 +85,14 @@
 
 <script type="text/javascript">
 	function onUserPlanChange() {
-		var type = "UserPlan?emp_id="+document.getElementById('emp_id').value;
-		//alert(type);
-		document.userPlanForm.action = type;
-		document.userPlanForm.submit();
+// 		var type = "UserPlan?emp_id="+document.getElementById('emp_id').value;
+// 		alert(type);
+// 		document.userPlanForm.action = type;
+// 		document.userPlanForm.submit();
+
+		scheduler.clearAll();
+		scheduler.load("events?emp_id="+document.getElementById('emp_id').value);  
+
 	}
 </script>
 

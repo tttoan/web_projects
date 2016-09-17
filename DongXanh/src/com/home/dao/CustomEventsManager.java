@@ -67,7 +67,6 @@ public class CustomEventsManager extends DHXEventsManager {
 			session.close();
 		}
 		DHXEventsManager.date_format = "MM/dd/yyyy HH:mm";
-		System.out.println("sasdasdasd " + evs.size());
 		return evs;
 	}
 
