@@ -22,7 +22,7 @@ public class Event extends DHXEvent {
 		this.typeOfDay = typeOfDay;
 	}
 	public void setTypeOfDay(String typeOfDay) {
-		this.typeOfDay = Integer.parseInt(typeOfDay == "" ? "0"
+		this.typeOfDay = Integer.parseInt(typeOfDay == "" ? "1"
 				: typeOfDay);
 	}
 	

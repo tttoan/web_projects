@@ -50,6 +50,16 @@
 .scheduler > div {
     border: 2px solid #cecece;
 }
+
+.dhx_cal_today_button  {
+    height: 20px;
+}
+.dhx_cal_tab{
+ height: 20px;
+}
+.dhx_cal_tab.active{
+ height: 20px;
+}
 </style>
 
 
@@ -85,9 +95,25 @@
 		scheduler.templates.lightbox_header = function(start,end,ev){
 			return "Tạo công tác";
 		};
+		
+		var inputs = document.body.getElementsByClassName('dhx_cal_tab');
+		for (var i = 0; i < inputs.length; i++) {
+			var name = inputs[i].getAttribute('name');
+			if (name == "vbvb_tab"){
+				inputs[i].onclick = function() {myFunction()};
+				break;
+			}
+				
+		}
+		
 </script>
 
 <script type="text/javascript">
+function myFunction() {
+		var type = "UserPlan?emp_id="+document.getElementById('emp_id').value;
+		document.userPlanForm.action = type;
+		document.userPlanForm.submit();
+}
 	function onUserPlanChange() {
 // 		var type = "UserPlan?emp_id="+document.getElementById('emp_id').value;
 // 		alert(type);

@@ -179,6 +179,8 @@
 				$('#customerIdOld').val(obj["customerId"]);
 			} else
 				selectBoxes[i].value = obj[name];
+			
+			
 		}
 	};
 

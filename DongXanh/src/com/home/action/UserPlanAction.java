@@ -119,6 +119,7 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 
 	private DHXGridView customGridView() {
 		DHXGridView grid = new DHXGridView("grid");
+		grid.setName("vbvb");
 		grid.clearIgnore();
 		DHXGridViewColumn c1 = new DHXGridViewColumn("text", "Mô tả");
 		c1.setVAlign(VAligns.MIDDLE);
@@ -162,7 +163,7 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 			planner.setInitialDate(new Date());
 			planner.setWidth(1000);
 			planner.setHeight(650);
-			planner.setInitialView("Timeline");
+			planner.setInitialView("vbvb");
 			// Template
 			planner.templates.setMonthScaleDate("{date:date(%l, %d/%m/%Y)}");
 			planner.templates.setDayScaleDate("{date:date(%l, %d/%m/%Y)}");
@@ -186,7 +187,7 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 			planner.data.dataprocessor.setURL("events?emp_id=" + emp_id);
 
 			// Xem chi tiết
-			// planner.views.add(customGridView());
+			planner.views.add(customGridView());
 
 			// // Xem tóm tắt
 			// DHXAgendaView agen = new DHXAgendaView();
