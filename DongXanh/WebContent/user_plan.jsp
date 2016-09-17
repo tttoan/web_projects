@@ -81,6 +81,10 @@
 	
 		window.onload = resize;
 		window.onresize = resize;
+
+		scheduler.templates.lightbox_header = function(start,end,ev){
+			return "Tạo công tác";
+		};
 </script>
 
 <script type="text/javascript">

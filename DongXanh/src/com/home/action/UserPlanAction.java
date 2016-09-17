@@ -26,11 +26,9 @@ import com.dhtmlx.planner.controls.DHXGridViewColumn;
 import com.dhtmlx.planner.controls.DHXGridViewColumn.Aligns;
 import com.dhtmlx.planner.controls.DHXGridViewColumn.VAligns;
 import com.dhtmlx.planner.controls.DHXLightboxMiniCalendar;
-import com.dhtmlx.planner.controls.DHXTimelineUnit;
 import com.dhtmlx.planner.controls.DHXTimelineView;
-import com.dhtmlx.planner.controls.DHXTimelineView.XScaleUnits;
-import com.dhtmlx.planner.controls.DHXView;
 import com.dhtmlx.planner.data.DHXDataFormat;
+import com.dhtmlx.planner.extensions.DHXExtension;
 import com.home.dao.CustomEventsManager;
 import com.home.dao.CustomerHome;
 import com.home.dao.UserHome;
@@ -176,9 +174,10 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 			planner.config.setDetailsOnDblClick(true);
 			planner.config.setDefaultDate("%d/%m/%Y");
 			planner.config.setMonthDate("%m/%Y");
-			planner.config.setScrollHour(8);
-			planner.config.setMaxMonthEvents(3);
-			planner.templates.setMonthEventsLink("<a>View more({count} events)</a>");
+			planner.config.setScrollHour(24);
+			planner.config.setFirstHour(8);
+			planner.config.setLastHour(19);
+			planner.config.setHourSizePx(55);
 			// View
 			planner.views.getView(0).setLabel("Tháng");
 			planner.views.getView(1).setLabel("Tuần");
