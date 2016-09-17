@@ -27,7 +27,7 @@ public class StringUtil {
 	private static String removeAccent(String val) {
 		String temp = Normalizer.normalize(val, Normalizer.Form.NFD);
 		Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-		return pattern.matcher(temp).replaceAll("");
+		return pattern.matcher(temp).replaceAll("").replace("Đ", "d").replace("đ", "d");
 	}
 	
 	public static String generateUserName(String val){
