@@ -149,15 +149,34 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 	private DHXGridView customGridView() {
 		DHXGridView grid = new DHXGridView(GRIF_VIEW_NAME);
 		grid.setLabel("Chi tiết");
-		grid.addOption(new DHXGridViewColumn("employeeName", "NVTT"));
-		grid.addOption(new DHXGridViewColumn("customerNameOld", "KH Cũ"));
-		grid.addOption(new DHXGridViewColumn("customerNameNew", "KH Mới"));
-		grid.addOption(new DHXGridViewColumn("contactTypeName", "Hình Thức LH"));
-		grid.addOption(new DHXGridViewColumn("timelineTypeName", "Thời Điểm"));
-		grid.addOption(new DHXGridViewColumn("lastModified", "Chỉnh Sửa"));
+		//NVTT
+		DHXGridViewColumn employeeName = new DHXGridViewColumn("employeeName", "NVTT");
+		employeeName.setWidth(180);
+		grid.addOption(employeeName);
+		//KH Cũ
+		DHXGridViewColumn customerNameOld = new DHXGridViewColumn("customerNameOld", "KH Cũ");
+		customerNameOld.setWidth(200);
+		grid.addOption(customerNameOld);
+		//KH Mới
+		DHXGridViewColumn customerNameNew= new DHXGridViewColumn("customerNameNew", "KH Mới");
+		customerNameNew.setWidth(200);
+		grid.addOption(customerNameNew);
+		//Hình Thức LH
+		DHXGridViewColumn contactTypeName= new DHXGridViewColumn("contactTypeName", "Hình Thức LH");
+		contactTypeName.setWidth(110);
+		grid.addOption(contactTypeName);
+		//Thời Điểm
+		DHXGridViewColumn timelineTypeName = new DHXGridViewColumn("timelineTypeName", "Thời Điểm");
+		timelineTypeName.setWidth(60);
+		grid.addOption(timelineTypeName);
+		//Chỉnh Sửa
+		DHXGridViewColumn lastModified=new DHXGridViewColumn("lastModified", "Chỉnh Sửa");
+		//lastModified.setWidth(200);
+		grid.addOption(lastModified);
 //		Calendar cal = Calendar.getInstance();
 //		grid.setFrom(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
 //				cal.get(Calendar.DAY_OF_MONTH));
+		grid.setPaging(true);
 		return grid;
 	}
 
@@ -226,6 +245,7 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 			view.setXStart(0);// 8AM/30min
 			view.setXLength(1);// 24/30min
 			view.setServerList("typeOfDayCollect");
+		
 			planner.views.add(view);
 
 			planner.calendars.attachMiniCalendar();

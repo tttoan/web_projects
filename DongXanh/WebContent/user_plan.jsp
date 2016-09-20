@@ -90,7 +90,6 @@
 				}
 				return true;
 			});
-
 	function resize() {
 		var menu = document.getElementById("sidebar-menu");
 		var header = document.getElementById("header");
@@ -103,7 +102,6 @@
 		content.style.height = height + "px";
 		container.style.height = (height - 120) + "px";
 
-		document.get
 		
 		if (scheduler)
 			scheduler.setCurrentView();
@@ -111,6 +109,16 @@
 
 	window.onload = resize;
 	window.onresize = resize;
+
+	function resizeGrid(){
+		var x = document.getElementsByClassName("dhx_grid_v_border");
+		
+		if(x.length > 0){
+			x[0].style.left = 300;
+		}
+		};
+		
+	
 	scheduler.templates.lightbox_header = function(start, end, ev) {
 		return "Tạo công tác";
 	};
@@ -124,12 +132,12 @@
 
 <script type="text/javascript">
 	function onUserPlanChange() {
-		// 		var type = "UserPlan?emp_id="+document.getElementById('emp_id').value;
-		// 		document.userPlanForm.action = type;
-		// 		document.userPlanForm.submit();
-		scheduler.clearAll();
-		scheduler.load("events?emp_id="
-				+ document.getElementById('emp_id').value + "&curTabName=");
+				var type = "UserPlan?emp_id="+document.getElementById('emp_id').value + "&curTabName=";
+				document.userPlanForm.action = type;
+				document.userPlanForm.submit();
+// 		scheduler.clearAll();
+// 		scheduler.load("events?emp_id="
+// 				+ document.getElementById('emp_id').value + "&curTabName=");
 	}
 </script>
 
