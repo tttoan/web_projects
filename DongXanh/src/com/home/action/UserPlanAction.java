@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -23,33 +22,54 @@ import com.dhtmlx.planner.DHXSkin;
 import com.dhtmlx.planner.controls.DHXExternalLightboxForm;
 import com.dhtmlx.planner.controls.DHXGridView;
 import com.dhtmlx.planner.controls.DHXGridViewColumn;
-import com.dhtmlx.planner.controls.DHXGridViewColumn.Aligns;
-import com.dhtmlx.planner.controls.DHXGridViewColumn.VAligns;
 import com.dhtmlx.planner.controls.DHXLightboxMiniCalendar;
 import com.dhtmlx.planner.controls.DHXTimelineView;
 import com.dhtmlx.planner.data.DHXDataFormat;
-import com.dhtmlx.planner.extensions.DHXExtension;
+import com.home.conts.UserPlanDefine;
+import com.home.dao.ContactTypeHome;
 import com.home.dao.CustomEventsManager;
 import com.home.dao.CustomerHome;
+import com.home.dao.TimelineTypeHome;
 import com.home.dao.UserHome;
 import com.home.dao.UserPlanHome;
 import com.home.entities.UserAware;
+import com.home.model.ContactType;
 import com.home.model.Customer;
 import com.home.model.MessageStore;
+import com.home.model.TimelineType;
 import com.home.model.User;
 import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
+import com.home.util.StringUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
-public class UserPlanAction extends ActionSupport implements UserAware {
+public class UserPlanAction extends ActionSupport implements UserAware, UserPlanDefine {
 	private static final long serialVersionUID = 1L;
 	private MessageStore messageStore = new MessageStore();
 	private User userSes;
 	private User selectedUserPlan;
 	private List<Customer> listCustomer = new ArrayList<Customer>();
-	private List<User> listEmployee = new ArrayList<User>();
+	private List<User> listEmployee = new ArrayList<>();
+	private List<ContactType> listContactType = new ArrayList<>();
+	private List<TimelineType> listTimelineType = new ArrayList<>();
+	public List<TimelineType> getListTimelineType() {
+		return listTimelineType;
+	}
+
+	public void setListTimelineType(List<TimelineType> listTimelineType) {
+		this.listTimelineType = listTimelineType;
+	}
+
+	public List<ContactType> getListContactType() {
+		return listContactType;
+	}
+
+	public void setListContactType(List<ContactType> listContactType) {
+		this.listContactType = listContactType;
+	}
+
 	private InputStream ical;
 	private InputStream fileInputStream;
 	public boolean isPermissionAccept = false;
@@ -90,7 +110,16 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 		setListCustomer(custHome.getListCustomerByUserId(getSelectedUserPlan()
 				.getId()));
 	}
-
+	private void getAllContactType() {
+		ContactTypeHome ctHome = new ContactTypeHome(
+				HibernateUtil.getSessionFactory());
+		setListContactType(ctHome.findAll());
+	}
+	private void getAllTimelineType() {
+		TimelineTypeHome tlHome = new TimelineTypeHome(
+				HibernateUtil.getSessionFactory());
+		setListTimelineType(tlHome.findAll());
+	}
 	private void getEmployees() {
 		boolean isAdmin = (userSes.getRole().getRoleId() == ROLE_ADMIN || userSes
 				.getRole().getRoleId() == ROLE_LEADER);
@@ -118,38 +147,32 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 	}
 
 	private DHXGridView customGridView() {
-		DHXGridView grid = new DHXGridView("grid");
-		grid.setName("vbvb");
-		grid.clearIgnore();
-		DHXGridViewColumn c1 = new DHXGridViewColumn("text", "Mô tả");
-		c1.setVAlign(VAligns.MIDDLE);
-		c1.setAlign(Aligns.LEFT);
-		grid.addOption(c1);
-		DHXGridViewColumn c2 = new DHXGridViewColumn("start_date", "Bắt đầu",
-				150);
-		c2.setVAlign(VAligns.MIDDLE);
-		c2.setAlign(Aligns.LEFT);
-		grid.addOption(c2);
-		grid.addOption(new DHXGridViewColumn("end_date", "Kết thúc", 150));
+		DHXGridView grid = new DHXGridView(GRIF_VIEW_NAME);
 		grid.setLabel("Chi tiết");
-		// grid.addOption(new DHXGridViewColumn("contactType",
-		// "Hình thức liên hệ"));
-		// grid.addOption(new DHXGridViewColumn("customerId", "Khách hàng"));
-		Calendar cal = Calendar.getInstance();
-		grid.setFrom(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
-				cal.get(Calendar.DAY_OF_MONTH));
-		grid.setPaging(true);
+		grid.addOption(new DHXGridViewColumn("employeeName", "NVTT"));
+		grid.addOption(new DHXGridViewColumn("customerNameOld", "KH Cũ"));
+		grid.addOption(new DHXGridViewColumn("customerNameNew", "KH Mới"));
+		grid.addOption(new DHXGridViewColumn("contactTypeName", "Hình Thức LH"));
+		grid.addOption(new DHXGridViewColumn("timelineTypeName", "Thời Điểm"));
+		grid.addOption(new DHXGridViewColumn("lastModified", "Chỉnh Sửa"));
+//		Calendar cal = Calendar.getInstance();
+//		grid.setFrom(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
+//				cal.get(Calendar.DAY_OF_MONTH));
 		return grid;
 	}
 
 	public String getUserPlan() throws Exception {
 		try {
+			messageStore = new MessageStore();
 			int emp_id = -1;
+			String currentTab = "Timeline";
 			selectedUserPlan = null;
 			try {
 				HttpServletRequest request = (HttpServletRequest) ActionContext
 						.getContext().get(ServletActionContext.HTTP_REQUEST);
 				emp_id = Integer.parseInt(request.getParameter("emp_id"));
+				if(!StringUtil.notNull(request.getParameter("curTabName")).isEmpty())
+					currentTab = StringUtil.notNull(request.getParameter("curTabName"));
 				if (emp_id > 0) {
 					// System.out.println("emp_id="+emp_id);
 					selectedUserPlan = new User();
@@ -163,12 +186,11 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 			planner.setInitialDate(new Date());
 			planner.setWidth(1000);
 			planner.setHeight(650);
-			planner.setInitialView("vbvb");
+			planner.setInitialView(currentTab);
 			// Template
 			planner.templates.setMonthScaleDate("{date:date(%l, %d/%m/%Y)}");
 			planner.templates.setDayScaleDate("{date:date(%l, %d/%m/%Y)}");
 			planner.templates.setWeekScaleDate("{date:date(%l, %d/%m/%Y)}");
-			
 			// Config
 			planner.config.setDetailsOnCreate(true);
 			planner.config.setDblClickCreate(true);
@@ -183,8 +205,8 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 			planner.views.getView(0).setLabel("Tháng");
 			planner.views.getView(1).setLabel("Tuần");
 			planner.views.getView(2).setLabel("Ngày");
-			planner.load("events?emp_id=" + emp_id, DHXDataFormat.JSON);
-			planner.data.dataprocessor.setURL("events?emp_id=" + emp_id);
+			planner.load("events?emp_id=" + emp_id+"&curTabName=" + currentTab, DHXDataFormat.JSON);
+			planner.data.dataprocessor.setURL("events?emp_id=" + emp_id+"&curTabName=" + currentTab);
 
 			// Xem chi tiết
 			planner.views.add(customGridView());
@@ -203,7 +225,7 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 			view.setXSize(2);// (8PM - 8AM)/30min
 			view.setXStart(0);// 8AM/30min
 			view.setXLength(1);// 24/30min
-			view.setServerList("type_of_day");
+			view.setServerList("typeOfDayCollect");
 			planner.views.add(view);
 
 			planner.calendars.attachMiniCalendar();
@@ -251,8 +273,8 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 		getListCustomerByUserId();
 		checkPermissionAccept();
 		getEmployees();
-		System.out.println("UserPlanAction.editor_custom() "
-				+ isPermissionAccept);
+		getAllContactType();
+		getAllTimelineType();
 		return SUCCESS;
 	}
 
@@ -267,10 +289,13 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 	public String planEvents() throws Exception {
 		System.out.println("get planEvents...");
 		int emp_id = -1;
+		String currentTab = "";
 		try {
 			HttpServletRequest request = (HttpServletRequest) ActionContext
 					.getContext().get(ServletActionContext.HTTP_REQUEST);
 			emp_id = Integer.parseInt(request.getParameter("emp_id"));
+			if(!StringUtil.notNull(request.getParameter("curTabName")).isEmpty())
+				currentTab = StringUtil.notNull(request.getParameter("curTabName"));
 			if (emp_id > 0) {
 				System.out.println("emp_id=" + emp_id);
 				selectedUserPlan = new User();
@@ -284,8 +309,15 @@ public class UserPlanAction extends ActionSupport implements UserAware {
 		HttpServletRequest request = ServletActionContext.getRequest();
 		// request.setCharacterEncoding("UTF-8");
 		// request.setAttribute("Content-type", "text/html; charset=UTF-8");
-		CustomEventsManager evs = new CustomEventsManager(request,
-				getSelectedUserPlan());
+		CustomEventsManager evs = null;
+		if(currentTab.equals(GRIF_VIEW_NAME)){
+			evs = new CustomEventsManager(request,
+					getSelectedUserPlan(),true);
+			System.out.println("UserPlanAction.planEvents() "+currentTab);
+		}
+		else
+			evs = new CustomEventsManager(request,
+					getSelectedUserPlan());
 		messageStore.setData(evs.run());
 		System.out.println(messageStore.getData());
 		return Action.SUCCESS;

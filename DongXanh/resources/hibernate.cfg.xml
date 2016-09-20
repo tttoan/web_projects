@@ -44,5 +44,7 @@
         <mapping resource="com/home/model/Event.hbm.xml" />
         <mapping resource="com/home/model/EventsHistory.hbm.xml" />
         <mapping resource="com/home/model/EventsNote.hbm.xml" />
+         <mapping resource="com/home/model/ContactType.hbm.xml" />
+         <mapping resource="com/home/model/TimelineType.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

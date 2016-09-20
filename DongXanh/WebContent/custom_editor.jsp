@@ -34,13 +34,12 @@
 				<tr class="even pointer">
 					<td><s:select label="Hình thức liên hệ" id="contactType"
 							name="contactType"
-							list="#{'1':'Gặp trực tiếp', '2':'Gọi điện thoại'}"
+							list="listContactType" listKey="id" listValue="contactTypeName"
 							showDownArrow="false" style="width: 100%" /></td>
 				</tr>
 					<tr class="even pointer">
-					<td><s:select label="Thời gian" id="typeOfDay"
-							name="typeOfDay"
-							list="#{'1':'Buối Sáng', '2':'Buổi Chiều'}"
+					<td><s:select label="Thời gian" id="typeOfDay" name="typeOfDay" 
+					list="listTimelineType" listKey="id" listValue="timelineTypeName" 
 							showDownArrow="false" style="width: 100%" /></td>
 				</tr>
 				<tr class="even pointer">

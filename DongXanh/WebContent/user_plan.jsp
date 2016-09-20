@@ -16,7 +16,6 @@
 			<td width="300px" valign="middle"><h3>Lịch Công Tác Tuần</h3></td>
 			<td width="110px" valign="middle"><label for="emp_id">Nhân
 					viên TT : </label></td>
-					
 			<td valign="middle"><s:form name="userPlanForm"
 					class="form-horizontal form-label-left">
 					<s:select id="emp_id" name="emp_id" style="padding-left:10px"
@@ -47,18 +46,20 @@
 </div>
 
 <style>
-.scheduler > div {
-    border: 2px solid #cecece;
+.scheduler>div {
+	border: 2px solid #cecece;
 }
 
-.dhx_cal_today_button  {
-    height: 20px;
+.dhx_cal_today_button {
+	height: 20px;
 }
-.dhx_cal_tab{
- height: 20px;
+
+.dhx_cal_tab {
+	height: 20px;
 }
-.dhx_cal_tab.active{
- height: 20px;
+
+.dhx_cal_tab.active {
+	height: 20px;
 }
 </style>
 
@@ -74,55 +75,61 @@
 
 
 <script>
+	scheduler.attachEvent("onBeforeViewChange",
+			function(old_mode, old_date, new_mode, new_date) {
+				if (new_mode == "log_detail") {
+					scheduler.clearAll();
+					scheduler.load("events?emp_id="
+							+ document.getElementById('emp_id').value
+							+ "&curTabName=log_detail");
+				} else if (old_mode == "log_detail") {
+					scheduler.clearAll();
+					scheduler.load("events?emp_id="
+							+ document.getElementById('emp_id').value
+							+ "&curTabName=");
+				}
+				return true;
+			});
+
 	function resize() {
 		var menu = document.getElementById("sidebar-menu");
 		var header = document.getElementById("header");
 		var content = document.getElementById("content");
 		var container = document.getElementById("scheduler");
-		
-		content.style.width = (document.body.offsetWidth - menu.offsetWidth) + "px";
-		var height = document.body.offsetHeight ;//- header.offsetHeight + 11;
+
+		content.style.width = (document.body.offsetWidth - menu.offsetWidth)
+				+ "px";
+		var height = document.body.offsetHeight;//- header.offsetHeight + 11;
 		content.style.height = height + "px";
 		container.style.height = (height - 120) + "px";
 
+		document.get
+		
 		if (scheduler)
 			scheduler.setCurrentView();
 	};
-	
-		window.onload = resize;
-		window.onresize = resize;
 
-		scheduler.templates.lightbox_header = function(start,end,ev){
-			return "Tạo công tác";
-		};
-		
-		var inputs = document.body.getElementsByClassName('dhx_cal_tab');
-		for (var i = 0; i < inputs.length; i++) {
-			var name = inputs[i].getAttribute('name');
-			if (name == "vbvb_tab"){
-				inputs[i].onclick = function() {myFunction()};
-				break;
+	window.onload = resize;
+	window.onresize = resize;
+	scheduler.templates.lightbox_header = function(start, end, ev) {
+		return "Tạo công tác";
+	};
+	scheduler.templates.event_bar_date = function(start,end,ev){
+		if(ev.typeOfDay == "1"){
+		return "S : ";
 			}
-				
-		}
-		
+		 return "C : ";
+	};
 </script>
 
 <script type="text/javascript">
-function myFunction() {
-		var type = "UserPlan?emp_id="+document.getElementById('emp_id').value;
-		document.userPlanForm.action = type;
-		document.userPlanForm.submit();
-}
 	function onUserPlanChange() {
-// 		var type = "UserPlan?emp_id="+document.getElementById('emp_id').value;
-// 		alert(type);
-// 		document.userPlanForm.action = type;
-// 		document.userPlanForm.submit();
-
+		// 		var type = "UserPlan?emp_id="+document.getElementById('emp_id').value;
+		// 		document.userPlanForm.action = type;
+		// 		document.userPlanForm.submit();
 		scheduler.clearAll();
-		scheduler.load("events?emp_id="+document.getElementById('emp_id').value);  
-
+		scheduler.load("events?emp_id="
+				+ document.getElementById('emp_id').value + "&curTabName=");
 	}
 </script>
 

@@ -1,6 +1,9 @@
 package com.home.dao;
 
 import java.math.BigInteger;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,23 +12,28 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.internal.SessionImpl;
 
 import com.dhtmlx.planner.DHXEv;
 import com.dhtmlx.planner.DHXEventsManager;
 import com.dhtmlx.planner.DHXStatus;
 import com.dhtmlx.planner.data.DHXCollection;
 import com.home.conts.UserPlanDefine;
+import com.home.model.Customer;
 import com.home.model.Event;
 import com.home.model.EventsHistory;
+import com.home.model.TimelineType;
 import com.home.model.User;
 import com.home.util.HibernateUtil;
+import com.home.util.StringUtil;
 
 public class CustomEventsManager extends DHXEventsManager implements UserPlanDefine {
 	private User userSes;
-
+	private boolean isLogDetailMode;
 	public CustomEventsManager(HttpServletRequest request) {
 		super(request);
 	}
@@ -33,24 +41,38 @@ public class CustomEventsManager extends DHXEventsManager implements UserPlanDef
 	public CustomEventsManager(HttpServletRequest request, User userSes) {
 		super(request);
 		this.userSes = userSes;
+		this.isLogDetailMode = false;
+	}
+	public CustomEventsManager(HttpServletRequest request, User userSes, boolean isLogDetailMode) {
+		super(request);
+		this.userSes = userSes;
+		this.isLogDetailMode = isLogDetailMode;
 	}
 	@Override
 	public HashMap<String, Iterable<DHXCollection>> getCollections() {
 		ArrayList<DHXCollection> type_of_day = new ArrayList<DHXCollection>();
-		type_of_day.add(new DHXCollection(MORNING_ID, "SÁNG"));
-		type_of_day.add(new DHXCollection(EVENING_ID, "CHIỀU"));
+		TimelineTypeHome timeHome = new TimelineTypeHome(HibernateUtil.getSessionFactory());
+		List<TimelineType> result = timeHome.findAll();
+		for (TimelineType timelineType : result) 
+			type_of_day.add(new DHXCollection(timelineType.getId()+"", timelineType.getTimelineTypeName()));
 		HashMap<String,Iterable<DHXCollection>> c = 
                           new HashMap<String,Iterable<DHXCollection>>();
-		c.put("type_of_day", type_of_day);
+		c.put("typeOfDayCollect", type_of_day);
 		return c;
 	}
-	@SuppressWarnings("unchecked")
 	@Override
 	public Iterable<DHXEv> getEvents() {
+		if(isLogDetailMode)
+			return getListLogDetail();
+		else
+			return getListEvents();
+	}
+	@SuppressWarnings("unchecked")
+	public Iterable<DHXEv> getListEvents() {
 		DHXEventsManager.date_format = "yyyy-MM-dd HH:mm:ss";
 		HibernateUtil.getSessionFactory();
 		Session session = HibernateUtil.getSessionFactory().openSession();
-		List<DHXEv> evs = new ArrayList<DHXEv>();
+		List<DHXEv> evs = new ArrayList<>();
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			Criteria cre = session.createCriteria(Event.class);
@@ -71,7 +93,57 @@ public class CustomEventsManager extends DHXEventsManager implements UserPlanDef
 		DHXEventsManager.date_format = "MM/dd/yyyy HH:mm";
 		return evs;
 	}
-
+	public Iterable<DHXEv> getListLogDetail() {
+		DHXEventsManager.date_format = "yyyy-MM-dd HH:mm:ss";
+		HibernateUtil.getSessionFactory();
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		List<DHXEv> evs = new ArrayList<>();
+		try {
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			try (Statement sta = conn.createStatement()) {
+				String query = "SELECT eh.*, u.full_name, co.business_name as customerNameOld, "
+						+ " cn.business_name as customerNameNew, tt.timeline_type_name,"
+						+ " ct.contact_type_name FROM events_history eh"
+						+ " left join user u on eh.employee_id = u.id"
+						+ " left join customer co on eh.customer_id_old = co.id"
+						+ " left join customer cn on eh.customer_id_new = cn.id"
+						+ " left join timeline_type tt on eh.type_of_day = tt.id"
+						+ " left join contact_type ct on eh.contact_type = ct.id";
+				try (ResultSet rs = sta.executeQuery(query)) {
+					while (rs.next()) {
+						DHXEv dhxEv = new EventsHistory();
+						dhxEv.setStart_date(rs.getDate("plan_date_old"));
+						dhxEv.setEnd_date(rs.getDate("plan_date_old"));
+						((EventsHistory)dhxEv).setPlanDateOld(rs.getDate("plan_date_old"));
+						((EventsHistory)dhxEv).setPlanDateNew(rs.getDate("plan_date_new"));
+						((EventsHistory)dhxEv).setEmployeeName(StringUtil.notNull(rs.getString("full_name")));
+						((EventsHistory)dhxEv).setCustomerNameOld(StringUtil.notNull(rs.getString("customerNameOld")));
+						((EventsHistory)dhxEv).setCustomerNameNew(StringUtil.notNull(rs.getString("customerNameNew")));
+						((EventsHistory)dhxEv).setTimelineTypeName(StringUtil.notNull(rs.getString("timeline_type_name")));
+						((EventsHistory)dhxEv).setContactTypeName(StringUtil.notNull(rs.getString("contact_type_name")));
+						((EventsHistory)dhxEv).setLastModified(rs.getDate("last_modified"));
+						evs.add(dhxEv);
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
+		} catch (RuntimeException re) {
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		DHXEventsManager.date_format = "MM/dd/yyyy HH:mm";
+		return evs;
+	}
 	private Date getDateByTypeOfDay(Date date, String typeOfDayId, boolean isStartDate){
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
