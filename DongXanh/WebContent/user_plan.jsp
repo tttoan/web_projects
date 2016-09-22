@@ -90,6 +90,22 @@
 				}
 				return true;
 			});
+	scheduler.attachEvent("onViewChange", function (new_mode , new_date){
+		if (new_mode == "log_detail") {
+			setTimeout(function(){
+				var x = document.getElementsByClassName("dhx_grid_v_border");
+				if(x.length > 0 && x.length < 6){
+					x[0].style.left = 163+"px";
+					x[1].style.left = 347+"px";
+					x[2].style.left = 530+"px";
+					x[3].style.left = 630+"px";
+					x[4].style.left = 715+"px";
+				}
+
+			},100); 
+		}
+	});
+	
 	function resize() {
 		var menu = document.getElementById("sidebar-menu");
 		var header = document.getElementById("header");
@@ -110,13 +126,7 @@
 	window.onload = resize;
 	window.onresize = resize;
 
-	function resizeGrid(){
-		var x = document.getElementsByClassName("dhx_grid_v_border");
-		
-		if(x.length > 0){
-			x[0].style.left = 300;
-		}
-		};
+
 		
 	
 	scheduler.templates.lightbox_header = function(start, end, ev) {
