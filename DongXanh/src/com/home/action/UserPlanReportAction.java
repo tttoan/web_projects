@@ -2,6 +2,7 @@ package com.home.action;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.net.URLDecoder;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -13,10 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
 
+import com.home.dao.EventsHistoryHome;
 import com.home.dao.EventsNoteHome;
 import com.home.dao.WorkingPlanHome;
 import com.home.entities.UserAware;
 import com.home.entities.UserPlanGeneral;
+import com.home.entities.UserPlanHistory;
 import com.home.model.EventsNote;
 import com.home.model.User;
 import com.home.util.DateUtils;
@@ -122,7 +125,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			html.append("<thead>");
 			
 			html.append("<tr class=\"headings\">");
-			html.append("<th colspan=\"9\">BÁO CÁO THỐNG KÊ SỐ LẦN TIẾP XÚC KHÁCH HÀNG</th>");
+			html.append("<th colspan=\"10\">BÁO CÁO THỐNG KÊ SỐ LẦN TIẾP XÚC KHÁCH HÀNG</th>");
 			html.append("</tr>");
 			
 			html.append("<tr class=\"headings\">");
@@ -130,14 +133,15 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			html.append("<th rowspan=\"2\">MKH</th>");
 			html.append("<th rowspan=\"2\">Tên khách hàng</th>");
 			html.append("<th rowspan=\"2\">NVTT</th>");
-			html.append("<th colspan=\"2\">Số lần tiếp xúc KH</th>");
-			html.append("<th rowspan=\"2\">Ngày tiếp xúc</th>");
+			html.append("<th colspan=\"4\">Số lần tiếp xúc KH</th>");
 			html.append("<th rowspan=\"2\" colspan=\"2\">Ghi chú</th>");
 			html.append("</tr>");
 				
 			html.append("<tr class=\"headings\">");
 			html.append("<th>ĐT</th>");
-			html.append("<th>Trực tiếp</th>");
+			html.append("<th>Ngày ĐT</th>");
+			html.append("<th>TT</th>");
+			html.append("<th>Ngày TT</th>");
 			html.append("</tr>");
 			
 			int sum_totalPhone = 0;
@@ -150,35 +154,38 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 				 List<UserPlanGeneral> listPlan = hm.get(username_cuscode);
 				// renderer html content
 				tblContent.append("<tr class=\"even pointer\">");
-				tblContent.append("<th>" + (no) + "</th>");
-				tblContent.append("<th style=\"text-align:left\">" + (listPlan.get(0).getCustomer_code()) + "</th>");
-				tblContent.append("<th style=\"text-align:left\">" + (listPlan.get(0).getBusiness_name()) + "</th>");
-				tblContent.append("<th style=\"text-align:left\">" + (listPlan.get(0).getUser_name()) + "</th>");
+				tblContent.append("<td>" + (no) + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + (listPlan.get(0).getCustomer_code()) + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + (listPlan.get(0).getBusiness_name()) + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + (listPlan.get(0).getNVTT()) + "</td>");
 				
 				int totalPhone = 0;
 				int totalMeet = 0;
-				StringBuilder planDate  = new StringBuilder();
+				StringBuilder planDatePhone  = new StringBuilder();
+				StringBuilder planDateMeet  = new StringBuilder();
 				for (UserPlanGeneral userPlanGeneral : listPlan) {
 					if(userPlanGeneral.getPhone() > 0){
 						totalPhone++;
 						sum_totalPhone++;
+						planDatePhone.append(DateUtils.getStringFromDate(userPlanGeneral.getStart_date(), "dd/MM")).append("; ");
 					}else{
 						totalMeet++;
 						sum_totalMeet++;
+						planDateMeet.append(DateUtils.getStringFromDate(userPlanGeneral.getStart_date(), "dd/MM")).append("; ");
 					}
-					planDate.append(DateUtils.getStringFromDate(userPlanGeneral.getStart_date(), "dd/MM/yyyy")).append("; ");
 				}
 				
-				tblContent.append("<th>" + (totalPhone) + "</th>");
-				tblContent.append("<th>" + (totalMeet) + "</th>");
-				tblContent.append("<th style=\"text-align:left\">" + planDate.toString() + "</th>");
-				EventsNote eventNote = enHome.findEventNoteByCode(no+listPlan.get(0).getCustomer_code()+listPlan.get(0).getUser_name()+planDate.toString());
+				tblContent.append("<td>" + (totalPhone) + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + planDatePhone.toString().trim() + "</td>");
+				tblContent.append("<td>" + (totalMeet) + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + planDateMeet.toString().trim() + "</td>");
+				EventsNote eventNote = enHome.findEventNoteByCode(no+listPlan.get(0).getCustomer_code()+listPlan.get(0).getNVTT()+planDatePhone.toString().trim()+planDateMeet.toString().trim());
 				if(eventNote != null){
-					tblContent.append("<th style=\"text-align:left\" id=\"id_note\">"+eventNote.getENote()+"</th>");
+					tblContent.append("<td style=\"text-align:left\" id=\"id_note\">"+eventNote.getENote()+"</td>");
 				}else{
-					tblContent.append("<th style=\"text-align:left\" id=\"id_note\"></th>");
+					tblContent.append("<td style=\"text-align:left\" id=\"id_note\"></td>");
 				}
-				tblContent.append("<th><button class=\"btn btn-info btn-xs\">Ghi chú</button></th>");
+				tblContent.append("<td><button class=\"btn btn-info btn-xs\">Ghi chú</button></td>");
 				tblContent.append("</tr>");
 				no++;
 			}
@@ -187,9 +194,9 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			html.append("<th></th><th></th>");
 			html.append("<th>TỔNG:</th>");
 			html.append("<th></th>");
-			html.append("<th>"+sum_totalPhone+"</th>");
+			html.append("<th>"+sum_totalPhone+"</th><th>dd/mm</th>");
 			html.append("<th>"+sum_totalMeet+"</th>");
-			html.append("<th></th><th>-------------------------------------------------------------</th><th></th>");
+			html.append("<th>dd/mm</th><th>-------------------------------------------------------------</th><th></th>");
 			html.append("</tr>");
 			
 			html.append("</thead>");
@@ -210,7 +217,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 	private LinkedHashMap<String, List<UserPlanGeneral>> getUserPlanStatistic(List<UserPlanGeneral> result) throws Exception{
 		LinkedHashMap<String, List<UserPlanGeneral>> hm = new LinkedHashMap<String, List<UserPlanGeneral>>();
 		for (UserPlanGeneral userPlanGeneral : result) {
-			String key = userPlanGeneral.getUser_name() + userPlanGeneral.getCustomer_code();
+			String key = userPlanGeneral.getNVTT() + userPlanGeneral.getCustomer_code();
 			if(!hm.containsKey(key)){
 				hm.put(key, new ArrayList<UserPlanGeneral>());
 			}
@@ -309,7 +316,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 
 			StringBuilder tblContent = new StringBuilder();
 			int no = 1;
-			int WEEK_OF_YEAR = cal2.get(Calendar.WEEK_OF_YEAR);
+			int WEEK_OF_YEAR = getWeekFromM10(cal2.get(Calendar.WEEK_OF_YEAR));
 			LinkedHashMap<String, List<UserPlanGeneral>> hm = getUserPlanGeneral(results);
 			Set<String> set = hm.keySet();
 			for (String username : set) {
@@ -319,95 +326,107 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 				}else{
 					tblContent.append("<tr class=\"even pointer\">");
 				}
-				tblContent.append("<th>" + (WEEK_OF_YEAR) + "</th>");
-				tblContent.append("<th>" + (no) + "</th>");
-				tblContent.append("<th style=\"text-align:left\">" + (username) + "</th>");
+				tblContent.append("<td>" + (WEEK_OF_YEAR) + "</td>");
+				tblContent.append("<td>" + (no) + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + (username) + "</td>");
 				
-				int totalPhone = 0;
-				int totalMeet  = 0;
-				StringBuilder lht2 = new StringBuilder("<ul >");
-				StringBuilder lht3 = new StringBuilder("<ul >");
-				StringBuilder lht4 = new StringBuilder("<ul >");
-				StringBuilder lht5 = new StringBuilder("<ul >");
-				StringBuilder lht6 = new StringBuilder("<ul >");
-				StringBuilder lht7 = new StringBuilder("<ul >");
-				StringBuilder lhcn = new StringBuilder("<ul >");
-				StringBuilder mkh2 = new StringBuilder("<ul >");
-				StringBuilder mkh3 = new StringBuilder("<ul >");
-				StringBuilder mkh4 = new StringBuilder("<ul >");
-				StringBuilder mkh5 = new StringBuilder("<ul >");
-				StringBuilder mkh6 = new StringBuilder("<ul >");
-				StringBuilder mkh7 = new StringBuilder("<ul >");
-				StringBuilder mkhcn = new StringBuilder("<ul >");
+				int totalTT = 0;
+				int totalCT  = 0;
+				StringBuilder lht2 = new StringBuilder("");
+				StringBuilder lht3 = new StringBuilder("");
+				StringBuilder lht4 = new StringBuilder("");
+				StringBuilder lht5 = new StringBuilder("");
+				StringBuilder lht6 = new StringBuilder("");
+				StringBuilder lht7 = new StringBuilder("");
+				StringBuilder lhcn = new StringBuilder("");
+				StringBuilder mkh2 = new StringBuilder("");
+				StringBuilder mkh3 = new StringBuilder("");
+				StringBuilder mkh4 = new StringBuilder("");
+				StringBuilder mkh5 = new StringBuilder("");
+				StringBuilder mkh6 = new StringBuilder("");
+				StringBuilder mkh7 = new StringBuilder("");
+				StringBuilder mkhcn = new StringBuilder("");
 				List<UserPlanGeneral> listPlan = hm.get(username);
+				List<String> listTT = new ArrayList<String>();
 				for (int i = 0; i < listPlan.size(); i++) {
 					if(listPlan.get(i).getPhone()>0){
-						totalPhone++;
 					}else{
-						totalMeet++;
+						totalCT++;
+						if(!listTT.contains(listPlan.get(i).getCustomer_code())){
+							totalTT++;
+							listTT.add(listPlan.get(i).getCustomer_code());
+						}
 					}
 					cal2.setTime(listPlan.get(i).getStart_date());
+					String lh = "";
+					String mkh = "";
+					if(listPlan.get(i).getPhone()>0){
+						lh = "ĐT<br>";
+						mkh = ""+(getDaySection(listPlan.get(i).getStart_date()) + ": " + listPlan.get(i).getCustomer_code())+"<br>";
+					}else{
+						mkh = ""+(getDaySection(listPlan.get(i).getStart_date()) + ": " + listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"<br>";
+					}
 					if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY){
-						lht2.append("<li>"+(listPlan.get(i).getPhone()>0?"ĐT":"CT")+"</li>");
-						mkh2.append("<li>"+(getDaySection(listPlan.get(i).getStart_date()) + ": " + listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
+						lht2.append(lh);
+						mkh2.append(mkh);
 					}
 					else if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY){
-						lht3.append("<li>"+(listPlan.get(i).getPhone()>0?"ĐT":"CT")+"</li>");
-						mkh3.append("<li>"+(getDaySection(listPlan.get(i).getStart_date()) + ": " + listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
+						lht3.append(lh);
+						mkh3.append(mkh);
 					}
 					else if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY){
-						lht4.append("<li>"+(listPlan.get(i).getPhone()>0?"ĐT":"CT")+"</li>");
-						mkh4.append("<li>"+(getDaySection(listPlan.get(i).getStart_date()) + ": " + listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");		
+						lht4.append(lh);
+						mkh4.append(mkh);		
 										}
 					else if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY){
-						lht5.append("<li>"+(listPlan.get(i).getPhone()>0?"ĐT":"CT")+"</li>");
-						mkh5.append("<li>"+(getDaySection(listPlan.get(i).getStart_date()) + ": " + listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
+						lht5.append(lh);
+						mkh5.append(mkh);
 					}
 					else if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY){
-						lht6.append("<li>"+(listPlan.get(i).getPhone()>0?"ĐT":"CT")+"</li>");
-						mkh6.append("<li>"+(getDaySection(listPlan.get(i).getStart_date()) + ": " + listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
+						lht6.append(lh);
+						mkh6.append(mkh);
 					}
 					else if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
-						lhcn.append("<li>"+(listPlan.get(i).getPhone()>0?"ĐT":"CT")+"</li>");
-						mkhcn.append("<li>"+(getDaySection(listPlan.get(i).getStart_date()) + ": " + listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
+						lhcn.append(lh);
+						mkhcn.append(mkh);
 					}
 					else if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
-						lht2.append("<li>"+(listPlan.get(i).getPhone()>0?"ĐT":"CT")+"</li>");
-						mkh2.append("<li>"+(getDaySection(listPlan.get(i).getStart_date()) + ": " + listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"</li>");
+						lht2.append(lh);
+						mkh2.append(mkh);
 					}
 				}
 				
 				//thu2
-				tblContent.append("<th style=\"text-align:left\">" + lht2.append("</ul>").toString() + "</th>");
-				tblContent.append("<th style=\"text-align:left\">" + mkh2.append("</ul>").toString() + "</th>");
+				tblContent.append("<td style=\"text-align:left\">" + lht2.append("").toString().replaceAll("<br>$", "") + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + mkh2.append("").toString().replaceAll("<br>$", "") + "</td>");
 				//thu3
-				tblContent.append("<th style=\"text-align:left\">" + lht3.append("</ul>").toString() + "</th>");
-				tblContent.append("<th style=\"text-align:left\">" + mkh3.append("</ul>").toString() + "</th>");
+				tblContent.append("<td style=\"text-align:left\">" + lht3.append("").toString().replaceAll("<br>$", "") + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + mkh3.append("").toString().replaceAll("<br>$", "") + "</td>");
 				//thu4
-				tblContent.append("<th style=\"text-align:left\">" + lht4.append("</ul>").toString() + "</th>");
-				tblContent.append("<th style=\"text-align:left\">" + mkh4.append("</ul>").toString() + "</th>");
+				tblContent.append("<td style=\"text-align:left\">" + lht4.append("").toString().replaceAll("<br>$", "") + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + mkh4.append("").toString().replaceAll("<br>$", "") + "</td>");
 				//thu5
-				tblContent.append("<th style=\"text-align:left\">" + lht5.append("</ul>").toString() + "</th>");
-				tblContent.append("<th style=\"text-align:left\">" + mkh5.append("</ul>").toString() + "</th>");
+				tblContent.append("<td style=\"text-align:left\">" + lht5.append("").toString().replaceAll("<br>$", "") + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + mkh5.append("").toString().replaceAll("<br>$", "") + "</td>");
 				//thu6
-				tblContent.append("<th style=\"text-align:left\">" + lht6.append("</ul>").toString() + "</th>");
-				tblContent.append("<th style=\"text-align:left\">" + mkh6.append("</ul>").toString() + "</th>");
+				tblContent.append("<td style=\"text-align:left\">" + lht6.append("").toString().replaceAll("<br>$", "") + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + mkh6.append("").toString().replaceAll("<br>$", "") + "</td>");
 				//thu7
-				tblContent.append("<th style=\"text-align:left\">" + lht7.append("</ul>").toString() + "</th>");
-				tblContent.append("<th style=\"text-align:left\">" + mkh7.append("</ul>").toString() + "</th>");
+				tblContent.append("<td style=\"text-align:left\">" + lht7.append("").toString().replaceAll("<br>$", "") + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + mkh7.append("").toString().replaceAll("<br>$", "") + "</td>");
 				//cn
-				tblContent.append("<th style=\"text-align:left\">" + lhcn.append("</ul>").toString() + "</th>");
-				tblContent.append("<th style=\"text-align:left\">" + mkhcn.append("</ul>").toString() + "</th>");
+				tblContent.append("<td style=\"text-align:left\">" + lhcn.append("").toString().replaceAll("<br>$", "") + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + mkhcn.append("").toString().replaceAll("<br>$", "") + "</td>");
 				
-				tblContent.append("<th>" + totalPhone + "</th>");
-				tblContent.append("<th>" + totalMeet + "</th>");
+				tblContent.append("<td>" + totalTT + "</td>");
+				tblContent.append("<td>" + totalCT + "</td>");
 				EventsNote eventNote = enHome.findEventNoteByCode(""+WEEK_OF_YEAR+no+username);
 				if(eventNote != null){
-					tblContent.append("<th style=\"text-align:left\" id=\"id_note\">"+eventNote.getENote()+"</th>");
+					tblContent.append("<td style=\"text-align:left\" id=\"id_note\">"+eventNote.getENote()+"</td>");
 				}else{
-					tblContent.append("<th style=\"text-align:left\" id=\"id_note\"></th>");
+					tblContent.append("<td style=\"text-align:left\" id=\"id_note\"></td>");
 				}
-				tblContent.append("<th><button class=\"btn btn-info btn-xs\">Ghi chú</button></th>");
+				tblContent.append("<td><button class=\"btn btn-info btn-xs\">Ghi chú</button></td>");
 				tblContent.append("</tr>");
 				no++;
 			}
@@ -427,10 +446,10 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 	private LinkedHashMap<String, List<UserPlanGeneral>> getUserPlanGeneral(List<UserPlanGeneral> result) throws Exception{
 		LinkedHashMap<String, List<UserPlanGeneral>> hm = new LinkedHashMap<String, List<UserPlanGeneral>>();
 		for (UserPlanGeneral userPlanGeneral : result) {
-			if(!hm.containsKey(userPlanGeneral.getUser_name())){
-				hm.put(userPlanGeneral.getUser_name(), new ArrayList<UserPlanGeneral>());
+			if(!hm.containsKey(userPlanGeneral.getNVTT())){
+				hm.put(userPlanGeneral.getNVTT(), new ArrayList<UserPlanGeneral>());
 			}
-			hm.get(userPlanGeneral.getUser_name()).add(userPlanGeneral);
+			hm.get(userPlanGeneral.getNVTT()).add(userPlanGeneral);
 		}
 		return hm;
 	}
@@ -482,17 +501,28 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 				
 				// renderer html content
 				tblContent.append("<tr class=\"even pointer\">");
-				tblContent.append("<th>" + (no) + "</th>");
-				tblContent.append("<th style=\"text-align:left\">" + (results.get(i).getUser_name()) + "</th>");
+				tblContent.append("<td>" + (no) + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + (results.get(i).getNVTT()) + "</td>");
 				
 				Date datePlan = results.get(i).getStart_date();
-				tblContent.append("<th style=\"text-align:right\">" + (getDayName(datePlan) + ", " + DateUtils.getStringFromDate(datePlan, "dd/MM/yy")) + "</th>");
-				tblContent.append("<th>" + (results.get(i).getPhone()>0?"ĐT":"CT") + "</th>");
-				tblContent.append("<th>" + (getDaySection(datePlan)) + "</th>");
+				tblContent.append("<td style=\"text-align:right\">" + (getDayName(datePlan) + ", " + DateUtils.getStringFromDate(datePlan, "dd/MM/yy")) + "</td>");
+				tblContent.append("<td>" + (results.get(i).getPhone()>0?"ĐT":"") + "</td>");
+				tblContent.append("<td>" + (getDaySection(datePlan)) + "</td>");
 				
-				tblContent.append("<th style=\"text-align:left\">" + (results.get(i).getCustomer_code()) + "</th>");
-				tblContent.append("<th style=\"text-align:left\">" + (results.get(i).getBusiness_name()) + "</th>");
-				tblContent.append("<th style=\"text-align:left\"></th>");
+				tblContent.append("<td style=\"text-align:left\">" + (results.get(i).getCustomer_code()) + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + (results.get(i).getBusiness_name()) + "</td>");
+				String contactWay = "";
+				if(results.get(i).getPhone()>0){
+					contactWay = results.get(i).getTelefone();
+				}else{
+					if(!results.get(i).getTelefone().isEmpty()){
+						contactWay += results.get(i).getTelefone() + "<br>";
+					}
+					if(!results.get(i).getAddress().isEmpty()){
+						contactWay += results.get(i).getAddress();
+					}
+				}
+				tblContent.append("<td style=\"text-align:left\">"+contactWay+"</td>");
 				tblContent.append("</tr>");
 				no++;
 			}
@@ -512,10 +542,13 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 	}
 	
 	private String getDayName(Date datePlan) throws Exception{
-		String[] arr = new String[]{"Chủ Nhật", "Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy"};
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(datePlan);
-		return arr[cal.get(Calendar.DAY_OF_WEEK)-1];
+		if(datePlan != null){
+			String[] arr = new String[]{"Chủ Nhật", "Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy"};
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(datePlan);
+			return arr[cal.get(Calendar.DAY_OF_WEEK)-1];
+		}
+		return "";
 	}
 	
 	private String getDaySection(Date datePlan) throws Exception{
@@ -532,8 +565,16 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 	public String updatePlanNote(){
 		try {
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
+			request.setCharacterEncoding("UTF-8");
+//			System.out.println(URLDecoder.decode(request.getRequestURI(), "UTF-8"));
+//			System.out.println(new String(request.getParameter("note").getBytes("UTF-8")));
+//			System.out.println(new String(request.getParameter("note").getBytes("iso-8859-1")));
+//			System.out.println(new String(request.getParameter("note").getBytes("UTF-8"), "UTF-8"));
+//			System.out.println(new String(request.getParameter("note").getBytes("iso-8859-1"), "UTF-8"));
+//			System.out.println(new String(request.getParameter("note").getBytes("iso-8859-1"), "iso-8859-1"));
+			
 			String code = StringUtil.notNull(request.getParameter("code"));
-			String note = StringUtil.notNull(request.getParameter("note"));
+			String note = StringUtil.notNull(new String(request.getParameter("note").getBytes("iso-8859-1"), "UTF-8"));
 			
 			EventsNoteHome enHome = new EventsNoteHome(HibernateUtil.getSessionFactory());
 			EventsNote eventNote = enHome.findEventNoteByCode(code);
@@ -553,5 +594,250 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			return Action.ERROR;
 		}
 		return Action.NONE;
+	}
+	
+	public String getPlanHistory(){
+		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
+			String startDate = StringUtil.notNull(request.getParameter("startDate"));
+			String endDate = StringUtil.notNull(request.getParameter("endDate"));
+
+			Date week1 = new Date(DateUtils.getDateFromString(startDate, "dd/MM/yyyy").getTime());
+			Date week2 = new Date(DateUtils.getDateFromString(endDate, "dd/MM/yyyy").getTime());
+						
+			Calendar cal2 = Calendar.getInstance();
+			cal2.setTime(week1);
+			Calendar cal3 = Calendar.getInstance();
+			cal3.setTime(week2);
+			EventsHistoryHome eHome = new EventsHistoryHome(HibernateUtil.getSessionFactory());
+			List<UserPlanHistory> results = eHome.getListPlanHistory(isManager()?-1:userSes.getId(), week1, week2);
+
+			StringBuilder html = new StringBuilder("<table id=\"example\" class=\"table table-striped responsive-utilities jambo_table display nowrap cell-border\" style=\"width: 100%\">");
+			html.append("<thead>");
+			
+			html.append("<tr class=\"headings\">");
+			html.append("<th colspan=\"7\">LỊCH SỬ THAY ĐỔI LỊCH CÔNG TÁC NVTT TUẦN "+getWeekFromM10(cal2.get(Calendar.WEEK_OF_YEAR))+", "+DateUtils.getStringFromDate(cal2.getTime(), "dd")+"-"+DateUtils.getStringFromDate(cal3.getTime(), "dd/MM/yyyy")+"</th>");
+			html.append("</tr>");
+			
+			html.append("<tr class=\"headings\">");
+			html.append("<th>No</th>");
+			html.append("<th>NVTT</th>");
+			html.append("<th>KH</th>");
+			html.append("<th>Ngày lịch công tác</th>");
+			html.append("<th>Ngày giờ thay đổi</th>");
+			html.append("<th>Nội dung</th>");
+			html.append("<th>Ghi chú</th>");
+			html.append("</tr>");
+				
+			html.append("</thead>");
+			
+			StringBuilder tblContent = new StringBuilder();
+			int no = 1;
+			for (int i = 0; i < results.size(); i++) {
+
+				List<WARNING> warnings = isWarningPlanHistory(results.get(i));
+				if(warnings.isEmpty()){
+					if("INSERT".equalsIgnoreCase(results.get(i).getAction()))
+						continue;
+				}
+				
+				// renderer html content
+				tblContent.append("<tr class=\"even pointer\">");
+				tblContent.append("<td>" + (no) + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + (results.get(i).getNvtt()) + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + (results.get(i).getEvent_name().isEmpty()?results.get(i).getCustomer_old():results.get(i).getEvent_name()) + "</td>");
+				
+				Date event_date = results.get(i).getEvent_date();
+				tblContent.append("<td style=\"text-align:right\">" + (getDayName(event_date) + ", " + DateUtils.getStringFromDate(event_date, "dd/MM/yy hh:mm")) + "</td>");
+				
+				Date modified_date = results.get(i).getLast_modified();
+				tblContent.append("<td style=\"text-align:right\">" + (getDayName(modified_date) + ", " + DateUtils.getStringFromDate(modified_date, "dd/MM/yy hh:mm")) + "</td>");
+				
+				tblContent.append("<td style=\"text-align:left\">" + getHistoryContent(results.get(i), warnings) + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + getHistoryNote(results.get(i), warnings) + "</td>");
+				tblContent.append("</tr>");
+				no++;
+			}
+			
+			html.append("<tbody>");
+			html.append(tblContent);
+			html.append("</tbody>");
+			html.append("</table>");
+			System.out.println(html.toString());
+			inputStream = new ByteArrayInputStream(html.toString().getBytes("UTF-8"));
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Action.ERROR;
+		}
+		return Action.SUCCESS;
+	}
+	
+	private List<WARNING> isWarningPlanHistory(UserPlanHistory planHisory){
+		List<WARNING> warnings = new ArrayList<UserPlanReportAction.WARNING>();
+		try {
+			/**
+			 * Cac truong hop can warning 
+			 */
+			//Thoi gian tao plan tre hon ngay hien tai
+			{
+				if("INSERT".equalsIgnoreCase(planHisory.getAction())){
+					//Kiem tra neu ngay tao plan sau ngay plan
+					if(DateUtils.dateWithoutTime(planHisory.getLast_modified()).getTime()>DateUtils.dateWithoutTime(planHisory.getPlan_date_new()).getTime()){
+						warnings.add(WARNING.LATE_PLAN);
+					}
+					//Kiem tra thoi gian tao plan truoc 8h AM sang neu cung ngay
+					else if(DateUtils.dateWithoutTime(planHisory.getLast_modified()).getTime()==DateUtils.dateWithoutTime(planHisory.getPlan_date_new()).getTime()){
+						if(DateUtils.hourFromDate(planHisory.getLast_modified()) > 8){
+							warnings.add(WARNING.LATE_PLAN);
+						}
+					}
+				}
+				else if("DELETE".equalsIgnoreCase(planHisory.getAction())){
+					//Kiem tra neu ngay tao plan sau ngay plan
+					if(DateUtils.dateWithoutTime(planHisory.getLast_modified()).getTime()>DateUtils.dateWithoutTime(planHisory.getPlan_date_new()).getTime()){
+						warnings.add(WARNING.DELETE_PLAN);
+					}
+					//Kiem tra thoi gian tao plan truoc 8h AM sang neu cung ngay
+					else if(DateUtils.dateWithoutTime(planHisory.getLast_modified()).getTime()==DateUtils.dateWithoutTime(planHisory.getPlan_date_new()).getTime()){
+						if(DateUtils.hourFromDate(planHisory.getLast_modified()) > 8){
+							warnings.add(WARNING.DELETE_PLAN);
+						}
+					}
+				}
+			}
+			//Thay doi thoi gian
+			if(planHisory.getPlan_date_new().getTime() != planHisory.getPlan_date_old().getTime()){
+				//Kiem tra neu ngay tao plan sau ngay plan
+				if(DateUtils.dateWithoutTime(planHisory.getLast_modified()).getTime()>DateUtils.dateWithoutTime(planHisory.getPlan_date_new()).getTime()){
+					warnings.add(WARNING.CHANGE_TIME);
+				}
+				//Kiem tra thoi gian tao plan truoc 8h AM sang neu cung ngay
+				else if(DateUtils.dateWithoutTime(planHisory.getLast_modified()).getTime()==DateUtils.dateWithoutTime(planHisory.getPlan_date_new()).getTime()){
+					if(DateUtils.hourFromDate(planHisory.getLast_modified()) > 8){
+						warnings.add(WARNING.CHANGE_TIME);
+					}
+				}
+				
+			}
+			//Thay doi khach hang
+			if(!planHisory.getCustomer_new().equalsIgnoreCase(planHisory.getCustomer_old())){
+				//Kiem tra neu ngay tao plan sau ngay plan
+				if(DateUtils.dateWithoutTime(planHisory.getLast_modified()).getTime()>DateUtils.dateWithoutTime(planHisory.getPlan_date_new()).getTime()){
+					warnings.add(WARNING.CHANGE_CUSTOMER);
+				}
+				//Kiem tra thoi gian tao plan truoc 8h AM sang neu cung ngay
+				else if(DateUtils.dateWithoutTime(planHisory.getLast_modified()).getTime()==DateUtils.dateWithoutTime(planHisory.getPlan_date_new()).getTime()){
+					if(DateUtils.hourFromDate(planHisory.getLast_modified()) > 8){
+						warnings.add(WARNING.CHANGE_CUSTOMER);
+					}
+				}
+			
+			}
+			//Thay doi hinh thuc lien lac
+			//if(!planHisory.getContact_type_new().equalsIgnoreCase(planHisory.getContact_type_old())){
+			//}
+			
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return warnings;
+	}
+	
+	private String getHistoryContent(UserPlanHistory planHisory, List<WARNING> warnings) throws Exception{
+		try {
+			if(warnings.size() > 0){
+				StringBuilder content = new StringBuilder();
+				for (WARNING warning : warnings) {
+					switch (warning) {
+					case LATE_PLAN:
+						content.append(planHisory.getEvent_name()).append("<br>");
+						break;
+					case CHANGE_TIME:
+						content.append("Thay đổi thời gian: " + DateUtils.getDateToString_hh_mm(planHisory.getPlan_date_old()) + " -> " + DateUtils.getDateToString_hh_mm(planHisory.getPlan_date_new())).append("<br>");
+						break;
+					case CHANGE_CUSTOMER:
+						content.append("Thay đổi KH: " + planHisory.getCustomer_old() + " -> " + planHisory.getCustomer_new()).append("<br>");
+						break;
+					case DELETE_PLAN:
+						content.append(planHisory.getEvent_name()).append("<br>");
+						break;
+					case CHANGE_CONTACT_TYPE:
+						break;
+
+					}
+				}
+				return content.toString().replaceAll("<br>$", "");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return "";
+	}
+	
+	private String getHistoryNote(UserPlanHistory planHisory, List<WARNING> warnings) throws Exception{
+		try {
+			if(warnings.size() > 0){
+				StringBuilder content = new StringBuilder();
+				for (WARNING warning : warnings) {
+					switch (warning) {
+					case LATE_PLAN:
+						content.append("Lên lịch trễ").append("<br>");
+						break;
+					case CHANGE_TIME:
+						content.append("Cập nhật lịch trễ").append("<br>");
+						break;
+					case CHANGE_CUSTOMER:
+						content.append("Cập nhật lịch trễ").append("<br>");
+						break;
+					case DELETE_PLAN:
+						content.append("Xóa lịch trễ").append("<br>");
+						break;
+					case CHANGE_CONTACT_TYPE:
+						break;
+					default:
+						content.append(translateNote(planHisory.getAction())).append("<br>");
+						break;
+					}
+				}
+				return content.toString().replaceAll("<br>$", "");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return translateNote(planHisory.getAction());
+	}
+	
+	private String translateNote(String note){
+		switch (note) {
+		case "INSERT":
+			return "Lên lịch";
+		case "UPDATE":
+			return "Cập nhật lịch";
+		case "DELETE":
+			return "Xóa lịch";
+		}
+		return note;
+	}
+	
+	enum WARNING{
+		LATE_PLAN,
+		CHANGE_CUSTOMER,
+		CHANGE_TIME,
+		CHANGE_CONTACT_TYPE,
+		DELETE_PLAN,
+		NONE
+	}
+	
+	private int getWeekFromM10(int weekOfYear){
+		//Week start from 1/10
+		if(weekOfYear + 12 > 52){
+			return weekOfYear + 12 - 52;
+		}else{
+			return weekOfYear+12;
+		}
 	}
 }

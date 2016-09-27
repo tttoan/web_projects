@@ -14,7 +14,25 @@ public class UserPlanGeneral {
 	private Date end_date;
 	private int phone;
 	private int meet;
-	
+	private String telefone;
+	private String address;
+	public static void main(String[] args) {
+		UserPlanGeneral u = new UserPlanGeneral();
+		u.setFull_name("Tran Thien TOan");
+		System.out.println(u.getNVTT());
+	}
+	public String getTelefone() {
+		return telefone;
+	}
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
 	public String getUser_name() {
 		return user_name;
 	}
@@ -23,6 +41,23 @@ public class UserPlanGeneral {
 	}
 	public String getFull_name() {
 		return full_name;
+	}
+	public String getNVTT(){
+		if(StringUtil.notNull(full_name).length() > 0){
+			String arr[] = full_name.split(" ");
+			if(arr.length > 0){
+				String nvtt = "";
+				for (int i = 0; i < arr.length; i++) {
+					if(i == arr.length-1){
+						nvtt += arr[i].substring(0, 1).toUpperCase() + arr[i].substring(1).toLowerCase();
+					}else{
+						nvtt += arr[i].substring(0, 1).toUpperCase();
+					}
+				}
+				return nvtt;
+			}
+		}
+		return getUser_name();
 	}
 	public void setFull_name(String full_name) {
 		this.full_name = full_name;

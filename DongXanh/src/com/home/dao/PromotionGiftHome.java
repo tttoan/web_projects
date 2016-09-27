@@ -255,6 +255,7 @@ public class PromotionGiftHome {
 		} finally{
 			try {
 				if(session != null){
+					session.flush();
 					session.close();
 				}
 			} catch (Exception e) {

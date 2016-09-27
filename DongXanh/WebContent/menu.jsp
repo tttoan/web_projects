@@ -22,12 +22,15 @@
 							href="%{giftURL}" theme="bootstrap"> Quà tặng </s:a></li>
 					<li><s:url action="products" var="productURL" /> <s:a
 							href="%{productURL}" theme="bootstrap"> Sản phẩm </s:a></li>
-				</ul></li>
-			<s:include value="menu_employee.jsp">
-				<s:param name="role_id">
-					<s:property value="%{userSes.role.roleId}" />
-				</s:param>
-			</s:include>
+				</ul>
+			</li>
+			<s:if test="%{userSes.role.roleId == 1 || userSes.role.roleId == 3}">
+				<s:include value="menu_employee.jsp">
+					<s:param name="role_id">
+						<s:property value="%{userSes.role.roleId}" />
+					</s:param>
+				</s:include>
+			</s:if>
 			<li><a><i class="fa fa-users"></i> Khách Hàng <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
@@ -35,8 +38,10 @@
 						<s:a href="%{macURL}"> Thêm mới </s:a></li>
 					<li><s:url action="list_customer.action" var="lcURL" /> <s:a
 							href="%{lcURL}"> Danh sách </s:a></li>
-					<li><s:url action="move_to_assign_customer" var="assignCusURL"></s:url>
-						<s:a href="%{assignCusURL}"> Phân công theo dõi </s:a></li>
+					<s:if test="%{userSes.role.roleId == 1 || userSes.role.roleId == 3}">
+						<li><s:url action="move_to_assign_customer" var="assignCusURL"></s:url>
+							<s:a href="%{assignCusURL}"> Phân công theo dõi </s:a></li>
+					</s:if>
 				</ul></li>
 			<li><a><i class="fa fa-book"></i> Bảng Kê <span
 					class="fa fa-chevron-down"></span></a>
@@ -48,33 +53,39 @@
 					<li><s:url action="move_to_accept_statistic" var="masURL">
 						</s:url> <s:a href="%{masURL}">Thao tác excel</s:a></li>
 				</ul></li>
-			<li><a><i class="fa fa-bar-chart"></i> Báo cáo <span
-					class="fa fa-chevron-down"></span></a>
-				<ul class="nav child_menu" style="display: none">
-					<li><s:url action="move_to_compare_statistic" var="csURL" />
-						<s:a href="%{csURL}" theme="bootstrap"> So sánh bảng kê </s:a></li>
-					<li><s:url action="showReportRevenues1" var="csURL1" /> <s:a
-							href="%{csURL1}" theme="bootstrap"> So sánh doanh số cùng kỳ </s:a></li>
-					<li><s:url action="showReportRevenues2" var="csURL2" /> <s:a
-							href="%{csURL2}" theme="bootstrap"> Doanh số câp1 </s:a></li>
-					<li><s:url action="showReportRevenues3" var="csURL3" /> <s:a
-							href="%{csURL3}" theme="bootstrap"> Doanh số cấp2 </s:a></li>
-					<li><s:url action="showReportRevenues4" var="csURL4" /> <s:a
-							href="%{csURL4}" theme="bootstrap"> Doanh số NVTT </s:a></li>
-				</ul></li>
+			<s:if test="%{userSes.role.roleId == 1 || userSes.role.roleId == 3}">
+				<li><a><i class="fa fa-bar-chart"></i> Báo cáo <span
+						class="fa fa-chevron-down"></span></a>
+					<ul class="nav child_menu" style="display: none">
+						<li><s:url action="move_to_compare_statistic" var="csURL" />
+							<s:a href="%{csURL}" theme="bootstrap"> So sánh bảng kê </s:a></li>
+						<li><s:url action="showReportRevenues1" var="csURL1" /> <s:a
+								href="%{csURL1}" theme="bootstrap"> So sánh doanh số cùng kỳ </s:a></li>
+						<li><s:url action="showReportRevenues2" var="csURL2" /> <s:a
+								href="%{csURL2}" theme="bootstrap"> Doanh số câp1 </s:a></li>
+						<li><s:url action="showReportRevenues3" var="csURL3" /> <s:a
+								href="%{csURL3}" theme="bootstrap"> Doanh số cấp2 </s:a></li>
+						<li><s:url action="showReportRevenues4" var="csURL4" /> <s:a
+								href="%{csURL4}" theme="bootstrap"> Doanh số NVTT </s:a></li>
+					</ul></li>
+			</s:if>
 			<li><a><i class="fa fa-calendar"></i> Lịch công tác <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
 					<li><s:url action="UserPlan" var="getUserPlanURL" /> <s:a
 							href="%{getUserPlanURL}" theme="bootstrap"> Lên lịch tuần </s:a></li>
-					<li><s:url action="OpenUserPlanStatisticAction" var="userPlanStatistic" /> <s:a
+					<s:if test="%{userSes.role.roleId == 1 || userSes.role.roleId == 3}">
+						<li><s:url action="OpenUserPlanStatisticAction" var="userPlanStatistic" /> <s:a
 							href="%{userPlanStatistic}" theme="bootstrap"> Thống kê lịch tiếp xúc </s:a></li>
+					</s:if>
 					<li><s:url action="OpenUserPlanGeneralAction" var="userPlanGeneral" /> <s:a
 							href="%{userPlanGeneral}" theme="bootstrap"> Kết quả công tác tuần </s:a></li>
 					<li><s:url action="OpenUserPlanDetailAction" var="userPlanDetail" /> <s:a
 							href="%{userPlanDetail}" theme="bootstrap"> Báo cáo chi tiết </s:a></li>
-					<li><s:url action="PlanHistoryAction" var="userPlanHistory" /> <s:a
+					<s:if test="%{userSes.role.roleId == 1 || userSes.role.roleId == 3}">
+						<li><s:url action="PlanHistoryAction" var="userPlanHistory" /> <s:a
 							href="%{userPlanHistory}" theme="bootstrap"> Lịch sử thay đổi </s:a></li>
+					</s:if>
 				</ul></li>
 		</ul>
 	</div>

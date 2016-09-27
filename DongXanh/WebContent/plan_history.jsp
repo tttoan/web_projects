@@ -15,9 +15,9 @@ pageEncoding="UTF-8"%>
 				<div class="view_pro">
 					<table style="width: 100%">
 						<tr>
-							<td width="120px" valign="middle"><label>Chọn tuần:</label></td>
-							<td width="500px valign="bottom">
-							<fieldset>
+							<td width="120px" valign="middle"><label>Thời gian:</label></td>
+							<td width="500px" valign="middle">
+							<fieldset style="padding-top: 7px">
 									<div class="control-group">
 										<div class="controls">
 											<div
@@ -27,6 +27,15 @@ pageEncoding="UTF-8"%>
 													aria-describedby="inputSuccess2Status"> <span
 													class="fa fa-calendar-o form-control-feedback left"
 													aria-hidden="true"></span> <span id="inputSuccess2Status"
+													class="sr-only">(success)</span>
+											</div>
+											<div
+												class="col-md-6 xdisplay_inputx form-group has-feedback">
+												<input type="text" class="form-control has-feedback-left"
+													id="single_cal2" name = "single_cal2"
+													aria-describedby="inputSuccess2Status2"> <span
+													class="fa fa-calendar-o form-control-feedback left"
+													aria-hidden="true"></span> <span id="inputSuccess2Status2"
 													class="sr-only">(success)</span>
 											</div>
 										</div>
@@ -57,7 +66,9 @@ pageEncoding="UTF-8"%>
 								<tr class="headings">
 									<th>No</th>
 									<th>NVTT</th>
-									<th>Ngày giờ</th>
+									<th>KH</th>
+									<th>Ngày lịch công tác</th>
+									<th>Ngày giờ thay đổi</th>
 									<th>Nội dung</th>
 									<th>Ghi chú</th>
 								</tr>
@@ -106,7 +117,7 @@ pageEncoding="UTF-8"%>
 .view_pro {
 	margin: 0px;
 	text-align: left;
-	padding: 10px 10px 10px 10px;
+	padding: 0px 10px 0px 10px;
 	border-style: outset;
 }
 
@@ -153,7 +164,7 @@ $(document).ready(function() {
                 console.log(start.toISOString(), end.toISOString(), label);
             });
             
-            var d = new Date();
+           /*  var d = new Date();
             var currDate = d.getDate();
             if(currDate < 10)currDate = '0'+currDate;
             var currMonth = d.getMonth()+1;
@@ -161,7 +172,16 @@ $(document).ready(function() {
             var currYear = d.getFullYear();
             var startDate = currDate + "/" + currMonth + "/" + currYear;
             $("#single_cal1").attr("value", startDate);
-            $("#single_cal2").attr("value", startDate);
+            $("#single_cal2").attr("value", startDate); */
+            
+            var startDate;
+            var endDate;
+            
+            var date = new Date();
+            startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() + 1);
+            endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() + 7);
+            $("#single_cal1").attr("value", moment(startDate).format('DD/MM/YYYY'));
+            $("#single_cal2").attr("value", moment(endDate).format('DD/MM/YYYY'));
 
         });
 </script>
@@ -169,11 +189,13 @@ $(document).ready(function() {
 <script type="text/javascript">
 	
 	function btnFilterValues(){
- 		var week 		= $('[name="single_cal1"]').val();
+ 		var startDate 		= $('[name="single_cal1"]').val();
+ 		var endDate 		= $('[name="single_cal2"]').val();
+ 		alert(endDate);
         $(document).ready(function () {
         	 $.ajax({
  	            type: "POST",
- 	            url : 'UserPlanDetailAction?week='+week, 
+ 	            url : 'GetPlanHistoryAction?startDate='+startDate+'&endDate='+endDate, 
  	            success : function(responseText) {
  	           		//alert(responseText);
  	              $('#x_content').html(responseText);

@@ -74,6 +74,11 @@ public class DateUtils {
 		SimpleDateFormat format = new SimpleDateFormat(HOUR);
 		return date != null ? format.format(date) : "";
 	}
+	
+	public static String getHour(Date date, String pattern) {
+		SimpleDateFormat format = new SimpleDateFormat(pattern);
+		return date != null ? format.format(date) : "";
+	}
 
 	public static Date tryConvertStringToDate(String strDate) {
 		try {
@@ -302,6 +307,7 @@ public class DateUtils {
 	public static void main(String[] args) throws ParseException {
 		try {
 
+			System.out.println(dateWithoutTime(new Date()));
 			System.out.println(getHour(new Date()));
 
 			// long startTime = getDate("31-12-2010 08:00");
@@ -567,5 +573,21 @@ public class DateUtils {
 			e.printStackTrace();
 			throw new Exception(e);
 		}
+	}
+	
+	public static Date dateWithoutTime(Date date){
+		Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+	}
+	
+	public static int hourFromDate(Date date){
+		Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal.get(Calendar.HOUR_OF_DAY);
 	}
 }

@@ -16,8 +16,8 @@ pageEncoding="UTF-8"%>
 					<table style="width: 100%">
 						<tr>
 							<td width="120px" valign="middle"><label>Chọn tuần:</label></td>
-							<td width="500px valign="bottom">
-							<fieldset>
+							<td width="500px" valign="middle">
+							<fieldset style="padding-top: 7px">
 									<div class="control-group">
 										<div class="controls">
 											<div
@@ -141,7 +141,7 @@ pageEncoding="UTF-8"%>
 .view_pro {
 	margin: 0px;
 	text-align: left;
-	padding: 10px 10px 10px 10px;
+	padding: 0px 10px 0px 10px;
 	border-style: outset;
 }
 
@@ -227,7 +227,7 @@ $(document).ready(function() {
  	                //alert( 'You clicked on '+data[1]+' row' );
  	                var code = data[0]+data[1]+data[2];
  	                 $('#plan_code').val(code);
- 	                 $('#descr').val(data[19]);
+ 	                 $('#descr').val(data[19].replace(/<br>/g, '\n'));
  	               	$('#fc_addNoteDialog').click();
  	             } );
  	             
@@ -237,7 +237,7 @@ $(document).ready(function() {
 	                 //alert( 'You clicked on '+data[1]+' row' );
 	                 var code = data[0]+data[1]+data[2];
  	                 $('#plan_code').val(code);
-	                  $('#descr').val(data[19])
+	                  $('#descr').val(data[19].replace(/<br>/g, '\n'));
 	                 $('#fc_addNoteDialog').click();
 	             } ); 
  	            }
@@ -248,6 +248,7 @@ $(document).ready(function() {
   	function updateNote() {
     	var code = $('#plan_code').val();
     	var note = $('#descr').val();
+    	note = note.replace(/\r?\n/g, '<br>');
 		 $.ajax({
 	            type: "POST",
 	            url : 'UpdatePlanNoteStatisticAction?code='+code+'&note='+note, 

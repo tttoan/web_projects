@@ -16,8 +16,8 @@ pageEncoding="UTF-8"%>
 					<table style="width: 100%">
 						<tr>
 							<td width="120px" valign="middle"><label>Chọn tuần:</label></td>
-							<td width="500px valign="bottom">
-							<fieldset>
+							<td width="500px" valign="middle">
+							<fieldset style="padding-top: 7px">
 									<div class="control-group">
 										<div class="controls">
 											<div
@@ -52,20 +52,21 @@ pageEncoding="UTF-8"%>
 							class="table table-striped responsive-utilities jambo_table display nowrap cell-border" style="width: 100%">
 							<thead>
 								<tr class="headings">
-									<th colspan="8">BÁO CÁO THỐNG KÊ SỐ LẦN TIẾP XÚC KHÁCH HÀNG</th>
+									<th colspan="9">BÁO CÁO THỐNG KÊ SỐ LẦN TIẾP XÚC KHÁCH HÀNG</th>
 								</tr>
 								<tr class="headings">
 									<th rowspan="2">No</th>
 									<th rowspan="2">MKH</th>
 									<th rowspan="2">Tên khách hàng</th>
 									<th rowspan="2">NVTT</th>
-									<th colspan="2">Số lần tiếp xúc KH</th>
-									<th rowspan="2">Ngày tiếp xúc</th>
+									<th colspan="4">Số lần tiếp xúc KH</th>
 									<th rowspan="2">Ghi chú</th>
 								</tr>
 								<tr class="headings">
 									<th>ĐT</th>
-									<th>Trực tiếp</th>
+									<th>Ngày ĐT</th>
+									<th>TT</th>
+									<th>Ngày TT</th>
 								</tr>
 								<tr>
 									<th></th>
@@ -73,8 +74,9 @@ pageEncoding="UTF-8"%>
 									<th>TỔNG:</th>
 									<th></th>
 									<th>0</th>
+									<th>dd/mm</th>
 									<th>0</th>
-									<th></th>
+									<th>dd/mm</th>
 									<th></th>
 								</tr>
 							</thead>
@@ -125,7 +127,7 @@ pageEncoding="UTF-8"%>
 .view_pro {
 	margin: 0px;
 	text-align: left;
-	padding: 10px 10px 10px 10px;
+	padding: 0px 10px 0px 10px;
 	border-style: outset;
 }
 
@@ -209,9 +211,9 @@ $(document).ready(function() {
   	                selected_row =  table.row( this ).index();
   	                
   	                //alert( 'You clicked on '+data[1]+' row' );
-  	                  var code = data[0]+data[1]+data[3]+data[6];
+  	                  var code = data[0]+data[1]+data[3]+data[5]+data[7];
  	                 $('#plan_code').val(code);
-  	                 $('#descr').val(data[7]);
+  	                 $('#descr').val(data[8].replace(/<br>/g, '\n'));
   	               	$('#fc_addNoteDialog').click();
  	             } );
  	             
@@ -219,9 +221,9 @@ $(document).ready(function() {
  	            	 var data = table.row( $(this).parents('tr') ).data();
 	                 selected_row =  table.row( $(this).parents('tr') ).index();
 	                 //alert( 'You clicked on '+data[1]+' row' );
-	                   var code = data[0]+data[1]+data[3]+data[6];
+	                   var code = data[0]+data[1]+data[3]+data[5]+data[7];
  	                 $('#plan_code').val(code);
-	                  $('#descr').val(data[7])
+	                  $('#descr').val(data[8].replace(/<br>/g, '\n'));
 	                 $('#fc_addNoteDialog').click();
 	             } ); 
  	            }
@@ -232,12 +234,14 @@ $(document).ready(function() {
 	function updateNote() {
     	var code = $('#plan_code').val();
     	var note = $('#descr').val();
+    	note = note.replace(/\r?\n/g, '<br>');
+    	//alert(note);
 		 $.ajax({
 	            type: "POST",
 	            url : 'UpdatePlanNoteStatisticAction?code='+code+'&note='+note, 
 	            success : function(responseText) {
 	           		//alert(responseText);
-	            	var cell = table.cell(selected_row, 7);
+	            	var cell = table.cell(selected_row, 8);
 	        		cell.data(note);
 	            }
 	        });  

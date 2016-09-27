@@ -16,8 +16,8 @@ pageEncoding="UTF-8"%>
 					<table style="width: 100%">
 						<tr>
 							<td width="120px" valign="middle"><label>Chọn tuần:</label></td>
-							<td width="500px valign="bottom">
-							<fieldset>
+							<td width="500px" valign="middle">
+							<fieldset style="padding-top: 7px">
 									<div class="control-group">
 										<div class="controls">
 											<div
@@ -109,7 +109,7 @@ pageEncoding="UTF-8"%>
 .view_pro {
 	margin: 0px;
 	text-align: left;
-	padding: 10px 10px 10px 10px;
+	padding: 0px 10px 0px 10px;
 	border-style: outset;
 }
 

@@ -2779,14 +2779,24 @@ scheduler._reset_hours_scale=function(b,dd,sd){
 	for (var i=this.config.first_hour*1; i < this.config.last_hour; i++) {
 		var cc=document.createElement("DIV");
 		cc.className="dhx_scale_hour";
-		cc.style.height=this.config.hour_size_px-(this._quirks?0:1)+"px";
+		//cc.style.height=this.config.hour_size_px-(this._quirks?0:1)+"px";
 		var width = this.xy.scale_width;
 		if (this.config.left_border) {
 			width = width - 1;
 			cc.className += " dhx_scale_hour_border";
 		}
 		cc.style.width = width + "px";
-		cc.innerHTML=scheduler.templates.hour_scale(date);
+		
+		cc.style.height=this.config.hour_size_px+"px";
+		if(i < 12){
+			cc.innerHTML='' + i + 'AM';
+			cc.className="dhx_scale_hour_S";
+		}else{
+			cc.innerHTML='' + i + 'PM';
+			cc.className="dhx_scale_hour_C";
+		}
+		
+		//cc.innerHTML=scheduler.templates.hour_scale(date);
 		
 		c.appendChild(cc);
 		date=this.date.add(date,1,"hour");

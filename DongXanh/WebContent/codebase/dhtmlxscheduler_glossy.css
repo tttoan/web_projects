@@ -1657,6 +1657,22 @@ input.dhx_repeat_checkbox {
 	border-bottom:1px solid #A4BED4;
 	color:#2F3A48;
 }
+.dhx_scale_hour_S{
+	background-image:url(imgs_glossy/left-time-bg.png);
+	border-bottom:1px solid #A4BED4;
+	color:#ffff00;
+	font-weight: bold;
+	text-align:center;
+	line-height:40px;
+}
+.dhx_scale_hour_C{
+	background-image:url(imgs_glossy/left-time-bg.png);
+	border-bottom:1px solid #A4BED4;
+	color:#0080ff;
+	font-weight: bold;
+	text-align:center;
+	line-height:40px;
+}
 .dhx_multi_day{
 	background-image:url(imgs_glossy/multi-days-bg.png);
 	background-repeat:repeat;
