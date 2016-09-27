@@ -13,7 +13,16 @@
 	</s:url>
 	<table style="width: 1000px">
 		<tr>
-			<td width="300px" valign="middle"><h3>Lịch Công Tác Tuần</h3></td>
+			<%
+				Calendar d = Calendar.getInstance();
+				int weekOfYear = d.get(Calendar.WEEK_OF_YEAR);
+				if(weekOfYear + 12 > 52){
+					weekOfYear = weekOfYear + 12 - 52;
+				}else{
+					weekOfYear = weekOfYear+12;
+				}
+			%>
+			<td width="300px" valign="middle"><h3>Lịch Công Tác Tuần <%=weekOfYear%></h3></td>
 			<td width="110px" valign="middle"><label for="emp_id">Nhân
 					viên TT : </label></td>
 			<td valign="middle"><s:form name="userPlanForm"
