@@ -24,6 +24,8 @@ import com.dhtmlx.planner.controls.DHXGridView;
 import com.dhtmlx.planner.controls.DHXGridViewColumn;
 import com.dhtmlx.planner.controls.DHXLightboxMiniCalendar;
 import com.dhtmlx.planner.controls.DHXTimelineView;
+import com.dhtmlx.planner.controls.DHXTimelineView.RenderModes;
+import com.dhtmlx.planner.controls.DHXTimelineView.XScaleUnits;
 import com.dhtmlx.planner.data.DHXDataFormat;
 import com.home.conts.UserPlanDefine;
 import com.home.dao.ContactTypeHome;
@@ -203,7 +205,7 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 			DHXPlanner planner = new DHXPlanner("./codebase/", DHXSkin.GLOSSY);
 			// Planner
 			planner.setInitialDate(new Date());
-			planner.setWidth(1000);
+			planner.setWidth(1100);
 			planner.setHeight(650);
 			planner.setInitialView(currentTab);
 			// Template
@@ -238,12 +240,13 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 			// Xem Timline
 			DHXTimelineView view = new DHXTimelineView("Timeline", "typeOfDay",
 					"S/C");
-			view.setRenderMode(DHXTimelineView.RenderModes.BAR);
-			view.addSecondScale(DHXTimelineView.XScaleUnits.DAY, "%l, %d/%m/%Y");
-			view.setXStep(24);
-			view.setXSize(2);// (8PM - 8AM)/30min
+			view.setRenderMode(RenderModes.BAR);
+	    	view.setXScaleUnit(XScaleUnits.DAY);
+	    	view.addSecondScale(DHXTimelineView.XScaleUnits.DAY, "%l, %d/%m");
+	    	view.setXStep(1);
+			view.setXSize(7);// (8PM - 8AM)/30min
 			view.setXStart(0);// 8AM/30min
-			view.setXLength(1);// 24/30min
+			view.setXLength(7);// 24/30min
 			view.setServerList("typeOfDayCollect");
 		
 			planner.views.add(view);
