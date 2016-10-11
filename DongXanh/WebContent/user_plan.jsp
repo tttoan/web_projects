@@ -26,7 +26,7 @@
 					weekOfYear = weekOfYear+12;
 				}
 			%>
-			<td width="300px" valign="middle"><h3>Lịch Công Tác Tuần <%=weekOfYear%></h3></td>
+			<td width="300px" valign="middle"><div id="div_userplan_WeekOfYear"><h3>Lịch Công Tác Tuần <%=weekOfYear%></h3></div></td>
 			<td width="110px" valign="middle"><label for="emp_id">Nhân
 					viên TT : </label></td>
 			<td valign="middle"><s:form name="userPlanForm"
@@ -83,8 +83,8 @@
 <script src="js/progressbar/bootstrap-progressbar.min.js"></script>
 <script src="js/nicescroll/jquery.nicescroll.min.js"></script>
 <script src="js/custom.js"></script>
-
-
+<!-- daterangepicker -->
+<script type="text/javascript" src="js/moment.min2.js"></script>
 
 
 <script>

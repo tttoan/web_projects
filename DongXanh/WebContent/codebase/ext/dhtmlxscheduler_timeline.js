@@ -327,7 +327,7 @@ scheduler.render_timeline_event = function(ev, attach){
 	var x_start = _getX(ev, false, this);
 	var x_end = _getX(ev, true, this);
 
-	var event_height = scheduler._get_timeline_event_height(ev, this);
+	var event_height = scheduler._get_timeline_event_height(ev, this)+16;
 
 	var hb = event_height - 2;// takes into account css sizes (border/padding)
 	if (!ev._inner && this.event_dy == "full") {
@@ -397,6 +397,9 @@ function _getX(ev, isEndPoint, config) {
 	var step = config._step;
 	var round_position = config.round_position;
 
+	ev.start_date.setHours(0);
+	ev.end_date.setHours(23); 
+	//alert(ev.end_date +"/"+ ev.start_date);
 	var column_offset = 0;
 	var date = (isEndPoint) ? ev.end_date : ev.start_date;
 

@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import com.dhtmlx.planner.controls.DHXExternalLightboxForm;
 import com.dhtmlx.planner.controls.DHXGridView;
 import com.dhtmlx.planner.controls.DHXGridViewColumn;
 import com.dhtmlx.planner.controls.DHXLightboxMiniCalendar;
+import com.dhtmlx.planner.controls.DHXMonthView;
 import com.dhtmlx.planner.controls.DHXTimelineView;
 import com.dhtmlx.planner.controls.DHXTimelineView.RenderModes;
 import com.dhtmlx.planner.controls.DHXTimelineView.XScaleUnits;
@@ -204,7 +206,12 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 			// creates and configures scheduler instance
 			DHXPlanner planner = new DHXPlanner("./codebase/", DHXSkin.GLOSSY);
 			// Planner
-			planner.setInitialDate(new Date());
+			//planner.setInitialDate(new Date());
+			Calendar c = Calendar.getInstance();
+			c.setTime(new Date());
+			c.set(Calendar.DAY_OF_WEEK, 2);
+			planner.setInitialDate(c.getTime());
+			
 			planner.setWidth(1100);
 			planner.setHeight(650);
 			planner.setInitialView(currentTab);
@@ -223,9 +230,13 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 			planner.config.setLastHour(19);
 			planner.config.setHourSizePx(55);
 			// View
+//			planner.views.getView(0).setLabel("Tháng");
+//			planner.views.getView(1).setLabel("Tuần");
+//			planner.views.getView(2).setLabel("Ngày");
+			planner.views.clear();
+			planner.views.add(new DHXMonthView());
 			planner.views.getView(0).setLabel("Tháng");
-			planner.views.getView(1).setLabel("Tuần");
-			planner.views.getView(2).setLabel("Ngày");
+			
 			planner.load("events?emp_id=" + emp_id+"&curTabName=" + currentTab, DHXDataFormat.JSON);
 			planner.data.dataprocessor.setURL("events?emp_id=" + emp_id+"&curTabName=" + currentTab);
 

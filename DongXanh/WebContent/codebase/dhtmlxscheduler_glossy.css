@@ -475,7 +475,7 @@ div.dhx_modal_cover {
 	border-radius:3px;
 	font-family:Tahoma;
 	font-size:8pt;
-	height:18px !important;
+	height:32px !important;
 	width: 122px !important;
 	padding-left:10px !important;
 	color:#887A2E;
@@ -1004,8 +1004,8 @@ div.icon_delete{
 	color:#887A2E;
 }
 .dhx_cal_event_line .dhx_event_resize {
-	cursor: w-resize;
-	background: url(./imgs/resize_dots.png) repeat-y;
+	/* cursor: w-resize;
+	background: url(./imgs/resize_dots.png) repeat-y; */
 	position: absolute;
 	top: 0;
 	width: 4px;
@@ -1711,8 +1711,8 @@ input.dhx_repeat_checkbox {
 	color:#000000;
 }
 .dhx_cal_event_line{
-	background-image:url(imgs_glossy/event-bg.png);
-	border:1px solid #FFBD51;
+	/* background-image:url(imgs_glossy/event-bg.png); */
+	border:2px solid #FFBD51;
 	color:#000000;
 }
 .dhx_in_move{

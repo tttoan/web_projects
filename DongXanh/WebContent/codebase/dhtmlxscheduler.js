@@ -2640,6 +2640,19 @@ scheduler.updateView = function(date, mode) {
 		this._els[dhx_cal_data][0].scrollTop = prev_scroll; // restoring original scroll
 };
 scheduler.setCurrentView = function(date, mode) {
+	try {
+		var weekOfYear = parseInt(''+moment(date).format('W'))+1;
+		//alert(weekOfYear);
+		if(weekOfYear + 12 > 52){
+			weekOfYear = weekOfYear + 12 - 52;
+		}else{
+			weekOfYear = weekOfYear+12;
+		}
+		$('#div_userplan_WeekOfYear').html('<h3>Lịch Công Tác Tuần '+weekOfYear+'</h3>');
+		//alert(date);
+	}
+	catch(err) {}
+	
 	if (!this.callEvent("onBeforeViewChange", [this._mode, this._date, mode || this._mode, date || this._date])) return;
 	this.updateView(date, mode);
 	this.callEvent("onViewChange", [this._mode, this._date]);
@@ -4258,7 +4271,7 @@ scheduler.render_event_bar = function (ev) {
 	var color = (ev.textColor ? ("color:" + ev.textColor + ";") : "");
 
 	var html = '<div event_id="' + ev.id + '" class="' + cs + '" style="position:absolute; top:' + y + 'px; left:' + x + 'px; width:' + (x2 - x - 15) + 'px;' + color + '' + bg_color + '' + (ev._text_style || "") + '">';
-
+	//alert(html);
 	ev = scheduler.getEvent(ev.id); // ev at this point could be a part of a larged event
 	if (ev._timed)
 		html += scheduler.templates.event_bar_date(ev.start_date, ev.end_date, ev);
