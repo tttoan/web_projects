@@ -341,8 +341,16 @@ scheduler.render_timeline_event = function(ev, attach){
 		this._events_height[section] = section_height;
 	}
 
+	//alert(JSON.stringify(ev));
 	var cs = scheduler.templates.event_class(ev.start_date,ev.end_date,ev);
 	cs = "dhx_cal_event_line "+(cs||"");
+	
+	if(ev.contactType==1){
+		ev.color = "#d7ff61";
+	}
+	else if(ev.contactType==2){
+		ev.color = "#ffe763";
+	}
 
 	var bg_color = (ev.color?("background:"+ev.color+";"):"");
 	var color = (ev.textColor?("color:"+ev.textColor+";"):"");

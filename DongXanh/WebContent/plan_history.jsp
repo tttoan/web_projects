@@ -191,7 +191,7 @@ $(document).ready(function() {
 	function btnFilterValues(){
  		var startDate 		= $('[name="single_cal1"]').val();
  		var endDate 		= $('[name="single_cal2"]').val();
- 		alert(endDate);
+ 		//alert(endDate);
         $(document).ready(function () {
         	 $.ajax({
  	            type: "POST",

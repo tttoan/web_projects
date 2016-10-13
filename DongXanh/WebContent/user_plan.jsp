@@ -15,7 +15,7 @@
 	<s:url action="export_event" var="exportEventURL">
 		<%-- 		<s:param name="custId" value="%{id}"></s:param> --%>
 	</s:url>
-	<table style="width: 1000px">
+	<table style="width: 1080px">
 		<tr>
 			<%
 				Calendar d = Calendar.getInstance();

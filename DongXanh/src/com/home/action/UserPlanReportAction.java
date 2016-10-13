@@ -2,7 +2,6 @@ package com.home.action;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.net.URLDecoder;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -175,9 +174,9 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 					}
 				}
 				
-				tblContent.append("<td>" + (totalPhone) + "</td>");
+				tblContent.append("<td style=\"text-align:center\">" + (totalPhone>0?totalPhone:"") + "</td>");
 				tblContent.append("<td style=\"text-align:left\">" + planDatePhone.toString().trim() + "</td>");
-				tblContent.append("<td>" + (totalMeet) + "</td>");
+				tblContent.append("<td style=\"text-align:center\">" + (totalMeet>0?totalMeet:"") + "</td>");
 				tblContent.append("<td style=\"text-align:left\">" + planDateMeet.toString().trim() + "</td>");
 				EventsNote eventNote = enHome.findEventNoteByCode(no+listPlan.get(0).getCustomer_code()+listPlan.get(0).getNVTT()+planDatePhone.toString().trim()+planDateMeet.toString().trim());
 				if(eventNote != null){
@@ -418,9 +417,9 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 				tblContent.append("<td style=\"text-align:left\">" + lhcn.append("").toString().replaceAll("<br>$", "") + "</td>");
 				tblContent.append("<td style=\"text-align:left\">" + mkhcn.append("").toString().replaceAll("<br>$", "") + "</td>");
 				
-				tblContent.append("<td>" + totalTT + "</td>");
 				tblContent.append("<td>" + totalCT + "</td>");
-				EventsNote eventNote = enHome.findEventNoteByCode(""+WEEK_OF_YEAR+no+username);
+				tblContent.append("<td>" + totalTT + "</td>");
+				EventsNote eventNote = enHome.findEventNoteByCode(""+WEEK_OF_YEAR+username);
 				if(eventNote != null){
 					tblContent.append("<td style=\"text-align:left\" id=\"id_note\">"+eventNote.getENote()+"</td>");
 				}else{
@@ -457,23 +456,29 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 	public String getPlanDetail(){
 		try {
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
-			String strWeek = StringUtil.notNull(request.getParameter("week"));
+//			String strWeek = StringUtil.notNull(request.getParameter("week"));
 
-			Date week = new Date(DateUtils.getDateFromString(strWeek, "dd/MM/yyyy").getTime());
-			Calendar cal = Calendar.getInstance();
+//			Date week = new Date(DateUtils.getDateFromString(strWeek, "dd/MM/yyyy").getTime());
+//			Calendar cal = Calendar.getInstance();
+//			
+//			cal.setTime(week);
+//			cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)-cal.get(Calendar.DAY_OF_WEEK)+2);
+//			Date startday = new Date(cal.getTimeInMillis());
+//
+//			cal.setTime(week);
+//			cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)-cal.get(Calendar.DAY_OF_WEEK)+8);
+//			Date endday = new Date(cal.getTimeInMillis());
 			
-			cal.setTime(week);
-			cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)-cal.get(Calendar.DAY_OF_WEEK)+2);
-			Date startday = new Date(cal.getTimeInMillis());
-
-			cal.setTime(week);
-			cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)-cal.get(Calendar.DAY_OF_WEEK)+8);
-			Date endday = new Date(cal.getTimeInMillis());
+			String startDate = StringUtil.notNull(request.getParameter("startDate"));
+			String endDate = StringUtil.notNull(request.getParameter("endDate"));
 			
-			Calendar cal2 = Calendar.getInstance();
-			cal2.setTime(startday);
+			Date week1 = new Date(DateUtils.getDateFromString(startDate, "dd/MM/yyyy").getTime());
+			Date week2 = new Date(DateUtils.getDateFromString(endDate, "dd/MM/yyyy").getTime());
+			
+//			Calendar cal2 = Calendar.getInstance();
+//			cal2.setTime(startday);
 			WorkingPlanHome wpHome = new WorkingPlanHome(HibernateUtil.getSessionFactory());
-			List<UserPlanGeneral> results = wpHome.getAllUserPlan4Report(isManager()?-1:userSes.getId(), startday, endday);
+			List<UserPlanGeneral> results = wpHome.getAllUserPlan4Report(isManager()?-1:userSes.getId(), week1, week2);
 
 			StringBuilder html = new StringBuilder("<table id=\"example\" class=\"table table-striped responsive-utilities jambo_table display nowrap cell-border\" style=\"width: 100%\">");
 			html.append("<thead>");

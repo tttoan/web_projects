@@ -1712,7 +1712,7 @@ input.dhx_repeat_checkbox {
 }
 .dhx_cal_event_line{
 	/* background-image:url(imgs_glossy/event-bg.png); */
-	border:2px solid #FFBD51;
+	border:1px solid #FFBD51;
 	color:#000000;
 }
 .dhx_in_move{

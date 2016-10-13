@@ -15,7 +15,7 @@ pageEncoding="UTF-8"%>
 				<div class="view_pro">
 					<table style="width: 100%">
 						<tr>
-							<td width="120px" valign="middle"><label>Chọn tuần:</label></td>
+							<td width="120px" valign="middle"><label>Thời gian:</label></td>
 							<td width="500px" valign="middle">
 							<fieldset style="padding-top: 7px">
 									<div class="control-group">
@@ -27,6 +27,15 @@ pageEncoding="UTF-8"%>
 													aria-describedby="inputSuccess2Status"> <span
 													class="fa fa-calendar-o form-control-feedback left"
 													aria-hidden="true"></span> <span id="inputSuccess2Status"
+													class="sr-only">(success)</span>
+											</div>
+											<div
+												class="col-md-6 xdisplay_inputx form-group has-feedback">
+												<input type="text" class="form-control has-feedback-left"
+													id="single_cal2" name = "single_cal2"
+													aria-describedby="inputSuccess2Status2"> <span
+													class="fa fa-calendar-o form-control-feedback left"
+													aria-hidden="true"></span> <span id="inputSuccess2Status2"
 													class="sr-only">(success)</span>
 											</div>
 										</div>
@@ -172,11 +181,14 @@ $(document).ready(function() {
 <script type="text/javascript">
 	
 	function btnFilterValues(){
- 		var week 		= $('[name="single_cal1"]').val();
+ 		//var week 		= $('[name="single_cal1"]').val();
+ 		var startDate 		= $('[name="single_cal1"]').val();
+ 		var endDate 		= $('[name="single_cal2"]').val();
         $(document).ready(function () {
         	 $.ajax({
  	            type: "POST",
- 	            url : 'UserPlanDetailAction?week='+week, 
+ 	            //url : 'UserPlanDetailAction?week='+week,
+ 	            url : 'UserPlanDetailAction?startDate='+startDate+'&endDate='+endDate, 
  	            success : function(responseText) {
  	           		//alert(responseText);
  	              $('#x_content').html(responseText);
