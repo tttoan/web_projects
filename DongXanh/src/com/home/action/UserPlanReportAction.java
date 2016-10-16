@@ -614,6 +614,83 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 		return Action.NONE;
 	}
 	
+	public String getPlanHistoryGeneral(){
+		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
+			String startDate = StringUtil.notNull(request.getParameter("startDate"));
+			String endDate = StringUtil.notNull(request.getParameter("endDate"));
+
+			Date week1 = new Date(DateUtils.getDateFromString(startDate, "dd/MM/yyyy").getTime());
+			Date week2 = new Date(DateUtils.getDateFromString(endDate, "dd/MM/yyyy").getTime());
+						
+			Calendar cal2 = Calendar.getInstance();
+			cal2.setTime(week1);
+			Calendar cal3 = Calendar.getInstance();
+			cal3.setTime(week2);
+			EventsHistoryHome eHome = new EventsHistoryHome(HibernateUtil.getSessionFactory());
+			List<UserPlanHistory> results = eHome.getListPlanHistory(isManager()?-1:userSes.getId(), week1, week2);
+
+			StringBuilder html = new StringBuilder("<table id=\"example\" class=\"table table-striped responsive-utilities jambo_table display nowrap cell-border\" style=\"width: 100%\">");
+			html.append("<thead>");
+			
+			html.append("<tr class=\"headings\">");
+			html.append("<th colspan=\"7\">LỊCH SỬ THAY ĐỔI LỊCH CÔNG TÁC NVTT TONG HOP, "+DateUtils.getStringFromDate(cal2.getTime(), "dd")+"-"+DateUtils.getStringFromDate(cal3.getTime(), "dd/MM/yyyy")+"</th>");
+			html.append("</tr>");
+			
+			html.append("<tr class=\"headings\">");
+			html.append("<th>No</th>");
+			html.append("<th>NVTT</th>");
+			html.append("<th>Thoi gian</th>");
+			html.append("<th>So ngay co dieu chinh</th>");
+			html.append("<th>So KH co dieu chinh</th>");
+			html.append("<th>Nội dung</th>");
+			html.append("<th>Chi tiet</th>");
+			html.append("</tr>");
+				
+			html.append("</thead>");
+			
+			StringBuilder tblContent = new StringBuilder();
+			int no = 1;
+			for (int i = 0; i < results.size(); i++) {
+
+				List<WARNING> warnings = isWarningPlanHistory(results.get(i));
+				if(warnings.isEmpty()){
+					if("INSERT".equalsIgnoreCase(results.get(i).getAction()))
+						continue;
+				}
+				
+				// renderer html content
+				tblContent.append("<tr class=\"even pointer\">");
+				tblContent.append("<td>" + (no) + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + (results.get(i).getNvtt()) + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + (DateUtils.getStringFromDate(cal2.getTime(), "dd")+"-"+DateUtils.getStringFromDate(cal3.getTime(), "dd/MM/yyyy")) + "</td>");
+				
+				Date event_date = results.get(i).getEvent_date();
+				tblContent.append("<td style=\"text-align:right\">" + (getDayName(event_date) + ", " + DateUtils.getStringFromDate(event_date, "dd/MM/yy hh:mm")) + "</td>");
+				
+				Date modified_date = results.get(i).getLast_modified();
+				tblContent.append("<td style=\"text-align:right\">" + (getDayName(modified_date) + ", " + DateUtils.getStringFromDate(modified_date, "dd/MM/yy hh:mm")) + "</td>");
+				
+				tblContent.append("<td style=\"text-align:left\">" + getHistoryContent(results.get(i), warnings) + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + getHistoryNote(results.get(i), warnings) + "</td>");
+				tblContent.append("</tr>");
+				no++;
+			}
+			
+			html.append("<tbody>");
+			html.append(tblContent);
+			html.append("</tbody>");
+			html.append("</table>");
+			System.out.println(html.toString());
+			inputStream = new ByteArrayInputStream(html.toString().getBytes("UTF-8"));
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Action.ERROR;
+		}
+		return Action.SUCCESS;
+	}
+	
 	public String getPlanHistory(){
 		try {
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
@@ -634,7 +711,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			html.append("<thead>");
 			
 			html.append("<tr class=\"headings\">");
-			html.append("<th colspan=\"7\">LỊCH SỬ THAY ĐỔI LỊCH CÔNG TÁC NVTT TUẦN "+getWeekFromM10(cal2.get(Calendar.WEEK_OF_YEAR))+", "+DateUtils.getStringFromDate(cal2.getTime(), "dd")+"-"+DateUtils.getStringFromDate(cal3.getTime(), "dd/MM/yyyy")+"</th>");
+			html.append("<th colspan=\"7\">LỊCH SỬ THAY ĐỔI LỊCH CÔNG TÁC NVTT CHI TIET, "+DateUtils.getStringFromDate(cal2.getTime(), "dd")+"-"+DateUtils.getStringFromDate(cal3.getTime(), "dd/MM/yyyy")+"</th>");
 			html.append("</tr>");
 			
 			html.append("<tr class=\"headings\">");

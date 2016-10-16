@@ -83,8 +83,8 @@
 					<li><s:url action="OpenUserPlanDetailAction" var="userPlanDetail" /> <s:a
 							href="%{userPlanDetail}" theme="bootstrap"> Báo cáo chi tiết </s:a></li>
 					<s:if test="%{userSes.role.roleId == 1 || userSes.role.roleId == 3}">
-						<li><s:url action="PlanHistoryAction" var="userPlanHistory" /> <s:a
-							href="%{userPlanHistory}" theme="bootstrap"> Lịch sử thay đổi </s:a></li>
+						<li><s:url action="PlanHistoryGeneralAction" var="userPlanHistory" /> <s:a
+							href="%{userPlanHistory}" theme="bootstrap"> Lịch sử thay đổi</s:a></li>
 					</s:if>
 				</ul></li>
 		</ul>

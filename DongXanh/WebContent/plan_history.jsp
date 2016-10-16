@@ -61,7 +61,7 @@ pageEncoding="UTF-8"%>
 							class="table table-striped responsive-utilities jambo_table display nowrap cell-border" style="width: 100%">
 							<thead>
 								<tr class="headings">
-									<th colspan="8">CHI TIET LỊCH SỬ THAY ĐỔI LỊCH CÔNG TÁC NVTT</th>
+									<th colspan="8">LỊCH SỬ THAY ĐỔI LỊCH CÔNG TÁC NVTT CHI TIET</th>
 								</tr>
 								<tr class="headings">
 									<th>No</th>

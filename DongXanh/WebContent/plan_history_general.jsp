@@ -61,14 +61,14 @@ pageEncoding="UTF-8"%>
 							class="table table-striped responsive-utilities jambo_table display nowrap cell-border" style="width: 100%">
 							<thead>
 								<tr class="headings">
-									<th colspan="8">TONG HOP LỊCH SỬ THAY ĐỔI LỊCH CÔNG TÁC NVTT</th>
+									<th colspan="8">LỊCH SỬ THAY ĐỔI LỊCH CÔNG TÁC NVTT TONG HOP</th>
 								</tr>
 								<tr class="headings">
 									<th>No</th>
 									<th>NVTT</th>
 									<th>Thoi gian</th>
 									<th>So ngay co dieu chinh</th>
-									<th>So khach hang dieu chinh</th>
+									<th>So KH co dieu chinh</th>
 									<th>Nội dung</th>
 									<th>Chi tiet</th>
 								</tr>
@@ -195,7 +195,7 @@ $(document).ready(function() {
         $(document).ready(function () {
         	 $.ajax({
  	            type: "POST",
- 	            url : 'GetPlanHistoryAction?startDate='+startDate+'&endDate='+endDate, 
+ 	            url : 'GetPlanHistoryGeneralAction?startDate='+startDate+'&endDate='+endDate, 
  	            success : function(responseText) {
  	           		//alert(responseText);
  	              $('#x_content').html(responseText);
