@@ -178,7 +178,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 				tblContent.append("<td style=\"text-align:left\">" + planDatePhone.toString().trim() + "</td>");
 				tblContent.append("<td style=\"text-align:center\">" + (totalMeet>0?totalMeet:"") + "</td>");
 				tblContent.append("<td style=\"text-align:left\">" + planDateMeet.toString().trim() + "</td>");
-				EventsNote eventNote = enHome.findEventNoteByCode(no+listPlan.get(0).getCustomer_code()+listPlan.get(0).getNVTT()+planDatePhone.toString().trim()+planDateMeet.toString().trim());
+				EventsNote eventNote = enHome.findEventNoteByCode("ST-"+no+listPlan.get(0).getCustomer_code()+listPlan.get(0).getNVTT()+planDatePhone.toString().trim()+planDateMeet.toString().trim());
 				if(eventNote != null){
 					tblContent.append("<td style=\"text-align:left\" id=\"id_note\">"+eventNote.getENote()+"</td>");
 				}else{
@@ -419,7 +419,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 				
 				tblContent.append("<td>" + totalCT + "</td>");
 				tblContent.append("<td>" + totalTT + "</td>");
-				EventsNote eventNote = enHome.findEventNoteByCode(""+WEEK_OF_YEAR+username);
+				EventsNote eventNote = enHome.findEventNoteByCode("GN-"+WEEK_OF_YEAR+username);
 				if(eventNote != null){
 					tblContent.append("<td style=\"text-align:left\" id=\"id_note\">"+eventNote.getENote()+"</td>");
 				}else{
@@ -533,7 +533,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 					}
 				}
 				tblContent.append("<td style=\"text-align:left\">"+contactWay+"</td>");
-				EventsNote eventNote = enHome.findEventNoteByCode(nvtt+workingDate+results.get(i).getCustomer_code());
+				EventsNote eventNote = enHome.findEventNoteByCode("DT-"+nvtt+workingDate+results.get(i).getCustomer_code());
 				if(eventNote != null){
 					tblContent.append("<td style=\"text-align:left\" id=\"id_note\">"+eventNote.getENote()+"</td>");
 				}else{
