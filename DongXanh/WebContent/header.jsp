@@ -26,6 +26,7 @@
 <script src="js/jquery.min.js"></script>
 <link href="css/calendar/fullcalendar.css" rel="stylesheet">
 <link href="css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="css/buttons.dataTables.min.css" rel="stylesheet">
 <script src="Scripts/custom/profileUser.js"></script>
 <link href="css/show.hidden.field.css" rel="stylesheet" />
 <!-- <link rel="stylesheet" href="css/jquery-ui.css"> -->

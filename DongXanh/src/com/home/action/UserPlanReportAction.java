@@ -477,6 +477,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			
 //			Calendar cal2 = Calendar.getInstance();
 //			cal2.setTime(startday);
+			EventsNoteHome enHome = new EventsNoteHome(HibernateUtil.getSessionFactory());
 			WorkingPlanHome wpHome = new WorkingPlanHome(HibernateUtil.getSessionFactory());
 			List<UserPlanGeneral> results = wpHome.getAllUserPlan4Report(isManager()?-1:userSes.getId(), week1, week2);
 
@@ -484,7 +485,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			html.append("<thead>");
 			
 			html.append("<tr class=\"headings\">");
-			html.append("<th colspan=\"8\">CHI TIẾT LỊCH CÔNG TÁC NVTT</th>");
+			html.append("<th colspan=\"10\">CHI TIẾT LỊCH CÔNG TÁC NVTT</th>");
 			html.append("</tr>");
 			
 			html.append("<tr class=\"headings\">");
@@ -495,7 +496,9 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			html.append("<th>Buổi</th>");
 			html.append("<th>MKH</th>");
 			html.append("<th>Tên người QĐCV</th>");
+			html.append("<th>Liên hệ</th>");
 			html.append("<th>Ghi chú</th>");
+			html.append("<th></th>");
 			html.append("</tr>");
 				
 			html.append("</thead>");
@@ -507,10 +510,12 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 				// renderer html content
 				tblContent.append("<tr class=\"even pointer\">");
 				tblContent.append("<td>" + (no) + "</td>");
-				tblContent.append("<td style=\"text-align:left\">" + (results.get(i).getNVTT()) + "</td>");
+				String nvtt = results.get(i).getNVTT();
+				tblContent.append("<td style=\"text-align:left\">" + (nvtt) + "</td>");
 				
 				Date datePlan = results.get(i).getStart_date();
-				tblContent.append("<td style=\"text-align:right\">" + (getDayName(datePlan) + ", " + DateUtils.getStringFromDate(datePlan, "dd/MM/yy")) + "</td>");
+				String workingDate = getDayName(datePlan) + ", " + DateUtils.getStringFromDate(datePlan, "dd/MM/yy");
+				tblContent.append("<td style=\"text-align:right\">" + (workingDate) + "</td>");
 				tblContent.append("<td>" + (results.get(i).getPhone()>0?"ĐT":"") + "</td>");
 				tblContent.append("<td>" + (getDaySection(datePlan)) + "</td>");
 				
@@ -528,6 +533,13 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 					}
 				}
 				tblContent.append("<td style=\"text-align:left\">"+contactWay+"</td>");
+				EventsNote eventNote = enHome.findEventNoteByCode(nvtt+workingDate+results.get(i).getCustomer_code());
+				if(eventNote != null){
+					tblContent.append("<td style=\"text-align:left\" id=\"id_note\">"+eventNote.getENote()+"</td>");
+				}else{
+					tblContent.append("<td style=\"text-align:left\" id=\"id_note\"></td>");
+				}
+				tblContent.append("<td><button class=\"btn btn-info btn-xs\">Ghi chú</button></td>");
 				tblContent.append("</tr>");
 				no++;
 			}
@@ -578,7 +590,8 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 //			System.out.println(new String(request.getParameter("note").getBytes("iso-8859-1"), "UTF-8"));
 //			System.out.println(new String(request.getParameter("note").getBytes("iso-8859-1"), "iso-8859-1"));
 			
-			String code = StringUtil.notNull(request.getParameter("code"));
+			//String code = StringUtil.notNull(request.getParameter("code"));
+			String code = StringUtil.notNull(new String(request.getParameter("code").getBytes("iso-8859-1"), "UTF-8"));
 			String note = StringUtil.notNull(new String(request.getParameter("note").getBytes("iso-8859-1"), "UTF-8"));
 			
 			EventsNoteHome enHome = new EventsNoteHome(HibernateUtil.getSessionFactory());

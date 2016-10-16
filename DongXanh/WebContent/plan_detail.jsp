@@ -61,7 +61,7 @@ pageEncoding="UTF-8"%>
 							class="table table-striped responsive-utilities jambo_table display nowrap cell-border" style="width: 100%">
 							<thead>
 								<tr class="headings">
-									<th colspan="8">CHI TIẾT LỊCH CÔNG TÁC NVTT</th>
+									<th colspan="9">CHI TIẾT LỊCH CÔNG TÁC NVTT</th>
 								</tr>
 								<tr class="headings">
 									<th>No</th>
@@ -71,6 +71,7 @@ pageEncoding="UTF-8"%>
 									<th>Buổi</th>
 									<th>MKH</th>
 									<th>Tên người QĐCV</th>
+									<th>Liên lạc</th>
 									<th>Ghi chú</th>
 								</tr>
 							</thead>
@@ -84,6 +85,9 @@ pageEncoding="UTF-8"%>
 			</div>
 		</div>
 	</div>
+	
+	<%@ include file="plan_general_add_note.jsp"%>
+	
 	<!-- footer content -->
 	<s:include value="footer.jsp" />
 	<!-- /footer content -->
@@ -137,7 +141,7 @@ th {
 <script>
 $(document).ready(function() {
     $('#example').DataTable( {
-        "scrollX": true
+        "scrollX": true,
     } );
 } );
 </script>
@@ -180,6 +184,9 @@ $(document).ready(function() {
     
 <script type="text/javascript">
 	
+	var table;
+	var selected_row = 0;
+
 	function btnFilterValues(){
  		//var week 		= $('[name="single_cal1"]').val();
  		var startDate 		= $('[name="single_cal1"]').val();
@@ -195,10 +202,47 @@ $(document).ready(function() {
  	              $('#example').DataTable({
  	            	 scrollX: true,
  	              });
+ 	              
+ 	             table = $('#example').DataTable();
+ 	             $('#example').on('dblclick', 'tr', function () {
+ 	                var data = table.row( this ).data();
+ 	                selected_row =  table.row( this ).index();
+ 	                
+ 	                //alert( 'You clicked on '+data[1]+' row' );
+ 	                var code = 'DT-'+data[1]+data[2]+data[5];
+ 	                 $('#plan_code').val(code);
+ 	                 $('#descr').val(data[8].replace(/<br>/g, '\n'));
+ 	               	$('#fc_addNoteDialog').click();
+ 	             } );
+ 	             
+ 	             $('#example tbody').on( 'click', 'button', function () {
+	                 var data = table.row( $(this).parents('tr') ).data();
+	                 selected_row =  table.row( $(this).parents('tr') ).index();
+	                 //alert( 'You clicked on '+data[1]+' row' );
+	                 var code = 'DT-'+data[1]+data[2]+data[5];
+ 	                 $('#plan_code').val(code);
+	                  $('#descr').val(data[8].replace(/<br>/g, '\n'));
+	                 $('#fc_addNoteDialog').click();
+	             } ); 
  	            }
  	        });    
         });
 	}
+	
+	function updateNote() {
+    	var code = $('#plan_code').val();
+    	var note = $('#descr').val();
+    	note = note.replace(/\r?\n/g, '<br>');
+		 $.ajax({
+	            type: "POST",
+	            url : 'UpdatePlanNoteStatisticAction?code='+code+'&note='+note, 
+	            success : function(responseText) {
+	           		//alert(responseText);
+	            	var cell = table.cell(selected_row, 8);
+	        		cell.data(note);
+	            }
+	        });  
+    }
 	
 </script>
 

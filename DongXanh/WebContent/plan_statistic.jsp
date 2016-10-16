@@ -211,7 +211,7 @@ $(document).ready(function() {
   	                selected_row =  table.row( this ).index();
   	                
   	                //alert( 'You clicked on '+data[1]+' row' );
-  	                  var code = data[0]+data[1]+data[3]+data[5]+data[7];
+  	                  var code = 'ST-'+data[0]+data[1]+data[3]+data[5]+data[7];
  	                 $('#plan_code').val(code);
   	                 $('#descr').val(data[8].replace(/<br>/g, '\n'));
   	               	$('#fc_addNoteDialog').click();
@@ -221,7 +221,7 @@ $(document).ready(function() {
  	            	 var data = table.row( $(this).parents('tr') ).data();
 	                 selected_row =  table.row( $(this).parents('tr') ).index();
 	                 //alert( 'You clicked on '+data[1]+' row' );
-	                   var code = data[0]+data[1]+data[3]+data[5]+data[7];
+	                   var code = 'ST-'+data[0]+data[1]+data[3]+data[5]+data[7];
  	                 $('#plan_code').val(code);
 	                  $('#descr').val(data[8].replace(/<br>/g, '\n'));
 	                 $('#fc_addNoteDialog').click();
