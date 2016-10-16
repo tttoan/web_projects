@@ -1,6 +1,8 @@
 package com.home.util;
 
+import java.sql.Date;
 import java.text.Normalizer;
+import java.util.Calendar;
 import java.util.regex.Pattern;
 
 public class StringUtil {
@@ -43,4 +45,24 @@ public class StringUtil {
 		return generateVal;
 	}
 	
+	public static String getDayName(Date datePlan) throws Exception{
+		if(datePlan != null){
+			String[] arr = new String[]{"Chủ Nhật", "Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy"};
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(datePlan);
+			return arr[cal.get(Calendar.DAY_OF_WEEK)-1];
+		}
+		return "";
+	}
+	
+	public static String getDaySection(Date datePlan) throws Exception{
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(datePlan);
+		//System.out.println(datePlan + " ------> " + cal.get(Calendar.HOUR_OF_DAY));
+		if(cal.get(Calendar.HOUR_OF_DAY) >= 12){
+			return "C";
+		}else{
+			return "S";
+		}
+	}
 }

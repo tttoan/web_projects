@@ -14,8 +14,8 @@
 
 .div_right {
 	position: absolute;
-	right: 5px;
-	width: 250px;
+	left: 15px;
+	width: 350px;
 	padding: 5px;
 }
 </style>
@@ -62,6 +62,7 @@
 					<s:select label="Khách hàng" id="customerId"
 							showDownArrow="false" autoComplete="true" list="listCustomer"
 							listKey="id" name="customerId"
+							headerKey="-1" headerValue="Chọn KH:"
 							listValue="customerCode +' - '+ businessName" style="width: 100%" /></td>
 				</tr>
 
@@ -109,10 +110,11 @@
 	</form>
 	<br>
 	<div class="div_right">
+	 	<input type="button" value="Xoá" onclick="lightbox.remove()" style="width:80px;	margin-right:60px"/>
 		<input type="button" value="Cập nhật" onclick="lightbox.save()"
 			style="width: 80px" /> <input type="button" value="Đóng"
 			onclick="lightbox.close()" style="width: 80px" />
-		<!-- <input type="button" value="Xoá" onclick="lightbox.remove()" style="width: 80px"/>  -->
+		
 	</div>
 </div>
 <script src="js/jquery.min.js"></script>

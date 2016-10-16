@@ -2,9 +2,10 @@ package com.home.entities;
 
 import java.sql.Date;
 
+import com.dhtmlx.planner.DHXEvent;
 import com.home.util.StringUtil;
 
-public class UserPlanGeneral {
+public class UserPlanGeneral extends DHXEvent{
 	private String user_name;
 	private String full_name;
 	private String customer_code;

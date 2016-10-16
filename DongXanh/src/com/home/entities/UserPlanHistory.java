@@ -70,6 +70,9 @@ public class UserPlanHistory {
 	public void setNvtt(String nvtt) {
 		this.nvtt = nvtt;
 	}
+	public String getUserName() {
+		return this.nvtt;
+	}
 	public Date getPlan_date_old() {
 		return plan_date_old;
 	}

@@ -23,6 +23,7 @@ import com.dhtmlx.planner.DHXEventsManager;
 import com.dhtmlx.planner.DHXStatus;
 import com.dhtmlx.planner.data.DHXCollection;
 import com.home.conts.UserPlanDefine;
+import com.home.entities.UserPlanGeneral;
 import com.home.model.Customer;
 import com.home.model.Event;
 import com.home.model.EventsHistory;
@@ -93,7 +94,28 @@ public class CustomEventsManager extends DHXEventsManager implements UserPlanDef
 		DHXEventsManager.date_format = "MM/dd/yyyy HH:mm";
 		return evs;
 	}
+	
 	public Iterable<DHXEv> getListLogDetail() {
+		DHXEventsManager.date_format = "yyyy-MM-dd HH:mm:ss";
+		List<DHXEv> evs = new ArrayList<>();
+		try {
+			WorkingPlanHome wpHome = new WorkingPlanHome(HibernateUtil.getSessionFactory());
+			Calendar cal1 = Calendar.getInstance();
+			cal1.setTime(new Date());
+			cal1.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+			
+			List<UserPlanGeneral> results = wpHome.getAllUserPlan4Report(userSes.getId(), new java.sql.Date(cal1.getTime().getTime()), new java.sql.Date(new Date().getTime() + 30*24*60*60*1000l));
+			for (UserPlanGeneral userPlanGeneral : results) {
+				evs.add(userPlanGeneral);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		DHXEventsManager.date_format = "MM/dd/yyyy HH:mm";
+		return evs;
+	}
+	
+	/*public Iterable<DHXEv> getListLogDetail() {
 		DHXEventsManager.date_format = "yyyy-MM-dd HH:mm:ss";
 		HibernateUtil.getSessionFactory();
 		Session session = HibernateUtil.getSessionFactory().openSession();
@@ -143,7 +165,7 @@ public class CustomEventsManager extends DHXEventsManager implements UserPlanDef
 		}
 		DHXEventsManager.date_format = "MM/dd/yyyy HH:mm";
 		return evs;
-	}
+	}*/
 	private Date getDateByTypeOfDay(Date date, String typeOfDayId, boolean isStartDate){
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);

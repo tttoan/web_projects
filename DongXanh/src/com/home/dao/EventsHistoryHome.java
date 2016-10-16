@@ -315,4 +315,85 @@ public class EventsHistoryHome {
 			}
 		}
 	}
+	
+	
+	public List<UserPlanHistory> getListPlanHistory(String user_name, Date startday, Date endday) throws Exception{
+		log.debug("retrieve list UserPlanHistory");
+		Session session = null;
+		List<UserPlanHistory> results = new ArrayList<UserPlanHistory>();
+		try {
+			session = sessionFactory.openSession();
+
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+
+			String sql = "SELECT e.*, e1.event_name, e1.start_date as event_date, c1.customer_code as c1_code, c1.business_name as c1_bname, c1.statistic_name as c1_sname,"
+					+ " c2.customer_code as c2_code, c2.business_name as c2_bname, c2.statistic_name as c2_sname, u.user_name, u.full_name " +
+					" FROM events_history AS e " +
+					" LEFT JOIN events AS e1 ON e.event_id=e1.event_id " +
+					" LEFT JOIN customer AS c1 ON e.customer_id_old=c1.id " +
+					" LEFT JOIN customer AS c2 ON e.customer_id_new=c2.id " +
+					" LEFT JOIN user AS u ON e.employee_id=u.id " +
+					" WHERE " +
+					" (u.user_name=? or ''=?) and (DATE(e.last_modified) >= ? and DATE(e.last_modified) <= ?)" +
+					" ORDER BY u.user_name, last_modified, event_id";
+			
+			try (PreparedStatement pre = conn.prepareStatement(sql)) {
+				pre.setString(1, user_name);
+				pre.setString(2, user_name);
+				pre.setDate(3, startday);
+				pre.setDate(4, endday);
+				System.out.println(pre.toString());
+				
+				int no=0;
+				ResultSet rs = pre.executeQuery();
+				while(rs.next()){
+					UserPlanHistory planHistory = new UserPlanHistory();
+					planHistory.setNo(++no);
+					planHistory.setEvent_id(rs.getInt("event_id"));
+					try {
+						planHistory.setEvent_name(StringUtil.notNull(rs.getString("event_name")));
+						planHistory.setEvent_date(new Date(rs.getTimestamp("event_date").getTime()));
+					} catch (Exception e) {}
+					planHistory.setNvtt(StringUtil.notNull(rs.getString("user_name")));
+					planHistory.setFull_name(StringUtil.notNull(rs.getString("full_name")));
+					
+					String c1_code = StringUtil.notNull(rs.getString("c1_code"));
+					String c1_bname = StringUtil.notNull(rs.getString("c1_bname"));
+					String c1_sname = StringUtil.notNull(rs.getString("c1_sname"));
+					planHistory.setCustomer_old(c1_code + "-" + (c1_bname.isEmpty()?c1_sname:c1_bname));
+					String c2_code = StringUtil.notNull(rs.getString("c2_code"));
+					String c2_bname = StringUtil.notNull(rs.getString("c2_bname"));
+					String c2_sname = StringUtil.notNull(rs.getString("c2_sname"));
+					planHistory.setCustomer_new(c2_code + "-" + (c2_bname.isEmpty()?c2_sname:c2_bname));
+					
+					planHistory.setPlan_date_old(new Date(rs.getTimestamp("plan_date_old").getTime()));
+					planHistory.setPlan_date_new(new Date(rs.getTimestamp("plan_date_new").getTime()));
+					
+					planHistory.setAction(StringUtil.notNull(rs.getString("action")));
+					planHistory.setLast_modified(new Date(rs.getTimestamp("last_modified").getTime()));
+					
+					results.add(planHistory);
+				}
+				rs.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw e;
+			}
+			log.debug("retrieve list UserPlanHistory successful, result size: " + results.size());
+			return results;
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list UserPlanHistory failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	}
 }

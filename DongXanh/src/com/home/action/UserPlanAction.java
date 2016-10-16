@@ -150,7 +150,7 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 		return SUCCESS;
 	}
 
-	private DHXGridView customGridView() {
+	/*private DHXGridView customGridView() {
 		DHXGridView grid = new DHXGridView(GRIF_VIEW_NAME);
 		grid.setLabel("Chi tiết");
 		//NVTT
@@ -180,6 +180,42 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 //		Calendar cal = Calendar.getInstance();
 //		grid.setFrom(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
 //				cal.get(Calendar.DAY_OF_MONTH));
+		grid.setPaging(true);
+		return grid;
+	}*/
+	
+	private DHXGridView customGridView() {
+		DHXGridView grid = new DHXGridView(GRIF_VIEW_NAME);
+		grid.setLabel("Chi tiết");
+		//NVTT
+		DHXGridViewColumn employeeName = new DHXGridViewColumn("user_name", "NVTT");
+		employeeName.setWidth(120);
+		grid.addOption(employeeName);
+		//KH Cũ
+		DHXGridViewColumn dayPlan = new DHXGridViewColumn("user_name", "Ngày công tác");
+		dayPlan.setWidth(200);
+		grid.addOption(dayPlan);
+		//Hình Thức LH
+		DHXGridViewColumn contactTypeName= new DHXGridViewColumn("getPhone()", "Hình Thức LH");
+		contactTypeName.setWidth(120);
+		grid.addOption(contactTypeName);
+		//Thời Điểm
+		DHXGridViewColumn timelineTypeName = new DHXGridViewColumn("user_name", "Thời Điểm");
+		timelineTypeName.setWidth(100);
+		grid.addOption(timelineTypeName);
+		//KH Mới
+		DHXGridViewColumn customerCode= new DHXGridViewColumn("customer_code", "Mã KH");
+		customerCode.setWidth(120);
+		grid.addOption(customerCode);
+		//KH Mới
+		DHXGridViewColumn customerName= new DHXGridViewColumn("statistic_name", "Tên người QĐCV");
+		customerName.setWidth(200);
+		grid.addOption(customerName);
+		//Chỉnh Sửa
+		DHXGridViewColumn lastModified=new DHXGridViewColumn("getTelefone()", "Điện thoại/Địa chỉ");
+		lastModified.setWidth(200);
+		grid.addOption(lastModified);
+		
 		grid.setPaging(true);
 		return grid;
 	}

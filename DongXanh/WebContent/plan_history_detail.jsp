@@ -8,11 +8,13 @@ pageEncoding="UTF-8"%>
 <!-- page content -->
 <div class="right_col" role="main">
 	<div class="">
+		<input type="hidden" id="nvtt" name="nvtt" value="<%=new String(request.getParameter("nvtt").getBytes("iso-8859-1"), "UTF-8")%>">
+		<input type="hidden" id="startDate" name="startDate" value="<%=request.getParameter("startDate")%>">
+		<input type="hidden" id="endDate" name="endDate" value="<%=request.getParameter("endDate")%>">
 		<div class="clearfix"></div>
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
-
-				<div class="view_pro">
+				<%-- <div class="view_pro">
 					<table style="width: 100%">
 						<tr>
 							<td width="120px" valign="middle"><label>Thời gian:</label></td>
@@ -53,7 +55,7 @@ pageEncoding="UTF-8"%>
 							<td></td>
 						</tr>
 					</table>
-				</div>
+				</div> --%>
 
 				<div class="x_panel">
 					<div id="x_content" class="x_content">
@@ -61,17 +63,15 @@ pageEncoding="UTF-8"%>
 							class="table table-striped responsive-utilities jambo_table display nowrap cell-border" style="width: 100%">
 							<thead>
 								<tr class="headings">
-									<th colspan="9">CHI TIẾT LỊCH CÔNG TÁC NVTT</th>
+									<th colspan="8">LỊCH SỬ THAY ĐỔI LỊCH CÔNG TÁC NVTT CHI TIẾT</th>
 								</tr>
 								<tr class="headings">
 									<th>No</th>
 									<th>NVTT</th>
-									<th>Ngày</th>
-									<th>LH</th>
-									<th>Buổi</th>
-									<th>MKH</th>
-									<th>Tên người QĐCV</th>
-									<th>Đt/Đc</th>
+									<th>KH</th>
+									<th>Ngày lịch công tác</th>
+									<th>Ngày giờ thay đổi</th>
+									<th>Nội dung</th>
 									<th>Ghi chú</th>
 								</tr>
 							</thead>
@@ -85,9 +85,6 @@ pageEncoding="UTF-8"%>
 			</div>
 		</div>
 	</div>
-	
-	<%@ include file="plan_general_add_note.jsp"%>
-	
 	<!-- footer content -->
 	<s:include value="footer.jsp" />
 	<!-- /footer content -->
@@ -141,7 +138,7 @@ th {
 <script>
 $(document).ready(function() {
     $('#example').DataTable( {
-        "scrollX": true,
+        "scrollX": true
     } );
 } );
 </script>
@@ -150,7 +147,7 @@ $(document).ready(function() {
     <script type="text/javascript" src="js/moment.min2.js"></script>
     <script type="text/javascript" src="js/datepicker/daterangepicker.js"></script>
     
-<script type="text/javascript">
+<%-- <script type="text/javascript">
         $(document).ready(function () {
             $('#single_cal1').daterangepicker({
                 singleDatePicker: true,
@@ -169,7 +166,7 @@ $(document).ready(function() {
                 console.log(start.toISOString(), end.toISOString(), label);
             });
             
-            var d = new Date();
+           /*  var d = new Date();
             var currDate = d.getDate();
             if(currDate < 10)currDate = '0'+currDate;
             var currMonth = d.getMonth()+1;
@@ -177,73 +174,38 @@ $(document).ready(function() {
             var currYear = d.getFullYear();
             var startDate = currDate + "/" + currMonth + "/" + currYear;
             $("#single_cal1").attr("value", startDate);
-            $("#single_cal2").attr("value", startDate);
+            $("#single_cal2").attr("value", startDate); */
+            
+            var startDate = "<%=request.getParameter("startDate")%>";
+            var endDate = "<%=request.getParameter("endDate")%>";
+            
+            //var date = new Date();
+            //startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() + 1);
+            //endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() + 7);
+            $("#single_cal1").attr("value", moment(startDate).format('DD/MM/YYYY'));
+            $("#single_cal2").attr("value", moment(endDate).format('DD/MM/YYYY'));
 
         });
-</script>
-    
-<script type="text/javascript">
-	
-	var table;
-	var selected_row = 0;
+</script> --%>
 
-	function btnFilterValues(){
- 		//var week 		= $('[name="single_cal1"]').val();
- 		var startDate 		= $('[name="single_cal1"]').val();
- 		var endDate 		= $('[name="single_cal2"]').val();
+<script type="text/javascript">
+ 		var startDate 		= $('[name="startDate"]').val();
+ 		var endDate 		= $('[name="endDate"]').val();
+ 		var nvtt 			= $('[name="nvtt"]').val();
+ 		//alert(startDate + ' & ' + endDate + ' & ' + nvtt);
         $(document).ready(function () {
         	 $.ajax({
  	            type: "POST",
- 	            //url : 'UserPlanDetailAction?week='+week,
- 	            url : 'UserPlanDetailAction?startDate='+startDate+'&endDate='+endDate, 
+ 	            url : 'GetPlanHistoryAction?startDate='+startDate+'&endDate='+endDate+'&nvtt='+nvtt, 
  	            success : function(responseText) {
  	           		//alert(responseText);
  	              $('#x_content').html(responseText);
  	              $('#example').DataTable({
  	            	 scrollX: true,
  	              });
- 	              
- 	             table = $('#example').DataTable();
- 	             $('#example').on('dblclick', 'tr', function () {
- 	                var data = table.row( this ).data();
- 	                selected_row =  table.row( this ).index();
- 	                
- 	                //alert( 'You clicked on '+data[1]+' row' );
- 	                var code = 'DT-'+data[1]+data[2]+data[5];
- 	                 $('#plan_code').val(code);
- 	                 $('#descr').val(data[8].replace(/<br>/g, '\n'));
- 	               	$('#fc_addNoteDialog').click();
- 	             } );
- 	             
- 	             $('#example tbody').on( 'click', 'button', function () {
-	                 var data = table.row( $(this).parents('tr') ).data();
-	                 selected_row =  table.row( $(this).parents('tr') ).index();
-	                 //alert( 'You clicked on '+data[1]+' row' );
-	                 var code = 'DT-'+data[1]+data[2]+data[5];
- 	                 $('#plan_code').val(code);
-	                  $('#descr').val(data[8].replace(/<br>/g, '\n'));
-	                 $('#fc_addNoteDialog').click();
-	             } ); 
  	            }
  	        });    
         });
-	}
-	
-	function updateNote() {
-    	var code = $('#plan_code').val();
-    	var note = $('#descr').val();
-    	note = note.replace(/\r?\n/g, '<br>');
-		 $.ajax({
-	            type: "POST",
-	            url : 'UpdatePlanNoteStatisticAction?code='+code+'&note='+note, 
-	            success : function(responseText) {
-	           		//alert(responseText);
-	            	var cell = table.cell(selected_row, 8);
-	        		cell.data(note);
-	            }
-	        });  
-    }
-	
 </script>
 
 <script>

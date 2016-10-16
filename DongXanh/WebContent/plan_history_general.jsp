@@ -61,16 +61,16 @@ pageEncoding="UTF-8"%>
 							class="table table-striped responsive-utilities jambo_table display nowrap cell-border" style="width: 100%">
 							<thead>
 								<tr class="headings">
-									<th colspan="8">LỊCH SỬ THAY ĐỔI LỊCH CÔNG TÁC NVTT TONG HOP</th>
+									<th colspan="8">LỊCH SỬ THAY ĐỔI LỊCH CÔNG TÁC NVTT TỔNG HỢP</th>
 								</tr>
 								<tr class="headings">
 									<th>No</th>
 									<th>NVTT</th>
-									<th>Thoi gian</th>
-									<th>So ngay co dieu chinh</th>
-									<th>So KH co dieu chinh</th>
+									<th>Thời gian</th>
+									<th>Số ngày có điều chỉnh</th>
+									<th>Số KH có điều chỉnh</th>
 									<th>Nội dung</th>
-									<th>Chi tiet</th>
+									<th>Chi tiết</th>
 								</tr>
 							</thead>
 
@@ -201,7 +201,25 @@ $(document).ready(function() {
  	              $('#x_content').html(responseText);
  	              $('#example').DataTable({
  	            	 scrollX: true,
+ 	            	"columnDefs": [
+           	              {
+           	                  "targets": [2],
+           	                  "visible": false,
+           	                  "searchable": false
+           	              }
+           	          ]
  	              });
+ 	              
+ 	             var table = $('#example').DataTable();
+ 	             $('#example').on('dblclick', 'tr', function () {
+ 	                var data = table.row( this ).data();
+ 	                window.location = 'PlanHistoryAction?startDate='+startDate+'&endDate='+endDate+'&nvtt='+data[2];
+ 	             } );
+ 	             
+ 	             $('#example tbody').on( 'click', 'button', function () {
+	                 var data = table.row( $(this).parents('tr') ).data();
+	                 window.location = 'PlanHistoryAction?startDate='+startDate+'&endDate='+endDate+'&nvtt='+data[2];
+	             } ); 
  	            }
  	        });    
         });

@@ -3236,22 +3236,22 @@ scheduler.locale = {
 	date:{
 		month_full:["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 		month_short:["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-		day_full:["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-		day_short:["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+		day_full:["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"],
+		day_short:["CN", "T2", "T3", "T4", "T5", "T6", "T7"]
 	},
 	labels:{
-		dhx_cal_today_button:"Today",
-		day_tab:"Day",
-		week_tab:"Week",
-		month_tab:"Month",
-		new_event:"New event",
+		dhx_cal_today_button:"Hôm nay",
+		day_tab:"Ngày",
+		week_tab:"Tuần",
+		month_tab:"Tháng",
+		new_event:"Chọn khách hàng!",
 		icon_save:"Save",
 		icon_cancel:"Cancel",
 		icon_details:"Details",
 		icon_edit:"Edit",
 		icon_delete:"Delete",
 		confirm_closing:"",//Your changes will be lost, are your sure ?
-		confirm_deleting:"Event will be deleted permanently, are you sure?",
+		confirm_deleting:"Bạn có chắc muốn xóa lịch công tác đang chọn không?",
 		section_description:"Description",
 		section_time:"Time period",
 		full_day:"Full day",

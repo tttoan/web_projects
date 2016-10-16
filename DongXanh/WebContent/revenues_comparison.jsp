@@ -81,11 +81,11 @@ pageEncoding="UTF-8"%>
 									<th>Nhóm</th>
 									<th>Doanh số tháng <br>2015</th>
 									<th>Doanh số tháng <br>2016</th>
-									<th>Tang 30%</th>
-									<th>Gi?m 30%</th>
+									<th>Tăng 30%</th>
+									<th>Giảm 30%</th>
 									<th>Không mua</th>
 									<th>Mua 2 noi</th>
-									<th>Noi nhận hàng</th>
+									<th>Nơi nhận hàng</th>
 									<th>NVTT quản lý</th>
 									<th>Ghi chú</th>
 								</tr>

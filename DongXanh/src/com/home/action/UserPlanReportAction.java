@@ -19,6 +19,7 @@ import com.home.dao.WorkingPlanHome;
 import com.home.entities.UserAware;
 import com.home.entities.UserPlanGeneral;
 import com.home.entities.UserPlanHistory;
+import com.home.entities.UserPlanHistoryGeneral;
 import com.home.model.EventsNote;
 import com.home.model.User;
 import com.home.util.DateUtils;
@@ -361,9 +362,9 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 					String mkh = "";
 					if(listPlan.get(i).getPhone()>0){
 						lh = "ĐT<br>";
-						mkh = ""+(getDaySection(listPlan.get(i).getStart_date()) + ": " + listPlan.get(i).getCustomer_code())+"<br>";
+						mkh = ""+(StringUtil.getDaySection(listPlan.get(i).getStart_date()) + ": " + listPlan.get(i).getCustomer_code())+"<br>";
 					}else{
-						mkh = ""+(getDaySection(listPlan.get(i).getStart_date()) + ": " + listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"<br>";
+						mkh = ""+(StringUtil.getDaySection(listPlan.get(i).getStart_date()) + ": " + listPlan.get(i).getCustomer_code() + "-" + listPlan.get(i).getBusiness_name())+"<br>";
 					}
 					if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY){
 						lht2.append(lh);
@@ -496,7 +497,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			html.append("<th>Buổi</th>");
 			html.append("<th>MKH</th>");
 			html.append("<th>Tên người QĐCV</th>");
-			html.append("<th>Liên hệ</th>");
+			html.append("<th>Đt/Đc</th>");
 			html.append("<th>Ghi chú</th>");
 			html.append("<th></th>");
 			html.append("</tr>");
@@ -514,10 +515,10 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 				tblContent.append("<td style=\"text-align:left\">" + (nvtt) + "</td>");
 				
 				Date datePlan = results.get(i).getStart_date();
-				String workingDate = getDayName(datePlan) + ", " + DateUtils.getStringFromDate(datePlan, "dd/MM/yy");
+				String workingDate = StringUtil.getDayName(datePlan) + ", " + DateUtils.getStringFromDate(datePlan, "dd/MM/yy");
 				tblContent.append("<td style=\"text-align:right\">" + (workingDate) + "</td>");
 				tblContent.append("<td>" + (results.get(i).getPhone()>0?"ĐT":"") + "</td>");
-				tblContent.append("<td>" + (getDaySection(datePlan)) + "</td>");
+				tblContent.append("<td>" + (StringUtil.getDaySection(datePlan)) + "</td>");
 				
 				tblContent.append("<td style=\"text-align:left\">" + (results.get(i).getCustomer_code()) + "</td>");
 				tblContent.append("<td style=\"text-align:left\">" + (results.get(i).getBusiness_name()) + "</td>");
@@ -558,26 +559,6 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 	
 	}
 	
-	private String getDayName(Date datePlan) throws Exception{
-		if(datePlan != null){
-			String[] arr = new String[]{"Chủ Nhật", "Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy"};
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(datePlan);
-			return arr[cal.get(Calendar.DAY_OF_WEEK)-1];
-		}
-		return "";
-	}
-	
-	private String getDaySection(Date datePlan) throws Exception{
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(datePlan);
-		//System.out.println(datePlan + " ------> " + cal.get(Calendar.HOUR_OF_DAY));
-		if(cal.get(Calendar.HOUR_OF_DAY) >= 12){
-			return "C";
-		}else{
-			return "S";
-		}
-	}
 	
 	public String updatePlanNote(){
 		try {
@@ -634,45 +615,39 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			html.append("<thead>");
 			
 			html.append("<tr class=\"headings\">");
-			html.append("<th colspan=\"7\">LỊCH SỬ THAY ĐỔI LỊCH CÔNG TÁC NVTT TONG HOP, "+DateUtils.getStringFromDate(cal2.getTime(), "dd")+"-"+DateUtils.getStringFromDate(cal3.getTime(), "dd/MM/yyyy")+"</th>");
+			html.append("<th colspan=\"8\">LỊCH SỬ THAY ĐỔI LỊCH CÔNG TÁC NVTT TỔNG HỢP, "+DateUtils.getStringFromDate(cal2.getTime(), "dd/MM")+"-"+DateUtils.getStringFromDate(cal3.getTime(), "dd/MM/yyyy")+"</th>");
 			html.append("</tr>");
 			
 			html.append("<tr class=\"headings\">");
 			html.append("<th>No</th>");
 			html.append("<th>NVTT</th>");
-			html.append("<th>Thoi gian</th>");
-			html.append("<th>So ngay co dieu chinh</th>");
-			html.append("<th>So KH co dieu chinh</th>");
+			html.append("<th>NVTT</th>");
+			html.append("<th>Thời gian</th>");
+			html.append("<th>Số ngày có điều chỉnh</th>");
+			html.append("<th>Số KH có điều chỉnh</th>");
 			html.append("<th>Nội dung</th>");
-			html.append("<th>Chi tiet</th>");
+			html.append("<th>Xem</th>");
 			html.append("</tr>");
 				
 			html.append("</thead>");
 			
 			StringBuilder tblContent = new StringBuilder();
 			int no = 1;
-			for (int i = 0; i < results.size(); i++) {
-
-				List<WARNING> warnings = isWarningPlanHistory(results.get(i));
-				if(warnings.isEmpty()){
-					if("INSERT".equalsIgnoreCase(results.get(i).getAction()))
-						continue;
-				}
-				
+			LinkedHashMap<String, UserPlanHistoryGeneral> hmGeneral = getHistoryGeneral(results);
+			Set<String> listNVTT = hmGeneral.keySet();
+			for (String nvtt : listNVTT) {
 				// renderer html content
 				tblContent.append("<tr class=\"even pointer\">");
 				tblContent.append("<td>" + (no) + "</td>");
-				tblContent.append("<td style=\"text-align:left\">" + (results.get(i).getNvtt()) + "</td>");
-				tblContent.append("<td style=\"text-align:left\">" + (DateUtils.getStringFromDate(cal2.getTime(), "dd")+"-"+DateUtils.getStringFromDate(cal3.getTime(), "dd/MM/yyyy")) + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + (nvtt) + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + (hmGeneral.get(nvtt).getUser_name()) + "</td>");
+				tblContent.append("<td style=\"text-align:left\">" + (DateUtils.getStringFromDate(cal2.getTime(), "dd/MM")+"-"+DateUtils.getStringFromDate(cal3.getTime(), "dd/MM/yyyy")) + "</td>");
+				tblContent.append("<td style=\"text-align:center\">" + (hmGeneral.get(nvtt).getTotalChangeTime()) + "</td>");
+				tblContent.append("<td style=\"text-align:center\">" + (hmGeneral.get(nvtt).getTotalChangeCus()) + "</td>");
 				
-				Date event_date = results.get(i).getEvent_date();
-				tblContent.append("<td style=\"text-align:right\">" + (getDayName(event_date) + ", " + DateUtils.getStringFromDate(event_date, "dd/MM/yy hh:mm")) + "</td>");
-				
-				Date modified_date = results.get(i).getLast_modified();
-				tblContent.append("<td style=\"text-align:right\">" + (getDayName(modified_date) + ", " + DateUtils.getStringFromDate(modified_date, "dd/MM/yy hh:mm")) + "</td>");
-				
-				tblContent.append("<td style=\"text-align:left\">" + getHistoryContent(results.get(i), warnings) + "</td>");
-				tblContent.append("<td style=\"text-align:left\">" + getHistoryNote(results.get(i), warnings) + "</td>");
+				List<WARNING> warnings = hmGeneral.get(nvtt).getWarnings();
+				tblContent.append("<td style=\"text-align:left\">" + (getHistoryNote(warnings)) + "</td>");
+				tblContent.append("<td><button class=\"btn btn-info btn-xs\">Chi tiết</button></td>");
 				tblContent.append("</tr>");
 				no++;
 			}
@@ -691,11 +666,60 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 		return Action.SUCCESS;
 	}
 	
+	private LinkedHashMap<String, UserPlanHistoryGeneral> getHistoryGeneral(List<UserPlanHistory> list) throws Exception{
+		LinkedHashMap<String, UserPlanHistoryGeneral> results = new LinkedHashMap<String, UserPlanHistoryGeneral>();
+		try {
+			for (UserPlanHistory history : list) {
+				List<WARNING> warnings = isWarningPlanHistory(history);
+				if(warnings.isEmpty()){
+					if("INSERT".equalsIgnoreCase(history.getAction()))
+						continue;
+				}
+				
+				String nvtt = history.getNvtt();
+				if(!results.containsKey(nvtt)){
+					results.put(nvtt, new UserPlanHistoryGeneral());
+					results.get(nvtt).setNvtt(nvtt);
+					results.get(nvtt).setUser_name(history.getUserName());
+				}
+				
+				int changeTime=0;
+				int changeCus=0;
+				for (WARNING warning : warnings) {
+					switch (warning) {
+					case LATE_PLAN:
+						break;
+					case CHANGE_TIME:
+						changeTime++;
+						break;
+					case CHANGE_CUSTOMER:
+						changeCus++;
+						break;
+					case DELETE_PLAN:
+						break;
+					case CHANGE_CONTACT_TYPE:
+						break;
+					}
+					results.get(nvtt).addWarning(warning);
+				}
+				
+				results.get(nvtt).setTotalChangeTime(results.get(nvtt).getTotalChangeTime()+changeTime);
+				results.get(nvtt).setTotalChangeCus(results.get(nvtt).getTotalChangeCus() + changeCus);
+			
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return results;
+	}
+	
 	public String getPlanHistory(){
 		try {
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
 			String startDate = StringUtil.notNull(request.getParameter("startDate"));
 			String endDate = StringUtil.notNull(request.getParameter("endDate"));
+			String user_name  = StringUtil.notNull(new String(request.getParameter("nvtt").getBytes("iso-8859-1"), "UTF-8")).toLowerCase();
 
 			Date week1 = new Date(DateUtils.getDateFromString(startDate, "dd/MM/yyyy").getTime());
 			Date week2 = new Date(DateUtils.getDateFromString(endDate, "dd/MM/yyyy").getTime());
@@ -705,13 +729,14 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			Calendar cal3 = Calendar.getInstance();
 			cal3.setTime(week2);
 			EventsHistoryHome eHome = new EventsHistoryHome(HibernateUtil.getSessionFactory());
-			List<UserPlanHistory> results = eHome.getListPlanHistory(isManager()?-1:userSes.getId(), week1, week2);
+			//List<UserPlanHistory> results = eHome.getListPlanHistory(isManager()?-1:userSes.getId(), week1, week2);
+			List<UserPlanHistory> results = eHome.getListPlanHistory(user_name, week1, week2);
 
 			StringBuilder html = new StringBuilder("<table id=\"example\" class=\"table table-striped responsive-utilities jambo_table display nowrap cell-border\" style=\"width: 100%\">");
 			html.append("<thead>");
 			
 			html.append("<tr class=\"headings\">");
-			html.append("<th colspan=\"7\">LỊCH SỬ THAY ĐỔI LỊCH CÔNG TÁC NVTT CHI TIET, "+DateUtils.getStringFromDate(cal2.getTime(), "dd")+"-"+DateUtils.getStringFromDate(cal3.getTime(), "dd/MM/yyyy")+"</th>");
+			html.append("<th colspan=\"7\">LỊCH SỬ THAY ĐỔI LỊCH CÔNG TÁC NVTT CHI TIẾT, "+DateUtils.getStringFromDate(cal2.getTime(), "dd/MM")+"-"+DateUtils.getStringFromDate(cal3.getTime(), "dd/MM/yyyy")+"</th>");
 			html.append("</tr>");
 			
 			html.append("<tr class=\"headings\">");
@@ -743,10 +768,10 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 				tblContent.append("<td style=\"text-align:left\">" + (results.get(i).getEvent_name().isEmpty()?results.get(i).getCustomer_old():results.get(i).getEvent_name()) + "</td>");
 				
 				Date event_date = results.get(i).getEvent_date();
-				tblContent.append("<td style=\"text-align:right\">" + (getDayName(event_date) + ", " + DateUtils.getStringFromDate(event_date, "dd/MM/yy hh:mm")) + "</td>");
+				tblContent.append("<td style=\"text-align:right\">" + (StringUtil.getDayName(event_date) + ", " + DateUtils.getStringFromDate(event_date, "dd/MM/yy hh:mm")) + "</td>");
 				
 				Date modified_date = results.get(i).getLast_modified();
-				tblContent.append("<td style=\"text-align:right\">" + (getDayName(modified_date) + ", " + DateUtils.getStringFromDate(modified_date, "dd/MM/yy hh:mm")) + "</td>");
+				tblContent.append("<td style=\"text-align:right\">" + (StringUtil.getDayName(modified_date) + ", " + DateUtils.getStringFromDate(modified_date, "dd/MM/yy hh:mm")) + "</td>");
 				
 				tblContent.append("<td style=\"text-align:left\">" + getHistoryContent(results.get(i), warnings) + "</td>");
 				tblContent.append("<td style=\"text-align:left\">" + getHistoryNote(results.get(i), warnings) + "</td>");
@@ -872,6 +897,39 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 		return "";
 	}
 	
+	private String getHistoryNote(List<WARNING> warnings) throws Exception{
+		try {
+			if(warnings.size() > 0){
+				StringBuilder content = new StringBuilder();
+				for (WARNING warning : warnings) {
+					switch (warning) {
+					case LATE_PLAN:
+						content.append("Lên lịch trễ").append("<br>");
+						break;
+					case CHANGE_TIME:
+						content.append("Cập nhật lịch trễ (điều chỉnh TG)").append("<br>");
+						break;
+					case CHANGE_CUSTOMER:
+						content.append("Cập nhật lịch trễ (điều chỉnh KH)").append("<br>");
+						break;
+					case DELETE_PLAN:
+						content.append("Xóa lịch trễ").append("<br>");
+						break;
+					case CHANGE_CONTACT_TYPE:
+						break;
+					default:
+						break;
+					}
+				}
+				return content.toString().replaceAll("<br>$", "");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return "";
+	}
+	
 	private String getHistoryNote(UserPlanHistory planHisory, List<WARNING> warnings) throws Exception{
 		try {
 			if(warnings.size() > 0){
@@ -918,7 +976,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 		return note;
 	}
 	
-	enum WARNING{
+	public enum WARNING{
 		LATE_PLAN,
 		CHANGE_CUSTOMER,
 		CHANGE_TIME,

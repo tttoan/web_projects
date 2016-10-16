@@ -84,7 +84,7 @@
 			</result>
 		</action>
 		<action name="PlanHistoryAction" class="com.home.action.UserPlanReportAction">
-			<result name="success">/plan_history.jsp</result>
+			<result name="success">/plan_history_detail.jsp</result>
 		</action>
 		<action name="GetPlanHistoryAction" class="com.home.action.UserPlanReportAction" method="getPlanHistory">
 			<result type="stream">
