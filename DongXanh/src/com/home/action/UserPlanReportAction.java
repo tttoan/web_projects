@@ -330,8 +330,8 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 				tblContent.append("<td>" + (no) + "</td>");
 				tblContent.append("<td style=\"text-align:left\">" + (username) + "</td>");
 				
-				int totalTT = 0;
-				int totalCT  = 0;
+				List<String> totalTT = new ArrayList<String>();
+				List<Integer> totalCT = new ArrayList<Integer>();
 				StringBuilder lht2 = new StringBuilder("");
 				StringBuilder lht3 = new StringBuilder("");
 				StringBuilder lht4 = new StringBuilder("");
@@ -347,17 +347,20 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 				StringBuilder mkh7 = new StringBuilder("");
 				StringBuilder mkhcn = new StringBuilder("");
 				List<UserPlanGeneral> listPlan = hm.get(username);
-				List<String> listTT = new ArrayList<String>();
 				for (int i = 0; i < listPlan.size(); i++) {
+					
+					cal2.setTime(listPlan.get(i).getStart_date());
+					
 					if(listPlan.get(i).getPhone()>0){
 					}else{
-						totalCT++;
-						if(!listTT.contains(listPlan.get(i).getCustomer_code())){
-							totalTT++;
-							listTT.add(listPlan.get(i).getCustomer_code());
+						if(!totalCT.contains(cal2.get(Calendar.DAY_OF_WEEK))){
+							totalCT.add(cal2.get(Calendar.DAY_OF_WEEK));
+						}
+						if(!totalTT.contains(listPlan.get(i).getCustomer_code())){
+							totalTT.add(listPlan.get(i).getCustomer_code());
 						}
 					}
-					cal2.setTime(listPlan.get(i).getStart_date());
+					
 					String lh = "";
 					String mkh = "";
 					if(listPlan.get(i).getPhone()>0){
@@ -418,8 +421,8 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 				tblContent.append("<td style=\"text-align:left\">" + lhcn.append("").toString().replaceAll("<br>$", "") + "</td>");
 				tblContent.append("<td style=\"text-align:left\">" + mkhcn.append("").toString().replaceAll("<br>$", "") + "</td>");
 				
-				tblContent.append("<td>" + totalCT + "</td>");
-				tblContent.append("<td>" + totalTT + "</td>");
+				tblContent.append("<td>" + totalTT.size() + "</td>");
+				tblContent.append("<td>" + totalCT.size() + "</td>");
 				EventsNote eventNote = enHome.findEventNoteByCode("GN-"+WEEK_OF_YEAR+username);
 				if(eventNote != null){
 					tblContent.append("<td style=\"text-align:left\" id=\"id_note\">"+eventNote.getENote()+"</td>");

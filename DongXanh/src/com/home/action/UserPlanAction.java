@@ -23,6 +23,7 @@ import com.dhtmlx.planner.DHXSkin;
 import com.dhtmlx.planner.controls.DHXExternalLightboxForm;
 import com.dhtmlx.planner.controls.DHXGridView;
 import com.dhtmlx.planner.controls.DHXGridViewColumn;
+import com.dhtmlx.planner.controls.DHXGridViewColumn.Aligns;
 import com.dhtmlx.planner.controls.DHXLightboxMiniCalendar;
 import com.dhtmlx.planner.controls.DHXMonthView;
 import com.dhtmlx.planner.controls.DHXTimelineView;
@@ -188,33 +189,37 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 		DHXGridView grid = new DHXGridView(GRIF_VIEW_NAME);
 		grid.setLabel("Chi tiết");
 		//NVTT
-		DHXGridViewColumn employeeName = new DHXGridViewColumn("user_name", "NVTT");
-		employeeName.setWidth(120);
-		grid.addOption(employeeName);
+		DHXGridViewColumn user_name = new DHXGridViewColumn("nvtt", "NVTT");
+		user_name.setWidth(120);
+		grid.addOption(user_name);
 		//KH Cũ
-		DHXGridViewColumn dayPlan = new DHXGridViewColumn("user_name", "Ngày công tác");
+		DHXGridViewColumn dayPlan = new DHXGridViewColumn("dayPlan", "Ngày công tác");
 		dayPlan.setWidth(200);
+		dayPlan.setAlign(Aligns.LEFT);
 		grid.addOption(dayPlan);
 		//Hình Thức LH
-		DHXGridViewColumn contactTypeName= new DHXGridViewColumn("getPhone()", "Hình Thức LH");
-		contactTypeName.setWidth(120);
+		DHXGridViewColumn contactTypeName= new DHXGridViewColumn("contactTypeName", "Hình Thức LH");
+		contactTypeName.setWidth(100);
 		grid.addOption(contactTypeName);
 		//Thời Điểm
-		DHXGridViewColumn timelineTypeName = new DHXGridViewColumn("user_name", "Thời Điểm");
+		DHXGridViewColumn timelineTypeName = new DHXGridViewColumn("timelineTypeName", "Thời Điểm");
 		timelineTypeName.setWidth(100);
 		grid.addOption(timelineTypeName);
 		//KH Mới
-		DHXGridViewColumn customerCode= new DHXGridViewColumn("customer_code", "Mã KH");
-		customerCode.setWidth(120);
+		DHXGridViewColumn customerCode= new DHXGridViewColumn("customerCode", "Mã KH");
+		customerCode.setWidth(150);
+		customerCode.setAlign(Aligns.LEFT);
 		grid.addOption(customerCode);
 		//KH Mới
-		DHXGridViewColumn customerName= new DHXGridViewColumn("statistic_name", "Tên người QĐCV");
-		customerName.setWidth(200);
+		DHXGridViewColumn customerName= new DHXGridViewColumn("customerName", "Tên người QĐCV");
+		customerName.setWidth(250);
+		customerName.setAlign(Aligns.LEFT);
 		grid.addOption(customerName);
 		//Chỉnh Sửa
-		DHXGridViewColumn lastModified=new DHXGridViewColumn("getTelefone()", "Điện thoại/Địa chỉ");
-		lastModified.setWidth(200);
-		grid.addOption(lastModified);
+		DHXGridViewColumn customerAddress=new DHXGridViewColumn("customerAddress", "Điện thoại/Địa chỉ");
+		//customerAddress.setWidth(250);
+		customerAddress.setAlign(Aligns.LEFT);
+		grid.addOption(customerAddress);
 		
 		grid.setPaging(true);
 		return grid;

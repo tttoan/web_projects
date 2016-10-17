@@ -355,6 +355,12 @@ scheduler.render_timeline_event = function(ev, attach){
 	var bg_color = (ev.color?("background:"+ev.color+";"):"");
 	var color = (ev.textColor?("color:"+ev.textColor+";"):"");
 	var text = scheduler.templates.event_bar_text(ev.start_date,ev.end_date,ev);
+	//alert(text);
+	if(ev.contactType==2){
+		if(text.indexOf('-') > 0){
+			text = text.substring(0, text.indexOf('-'));
+		}
+	}
 
 	var html='<div event_id="'+ev.id+'" class="'+cs+'" style="'+bg_color+''+color+'position:absolute; top:'+y+'px; height: '+hb+'px; left:'+x_start+'px; width:'+Math.max(0,x_end-x_start)+'px;'+(ev._text_style||"")+'">';
 	if (scheduler.config.drag_resize && !scheduler.config.readonly) {

@@ -23,12 +23,14 @@ import com.dhtmlx.planner.DHXEventsManager;
 import com.dhtmlx.planner.DHXStatus;
 import com.dhtmlx.planner.data.DHXCollection;
 import com.home.conts.UserPlanDefine;
+import com.home.entities.UserPlanDetail;
 import com.home.entities.UserPlanGeneral;
 import com.home.model.Customer;
 import com.home.model.Event;
 import com.home.model.EventsHistory;
 import com.home.model.TimelineType;
 import com.home.model.User;
+import com.home.util.DateUtils;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
 
@@ -106,7 +108,29 @@ public class CustomEventsManager extends DHXEventsManager implements UserPlanDef
 			
 			List<UserPlanGeneral> results = wpHome.getAllUserPlan4Report(userSes.getId(), new java.sql.Date(cal1.getTime().getTime()), new java.sql.Date(new Date().getTime() + 30*24*60*60*1000l));
 			for (UserPlanGeneral userPlanGeneral : results) {
-				evs.add(userPlanGeneral);
+				DHXEv dhxEv = new UserPlanDetail();
+				((UserPlanDetail)dhxEv).setNvtt(userPlanGeneral.getNVTT());
+				((UserPlanDetail)dhxEv).setDayPlan(DateUtils.getStringFromDate(userPlanGeneral.getStart_date(), "dd/MM/yy") +", "+ StringUtil.getDayName(userPlanGeneral.getStart_date()));
+				dhxEv.setStart_date(userPlanGeneral.getStart_date());
+				dhxEv.setEnd_date(userPlanGeneral.getEnd_date());
+				((UserPlanDetail)dhxEv).setContactTypeName(userPlanGeneral.getPhone()>0?"ĐT":"");
+				((UserPlanDetail)dhxEv).setTimelineTypeName(StringUtil.getDaySection(userPlanGeneral.getStart_date()));
+				((UserPlanDetail)dhxEv).setCustomerCode(userPlanGeneral.getCustomer_code());
+				((UserPlanDetail)dhxEv).setCustomerName(userPlanGeneral.getBusiness_name());
+				dhxEv.setText(userPlanGeneral.getCustomer_code()+"-"+userPlanGeneral.getBusiness_name());
+				String contactWay = "";
+				if(userPlanGeneral.getPhone()>0){
+					contactWay = userPlanGeneral.getTelefone();
+				}else{
+					if(!userPlanGeneral.getTelefone().isEmpty()){
+						contactWay += userPlanGeneral.getTelefone() + "<br>";
+					}
+					if(!userPlanGeneral.getAddress().isEmpty()){
+						contactWay += userPlanGeneral.getAddress();
+					}
+				}
+				((UserPlanDetail)dhxEv).setCustomerAddress(contactWay);
+				evs.add(dhxEv);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
