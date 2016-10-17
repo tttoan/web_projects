@@ -11,6 +11,7 @@
 		<ul class="nav side-menu">
 			<li><s:url action="homeAction" var="homeURL" /> <s:a
 					href="%{homeURL}" theme="bootstrap"> Trang chủ </s:a></li>
+					<s:if test="%{userSes.role.roleId == 1 || userSes.role.roleId == 3}">
 			<li><a><i class="fa fa-cubes"></i> Khuyến Mãi <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
@@ -24,7 +25,7 @@
 							href="%{productURL}" theme="bootstrap"> Sản phẩm </s:a></li>
 				</ul>
 			</li>
-			<s:if test="%{userSes.role.roleId == 1 || userSes.role.roleId == 3}">
+			
 				<s:include value="menu_employee.jsp">
 					<s:param name="role_id">
 						<s:property value="%{userSes.role.roleId}" />
@@ -43,6 +44,7 @@
 							<s:a href="%{assignCusURL}"> Phân công theo dõi </s:a></li>
 					</s:if>
 				</ul></li>
+				<s:if test="%{userSes.role.roleId == 1 || userSes.role.roleId == 3}">
 			<li><a><i class="fa fa-book"></i> Bảng Kê <span
 					class="fa fa-chevron-down"></span></a>
 				<ul class="nav child_menu" style="display: none">
@@ -53,7 +55,7 @@
 					<li><s:url action="move_to_accept_statistic" var="masURL">
 						</s:url> <s:a href="%{masURL}">Thao tác excel</s:a></li>
 				</ul></li>
-			<s:if test="%{userSes.role.roleId == 1 || userSes.role.roleId == 3}">
+			
 				<li><a><i class="fa fa-bar-chart"></i> Báo cáo <span
 						class="fa fa-chevron-down"></span></a>
 					<ul class="nav child_menu" style="display: none">
