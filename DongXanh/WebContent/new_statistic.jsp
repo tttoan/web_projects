@@ -163,7 +163,7 @@
 							<div class="ln_solid"></div>
 							<div class="form-group">
 								<div class="col-md-6 col-md-offset-3">
-									<button type="reset" class="btn btn-primary">Reset</button>
+									<button type="reset" class="btn btn-primary">Làm mới</button>
 									<button id="send" type="submit" class="btn btn-success"><s:if test="%{edit}">
 											Cập nhật
 										</s:if>
