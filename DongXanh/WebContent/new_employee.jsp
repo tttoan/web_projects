@@ -133,6 +133,7 @@
 									<s:select id="roleId" name="roleId" showDownArrow="false"
 										autoComplete="true" value="%{user.role.roleId}"
 										cssClass="form-control col-md-7 col-xs-12" list="listRole"
+										disabled="%{userSes.role.roleId != 1 && userSes.role.roleId != 3}"
 										listKey="roleId" listValue="roleName" />
 								</div>
 							</div>
