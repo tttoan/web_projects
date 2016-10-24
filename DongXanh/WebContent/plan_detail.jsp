@@ -43,7 +43,9 @@ pageEncoding="UTF-8"%>
 								</fieldset>
 							</td>
 							<td align="left" valign="middle">
+								<s:url action="export_plan_detail" var="exportPlanDetailURL"></s:url>
 								<button type="button" class="btn btn-primary" id="btnFilter" onclick="btnFilterValues()">Xem kết quả</button>
+								<button type="button" class="btn btn-primary" id="btnFilter" onclick="btnExport()">Xuất Excel</button>
 							</td>
 						</tr>
 						<tr>
@@ -227,6 +229,13 @@ $(document).ready(function() {
  	            }
  	        });    
         });
+	}
+	
+	function btnExport(){
+ 		//var week 		= $('[name="single_cal1"]').val();
+ 		var startDate 		= $('[name="single_cal1"]').val();
+ 		var endDate 		= $('[name="single_cal2"]').val();
+ 		location.href		='export_plan_detail?startDate='+startDate+'&endDate='+endDate;
 	}
 	
 	function updateNote() {

@@ -42,7 +42,7 @@
 										value="%{getText('format.date',{birthDate})}" /></td>
 								<td class=""><s:property value="mobilePhone" /></td>
 
-								<td class=""><a class="btn btn-success btn-xs"><i
+								<td class=""><a class="btn btn-success btn-xs" style="width: 80px"><i
 										class="fa"></i> <s:property value="%{role.roleName}" /> </a></td>
 								<s:if test="%{#rId == 1}">
 									<td class="last">
