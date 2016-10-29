@@ -32,7 +32,7 @@ public class LoginAction extends ActionSupport implements Action, ModelDriven<Us
 	}
 
 	public SessionFactory getSessionFactory() {
-		return HibernateUtil.getSessionFactory();
+		return HibernateUtil.getSessionFactory(this);
 	}
 
 	@Override
