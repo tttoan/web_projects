@@ -139,11 +139,16 @@ th {
 <!--<script src="js/datatables/tools/js/dataTables.tableTools.js"></script>-->
 
 <!-- Datatables -->
+<script src="js/jquery-1.12.3.min.js"></script>
 <script src="js/jquery.dataTables.min.js"></script>
+<script src="js/dataTables.fixedHeader.min.js"></script>
+
 <script>
 $(document).ready(function() {
     $('#example').DataTable( {
-        "scrollX": true,
+        scrollX: true,
+        fixedHeader: true,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
     } );
 } );
 </script>
@@ -190,22 +195,27 @@ $(document).ready(function() {
 	var selected_row = 0;
 
 	function btnFilterValues(){
+		//alert('ttt1');
  		//var week 		= $('[name="single_cal1"]').val();
  		var startDate 		= $('[name="single_cal1"]').val();
  		var endDate 		= $('[name="single_cal2"]').val();
-        $(document).ready(function () {
+ 		//alert('ttt2');
+       // $(document).ready(function () {
         	 $.ajax({
  	            type: "POST",
  	            //url : 'UserPlanDetailAction?week='+week,
  	            url : 'UserPlanDetailAction?startDate='+startDate+'&endDate='+endDate, 
  	            success : function(responseText) {
- 	           		//alert(responseText);
+ 	           	  //alert(responseText);
  	              $('#x_content').html(responseText);
  	              $('#example').DataTable({
+ 	            	 fixedHeader: true,
  	            	 scrollX: true,
+ 	            	 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
  	              });
  	              
  	             table = $('#example').DataTable();
+ 	             
  	             $('#example').on('dblclick', 'tr', function () {
  	                var data = table.row( this ).data();
  	                selected_row =  table.row( this ).index();
@@ -228,7 +238,7 @@ $(document).ready(function() {
 	             } ); 
  	            }
  	        });    
-        });
+      //  });
 	}
 	
 	function btnExport(){

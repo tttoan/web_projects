@@ -29,6 +29,7 @@
 <link href="css/buttons.dataTables.min.css" rel="stylesheet">
 <script src="Scripts/custom/profileUser.js"></script>
 <link href="css/show.hidden.field.css" rel="stylesheet" />
+<link href="css/fixedHeader.dataTables.min.css" rel="stylesheet" />
 <!-- <link rel="stylesheet" href="css/jquery-ui.css"> -->
 <%-- <script src="js/jquery-1.10.2.js" type="text/javascript"></script> --%>
 

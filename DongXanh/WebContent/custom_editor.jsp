@@ -183,6 +183,13 @@
 			
 			
 		}
+		
+		var ctype = $('#contactType').val();
+		if(ctype>=3){
+			$("#customerId").prop("disabled", true);
+		}else{
+			$("#customerId").prop("disabled", false);
+		}
 	};
 
 	$(document).ready(
@@ -197,6 +204,20 @@
 							$('#directorAddress').val(
 									$("#directorAdressCbb option:selected")
 											.text());
+						});
+				
+				$('#contactType').change(
+						function() {
+							var ctype = $('#contactType').val();
+							//alert($(this).find('option:selected').text());
+							if(ctype>=3){
+								$('#event_text').val($(this).find('option:selected').text());
+								$("#customerId").prop("disabled", true);
+							}else{
+								$("#customerId").prop("disabled", false);
+								$('#event_text').val(
+										$("#customerId option:selected").text());
+							}
 						});
 			});
 

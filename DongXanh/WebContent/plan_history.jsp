@@ -133,10 +133,14 @@ th {
 
 <!-- Datatables -->
 <script src="js/jquery.dataTables.min.js"></script>
+<script src="js/dataTables.fixedHeader.min.js"></script>
+
 <script>
 $(document).ready(function() {
     $('#example').DataTable( {
-        "scrollX": true
+    	 scrollX: true,
+         fixedHeader: true,
+         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
     } );
 } );
 </script>
@@ -201,6 +205,8 @@ $(document).ready(function() {
  	              $('#x_content').html(responseText);
  	              $('#example').DataTable({
  	            	 scrollX: true,
+ 	                fixedHeader: true,
+ 	               "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
  	              });
  	            }
  	        });    

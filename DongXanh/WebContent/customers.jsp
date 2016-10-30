@@ -223,6 +223,7 @@
 <!-- Datatables -->
 <script src="js/jquery-1.12.3.min.js"></script>
 <script src="js/jquery.dataTables.min.js"></script>
+<script src="js/dataTables.fixedHeader.min.js"></script>
 
 <script src="js/moment.js"></script>
 
@@ -310,6 +311,8 @@ th {
              "filter": true, // this is for disable filter (search box)
              "orderMulti": false, // for disable multiple column at once
              "scrollX" : true,
+             "fixedHeader": true,
+             "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
              "ajax": {
                  "url": "listCustomerJSonAction",
                  "type": "POST",
