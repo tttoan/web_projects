@@ -1,9 +1,6 @@
 package com.home.dao;
 
 import java.math.BigInteger;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,20 +9,19 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.internal.SessionImpl;
 
 import com.dhtmlx.planner.DHXEv;
 import com.dhtmlx.planner.DHXEventsManager;
 import com.dhtmlx.planner.DHXStatus;
 import com.dhtmlx.planner.data.DHXCollection;
+import com.home.action.UserPlanReportAction.WARNING;
 import com.home.conts.UserPlanDefine;
 import com.home.entities.UserPlanDetail;
 import com.home.entities.UserPlanGeneral;
-import com.home.model.Customer;
 import com.home.model.Event;
 import com.home.model.EventsHistory;
 import com.home.model.TimelineType;
@@ -86,8 +82,9 @@ public class CustomEventsManager extends DHXEventsManager implements UserPlanDef
 				Event e = (Event) dhxEv;
 				((Event) dhxEv).setCustomerIdOld(e.getCustomerId());
 				((Event) dhxEv).setPlanDateOld(dhxEv.getStart_date());
+				e.setWarningType(getWarningType(session, e));
 			}
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			session.flush();
@@ -272,5 +269,64 @@ public class CustomEventsManager extends DHXEventsManager implements UserPlanDef
 	@Override
 	public DHXEv createEvent(String id, DHXStatus status) {
 		return new Event();
+	}
+	
+	private int getWarningType(Session session, Event event) throws Exception{
+		try {
+			String hql = "FROM EventsHistory WHERE eventId=:eventId AND lastModified>=:lastModified";
+			Query query = session.createQuery(hql);
+			query.setParameter("eventId",event.getId());
+			query.setParameter("lastModified",event.getStart_date());
+			List results = query.list();
+			if(results != null && !results.isEmpty()){
+				for (Object obj : results) {
+					EventsHistory evtHistory = (EventsHistory) obj;
+					if("INSERT".equalsIgnoreCase(evtHistory.getAction())){
+						//Kiem tra neu ngay tao plan sau ngay plan
+						if(DateUtils.dateWithoutTime(evtHistory.getLastModified()).getTime()>DateUtils.dateWithoutTime(event.getStart_date()).getTime()){
+							return 1;
+						}
+						//Kiem tra thoi gian tao plan truoc 8h AM sang neu cung ngay
+						if(DateUtils.dateWithoutTime(evtHistory.getLastModified()).getTime()==DateUtils.dateWithoutTime(event.getStart_date()).getTime()){
+							if(DateUtils.hourFromDate(evtHistory.getLastModified()) > 8){
+								return 1;
+							}
+						}
+					}
+					else if("UPDATE".equalsIgnoreCase(evtHistory.getAction())){
+						//Thay doi thoi gian
+						if(evtHistory.getPlanDateOld().getTime() != evtHistory.getPlanDateNew().getTime()){
+							//Kiem tra neu ngay tao plan sau ngay plan
+							if(DateUtils.dateWithoutTime(evtHistory.getLastModified()).getTime()>DateUtils.dateWithoutTime(event.getStart_date()).getTime()){
+								return 2;
+							}
+							//Kiem tra thoi gian tao plan truoc 8h AM sang neu cung ngay
+							if(DateUtils.dateWithoutTime(evtHistory.getLastModified()).getTime()==DateUtils.dateWithoutTime(event.getStart_date()).getTime()){
+								if(DateUtils.hourFromDate(evtHistory.getLastModified()) > 8){
+									return 2;
+								}
+							}
+						}
+						//Thay doi khach hang
+						if(evtHistory.getCustomerIdOld() != evtHistory.getCustomerIdNew()){
+							//Kiem tra neu ngay tao plan sau ngay plan
+							if(DateUtils.dateWithoutTime(evtHistory.getLastModified()).getTime()>DateUtils.dateWithoutTime(event.getStart_date()).getTime()){
+								return 3;
+							}
+							//Kiem tra thoi gian tao plan truoc 8h AM sang neu cung ngay
+							if(DateUtils.dateWithoutTime(evtHistory.getLastModified()).getTime()==DateUtils.dateWithoutTime(event.getStart_date()).getTime()){
+								if(DateUtils.hourFromDate(evtHistory.getLastModified()) > 8){
+									return 3;
+								}
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return 0;
 	}
 }

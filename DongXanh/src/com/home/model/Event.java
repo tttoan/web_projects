@@ -13,6 +13,20 @@ public class Event extends DHXEvent {
 	public int customerIdOld;
 	public Date planDateOld;
 	public int typeOfDay;
+	public int warningType;
+
+	public int getWarningType() {
+		return warningType;
+	}
+
+	public void setWarningType(int warningType) {
+		this.warningType = warningType;
+	}
+	public void setWarningType(String warningType) {
+		if(warningType != null && !warningType.isEmpty()){
+			this.warningType = Integer.parseInt(warningType);
+		}
+	}
 
 	public int getTypeOfDay() {
 		return typeOfDay;

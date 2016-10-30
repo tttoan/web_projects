@@ -345,11 +345,32 @@ scheduler.render_timeline_event = function(ev, attach){
 	var cs = scheduler.templates.event_class(ev.start_date,ev.end_date,ev);
 	cs = "dhx_cal_event_line "+(cs||"");
 	
+	var tooltipWarning = "";
 	if(ev.contactType==1){
 		ev.color = "#d7ff61";
+		if(ev.warningType==1){
+			ev.color = "#d7ff61 url(codebase/imgs/event_warning1.png) no-repeat 103px 14px";
+			tooltipWarning = "Lên lịch trễ";
+		}else if(ev.warningType==2){
+			ev.color = "#d7ff61 url(codebase/imgs/event_warning2.png) no-repeat 103px 14px";
+			tooltipWarning = "Đổi TG";
+		}else if(ev.warningType==3){
+			ev.color = "#d7ff61 url(codebase/imgs/event_warning3.png) no-repeat 103px 14px";
+			tooltipWarning = "Đổi KH";
+		}
 	}
 	else if(ev.contactType==2){
 		ev.color = "#ffe763";
+		if(ev.warningType==1){
+			ev.color = "#ffe763 url(codebase/imgs/event_warning1.png) no-repeat 103px 14px";
+			tooltipWarning = "Lên lịch trễ";
+		}else if(ev.warningType==2){
+			ev.color = "#ffe763 url(codebase/imgs/event_warning2.png) no-repeat 103px 14px";
+			tooltipWarning = "Đổi TG";
+		}else if(ev.warningType==3){
+			ev.color = "#ffe763 url(codebase/imgs/event_warning3.png) no-repeat 103px 14px";
+			tooltipWarning = "Đổi KH";
+		}
 	}
 
 	var bg_color = (ev.color?("background:"+ev.color+";"):"");
@@ -366,6 +387,9 @@ scheduler.render_timeline_event = function(ev, attach){
 	if (scheduler.config.drag_resize && !scheduler.config.readonly) {
 		var dhx_event_resize = 'dhx_event_resize';
 		html += ("<div class='"+dhx_event_resize+" "+dhx_event_resize+"_start' style='height: "+hb+"px;'></div><div class='"+dhx_event_resize+" "+dhx_event_resize+"_end' style='height: "+hb+"px;'></div>");
+	}
+	if(tooltipWarning != ""){
+		html +="<div class='custom_tooltip'>"+tooltipWarning+"</div>";
 	}
 	html += (text+'</div>');
 

@@ -1913,3 +1913,23 @@ div.dhx_cal_editor{
     background-image:url('imgs_glossy/export_ical.png');
 }
 /* export to PDF and iCal buttons end */
+
+.custom_tooltip {
+  top: 13px;
+  left: 1px;
+  padding:0px 3px 0px 3px;
+  background-color:#ff8040;
+  color:white;
+  border-radius:3px;
+  opacity:0;
+  position:absolute;
+  -webkit-transition: opacity 0.5s;
+  -moz-transition:  opacity 0.5s;
+  -ms-transition: opacity 0.5s;
+  -o-transition:  opacity 0.5s;
+  transition:  opacity 0.5s;
+}
+
+.dhx_cal_event_line:hover .custom_tooltip {
+    opacity:1;
+}

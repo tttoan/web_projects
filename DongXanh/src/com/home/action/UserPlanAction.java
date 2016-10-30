@@ -291,7 +291,7 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 
 			// Xem Timline
 			DHXTimelineView view = new DHXTimelineView("Timeline", "typeOfDay",
-					"S/C");
+					"Lịch tuần");
 			view.setRenderMode(RenderModes.BAR);
 	    	view.setXScaleUnit(XScaleUnits.DAY);
 	    	view.addSecondScale(DHXTimelineView.XScaleUnits.DAY, "%l, %d/%m");
@@ -332,10 +332,10 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 
 	public User getSelectedUserPlan() {
 		if (selectedUserPlan != null) {
-			System.out.println("get selectedUserPlan");
+			//System.out.println("get selectedUserPlan");
 			return selectedUserPlan;
 		} else {
-			System.out.println("get userSes");
+			//System.out.println("get userSes");
 			return userSes;
 		}
 	}
