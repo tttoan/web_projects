@@ -47,7 +47,9 @@ pageEncoding="UTF-8"%>
 				</div>
 
 				<div class="x_panel">
-					<div id="x_content" class="x_content">
+					<span class="scroll left-scroll"> &#171; </span>
+    				<span class="scroll right-scroll">&#187;</span> 
+					<div id="x_content" class="x_content" style="margin-top: -45px">
 						<table id="example"
 							class="table table-striped responsive-utilities jambo_table display nowrap cell-border" style="width: 100%">
 							<thead>
@@ -149,6 +151,40 @@ th {
 	text-align: center;
 	vertical-align: middle;
 }
+
+.wrapper {
+    width: 630px;
+    margin: auto;
+    background: #eee;
+    border: 1px solid black;
+    padding: 20px 30px;
+}
+
+.scroll {
+  font-size: 30px;
+  font-size: bold;  
+  color: gray;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;    
+}
+.scroll:hover {
+  color: blue;
+  cursor: pointer;  
+}
+.left-scroll { 
+    position: relative;
+    z-index: 10;
+    left: 10px;
+    top: 70px;
+}    
+.right-scroll { 
+    position: relative;
+    z-index: 10;
+    left: 200px;
+    top: 70px;
+}   
 </style>
 
 <!-- Datatables -->
@@ -157,11 +193,21 @@ th {
 
 <!-- Datatables -->
 <script src="js/jquery.dataTables.min.js"></script>
+<script src="js/dataTables.fixedHeader.min.js"></script>
+
 <script>
 $(document).ready(function() {
     $('#example').DataTable( {
-        "scrollX": true
+    	  scrollX: true,
+          fixedHeader: true,
+          "lengthMenu": [[3, 10, 25, 50, -1], [3, 10, 25, 50, "All"]]
     } );
+    $(".right-scroll").on('click', function() {
+         document.querySelector('.dataTables_scrollBody').scrollLeft += 100;
+     }) 
+     $(".left-scroll").on('click', function() {
+         document.querySelector('.dataTables_scrollBody').scrollLeft -= 100;
+     }) 
 } );
 </script>
 
@@ -217,6 +263,8 @@ $(document).ready(function() {
  	              $('#x_content').html(responseText);
  	              $('#example').DataTable({
  	            	 scrollX: true,
+ 	                 fixedHeader: true,
+ 	                "lengthMenu": [[3, 10, 25, 50, -1], [3, 10, 25, 50, "All"]]
  	              });
  	              
  	             table = $('#example').DataTable();
@@ -242,6 +290,7 @@ $(document).ready(function() {
 	                  $('#descr').val(data[19].replace(/<br>/g, '\n'));
 	                 $('#fc_addNoteDialog').click();
 	             } ); 
+ 	             
  	            }
  	        });    
         });

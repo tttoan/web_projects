@@ -30,6 +30,7 @@ import com.dhtmlx.planner.controls.DHXTimelineView;
 import com.dhtmlx.planner.controls.DHXTimelineView.RenderModes;
 import com.dhtmlx.planner.controls.DHXTimelineView.XScaleUnits;
 import com.dhtmlx.planner.data.DHXDataFormat;
+import com.dhtmlx.planner.extensions.DHXExtension;
 import com.home.conts.UserPlanDefine;
 import com.home.dao.ContactTypeHome;
 import com.home.dao.CustomEventsManager;
@@ -253,8 +254,11 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 			c.set(Calendar.DAY_OF_WEEK, 2);
 			planner.setInitialDate(c.getTime());
 			
-			planner.setWidth(1100);
-			planner.setHeight(650);
+			//planner.extensions.add(DHXExtension.CONTAINER_AUTORESIZE);
+			//planner.setWidth(1100);
+			planner.setWidth(97, "%");
+			planner.setHeight(650, "px");
+			
 			planner.setInitialView(currentTab);
 			// Template
 			planner.templates.setMonthScaleDate("{date:date(%l, %d/%m/%Y)}");
