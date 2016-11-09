@@ -49,7 +49,7 @@ pageEncoding="UTF-8"%>
 				<div class="x_panel">
 					<span class="scroll left-scroll"> &#171; </span>
     				<span class="scroll right-scroll">&#187;</span> 
-					<div id="x_content" class="x_content" style="margin-top: -45px">
+					<div id="x_content" class="x_content" >
 						<table id="example"
 							class="table table-striped responsive-utilities jambo_table display nowrap cell-border" style="width: 100%">
 							<thead>
@@ -161,7 +161,7 @@ th {
 }
 
 .scroll {
-  font-size: 30px;
+  font-size: 40px;
   font-size: bold;  
   color: gray;
   -moz-user-select: none;
@@ -174,16 +174,16 @@ th {
   cursor: pointer;  
 }
 .left-scroll { 
-    position: relative;
+    position: fixed;
     z-index: 10;
-    left: 10px;
-    top: 70px;
+    left: 500px;
+    top: 500px;
 }    
 .right-scroll { 
-    position: relative;
+    position: fixed;
     z-index: 10;
-    left: 200px;
-    top: 70px;
+    left: 600px;
+    top: 500px;
 }   
 </style>
 
@@ -203,10 +203,10 @@ $(document).ready(function() {
           "lengthMenu": [[3, 10, 25, 50, -1], [3, 10, 25, 50, "All"]]
     } );
     $(".right-scroll").on('click', function() {
-         document.querySelector('.dataTables_scrollBody').scrollLeft += 100;
+         document.querySelector('.dataTables_scrollBody').scrollLeft += 150;
      }) 
      $(".left-scroll").on('click', function() {
-         document.querySelector('.dataTables_scrollBody').scrollLeft -= 100;
+         document.querySelector('.dataTables_scrollBody').scrollLeft -= 150;
      }) 
 } );
 </script>
