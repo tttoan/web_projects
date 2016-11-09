@@ -157,7 +157,7 @@ scheduler.createTimelineView=function(obj){
 	scheduler["mouse_"+obj.name]=function(pos){ //mouse_coord handler
 		//get event object
 		var ev = this._drag_event;
-		if (this._drag_id){
+		if (this._drag_id){if(1==1)return;
 			ev = this.getEvent(this._drag_id);
 			this._drag_event._dhx_changed = true;
 		}
@@ -369,6 +369,19 @@ scheduler.render_timeline_event = function(ev, attach){
 			tooltipWarning = "Đổi TG";
 		}else if(ev.warningType==3){
 			ev.color = "#ffe763 url(codebase/imgs/event_warning3.png) no-repeat 103px 14px";
+			tooltipWarning = "Đổi KH";
+		}
+	}
+	else {
+		ev.color = "#fff4b3";
+		if(ev.warningType==1){
+			ev.color = "#fff4b3 url(codebase/imgs/event_warning1.png) no-repeat 103px 14px";
+			tooltipWarning = "Lên lịch trễ";
+		}else if(ev.warningType==2){
+			ev.color = "#fff4b3 url(codebase/imgs/event_warning2.png) no-repeat 103px 14px";
+			tooltipWarning = "Đổi TG";
+		}else if(ev.warningType==3){
+			ev.color = "#fff4b3 url(codebase/imgs/event_warning3.png) no-repeat 103px 14px";
 			tooltipWarning = "Đổi KH";
 		}
 	}

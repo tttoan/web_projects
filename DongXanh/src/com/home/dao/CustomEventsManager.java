@@ -110,7 +110,7 @@ public class CustomEventsManager extends DHXEventsManager implements UserPlanDef
 				((UserPlanDetail)dhxEv).setDayPlan(DateUtils.getStringFromDate(userPlanGeneral.getStart_date(), "dd/MM/yy") +", "+ StringUtil.getDayName(userPlanGeneral.getStart_date()));
 				dhxEv.setStart_date(userPlanGeneral.getStart_date());
 				dhxEv.setEnd_date(userPlanGeneral.getEnd_date());
-				((UserPlanDetail)dhxEv).setContactTypeName(userPlanGeneral.getPhone()>0?"ĐT":"");
+				((UserPlanDetail)dhxEv).setContactTypeName(userPlanGeneral.getContactType());
 				((UserPlanDetail)dhxEv).setTimelineTypeName(StringUtil.getDaySection(userPlanGeneral.getStart_date()));
 				((UserPlanDetail)dhxEv).setCustomerCode(userPlanGeneral.getCustomer_code());
 				((UserPlanDetail)dhxEv).setCustomerName(userPlanGeneral.getBusiness_name());

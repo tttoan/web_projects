@@ -17,6 +17,32 @@ public class UserPlanGeneral {
 	private int meet;
 	private String telefone;
 	private String address;
+	private int contact_type;
+	
+	public int getContact_type() {
+		return contact_type;
+	}
+	
+	public String getContactType() {
+		switch (contact_type) {
+		case 1:
+			return "Gặp trực tiếp";
+		case 2:
+			return "Gọi điện thoại";
+		case 3:
+			return "Họp online";
+		case 4:
+			return "Họp trực tiếp";
+		case 5:
+			return "Công tác";
+		default:
+			return "";
+		}
+	}
+	
+	public void setContact_type(int contact_type) {
+		this.contact_type = contact_type;
+	}
 	public static void main(String[] args) {
 		UserPlanGeneral u = new UserPlanGeneral();
 		u.setFull_name("Tran Thien TOan");
@@ -70,7 +96,7 @@ public class UserPlanGeneral {
 		this.customer_code = customer_code;
 	}
 	public String getBusiness_name() {
-		if(StringUtil.notNull(business_name).isEmpty()){
+		if(StringUtil.notNull(business_name).replace("0.0", "").isEmpty()){
 			return statistic_name;
 		}
 		return business_name;

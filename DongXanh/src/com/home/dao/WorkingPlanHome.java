@@ -151,7 +151,7 @@ public class WorkingPlanHome {
 			String query = ""
 			+" SELECT u.user_name, u.full_name, c.customer_code, c.business_name, c.statistic_name, e.start_date, e.end_date, "
 				//+ "DATE_FORMAT(e.start_date, '%d/%m/%Y') as start_date," 
-				+" c.telefone, c.business_address, "
+				+" c.telefone, c.business_address, e.contact_type, "
 				+" case when e.contact_type = 2 then 1 else 0 end as phone, "
 				+" case when e.contact_type = 1 then 1 else 0 end as meet"
 			+" FROM events as e"
@@ -183,6 +183,7 @@ public class WorkingPlanHome {
 						userPlanGeneral.setEnd_date(new Date(rs.getTimestamp("end_date").getTime()));
 						userPlanGeneral.setPhone((rs.getInt("phone")));
 						userPlanGeneral.setMeet((rs.getInt("meet")));
+						userPlanGeneral.setContact_type(rs.getInt("contact_type"));
 						userPlanGeneral.setTelefone(StringUtil.notNull(rs.getString("telefone")));
 						userPlanGeneral.setAddress(StringUtil.notNull(rs.getString("business_address")));
 						results.add(userPlanGeneral);

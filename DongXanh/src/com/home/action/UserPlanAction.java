@@ -201,6 +201,7 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 		//Hình Thức LH
 		DHXGridViewColumn contactTypeName= new DHXGridViewColumn("contactTypeName", "Hình Thức LH");
 		contactTypeName.setWidth(100);
+		contactTypeName.setAlign(Aligns.LEFT);
 		grid.addOption(contactTypeName);
 		//Thời Điểm
 		DHXGridViewColumn timelineTypeName = new DHXGridViewColumn("timelineTypeName", "Thời Điểm");
