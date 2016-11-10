@@ -176,14 +176,14 @@ th {
 .left-scroll { 
     position: fixed;
     z-index: 10;
-    left: 500px;
-    top: 500px;
+    left: 600px;
+    top: 120px;
 }    
 .right-scroll { 
     position: fixed;
     z-index: 10;
-    left: 600px;
-    top: 500px;
+    left: 700px;
+    top: 120px;
 }   
 </style>
 
@@ -194,13 +194,15 @@ th {
 <!-- Datatables -->
 <script src="js/jquery.dataTables.min.js"></script>
 <script src="js/dataTables.fixedHeader.min.js"></script>
+<script src="js/dataTables.fixedColumns.min.js"></script>
 
 <script>
 $(document).ready(function() {
     $('#example').DataTable( {
     	  scrollX: true,
-          fixedHeader: true,
-          "lengthMenu": [[3, 10, 25, 50, -1], [3, 10, 25, 50, "All"]]
+          //fixedHeader: true,
+          "lengthMenu": [[1,2,3, 10, 25, 50, 100], [1,2,3, 10, 25, 50, 100]],
+          "pageLength": 3,
     } );
     $(".right-scroll").on('click', function() {
          document.querySelector('.dataTables_scrollBody').scrollLeft += 150;
@@ -263,8 +265,13 @@ $(document).ready(function() {
  	              $('#x_content').html(responseText);
  	              $('#example').DataTable({
  	            	 scrollX: true,
- 	                 fixedHeader: true,
- 	                "lengthMenu": [[3, 10, 25, 50, -1], [3, 10, 25, 50, "All"]]
+ 	                 //fixedHeader: true,
+ 	                "lengthMenu": [[1,2,3, 10, 25, 50, 100], [1,2,3, 10, 25, 50, 100]],
+ 	                "pageLength": 3,
+ 	                scrollCollapse: true,
+ 	                fixedColumns:   {
+ 	                  leftColumns: 3,
+ 	              	}
  	              });
  	              
  	             table = $('#example').DataTable();
