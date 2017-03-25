@@ -425,7 +425,9 @@ public class CustomerHome {
 						Customer cus = new Customer();
 						cus.setId(rs.getInt("id"));
 						cus.setCustomerCode(rs.getString("customer_code"));
-						cus.setBusinessName(rs.getString("business_name") == null?rs.getString("statistic_name"):rs.getString("business_name"));
+						//cus.setBusinessName(rs.getString("business_name") == null?rs.getString("statistic_name"):rs.getString("business_name"));
+						cus.setBusinessName(rs.getString("statistic_name") == null?rs.getString("business_name"):rs.getString("statistic_name"));
+						cus.setStatisticName(rs.getString("statistic_name"));
 						results.add(cus);
 					}
 				}
@@ -486,7 +488,8 @@ public class CustomerHome {
 						cus.setStatisticName(StringUtil.notNull(rs.getString("statistic_name")));
 						cus.setTelefone(StringUtil.notNull(rs.getString("telefone")));
 						cus.setBusinessAddress(StringUtil.notNull(rs.getString("business_address")));
-						results.add(new Object[]{cus.getId(), cus.getCustomerCode(), cus.getBusinessName().replace("0.0", "").isEmpty()?cus.getStatisticName():cus.getBusinessName(), cus.getTelefone(), cus.getBusinessAddress()});
+						//results.add(new Object[]{cus.getId(), cus.getCustomerCode(), cus.getBusinessName().replace("0.0", "").isEmpty()?cus.getStatisticName():cus.getBusinessName(), cus.getTelefone(), cus.getBusinessAddress()});
+						results.add(new Object[]{cus.getId(), cus.getCustomerCode(), cus.getStatisticName().isEmpty()?cus.getBusinessName().replace("0.0", ""):cus.getStatisticName(), cus.getTelefone(), cus.getBusinessAddress()});
 					}
 				} 
 			} catch (Exception e) {
@@ -526,7 +529,8 @@ public class CustomerHome {
 						cus.setDirector(StringUtil.notNull(rs.getString("director")));
 						cus.setBusinessName(StringUtil.notNull(rs.getString("business_name")));
 						cus.setStatisticName(StringUtil.notNull(rs.getString("statistic_name")));
-						results.add(new Object[]{cus.getId(), cus.getCustomerCode(), cus.getBusinessName().replace("0.0", "").isEmpty()?cus.getStatisticName():cus.getBusinessName()});
+						//results.add(new Object[]{cus.getId(), cus.getCustomerCode(), cus.getBusinessName().replace("0.0", "").isEmpty()?cus.getStatisticName():cus.getBusinessName()});
+						results.add(new Object[]{cus.getId(), cus.getCustomerCode(), cus.getStatisticName().isEmpty()?cus.getBusinessName().replace("0.0", ""):cus.getStatisticName()});
 					}
 				} 
 			} catch (Exception e) {

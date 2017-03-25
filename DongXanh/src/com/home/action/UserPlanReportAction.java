@@ -400,12 +400,12 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 						mkh6.append(mkh);
 					}
 					else if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
-						lhcn.append(lh);
-						mkhcn.append(mkh);
+						lht7.append(lh);
+						mkh7.append(mkh);
 					}
 					else if(cal2.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
-						lht2.append(lh);
-						mkh2.append(mkh);
+						lhcn.append(lh);
+						mkhcn.append(mkh);
 					}
 				}
 

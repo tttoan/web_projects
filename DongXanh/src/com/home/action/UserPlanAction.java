@@ -256,8 +256,8 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 			planner.setInitialDate(c.getTime());
 			
 			//planner.extensions.add(DHXExtension.CONTAINER_AUTORESIZE);
-			//planner.setWidth(1100);
-			planner.setWidth(97, "%");
+			planner.setWidth(1100);
+			//planner.setWidth(97, "%");
 			planner.setHeight(650, "px");
 			
 			planner.setInitialView(currentTab);
@@ -318,7 +318,7 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 			// planner.toPDF();
 			// planner.toICal("16_ical");
 
-			System.out.println(planner.render());
+			//System.out.println(planner.render());
 			messageStore.setScheduler(planner.render());
 			editor_custom();
 			// System.out.println("vao 2");
@@ -399,7 +399,7 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 			evs = new CustomEventsManager(request,
 					getSelectedUserPlan());
 		messageStore.setData(evs.run());
-		System.out.println(messageStore.getData());
+		//System.out.println(messageStore.getData());
 		return Action.SUCCESS;
 	}
 
