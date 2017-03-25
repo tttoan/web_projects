@@ -23,7 +23,7 @@
 		</action>
 
 		<action name="move_to_add_customer" class="com.home.action.CustomerAction">
-			<result name="success">/new_customer.jsp</result>
+			<result name="success">/new_customer2.jsp</result>
 			<result name="error">/customers.jsp</result>
 		</action>
 		<action name="notify_list_customer" method="notifyListCutomer"
