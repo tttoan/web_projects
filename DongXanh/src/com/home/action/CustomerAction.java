@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FileUtils;
@@ -22,6 +24,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
+
+import com.home.conts.MyConts;
 import com.home.dao.CustomerHome;
 import com.home.dao.GroupCustomerHome;
 import com.home.dao.UserHome;
@@ -75,12 +79,12 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private int cus5Level1Id;
 	private String commonCusPhone = "";
 	private User userSes;
-	private File cusImageScan;
+	private File[] cusImageScan;
 	private String cusImageScanContentType;
 	private String cusImageScanFileName;
 	private String varCreateTime = SDF.format(new Date());
-	private String varCertificateDate = SDF.format(new Date());
-	private String varDirectorBirthday = SDF.format(new Date());
+	private String varCertificateDate ;//= SDF.format(new Date());
+	private String varDirectorBirthday ;//= SDF.format(new Date());
 	private List<DefineColumnImport> listDefineColumnsLevel1;
 	private List<DefineColumnImport> listDefineColumnsLevel2;
 	private List<String> listColumnExcel;
@@ -422,9 +426,15 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		try {
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
 			cust.setId(custId);
-			cust.setCreateTime(SDF.parse(varCreateTime));
-			cust.setCertificateDate(SDF.parse(varCertificateDate));
-			cust.setDirectorBirthday(SDF.parse(varDirectorBirthday));
+			if(StringUtil.notNull(varCreateTime).matches("[0-9]{2}/[0-9]{2}/[0-9]{4}")){
+				cust.setCreateTime(SDF.parse(varCreateTime));	
+			}
+			if(StringUtil.notNull(varCertificateDate).matches("[0-9]{2}/[0-9]{2}/[0-9]{4}")){
+				cust.setCertificateDate(SDF.parse(varCertificateDate));
+			}
+			if(StringUtil.notNull(varDirectorBirthday).matches("[0-9]{2}/[0-9]{2}/[0-9]{4}")){
+				cust.setDirectorBirthday(SDF.parse(varDirectorBirthday));
+			}
 			cust.setCustomerIsActive(true);
 			if (emp.getId() > 0)
 				getCust().setUser(emp);
@@ -441,18 +451,19 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			if (cus5Level1.getId() > 0)
 				getCust().setCustomerByCustomer5Level1Id(cus5Level1);
 			// -----Upload image scan----
-			if (getCusImageScanFileName() != null) {
-				// File destFile = new
-				// File(SystemUtil.getValuePropertiesByKey("path.image.scan") +
-				// "\\", getCusImageScanFileName());
-				String path_doc_scan = "path_doc_scan";
+			if (StringUtil.notNull(getCusImageScanFileName()).length() > 0) {
+				String path_doc_scan = MyConts.UPLOAD_DIR;
 				String filePath = this.ctx.getRealPath("/").concat(path_doc_scan);
-				File destFile = new File(filePath, getCusImageScanFileName());
-
-				FileUtils.copyFile(cusImageScan, destFile, true);
-				// cust.setPathDocScan(destFile.getAbsolutePath().replace("\\",
-				// "/"));
-				cust.setPathDocScan(path_doc_scan + "/" + destFile.getName());
+				
+				String[] arrOriginalName = getCusImageScanFileName().split(",");
+				String imageName = "";
+				for (int i = 0; i < cusImageScan.length; i++) {
+					String newName = cust.getCustomerCode() + "_" + i + "." + FilenameUtils.getExtension(arrOriginalName[i]);
+					FileUtils.copyFile(cusImageScan[i], new File(filePath, newName), true);
+					imageName += newName + "|";
+				}
+				
+				cust.setPathDocScan(path_doc_scan + "/" + imageName.replaceAll(Pattern.quote("|")+"$", ""));
 			}
 			if (cust.getId() > 0) {
 				cusHome.updateDirty(getCust());
@@ -462,6 +473,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			}
 			return SUCCESS;
 		} catch (Exception e) {
+			e.printStackTrace();
 			cust.setCustomerCode(generateCustomerCode());
 			addActionError(e.getMessage() + ".");
 		}
@@ -822,11 +834,11 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		this.listCity = listCity;
 	}
 
-	public File getCusImageScan() {
+	public File[] getCusImageScan() {
 		return cusImageScan;
 	}
 
-	public void setCusImageScan(File cusImageScan) {
+	public void setCusImageScan(File[] cusImageScan) {
 		this.cusImageScan = cusImageScan;
 	}
 

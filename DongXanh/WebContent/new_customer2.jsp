@@ -223,11 +223,34 @@
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
 											for="cusImageScan">Ảnh scan (*.jpg, *.png, *.gif) </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<input id="cusImageScan" name="cusImageScan[]" type="file" multiple/>
+											<input id="cusImageScan" name="cusImageScan" type="file" multiple/>
 										</div>
 									</div>
 									<div class="item form-group">
-											<div id="dvPreview" class="col-sm-12"></div>
+											<label class="control-label col-md-3 col-sm-3 col-xs-12"
+												for="cusImageScan"></label>
+												
+											<s:if test="%{edit}">
+												<div id="dvPreview" class="col-md-9 col-sm-9 col-xs-12">
+													<%
+														String fullFilePath = ""+request.getAttribute("cust.pathDocScan");
+														fullFilePath = fullFilePath.replace("\\", "/");
+														String imagePath = "";
+														String arrName[] = null;
+														if(fullFilePath.length() > 0){
+															imagePath = fullFilePath.substring(0, fullFilePath.lastIndexOf("/"));
+															arrName = fullFilePath.substring(fullFilePath.lastIndexOf("/")+1).split("|");
+														}
+													%>
+													<input type="text" value="<%=arrName%>"/>	
+													<input type="text" value="<%=imagePath%>"/>	
+													<s:iterator value="<%=arrName%>" status="name">
+													</s:iterator>
+												</div>
+											</s:if>
+											<s:else>
+												<div id="dvPreview" class="col-md-9 col-sm-9 col-xs-12"></div>
+											</s:else>
 									</div>
 									
 									
@@ -249,6 +272,7 @@
 										<div class="col-md-3 xdisplay_inputx has-feedback">
 											<input type="text" class="form-control has-feedback-left"
 												id="certificateDate" name="varCertificateDate"
+												value="${varCertificateDate}"
 												aria-describedby="inputSuccess2Status"> <span
 												class="fa fa-calendar-o form-control-feedback left"
 												aria-hidden="true"></span> <span id="inputSuccess2Status"
@@ -1213,7 +1237,7 @@ $(function () {
                         	 img.height = "300";
                              img.width = "200";
                              img.src = e.target.result;
-                             img.border = "5";
+                             img.style.border = "3px solid blue";
                              $("#dvPreview").append(img);
                             //$("#dvPreview img").attr("src", e.target.result).width(300).height(200);;
                         }
