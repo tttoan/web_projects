@@ -1,3 +1,4 @@
+<%@page import="java.util.regex.Pattern"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@page import="java.util.Calendar"%>
@@ -15,7 +16,12 @@
 	<div class="">
 		<div class="page-title">
 			<div class="title_left">
-				<h3>Thêm khách hàng</h3>
+				<s:if test="%{edit}">
+					<h3>Cập nhật thông tin khách hàng</h3>
+				</s:if>
+				<s:else>
+					<h3>Thêm khách hàng</h3>
+				</s:else>
 			</div>
 		</div>
 		<div class="clearfix"></div>
@@ -223,7 +229,7 @@
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
 											for="cusImageScan">Ảnh scan (*.jpg, *.png, *.gif) </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<input id="cusImageScan" name="cusImageScan" type="file" multiple/>
+											<input id="cusImageScan" name="cusImageScan" type="file" value="%{cust.pathDocScan}" multiple/>
 										</div>
 									</div>
 									<div class="item form-group">
@@ -237,15 +243,27 @@
 														fullFilePath = fullFilePath.replace("\\", "/");
 														String imagePath = "";
 														String arrName[] = null;
-														if(fullFilePath.length() > 0){
+														if(fullFilePath.length() > 0 && fullFilePath.contains("/")){
 															imagePath = fullFilePath.substring(0, fullFilePath.lastIndexOf("/"));
-															arrName = fullFilePath.substring(fullFilePath.lastIndexOf("/")+1).split("|");
+															arrName = fullFilePath.substring(fullFilePath.lastIndexOf("/")+1).split(Pattern.quote("|"));
+														}
+														/* request.setAttribute("tttoan", imagePath);
+														request.setAttribute("arrImgName", arrName); */
+													%>
+													<%-- <input type="text" value="%{tttoan}"/>
+													<input type="text" value="${tttoan}"/>	
+													<input type="text" value="#tttoan"/>	
+													<input type="text" value="<%=imagePath%>"/>	 --%>
+													<%
+														if(arrName != null){
+															for(int i=0; i< arrName.length; i++){
+																request.setAttribute("imgCus", imagePath + "/" + arrName[i]);
+																%>
+																	<img src="${imgCus}"  width="300" height="250" style="border:3px solid blue" />
+																<%	
+															}
 														}
 													%>
-													<input type="text" value="<%=arrName%>"/>	
-													<input type="text" value="<%=imagePath%>"/>	
-													<s:iterator value="<%=arrName%>" status="name">
-													</s:iterator>
 												</div>
 											</s:if>
 											<s:else>

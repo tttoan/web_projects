@@ -146,9 +146,15 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 				setCust(cusTemp);
 				generateCustomerByRule(cusTemp);
 				varCityCode = getCust().getCustomerCode().substring(0, getCust().getCustomerCode().length() - 3);
-				varCreateTime = SDF.format(getCust().getCreateTime());
-				varCertificateDate = SDF.format(getCust().getCertificateDate());
-				varDirectorBirthday = SDF.format(getCust().getDirectorBirthday());
+				if(getCust().getCreateTime() != null){
+					varCreateTime = SDF.format(getCust().getCreateTime());
+				}
+				if(getCust().getCertificateDate() != null){
+					varCertificateDate = SDF.format(getCust().getCertificateDate());
+				}
+				if(getCust().getDirectorBirthday() != null){
+					varDirectorBirthday = SDF.format(getCust().getDirectorBirthday());
+				}
 				setEdit(true);
 			} catch (Exception e) {
 				throw e;
