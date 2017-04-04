@@ -89,6 +89,15 @@ public class Customer implements java.io.Serializable {
 	public Set<Customer> customersForCustomer3Level1Id = new HashSet<Customer>(0);
 	public Set<Customer> customersForCustomer1Level1Id = new HashSet<Customer>(0);
 	public int no;
+	private String customer_location;
+
+	public String getCustomer_location() {
+		return customer_location;
+	}
+
+	public void setCustomer_location(String customer_location) {
+		this.customer_location = customer_location;
+	}
 
 	public int getNo() {
 		return no;

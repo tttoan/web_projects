@@ -49,7 +49,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private List<Object[]> listTableColumn = new ArrayList<Object[]>();
 	private boolean edit = false;
 	private int custId = 0;
-	private String varCityCode = "";
+	//private String varCityCode = "";
 	private Customer cust = new Customer();
 	public List<String> listLookupEmployeeForCus = new ArrayList<>();
 	private List<Customer> customers = new ArrayList<>();
@@ -145,7 +145,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 				Customer cusTemp = cusHome.findById(custId);
 				setCust(cusTemp);
 				generateCustomerByRule(cusTemp);
-				varCityCode = getCust().getCustomerCode().substring(0, getCust().getCustomerCode().length() - 3);
+				//varCityCode = getCust().getCustomerCode().substring(0, getCust().getCustomerCode().length() - 3);
 				if(getCust().getCreateTime() != null){
 					varCreateTime = SDF.format(getCust().getCreateTime());
 				}
@@ -428,18 +428,36 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		}
 	}
 
+	/**
+	 * @To Do: save new & update customer inform 
+	 * @return
+	 * @throws Exception
+	 */
 	public String addCustomer() throws Exception {
 		try {
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
+			/**
+			 * check customer code
+			 */
+			
+			/**
+			 * set value
+			 */
 			cust.setId(custId);
 			if(StringUtil.notNull(varCreateTime).matches("[0-9]{2}/[0-9]{2}/[0-9]{4}")){
 				cust.setCreateTime(SDF.parse(varCreateTime));	
+			}else{
+				cust.setCreateTime(null);	
 			}
 			if(StringUtil.notNull(varCertificateDate).matches("[0-9]{2}/[0-9]{2}/[0-9]{4}")){
 				cust.setCertificateDate(SDF.parse(varCertificateDate));
+			}else{
+				cust.setCertificateDate(null);
 			}
 			if(StringUtil.notNull(varDirectorBirthday).matches("[0-9]{2}/[0-9]{2}/[0-9]{4}")){
 				cust.setDirectorBirthday(SDF.parse(varDirectorBirthday));
+			}else{
+				cust.setDirectorBirthday(null);
 			}
 			cust.setCustomerIsActive(true);
 			if (emp.getId() > 0)
@@ -464,7 +482,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 				String[] arrOriginalName = getCusImageScanFileName().split(",");
 				String imageName = "";
 				for (int i = 0; i < cusImageScan.length; i++) {
-					String newName = cust.getCustomerCode() + "_" + i + "." + FilenameUtils.getExtension(arrOriginalName[i]);
+					String newName = cust.getCustomerCode() + "_" + i + "_" + new Date().getTime() + "." + FilenameUtils.getExtension(arrOriginalName[i]);
 					FileUtils.copyFile(cusImageScan[i], new File(filePath, newName), true);
 					imageName += newName + "|";
 				}
@@ -824,13 +842,13 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		this.uploadFileName = uploadFileName;
 	}
 
-	public String getVarCityCode() {
-		return varCityCode;
-	}
-
-	public void setVarCityCode(String varCityCode) {
-		this.varCityCode = varCityCode;
-	}
+//	public String getVarCityCode() {
+//		return varCityCode;
+//	}
+//
+//	public void setVarCityCode(String varCityCode) {
+//		this.varCityCode = varCityCode;
+//	}
 
 	public List<City> getListCity() {
 		return listCity;

@@ -190,12 +190,12 @@
 											for="cityName">Khu vực 
 										</label>
 										<div class="col-md-3 col-sm-3 col-xs-12">
-											<s:select id="cityName" name="varCityCode"
+											<s:select id="cityName" name="cust.customer_location"
 												cssClass="col-md-12 col-xs-12" list="listCity"
 												showDownArrow="false" autoComplete="true" headerKey="-1" headerValue="--"
 												listKey="cityCode" listValue="cityName"
 												style="width:245px"
-												value="%{varCityCode}" />
+												value="%{cust.customer_location}" />
 										</div>
 										
 										<label class="control-label col-md-2 col-sm-3 col-xs-12" 
@@ -229,7 +229,7 @@
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
 											for="cusImageScan">Ảnh scan (*.jpg, *.png, *.gif) </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<input id="cusImageScan" name="cusImageScan" type="file" value="%{cust.pathDocScan}" multiple/>
+											<input id="cusImageScan" name="cusImageScan" type="file" multiple/>
 										</div>
 									</div>
 									<div class="item form-group">
@@ -237,6 +237,7 @@
 												for="cusImageScan"></label>
 												
 											<s:if test="%{edit}">
+												<s:hidden name="cust.pathDocScan" value="%{cust.pathDocScan}"></s:hidden>
 												<div id="dvPreview" class="col-md-9 col-sm-9 col-xs-12">
 													<%
 														String fullFilePath = ""+request.getAttribute("cust.pathDocScan");
