@@ -473,7 +473,7 @@
 												showDownArrow="false" autoComplete="true"
 												value="%{cust.customerByCustomer1Level1Id.id}"
 												cssClass="form-control col-md-7 col-xs-12"
-												list="listCustomer" listKey="id" headerKey="-1"
+												list="listCustomerL1" listKey="id" headerKey="-1"
 												headerValue="---" listValue="businessName +' - '+ customerCode" />
 										</div>
 										<label class="control-label col-md-1 col-sm-3 col-xs-12"
@@ -515,7 +515,7 @@
 												showDownArrow="false" autoComplete="true"
 												value="%{cust.customerByCustomer2Level1Id.id}"
 												cssClass="form-control col-md-7 col-xs-12"
-												list="listCustomer" listKey="id" headerKey="-1"
+												list="listCustomerL1" listKey="id" headerKey="-1"
 												headerValue="---" listValue="businessName +' - '+ customerCode" />
 										</div>
 										<label class="control-label col-md-1 col-sm-3 col-xs-12"
@@ -557,7 +557,7 @@
 												showDownArrow="false" autoComplete="true"
 												value="%{cust.customerByCustomer3Level1Id.id}"
 												cssClass="form-control col-md-7 col-xs-12"
-												list="listCustomer" listKey="id" headerKey="-1"
+												list="listCustomerL1" listKey="id" headerKey="-1"
 												headerValue="---" listValue="businessName +' - '+ customerCode" />
 										</div>
 										<label class="control-label col-md-1 col-sm-3 col-xs-12"
@@ -598,7 +598,7 @@
 												showDownArrow="false" autoComplete="true"
 												value="%{cust.customerByCustomer4Level1Id.id}"
 												cssClass="form-control col-md-7 col-xs-12"
-												list="listCustomer" listKey="id" headerKey="-1"
+												list="listCustomerL1" listKey="id" headerKey="-1"
 												headerValue="---" listValue="businessName +' - '+ customerCode" />
 										</div>
 										<label class="control-label col-md-1 col-sm-3 col-xs-12"
@@ -632,7 +632,7 @@
 												showDownArrow="false" autoComplete="true"
 												value="%{cust.customerByCustomer5Level1Id.id}"
 												cssClass="form-control col-md-7 col-xs-12"
-												list="listCustomer" listKey="id" headerKey="-1"
+												list="listCustomerL1" listKey="id" headerKey="-1"
 												headerValue="---" listValue="businessName +' - '+ customerCode" />
 										</div>
 										<label class="control-label col-md-1 col-sm-3 col-xs-12"

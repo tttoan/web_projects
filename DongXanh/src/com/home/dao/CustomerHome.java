@@ -370,7 +370,7 @@ public class CustomerHome {
 		}
 	}
 
-	public boolean isCustomerExist(String customerCode) {
+	public boolean existCustomer(String customerCode) {
 		log.debug("getting Customer instance with code: " + customerCode);
 		Transaction tx = null;
 		Session session = null;
@@ -379,6 +379,38 @@ public class CustomerHome {
 			tx = session.beginTransaction();
 			Criteria criteria = session.createCriteria(Customer.class);
 			criteria.add(Restrictions.eq("customerCode", customerCode));
+			criteria.setProjection(Projections.rowCount());
+			Long count = (Long) criteria.uniqueResult();
+			tx.commit();
+			if (count > 0) {
+				return true;
+			}
+		} catch (Exception re) {
+			log.error("get failed", re);
+			re.printStackTrace();
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.error("get failed", e);
+			}
+		}
+		return false;
+	}
+	
+	public boolean existCustomerBangKe(String statisticName) {
+		log.debug("getting Customer instance with code: " + statisticName);
+		Transaction tx = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			Criteria criteria = session.createCriteria(Customer.class);
+			criteria.add(Restrictions.eq("statisticName", statisticName));
 			criteria.setProjection(Projections.rowCount());
 			Long count = (Long) criteria.uniqueResult();
 			tx.commit();
@@ -825,7 +857,7 @@ public class CustomerHome {
 				c.setGroupCustomer(group);
 				
 				c.setPathDocScan(StringUtil.notNull(rs.getString("path_doc_scan"))	);
-
+				c.setCustomer_location(StringUtil.notNull(rs.getString("customer_location")));
 				
 				results.add(c);
 			}

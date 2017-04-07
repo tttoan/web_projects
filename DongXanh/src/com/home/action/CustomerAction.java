@@ -62,7 +62,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private String uploadFileName;
 	private User emp = new User();
 	public int yearNow = (Calendar.getInstance()).get(Calendar.YEAR);
-	private List<Customer> listCustomer = new ArrayList<>();
+	private List<Customer> listCustomerL1 = new ArrayList<>();
 	private List<User> listEmployee = new ArrayList<>();
 	private List<City> listCity = new ArrayList<>();
 	private List<GroupCustomer> listGrpCus = new ArrayList<>();
@@ -287,6 +287,19 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	@Override
 	public void validate() {
 		try {
+			CustomerHome cusHome = new CustomerHome(getSessionFactory());
+			/**
+			 * check customer code
+			 */
+			if(StringUtil.notNull(getCust().getCustomerCode()).length() > 0 && cusHome.existCustomer(getCust().getCustomerCode())){
+				addFieldError("customerCode", "Đã tồn tại mã khách hàng này trong hệ thống");
+			}
+			/**
+			 * check ten bang ke
+			 */
+			if(StringUtil.notNull(getCust().getStatisticName()).length() > 0 && cusHome.existCustomerBangKe(getCust().getStatisticName())){
+				addFieldError("cust.statisticName", "Đã tồn tại tên bảng kê này trong hệ thống");
+			}
 			loadLookupEmployee();
 			loadLookupCustomer();
 			loadLookupGrpCustomer();
@@ -326,7 +339,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	public void loadLookupCustomer() {
 		try {
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
-			listCustomer = cusHome.getLookupCustomer(custId);
+			listCustomerL1 = cusHome.getLookupCustomer(custId, MyConts.CUS_L1);
 		} catch (Exception e) {
 			e.printStackTrace();
 			addActionError("Error: load lookup customers. Exception: " + e.getMessage());
@@ -436,10 +449,6 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	public String addCustomer() throws Exception {
 		try {
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
-			/**
-			 * check customer code
-			 */
-			
 			/**
 			 * set value
 			 */
@@ -602,7 +611,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 						}
 					}
 					// ---------------------------
-					boolean isExisted = custHome.isCustomerExist(getCust().getCustomerCode());
+					boolean isExisted = custHome.existCustomer(getCust().getCustomerCode());
 					if (!isExisted)
 						custHome.attachDirty(getCust());
 					else
@@ -657,12 +666,12 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		this.emp = emp;
 	}
 
-	public List<Customer> getListCustomer() {
-		return listCustomer;
+	public List<Customer> getListCustomerL1() {
+		return listCustomerL1;
 	}
 
-	public void setListCustomer(List<Customer> listCustomer) {
-		this.listCustomer = listCustomer;
+	public void setListCustomerL1(List<Customer> listCustomerL1) {
+		this.listCustomerL1 = listCustomerL1;
 	}
 
 	public List<User> getListEmployee() {
