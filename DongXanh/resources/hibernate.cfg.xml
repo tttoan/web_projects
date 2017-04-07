@@ -5,9 +5,9 @@
 <hibernate-configuration>
     <session-factory>
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-		<property name="connection.url">jdbc:mysql://localhost/db_promotion?autoReconnect=true</property>
+		<property name="connection.url">jdbc:mysql://10.1.21.135/db_promotion?autoReconnect=true</property>
 		<property name="connection.username">root</property>
-		<property name="connection.password">root</property>
+		<property name="connection.password"></property>
 		<property name="connection.autoReconnect">true</property>
 		<property name="connection.autoReconnectForPools">true</property>
 		<property name="connection.is-connection-validation-required">true</property>
