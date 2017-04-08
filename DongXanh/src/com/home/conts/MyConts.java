@@ -10,5 +10,5 @@ public class MyConts {
 	
 	public final static int CUS_L1 = 1;
 	
-	public final static int CUS_L2 = 1;
+	public final static int CUS_L2 = 2;
 }

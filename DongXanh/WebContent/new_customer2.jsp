@@ -260,7 +260,7 @@
 															for(int i=0; i< arrName.length; i++){
 																request.setAttribute("imgCus", imagePath + "/" + arrName[i]);
 																%>
-																	<img src="${imgCus}"  width="300" height="250" style="border:3px solid blue" />
+																	<img src="${imgCus}"  width="300" height="250" style="border:3px solid #73AD21" />
 																<%	
 															}
 														}
@@ -474,7 +474,7 @@
 												value="%{cust.customerByCustomer1Level1Id.id}"
 												cssClass="form-control col-md-7 col-xs-12"
 												list="listCustomerL1" listKey="id" headerKey="-1"
-												headerValue="---" listValue="businessName +' - '+ customerCode" />
+												headerValue="---" listValue="customerCode +' - '+ statisticName" />
 										</div>
 										<label class="control-label col-md-1 col-sm-3 col-xs-12"
 											for="cus1Phone">ÐT
@@ -516,7 +516,7 @@
 												value="%{cust.customerByCustomer2Level1Id.id}"
 												cssClass="form-control col-md-7 col-xs-12"
 												list="listCustomerL1" listKey="id" headerKey="-1"
-												headerValue="---" listValue="businessName +' - '+ customerCode" />
+												headerValue="---" listValue="customerCode +' - '+ statisticName" />
 										</div>
 										<label class="control-label col-md-1 col-sm-3 col-xs-12"
 											for="cus2Phone">ÐT
@@ -558,7 +558,7 @@
 												value="%{cust.customerByCustomer3Level1Id.id}"
 												cssClass="form-control col-md-7 col-xs-12"
 												list="listCustomerL1" listKey="id" headerKey="-1"
-												headerValue="---" listValue="businessName +' - '+ customerCode" />
+												headerValue="---" listValue="customerCode +' - '+ statisticName" />
 										</div>
 										<label class="control-label col-md-1 col-sm-3 col-xs-12"
 											for="cus3Phone">ÐT
@@ -599,15 +599,22 @@
 												value="%{cust.customerByCustomer4Level1Id.id}"
 												cssClass="form-control col-md-7 col-xs-12"
 												list="listCustomerL1" listKey="id" headerKey="-1"
-												headerValue="---" listValue="businessName +' - '+ customerCode" />
+												headerValue="---" listValue="customerCode +' - '+ statisticName" />
 										</div>
 										<label class="control-label col-md-1 col-sm-3 col-xs-12"
 											for="cus4Phone">ÐT
 										</label>
 										<div class="col-md-2 col-sm-6 col-xs-12">
-											<input id="cus4Phone" name="cus4Phone" type="text" readonly
-												value="${cust.customerByCustomer4Level1Id.telefone}"
-												class="form-control col-md-7 col-xs-12">
+											<s:if test="%{cust.customerByCustomer4Level1Id.telefone != null}">
+												<input id="cus4Phone" name="cus4Phone" type="text" readonly
+													value="${cust.customerByCustomer4Level1Id.telefone}"
+													class="form-control col-md-7 col-xs-12">
+											</s:if>
+											<s:else>
+												<input id="cus4Phone" name="cus4Phone" type="text" readonly
+													value=""
+													class="form-control col-md-7 col-xs-12">
+											</s:else>
 										</div>
 									</div>
 									<div class="item form-group">
@@ -633,15 +640,22 @@
 												value="%{cust.customerByCustomer5Level1Id.id}"
 												cssClass="form-control col-md-7 col-xs-12"
 												list="listCustomerL1" listKey="id" headerKey="-1"
-												headerValue="---" listValue="businessName +' - '+ customerCode" />
+												headerValue="---" listValue="customerCode +' - '+ statisticName" />
 										</div>
 										<label class="control-label col-md-1 col-sm-3 col-xs-12"
 											for="cus5Phone">ÐT
 										</label>
 										<div class="col-md-2 col-sm-6 col-xs-12">
-											<input id="cus5Phone" name="cus5Phone" type="text" readonly
-												value="${cust.customerByCustomer5Level1Id.telefone}"
-												class="form-control col-md-7 col-xs-12">
+											<s:if test="%{cust.customerByCustomer5Level1Id.telefone != null}">
+												<input id="cus5Phone" name="cus5Phone" type="text" readonly
+													value="${cust.customerByCustomer5Level1Id.telefone}"
+													class="form-control col-md-7 col-xs-12">
+											</s:if>
+											<s:else>
+												<input id="cus5Phone" name="cus5Phone" type="text" readonly
+													value=""
+													class="form-control col-md-7 col-xs-12">
+											</s:else>
 										</div>
 									</div>
 									<div class="item form-group">

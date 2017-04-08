@@ -1,8 +1,11 @@
+<%@page import="com.home.entities.City"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@page import="java.util.Calendar"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
+<%@page import="java.util.regex.Pattern"%>
 <%@ taglib uri="/struts-tags" prefix="s"%>
 <%@ taglib uri="/struts-dojo-tags" prefix="sd"%>
 
@@ -15,11 +18,12 @@
 	<input type="hidden" id="cusId" name="cusId" value="<%=request.getParameter("custId")%>">
 	<div class="">
 		<div class="title_left">
-				<h4><s:property value="cust.customerCode"/>: <s:property value="cust.statisticName"/></h4>
+				<button class="btn btn-danger btn-xs" onclick="goBack()">Quay lại</button>
 		</div>
 		<div class="clearfix"></div>
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
+			
 				<s:set var="product1Session" value="%{cust.farmProduct1Session}" />
 				<jsp:useBean id="product1Session" type="java.lang.String" />
 				<s:set var="farmProduct2Session" value="%{cust.farmProduct2Session}" />
@@ -28,7 +32,7 @@
 				<jsp:useBean id="farmProduct3Session" type="java.lang.String" />
 				<s:set var="farmProduct4Session" value="%{cust.farmProduct4Session}" />
 				<jsp:useBean id="farmProduct4Session" type="java.lang.String" />
-				
+
 				<%
 					String session1From1 = "0";
 					String session1To1 = "0";
@@ -95,529 +99,742 @@
 					int yearNow = d.get(Calendar.YEAR);
 				%>
 
-				<sx:tabbedpanel id="tabContainer">
-					<s:form action="add_customer" method="post"
+			<s:form action="add_customer" method="post"
 						enctype="multipart/form-data"
 						cssClass="form-horizontal form-label-left" theme="bootstrap">
-						<sx:div label="Thông Tin Khách Hàng" id="createCustomerInfo1">
+						
+				<div class="" role="tabpanel" data-example-id="togglable-tabs">
+					<ul id="myTab" class="nav cus_inform nav-tabs bar_tabs" role="tablist">
+						<li role="presentation" class="active"><a
+							href="#tab_content1" id="home-tab" role="tab" data-toggle="tab"
+							aria-expanded="true">Thông tin khách hàng</a></li>
+						<li role="presentation" class=""><a href="#tab_content2"
+							role="tab" id="profile-tab2" data-toggle="tab"
+							aria-expanded="false">Hiện trạng kinh doanh thuốc BVTV</a></li>
+						<li role="presentation" class=""><a href="#tab_content3"
+							role="tab" id="profile-tab3" data-toggle="tab"
+							aria-expanded="false">Kế Hoạch Hoạt Động Của NVTT</a></li>
+						<li role="presentation" class=""><a href="#tab_content4"
+							role="tab" id="profile-tab4" data-toggle="tab"
+							aria-expanded="false">Số liệu bán hàng 3 năm qua</a></li>
+					</ul>
+					<div id="myTabContent" class="tab-content">
+						<div role="tabpanel" class="tab-pane fade active in"
+							id="tab_content1" aria-labelledby="home-tab">
+							
 							<div class="x_panel">
 								<div class="x_content">
+									<s:hidden name="custId" value="%{custId}"></s:hidden>
+									<s:hidden name="edit" value="%{edit}"></s:hidden>
+									<s:if test="hasActionErrors()">
+										<div class="errors">
+											<s:actionerror escape="false" />
+										</div>
+									</s:if>
+									<s:elseif test="hasActionMessages()">
+										<div class="message">
+											<s:actionmessage escape="false" />
+										</div>
+									</s:elseif>
 
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="createTime">Ngày lập: </label>
-										<div class="col-md-3 xdisplay_inputx has-feedback">
-											<label class="control-label"> <s:property value="cust.createTime"/></label>
-										</div>
-									</div>
-
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="customerCode">Mã khách hàng:
-										</label>
-										<div class="col-md-2 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.customerCode"/></label>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cityName">Khu vực: 
-										</label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.certificateAddress"/></label>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="grpCustomer_id">Nhóm: 
-										</label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.groupCustomer.groupName"/></label>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="emp_id">Nhân viên TT:
-										</label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.user.userName"/></label>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="statisticName">Tên bảng kê: <span
-											class="required">*</span>
-										</label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.statisticName"/></label>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cusImageScan">Ảnh scan (*.jpg, *.png, *.gif) </label>
-											<div id="dvPreview" class="col-md-5 col-sm-6 col-xs-12 divborder">
-												<img src="<s:property value="cust.pathDocScan"/>"  width="300" height="250"  />
-											</div>
-									</div>
-									<br>
-
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="businessName">Tên doanh nghiệp (cửa hàng): <span
-											class="required">*</span>
-										</label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.businessName"/></label>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="certificateNumber">Giấy phép ĐKKD số: 
-										</label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.certificateNumber"/></label>
-										</div>
-									</div>
-
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="certificateDate">Ngày cấp: 
-										</label>
-										<div class="col-md-3 xdisplay_inputx has-feedback">
-											<label class="control-label"> <s:property value="cust.certificateDate"/></label>
-										</div>
-									</div>
-
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="certificateAddress">Địa chỉ đăng kí KD: 
-										</label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.certificateAddress"/></label>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="taxNumber">Mã số thuế: 
-										</label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.taxNumber"/></label>
-										</div>
-									</div>
-
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="budgetRegister">Vốn đăng kí: </label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.budgetRegister"/></label>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="telefone">Điện thoại bàn: </label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.telefone"/></label>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="fax">Fax: </label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.fax"/></label>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="email">Email: </label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.email"/></label>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="socialAddress">Địa chỉ mạng xã hội (Facebook,
-											Twitter, Zalo,…): </label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.socialAddress"/></label>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="businessAddress">Địa điểm kinh doanh: </label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.businessAddress"/></label>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="adviser">Người đại diện pháp luật: </label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.lawyer"/></label>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="director">Người quyết định chính công việc: </label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.director"/></label>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="directorMobile">ĐTDĐ Người quyết định: </label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.directorMobile"/></label>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="directorBirthday">Ngày sinh: </label>
-										<div class="col-md-3 xdisplay_inputx has-feedback">
-											<label class="control-label"> <s:property value="cust.directorBirthday"/></label>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="directorDomicile">Nguyên quán: </label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.directorDomicile"/></label>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="sellMan">Người bán hàng trực tiếp: </label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.sellMan"/></label>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="sellManMobile">ĐTDĐ Người bán hàng: </label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.sellManMobile"/></label>
-										</div>
-									</div>
-
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="budgetOriginal">Ước vốn tự có để kinh doanh
-											(Triệu): </label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.budgetRegister"/></label>
-										</div>
-									</div>
-								</div>
-							</div>
-						</sx:div>
-						<sx:div label="Hiện Trạng Kinh Doanh Thuốc"
-							id="createCustomerInfo2">
-							<div class="x_panel">
-								<div class="x_content">
-									<span class="section"></span>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="otherBusiness">Ngành nghề kinh doanh khác: </label>
-										<div class="col-md-4 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.otherBusiness"/></label>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="col-md-5 col-sm-3 col-xs-12"><u><i>CÁC CẤP 1
-											ĐANG NHẬN HÀNG CHÍNH</i></u> </label>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cus1Level1_id">Tên: <span class="required">(1)</span>
-										</label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.customerByCustomer1Level1Id.businessName"/></label>
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cus1Phone">Ðiện thoại: <span class="required">(1)</span>
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="customerCode">Mã khách hàng
 										</label>
 										<div class="col-md-3 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.customerByCustomer1Level1Id.telefone"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.customerCode}"/></label>
+										</div>
+										
+										<label class="control-label cus_lable col-md-2 col-sm-3 col-xs-12"
+											for="createTime">Ngày lập </label>
+										<div class="col-md-3 xdisplay_inputx has-feedback">
+											<label class="control-label cus_inform"> <s:property value="%{varCreateTime}"/></label>
+										</div>
+										
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="statisticName">Tên bảng kê
+										</label>
+										<div class="col-md-8 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.statisticName}"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="customer1Percent">Tỉ lệ nhận (%): <span
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="businessName">Tên doanh nghiệp (cửa hàng)
+										</label>
+										<div class="col-md-8 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.businessName}"/></label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="cityName">Khu vực 
+										</label>
+										<div class="col-md-3 col-sm-3 col-xs-12">
+											<% 
+												String citi = ""+request.getAttribute("cust.customer_location");
+												Object objCity = request.getAttribute("listCity");
+												if(citi.length() > 0 && objCity != null){
+													List<City> listCity = (List<City>)objCity;
+													for(int i=0; i<listCity.size(); i++){
+														if(citi.equals(listCity.get(i).getCityCode())){
+															citi = listCity.get(i).getCityName();
+														} 
+													} 
+												}
+											%>
+											<label class="control-label cus_inform"> <%=citi%></label>
+										</div>
+										
+										<label class="control-label cus_lable col-md-2 col-sm-3 col-xs-12" 
+											for="grpCustomer_id">Nhóm 
+										</label>
+										<div class="col-md-3 col-sm-3 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.groupCustomer.groupName}" /></label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="emp_id">Nhân viên TT 
+										</label>
+										<div class="col-md-8 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.user.fullName}" /></label>
+										</div>
+									</div>
+									
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="cusImageScan">Ảnh scan (*.jpg, *.png, *.gif) </label>
+									</div>
+									<div class="item form-group">
+											<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+												for="cusImageScan"></label>
+												
+											<s:hidden name="cust.pathDocScan" value="%{cust.pathDocScan}"></s:hidden>
+											<div id="dvPreview" class="col-md-9 col-sm-9 col-xs-12">
+												<%
+													String fullFilePath = ""+request.getAttribute("cust.pathDocScan");
+													fullFilePath = fullFilePath.replace("\\", "/");
+													String imagePath = "";
+													String arrName[] = null;
+													if(fullFilePath.length() > 0 && fullFilePath.contains("/")){
+														imagePath = fullFilePath.substring(0, fullFilePath.lastIndexOf("/"));
+														arrName = fullFilePath.substring(fullFilePath.lastIndexOf("/")+1).split(Pattern.quote("|"));
+													}
+													/* request.setAttribute("tttoan", imagePath);
+													request.setAttribute("arrImgName", arrName); */
+												%>
+												<%-- <input type="text" value="%{tttoan}"/>
+												<input type="text" value="${tttoan}"/>	
+												<input type="text" value="#tttoan"/>	
+												<input type="text" value="<%=imagePath%>"/>	 --%>
+												<%
+													if(arrName != null){
+														for(int i=0; i< arrName.length; i++){
+															request.setAttribute("imgCus", imagePath + "/" + arrName[i]);
+															%>
+																<img src="${imgCus}"  width="300" height="250" style="border:3px solid #73AD21" />
+															<%	
+														}
+													}
+												%>
+											</div>
+									</div>
+									
+									
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="certificateNumber">Giấy phép ĐKKD số 
+										</label>
+										<div class="col-md-3 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.certificateNumber}"/></label>
+										</div>
+										
+										<div class="item form-group">
+										<label class="control-label cus_lable col-md-2 col-sm-3 col-xs-12"
+											for="certificateDate">Ngày cấp 
+										</label>
+										<div class="col-md-3 xdisplay_inputx has-feedback">
+											<label class="control-label cus_inform"> <s:property value="%{varCertificateDate}"/></label>
+										</div>
+										</div>
+									</div>
+
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="certificateAddress">Địa chỉ đăng kí KD 
+										</label>
+										<div class="col-md-8 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.certificateAddress}"/></label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="taxNumber">Mã số thuế 
+										</label>
+										<div class="col-md-3 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.taxNumber}"/></label>
+										</div>
+										<label class="control-label cus_lable col-md-2 col-sm-3 col-xs-12"
+											for="budgetRegister">Vốn đăng kí </label>
+										<div class="col-md-3 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.budgetRegister}"/></label>
+										</div>
+									</div>
+
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="telefone">Điện thoại bàn </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.telefone}"/></label>
+										</div>
+										<label class="control-label cus_lable col-md-1 col-sm-3 col-xs-12"
+											for="fax">Fax </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.fax}" /></label>
+										</div>
+										<label class="control-label cus_lable col-md-1 col-sm-3 col-xs-12"
+											for="email">Email </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.email}"/></label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="socialAddress">Địa chỉ mạng xã hội </label>
+										<div class="col-md-8 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.socialAddress}"/></label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="businessAddress">Địa điểm kinh doanh </label>
+										<div class="col-md-8 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.businessAddress}"/></label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="adviser">Người đại diện pháp luật </label>
+										<div class="col-md-5 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.lawyer}"/></label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="director">Người quyết định chính công việc </label>
+										<div class="col-md-5 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.director}"/></label>
+										</div>
+										<label class="control-label cus_lable col-md-1 col-sm-3 col-xs-12"
+											for="directorMobile">ĐTDĐ </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.directorMobile}"/></label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="directorBirthday">Ngày sinh </label>
+										<div class="col-md-3 xdisplay_inputx has-feedback">
+											<label class="control-label cus_inform"> <s:property value="%{varDirectorBirthday}"/></label>
+										</div>
+										<label class="control-label cus_lable col-md-2 col-sm-3 col-xs-12"
+											for="directorDomicile">Nguyên quán </label>
+										<div class="col-md-3 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.directorDomicile}"/></label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="sellMan">Người bán hàng trực tiếp </label>
+										<div class="col-md-5 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.sellMan}"/></label>
+										</div>
+										<label class="control-label cus_lable col-md-1 col-sm-3 col-xs-12"
+											for="sellManMobile">ĐTDĐ </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.sellManMobile}"/></label>
+										</div>
+									</div>
+
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="budgetOriginal">Ước vốn tự có để kinh doanh
+											(Triệu) </label>
+										<div class="col-md-5 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.budgetOriginal}"/></label>
+										</div>
+									</div>
+									
+								</div>
+							</div>
+							
+						</div>
+						<div role="tabpanel" class="tab-pane fade" id="tab_content2"
+							aria-labelledby="profile-tab">
+							
+							<div class="x_panel">
+								<div class="x_content">
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="otherBusiness">Ngành nghề kinh doanh khác </label>
+										<div class="col-md-4 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.otherBusiness}"/></label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="col-md-5 col-sm-3 col-xs-12">CÁC CẤP 1
+											ĐANG NHẬN HÀNG CHÍNH </label>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="cus1Level1_id">Tên <span class="required">(1)</span>
+										</label>
+										<div class="col-md-5 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.customerByCustomer1Level1Id.statisticName}"/></label>
+										</div>
+										<label class="control-label cus_lable col-md-1 col-sm-3 col-xs-12"
+											for="cus1Phone">ÐT
+										</label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.customerByCustomer1Level1Id.telefone}"/></label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="customer1Percent">Tỉ lệ nhận (%) <span
 											class="required">(1)</span>
 										</label>
 										<div class="col-md-3 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.customer1Percent"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.customer1Percent}"/></label>
 										</div>
 									</div>
 
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cus2Level1_id">Tên: <span class="required">(2)</span>
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="cus2Level1_id">Tên <span class="required">(2)</span>
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.customerByCustomer2Level1Id.businessName"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.customerByCustomer2Level1Id.statisticName}"/></label>
 										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cus2Phone">Ðiện thoại: <span class="required">(2)</span>
+										<label class="control-label cus_lable col-md-1 col-sm-3 col-xs-12"
+											for="cus2Phone">ÐT
 										</label>
-										<div class="col-md-3 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.customerByCustomer2Level1Id.telefone"/></label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.customerByCustomer2Level1Id.telefone}"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="customer2Percent">Tỉ lệ nhận (%): <span
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="customer2Percent">Tỉ lệ nhận (%) <span
 											class="required">(2)</span>
 										</label>
 										<div class="col-md-3 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.customer2Percent"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.customer2Percent}"/></label>
 										</div>
 									</div>
 
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cus3Level1_id">Tên: <span class="required">(3)</span>
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="cus3Level1_id">Tên <span class="required">(3)</span>
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.customerByCustomer3Level1Id.businessName"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.customerByCustomer3Level1Id.statisticName}"/></label>
 										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cus3Phone">Ðiện thoại: <span class="required">(3)</span>
+										<label class="control-label cus_lable col-md-1 col-sm-3 col-xs-12"
+											for="cus3Phone">ÐT
 										</label>
-										<div class="col-md-3 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.customerByCustomer3Level1Id.telefone"/></label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.customerByCustomer3Level1Id.telefone}"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="customer3Percent">Tỉ lệ nhận (%): <span
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="customer3Percent">Tỉ lệ nhận (%) <span
 											class="required">(3)</span>
 										</label>
 										<div class="col-md-3 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.customer3Percent"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.customer3Percent}"/></label>
 										</div>
 									</div>
 
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cus4Level1_id">Tên: <span class="required">(4)</span>
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="cus4Level1_id">Tên <span class="required">(4)</span>
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.customerByCustomer4Level1Id.businessName"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.customerByCustomer4Level1Id.statisticName}"/></label>
 										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cus4Phone">Ðiện thoại: <span class="required">(4)</span>
+										<label class="control-label cus_lable col-md-1 col-sm-3 col-xs-12"
+											for="cus4Phone">ÐT
 										</label>
-										<div class="col-md-3 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.customerByCustomer4Level1Id.telefone"/></label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.customerByCustomer4Level1Id.telefone}"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="customer4Percent">Tỉ lệ nhận (%): <span
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="customer4Percent">Tỉ lệ nhận (%) <span
 											class="required">(4)</span>
 										</label>
 										<div class="col-md-3 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.customer4Percent"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.customer4Percent}"/></label>
 										</div>
 									</div>
 
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cus5Level1_id">Tên: <span class="required">(5)</span>
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="cus5Level1_id">Tên <span class="required">(5)</span>
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.customerByCustomer5Level1Id.businessName"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.customerByCustomer5Level1Id.statisticName}"/></label>
 										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="cus5Phone">Ðiện thoại: <span class="required">(5)</span>
+										<label class="control-label cus_lable col-md-1 col-sm-3 col-xs-12"
+											for="cus5Phone">ÐT
 										</label>
-										<div class="col-md-3 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.customerByCustomer5Level1Id.telefone"/></label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.customerByCustomer5Level1Id.telefone}"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="customer5Percent">Tỉ lệ nhận (%): <span
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="customer5Percent">Tỉ lệ nhận (%) <span
 											class="required">(5)</span>
 										</label>
 										<div class="col-md-3 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.customer5Percent"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.customer5Percent}"/></label>
 										</div>
 									</div>
 
 									<div class="item form-group">
-										<label class="col-md-8 col-sm-3 col-xs-12"><u><i>DOANH SỐ
-											BÁN THUỐC BVTV 2 NIÊN VỤ VỪA QUA </i></u></label>
+										<label class="col-md-8 col-sm-3 col-xs-12">DOANH SỐ
+											BÁN THUỐC BVTV 2 NIÊN VỤ VỪA QUA </label>
 									</div>
 
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
 											for="revenue1"> <%=(yearNow - 2)%> - <%=(yearNow - 1)%>
-											(Triệu đồng):
+											(Triệu đồng)
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.revenue1"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.revenue1}"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
 											for="revenue2"> <%=(yearNow - 1)%> - <%=(yearNow)%>
-											(Triệu đồng):
+											(Triệu đồng)
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.revenue2"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.revenue2}"/></label>
 										</div>
 									</div>
 
 
 									<div class="item form-group">
-										<label class="col-md-8 col-sm-3 col-xs-12"><u><i>TỈ LỆ DOANH
-											SỐ PHÂN PHỐI CỦA CÁC CTY KINH DOANH THUỐC BVTV CUNG ỨNG </i></u></label>
+										<label class="col-md-8 col-sm-3 col-xs-12">TỈ LỆ DOANH
+											SỐ PHÂN PHỐI CỦA CÁC CTY KINH DOANH THUỐC BVTV CUNG ỨNG </label>
 									</div>
 
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
 											for="percentProvide1">Trên 30% </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.percentProvide1"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.percentProvide1}"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
 											for="percentProvide2">20 - 30% </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.percentProvide2"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.percentProvide2}"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
 											for="percentProvide3">10 - 20% </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.percentProvide3"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.percentProvide3}"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
 											for="percentProvide4">Dưới 10% </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.percentProvide4"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.percentProvide4}"/></label>
 										</div>
 									</div>
 
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
 											for="productSell">Tên ít nhất 7 sản phẩm Đồng Xanh
-											đang bán theo số lượng thấp dần: </label>
+											đang bán theo số lượng thấp dần </label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.productSell"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.productSell}"/></label>
 										</div>
 									</div>
 
 									<br>
 									<div class="item form-group">
-										<label class="col-md-8 col-sm-3 col-xs-12"><u><i>DANH MỤC
-											CÁC MẶT HÀNG (TÊN THƯƠNG MẠI) ĐANG TIÊU THỤ MẠNH </i></u></label>
+										<label class="col-md-8 col-sm-3 col-xs-12">DANH MỤC
+											CÁC MẶT HÀNG (TÊN THƯƠNG MẠI) ĐANG TIÊU THỤ MẠNH </label>
 									</div>
 
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="product1Hot">3 Sản phẩm thuốc trừ cỏ: </label>
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="product1Hot">3 Sản phẩm thuốc trừ cỏ </label>
 										<div class="col-md-6 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.product1Hot"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.product1Hot}"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="product2Hot">5 Sản phẩm thuốc trừ sâu: </label>
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="product2Hot">5 Sản phẩm thuốc trừ sâu </label>
 										<div class="col-md-6 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.product2Hot"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.product2Hot}"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="product3Hot">3 Sản phẩm thuốc trừ rầy: </label>
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="product3Hot">3 Sản phẩm thuốc trừ rầy </label>
 										<div class="col-md-6 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.product3Hot"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.product3Hot}"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="product4Hot">5 Sản phẩm thuốc trừ bệnh: </label>
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="product4Hot">5 Sản phẩm thuốc trừ bệnh </label>
 										<div class="col-md-6 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.product4Hot"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.product4Hot}"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="product5Hot">3 Sản phẩm kích thích sinh trưởng: </label>
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="product5Hot">3 Sản phẩm kích thích sinh trưởng </label>
 										<div class="col-md-6 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.product5Hot"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.product5Hot}"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="product6Hot">3 Sản phẩm thuốc trừ ốc: </label>
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
+											for="product6Hot">3 Sản phẩm thuốc trừ ốc </label>
 										<div class="col-md-6 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.product6Hot"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.product6Hot}"/></label>
 										</div>
+									</div>
+									<br>
+									<div class="item form-group">
+										<label class="col-md-8 col-sm-3 col-xs-12">CÂY TRỒNG
+											TRONG KHU VỰC (CHỌN CÂY TRỒNG CHÍNH) </label>
 									</div>
 
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-2 col-sm-3 col-xs-12"
+											for="farmProduct1">+ Lúa (%) </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.farmProduct1}"/></label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12">Mùa
+											vụ 1: Từ tháng </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"><%=session1From1%></label>
+										</div>
+										<label class="control-label cus_lable col-md-1 col-sm-3 col-xs-12">đến </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"><%=session1To1%>"</label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12">Mùa
+											vụ 2 : Từ tháng </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <%=session1From2%></label>
+										</div>
+										<label class="control-label cus_lable col-md-1 col-sm-3 col-xs-12">đến </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <%=session1To2%></label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12">Mùa
+											vụ 3: Từ tháng </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <%=session1From3%></label>
+										</div>
+										<label class="control-label cus_lable col-md-1 col-sm-3 col-xs-12">đến </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <%=session1To3%>"</label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-2 col-sm-3 col-xs-12"
+											for="farmProduct2">+ Rau màu (%) </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.farmProduct2}" /></label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12">Mùa
+											vụ 1: Từ tháng </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <%=session2From1%></label>
+										</div>
+										<label class="control-label cus_lable col-md-1 col-sm-3 col-xs-12">đến </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <%=session2To1%>"</label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12">Mùa
+											vụ 2 : Từ tháng </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <%=session2From2%>"</label>
+										</div>
+										<label class="control-label cus_lable col-md-1 col-sm-3 col-xs-12">đến </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <%=session2To2%>"</label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12">Mùa
+											vụ 3: Từ tháng </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <%=session2From3%>"</label>
+										</div>
+										<label class="control-label cus_lable col-md-1 col-sm-3 col-xs-12">đến </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <%=session2To3%>"</label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-2 col-sm-3 col-xs-12"
+											for="farmProduct1">+ Cây ăn trái (%) </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.farmProduct3}"/></label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12">Mùa
+											vụ 1: Từ tháng </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <%=session3From1%>"</label>
+										</div>
+										<label class="control-label cus_lable col-md-1 col-sm-3 col-xs-12">đến </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <%=session3To1%>"</label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12">Mùa
+											vụ 2 : Từ tháng </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <%=session3From2%></label>
+										</div>
+										<label class="control-label cus_lable col-md-1 col-sm-3 col-xs-12">đến </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <%=session3To2%>"</label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12">Mùa
+											vụ 3: Từ tháng </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <%=session3From3%></label>
+										</div>
+										<label class="control-label cus_lable col-md-1 col-sm-3 col-xs-12">đến </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <%=session3To3%></label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-2 col-sm-3 col-xs-12"
+											for="farmProduct4">+ Khác (%) </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.farmProduct4}"/></label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12">Mùa
+											vụ 1: Từ tháng </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <%=session4From1%></label>
+										</div>
+										<label class="control-label cus_lable col-md-1 col-sm-3 col-xs-12">đến </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <%=session4To1%></label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12">Mùa
+											vụ 2 : Từ tháng </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> "<%=session4From2%></label>
+										</div>
+										<label class="control-label cus_lable col-md-1 col-sm-3 col-xs-12">đến </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <%=session4To2%>></label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12">Mùa
+											vụ 3: Từ tháng </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <%=session4From3%></label>
+										</div>
+										<label class="control-label cus_lable col-md-1 col-sm-3 col-xs-12">đến </label>
+										<div class="col-md-2 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <%=session4To3%></label>
+										</div>
+									</div>
 								</div>
 							</div>
-						</sx:div>
-						<sx:div label="Kế Hoạch Hoạt Động Của NVTT"
-							id="createCustomerInfo3">
+							
+						</div>
+						<div role="tabpanel" class="tab-pane fade" id="tab_content3"
+							aria-labelledby="profile-tab">
 							<div class="x_panel">
 								<div class="x_content">
-									<span class="section"></span>
 									<div class="item form-group">
-										<label class="col-md-5 col-sm-3 col-xs-12"><u><i>DOANH SỐ DỰ
-											KIẾN TRONG 3 NĂM TỚI </i></u></label>
+										<label class="col-md-5 col-sm-3 col-xs-12">DOANH SỐ DỰ
+											KIẾN TRONG 3 NĂM TỚI </label>
 									</div>
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
 											for="revenueExpect1"> <%=(yearNow)%> - <%=(yearNow + 1)%>
-											(Triệu đồng):
+											(Triệu đồng)
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.revenueExpect1"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.revenueExpect1}"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
 											for="revenueExpect2"> <%=(yearNow + 1)%> - <%=(yearNow + 2)%>
-											(Triệu đồng):
+											(Triệu đồng)
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.revenueExpect2"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.revenueExpect2}"/></label>
 										</div>
 									</div>
 									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
 											for="revenueExpect3"> <%=(yearNow + 2)%> - <%=(yearNow + 3)%>
-											(Triệu đồng):
+											(Triệu đồng)
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<label class="control-label"> <s:property value="cust.revenueExpect3"/></label>
+											<label class="control-label cus_inform"> <s:property value="%{cust.revenueExpect3}"/></label>
 										</div>
 									</div>
 								</div>
 							</div>
-						</sx:div>
-						<sx:div label="Số liệu bán hàng 3 năm qua"
-							id="createCustomerInfo4">
+						</div>
+						<div role="tabpanel" class="tab-pane fade" id="tab_content4"
+							aria-labelledby="profile-tab">
 							<div class="x_panel">
-								
 								<div id="x_content_view" class="x_content_view">
 									<table id="example_view"
 										class="table table-striped responsive-utilities jambo_table display nowrap cell-border" style="width: 100%">
@@ -651,9 +868,13 @@
 								</div>
 								
 							</div>
-						</sx:div>
-					</s:form>
-				</sx:tabbedpanel>
+						</div>
+					</div>
+				</div>
+				
+				<div class="ln_solid"></div>
+			</s:form>
+
 			</div>
 		</div>
 	</div>
@@ -689,6 +910,11 @@
 <script src="js/custom.js"></script>
 <!-- form validation -->
 <script src="js/validator/validator.js"></script>
+<script>
+	function goBack() {
+	    window.history.back();
+	}
+</script>
 <script>
 	// initialize the validator function
 	validator.message['date'] = 'not a real date';
@@ -921,6 +1147,17 @@
 	.divborder {
 	    border: 3px solid #73AD21;
 	    padding: 5px;
+	}
+	.cus_lable {
+	    font-weight: normal;
+	}
+	.cus_inform {
+	    border: 1px solid #73AD21;
+	    padding: 5px 5px 3px 5px !important;
+	    font-weight: bold;
+	    width: 100%;
+	    height: 300;
+	    text-align: left !important;
 	}
 </style>
 </body>

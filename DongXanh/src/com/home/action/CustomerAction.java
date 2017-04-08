@@ -130,6 +130,8 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		cust.setFarmProduct2Session("");
 		cust.setFarmProduct3Session("");
 		cust.setFarmProduct4Session("");
+		cust.setGroupCustomer(new GroupCustomer());
+		cust.getGroupCustomer().setId(MyConts.CUS_L2);
 		return cust;
 	}
 
@@ -144,7 +146,6 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 				CustomerHome cusHome = new CustomerHome(getSessionFactory());
 				Customer cusTemp = cusHome.findById(custId);
 				setCust(cusTemp);
-				generateCustomerByRule(cusTemp);
 				//varCityCode = getCust().getCustomerCode().substring(0, getCust().getCustomerCode().length() - 3);
 				if(getCust().getCreateTime() != null){
 					varCreateTime = SDF.format(getCust().getCreateTime());
@@ -287,19 +288,13 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	@Override
 	public void validate() {
 		try {
-			CustomerHome cusHome = new CustomerHome(getSessionFactory());
 			/**
-			 * check customer code
+			 * Check duplicate data
 			 */
-			if(StringUtil.notNull(getCust().getCustomerCode()).length() > 0 && cusHome.existCustomer(getCust().getCustomerCode())){
-				addFieldError("customerCode", "Đã tồn tại mã khách hàng này trong hệ thống");
-			}
+			checkDuplicateData();
 			/**
-			 * check ten bang ke
+			 * Load data lookup
 			 */
-			if(StringUtil.notNull(getCust().getStatisticName()).length() > 0 && cusHome.existCustomerBangKe(getCust().getStatisticName())){
-				addFieldError("cust.statisticName", "Đã tồn tại tên bảng kê này trong hệ thống");
-			}
 			loadLookupEmployee();
 			loadLookupCustomer();
 			loadLookupGrpCustomer();
@@ -310,6 +305,29 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			generateColumnExcel();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private void checkDuplicateData(){
+		try {
+			CustomerHome cusHome = new CustomerHome(getSessionFactory());
+			/**
+			 * check customer code
+			 */
+			if(StringUtil.notNull(getCust().getCustomerCode()).length() > 0 && cusHome.existCustomer(custId, getCust().getCustomerCode())){
+				//addFieldError("customerCode", "Đã tồn tại mã khách hàng này trong hệ thống");
+				addActionError("Đã tồn tại mã khách hàng='"+getCust().getCustomerCode()+"' này trong hệ thống");
+			}
+			/**
+			 * check ten bang ke
+			 */
+			if(StringUtil.notNull(getCust().getStatisticName()).length() > 0 && cusHome.existCustomerBangKe(custId, getCust().getStatisticName())){
+				//addFieldError("cust.statisticName", "Đã tồn tại tên bảng kê này trong hệ thống");
+				addActionError("Đã tồn tại tên bảng kê='"+getCust().getStatisticName()+"' này trong hệ thống");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			addActionError("Error: checkDuplicateData. Exception: " + e.getMessage());
 		}
 	}
 
@@ -398,18 +416,30 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		}
 	}
 
-	private void generateCustomerByRule(Customer cusTemp) {
-		if (cusTemp.getCertificateDate() == null)
-			cusTemp.setCertificateDate(new Date());
-		if (cusTemp.getDirectorBirthday() == null)
-			cusTemp.setDirectorBirthday(new Date());
-	}
-
 	public String findCustomer() {
 		try {
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
 			Customer cusTemp = cusHome.findById(custId);
-			generateCustomerByRule(cusTemp);
+			if(cusTemp.getCustomerByCustomer1Level1Id() != null){
+				Customer cus1L1 = cusHome.findById(cusTemp.getCustomerByCustomer1Level1Id().getId());
+				cusTemp.setCustomerByCustomer1Level1Id(cus1L1);
+			}
+			if(cusTemp.getCustomerByCustomer2Level1Id() != null){
+				Customer cus2L1 = cusHome.findById(cusTemp.getCustomerByCustomer2Level1Id().getId());
+				cusTemp.setCustomerByCustomer2Level1Id(cus2L1);
+			}
+			if(cusTemp.getCustomerByCustomer3Level1Id() != null){
+				Customer cus3L1 = cusHome.findById(cusTemp.getCustomerByCustomer3Level1Id().getId());
+				cusTemp.setCustomerByCustomer3Level1Id(cus3L1);
+			}
+			if(cusTemp.getCustomerByCustomer4Level1Id() != null){
+				Customer cus4L1 = cusHome.findById(cusTemp.getCustomerByCustomer4Level1Id().getId());
+				cusTemp.setCustomerByCustomer4Level1Id(cus4L1);
+			}
+			if(cusTemp.getCustomerByCustomer5Level1Id() != null){
+				Customer cus5L1 = cusHome.findById(cusTemp.getCustomerByCustomer5Level1Id().getId());
+				cusTemp.setCustomerByCustomer5Level1Id(cus5L1);
+			}
 			setCust(cusTemp);
 			return SUCCESS;
 		} catch (Exception e) {
@@ -611,7 +641,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 						}
 					}
 					// ---------------------------
-					boolean isExisted = custHome.existCustomer(getCust().getCustomerCode());
+					boolean isExisted = custHome.existCustomer(custId, getCust().getCustomerCode());
 					if (!isExisted)
 						custHome.attachDirty(getCust());
 					else
