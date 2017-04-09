@@ -915,4 +915,46 @@ public class CustomerHome {
 	}
 
 
+	public List<Object[]> lookupCustomer(String cusName) {
+		log.debug("finding List Customer instance by full name");
+		List<Object[]> results = new ArrayList<Object[]>();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			try (Statement sta = conn.createStatement()) {
+				String query = "Select id, customer_code, business_name, statistic_name, business_address"
+						+ "From customer where (lower(business_name) Like '%"+cusName.toLowerCase()+"%' OR lower(statistic_name) Like '%"+cusName.toLowerCase()+"%') order by customer_code, business_name, statistic_name LIMIT 20";
+				System.out.println(query);
+				try (ResultSet rs = sta.executeQuery(query)) {
+					while (rs.next()) {
+						Customer cus = new Customer();
+						cus.setId(rs.getInt("id"));
+						cus.setCustomerCode(StringUtil.notNull(rs.getString("customer_code")));
+						cus.setBusinessName(StringUtil.notNull(rs.getString("business_name")));
+						cus.setStatisticName(StringUtil.notNull(rs.getString("statistic_name")));
+						cus.setTelefone(StringUtil.notNull(rs.getString("telefone")));
+						cus.setBusinessAddress(StringUtil.notNull(rs.getString("business_address")));
+						//results.add(new Object[]{cus.getId(), cus.getCustomerCode(), cus.getBusinessName().replace("0.0", "").isEmpty()?cus.getStatisticName():cus.getBusinessName(), cus.getTelefone(), cus.getBusinessAddress()});
+						results.add(new Object[]{cus.getCustomerCode(), cus.getStatisticName().isEmpty()?cus.getBusinessName().replace("0.0", ""):cus.getStatisticName(), cus.getTelefone(), cus.getBusinessAddress()});
+					}
+				} 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return results;
+		} catch (RuntimeException re) {
+			log.error("find by Customer failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

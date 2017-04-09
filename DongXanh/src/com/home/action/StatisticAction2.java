@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -18,6 +19,7 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.util.ServletContextAware;
 import org.hibernate.SessionFactory;
 
+import com.home.dao.CustomerHome;
 import com.home.dao.StatisticHome;
 import com.home.entities.RevenuesSellman;
 import com.home.entities.StatisticHistory;
@@ -39,6 +41,8 @@ public class StatisticAction2  implements Action, ServletContextAware{
 	private String order;
 	private String search;
 	private InputStream inputStream;
+	private List<Object[]> listCustomerL1 = new ArrayList<>();
+	private List<Object[]> listCustomerL2 = new ArrayList<>();
 
 	public InputStream getInputStream() {
 		return inputStream;
@@ -53,6 +57,21 @@ public class StatisticAction2  implements Action, ServletContextAware{
 		}
 	}
 
+	public String lookupCustomerL1Statistic(){
+		try {
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			String cusName = StringUtil.notNull(request.getParameter("cusName"));
+			System.out.println("lookupCustomerL1Statistic = " + cusName);
+			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
+			listCustomerL2 = cusHome.lookupCustomer(cusName);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+		return SUCCESS;
+	
+	}
+	
 	public String listStatisticJson() throws Exception {
 		try {
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
@@ -237,4 +256,19 @@ public class StatisticAction2  implements Action, ServletContextAware{
 		this.order = order;
 	}
 
+	public List<Object[]> getListCustomerL1() {
+		return listCustomerL1;
+	}
+
+	public void setListCustomerL1(List<Object[]> listCustomerL1) {
+		this.listCustomerL1 = listCustomerL1;
+	}
+
+	public List<Object[]> getListCustomerL2() {
+		return listCustomerL2;
+	}
+
+	public void setListCustomerL2(List<Object[]> listCustomerL2) {
+		this.listCustomerL2 = listCustomerL2;
+	}
 }

@@ -113,5 +113,10 @@
 			method="listStatisticJson">
 			<result type="json">/statistics.jsp</result>
 		</action>
+		
+		<action name="lookupCustomerL1StatisticAction" class="com.home.action.StatisticAction2"
+			method="lookupCustomerL1Statistic">
+			<result type="json" />
+		</action>
 	</package>
 </struts>
