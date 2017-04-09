@@ -255,16 +255,20 @@
 													<input type="text" value="${tttoan}"/>	
 													<input type="text" value="#tttoan"/>	
 													<input type="text" value="<%=imagePath%>"/>	 --%>
+													<div class="thumbnails">
 													<%
 														if(arrName != null){
 															for(int i=0; i< arrName.length; i++){
 																request.setAttribute("imgCus", imagePath + "/" + arrName[i]);
 																%>
+																	<a href="${imgCus}">
 																	<img src="${imgCus}"  width="300" height="250" style="border:3px solid #73AD21" />
+																	</a>
 																<%	
 															}
 														}
 													%>
+													</div>
 												</div>
 											</s:if>
 											<s:else>
@@ -1216,21 +1220,134 @@
 			$('form .alert').remove();
 	}).prop('checked', false);
 </script>
+
+
+<!-- image slide show -->
+<script src="Scripts/jquery-1.12.3.js" type="text/javascript"></script>
+<script src="Scripts/lightbox/lightbox-slideshow.js" type="text/javascript"></script>
+<link href="css/lightbox/lightbox.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.thumbnails A').lightBox({
+	        slideshow: true, nextSlideDelay: 60000
+        });
+    });
+</script>
+<!-- image slide show -->
+
 <script>
-	$(document).ready(function() {
+	  $(document).ready(function() {
 		$('#cityName').change(function() {
-			var custCode = $("#customerCode").val();
-			if (custCode.length > 3)
-				custCode = custCode.substr(custCode.length - 3);
 			var cityCode = $("#cityName").val();
-			$("#customerCode").val(cityCode + "" + custCode);
+			var custCode = $("#customerCode").val();
+			//alert("cityCode = " + cityCode + " && custCode = " + custCode);
+			if(cityCode != '' && (custCode == '' || !custCode.startsWith(cityCode))){
+				var commonCusId = {
+						"cusCodeGen" : cityCode
+					};
+					$.ajax({
+						url : "generateCustomerCodeAction",
+						data : JSON.stringify(commonCusId),
+						dataType : 'json',
+						contentType : 'application/json',
+						type : 'POST',
+						async : true,
+						success : function(res) {
+							$("#customerCode").val(res);
+						}
+					});
+					
+			}
+		});
+	});  
+	
+	$(document).ready(function() {
+		$('#cus1Level1_id').change(function() {
+			var commonCusId = {
+				"cus1Level1Id" : $("#cus1Level1_id").val()
+			};
+			$.ajax({
+				url : "readInfoCustomer",
+				data : JSON.stringify(commonCusId),
+				dataType : 'json',
+				contentType : 'application/json',
+				type : 'POST',
+				async : true,
+				success : function(res) {
+					$('#cus1Phone').val(res);
+				}
+			});
+		});
+		$('#cus2Level1_id').change(function() {
+			var commonCusId = {
+				"cus2Level1Id" : $("#cus2Level1_id").val()
+			};
+			$.ajax({
+				url : "readInfoCustomer",
+				data : JSON.stringify(commonCusId),
+				dataType : 'json',
+				contentType : 'application/json',
+				type : 'POST',
+				async : true,
+				success : function(res) {
+					$('#cus2Phone').val(res);
+				}
+			});
+		});
+		$('#cus3Level1_id').change(function() {
+			var commonCusId = {
+				"cus3Level1Id" : $("#cus3Level1_id").val()
+			};
+			$.ajax({
+				url : "readInfoCustomer",
+				data : JSON.stringify(commonCusId),
+				dataType : 'json',
+				contentType : 'application/json',
+				type : 'POST',
+				async : true,
+				success : function(res) {
+					$('#cus3Phone').val(res);
+				}
+			});
+		});
+		$('#cus4Level1_id').change(function() {
+			var commonCusId = {
+				"cus4Level1Id" : $("#cus4Level1_id").val()
+			};
+			$.ajax({
+				url : "readInfoCustomer",
+				data : JSON.stringify(commonCusId),
+				dataType : 'json',
+				contentType : 'application/json',
+				type : 'POST',
+				async : true,
+				success : function(res) {
+					$('#cus4Phone').val(res);
+				}
+			});
+		});
+		$('#cus5Level1_id').change(function() {
+			var commonCusId = {
+				"cus5Level1Id" : $("#cus5Level1_id").val()
+			};
+			$.ajax({
+				url : "readInfoCustomer",
+				data : JSON.stringify(commonCusId),
+				dataType : 'json',
+				contentType : 'application/json',
+				type : 'POST',
+				async : true,
+				success : function(res) {
+					$('#cus5Phone').val(res);
+				}
+			});
 		});
 	});
 </script>
+
 <!-- daterangepicker -->
 <script type="text/javascript" src="js/moment.min2.js"></script>
 <script type="text/javascript" src="js/datepicker/daterangepicker.js"></script>
-
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('#createTime,#certificateDate,#directorBirthday').daterangepicker({
@@ -1244,8 +1361,6 @@
 	});
 </script>
 
-
-<script src="js/jquery.min.js"></script>
 <script type="text/javascript">
 $(function () {
     $("#cusImageScan").change(function () {

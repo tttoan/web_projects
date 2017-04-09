@@ -63,7 +63,7 @@ public class CustomerHome {
 		}
 	}
 
-	public Integer getMaxId() {
+	public Integer getMaxId() throws Exception {
 		log.debug("retrieve max id");
 		Transaction tx = null;
 		Session session = null;
@@ -86,6 +86,39 @@ public class CustomerHome {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public String getMaxCustomerCode(String citiCode) throws Exception{
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			String sql = "SELECT MAX(customer_code) FROM customer WHERE UPPER(customer_code) REGEXP  '^"+citiCode+"[0-9]+'";
+			
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			try(Statement st = conn.createStatement()) {
+				try(ResultSet rs = st.executeQuery(sql);){
+					if(rs.next()){
+						return rs.getString(1);
+					}
+					rs.close();
+				} 
+			} 
+			return "";
+		} catch (Exception re) {
+			re.printStackTrace();
+			log.error("retrieve list Product failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+			}
+		}
+	
 	}
 
 	@SuppressWarnings("unchecked")

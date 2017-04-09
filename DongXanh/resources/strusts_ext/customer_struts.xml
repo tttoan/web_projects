@@ -22,7 +22,8 @@
 			<result>/login.jsp</result>
 		</action>
 
-		<action name="move_to_add_customer" class="com.home.action.CustomerAction">
+		<action name="move_to_add_customer" method="execute"
+			class="com.home.action.CustomerAction">
 			<result name="success">/new_customer2.jsp</result>
 			<result name="error">/customers.jsp</result>
 		</action>
@@ -94,6 +95,12 @@
 			method="retrievePhoneById">
 			<result type="json">
 				<param name="root">commonCusPhone</param>
+			</result>
+		</action>
+		<action name="generateCustomerCodeAction" class="com.home.action.CustomerAction"
+			method="generateCustomerCode">
+			<result type="json">
+				<param name="root">cusCodeGen</param>
 			</result>
 		</action>
 		<action name="getAssignCusByNVTTAction" method="getCustomerByNVTT"

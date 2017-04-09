@@ -65,4 +65,21 @@ public class StringUtil {
 			return "S";
 		}
 	}
+	
+	public static String roundZero(Object value, int len){
+		String v = notNull(value);
+		if(len > 0){
+			int more = len - v.length();
+			if(more > 0){
+				for (int i = 0; i < more; i++) {
+					v = "0" + v;
+				}
+			}
+		}
+		return v;
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(roundZero("12345", 2));
+	}
 }

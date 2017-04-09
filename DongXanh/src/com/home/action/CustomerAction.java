@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.ss.usermodel.Cell;
@@ -40,6 +41,7 @@ import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
 import com.opensymphony.xwork2.Action;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
@@ -93,6 +95,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private String varFieldEntName;
 	private String varIndexColumn;
 	private String varIndexRow = "3";
+	private String cusCodeGen;
 
 	public String retrievePhoneById() throws Exception {
 		int commonCusId = 0;
@@ -141,31 +144,37 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	@Override
 	public String execute() throws Exception {
-		if (custId != 0) {
-			try {
-				CustomerHome cusHome = new CustomerHome(getSessionFactory());
-				Customer cusTemp = cusHome.findById(custId);
-				setCust(cusTemp);
-				//varCityCode = getCust().getCustomerCode().substring(0, getCust().getCustomerCode().length() - 3);
-				if(getCust().getCreateTime() != null){
-					varCreateTime = SDF.format(getCust().getCreateTime());
+		try {
+			if (custId != 0) {
+				try {
+					CustomerHome cusHome = new CustomerHome(getSessionFactory());
+					Customer cusTemp = cusHome.findById(custId);
+					setCust(cusTemp);
+					//varCityCode = getCust().getCustomerCode().substring(0, getCust().getCustomerCode().length() - 3);
+					if(getCust().getCreateTime() != null){
+						varCreateTime = SDF.format(getCust().getCreateTime());
+					}
+					if(getCust().getCertificateDate() != null){
+						varCertificateDate = SDF.format(getCust().getCertificateDate());
+					}
+					if(getCust().getDirectorBirthday() != null){
+						varDirectorBirthday = SDF.format(getCust().getDirectorBirthday());
+					}
+					setEdit(true);
+				} catch (Exception e) {
+					throw e;
 				}
-				if(getCust().getCertificateDate() != null){
-					varCertificateDate = SDF.format(getCust().getCertificateDate());
-				}
-				if(getCust().getDirectorBirthday() != null){
-					varDirectorBirthday = SDF.format(getCust().getDirectorBirthday());
-				}
-				setEdit(true);
-			} catch (Exception e) {
-				throw e;
+			} else {
+				getModel();
+				cust.setCustomerCode(cusCodeGen);
 			}
-		} else {
-			getModel();
-			cust.setCustomerCode(generateCustomerCode());
+		} catch (Exception e) {
+			e.printStackTrace();
+			addActionError("Error: int execute() method. Exception: " + e.getMessage());
 		}
 		return SUCCESS;
 	}
+	
 
 	private void generateColumnExcel() {
 		listColumnExcel = new ArrayList<String>();
@@ -305,6 +314,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			generateColumnExcel();
 		} catch (Exception e) {
 			e.printStackTrace();
+			addActionError("Error: checkDuplicateData. Exception: " + e.getMessage());
 		}
 	}
 	
@@ -316,14 +326,14 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			 */
 			if(StringUtil.notNull(getCust().getCustomerCode()).length() > 0 && cusHome.existCustomer(custId, getCust().getCustomerCode())){
 				//addFieldError("customerCode", "Đã tồn tại mã khách hàng này trong hệ thống");
-				addActionError("Đã tồn tại mã khách hàng='"+getCust().getCustomerCode()+"' này trong hệ thống");
+				addActionError("Đã tồn tại mã khách hàng='"+getCust().getCustomerCode()+"' này trong hệ thống!");
 			}
 			/**
 			 * check ten bang ke
 			 */
 			if(StringUtil.notNull(getCust().getStatisticName()).length() > 0 && cusHome.existCustomerBangKe(custId, getCust().getStatisticName())){
 				//addFieldError("cust.statisticName", "Đã tồn tại tên bảng kê này trong hệ thống");
-				addActionError("Đã tồn tại tên bảng kê='"+getCust().getStatisticName()+"' này trong hệ thống");
+				addActionError("Đã tồn tại tên bảng kê='"+getCust().getStatisticName()+"' này trong hệ thống!");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -457,18 +467,27 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			return ERROR;
 		}
 	}
-
-	private String generateCustomerCode() throws Exception {
+	
+	public String generateCustomerCode() throws Exception {
 		try {
+			//HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			String citiCode = StringUtil.notNull(cusCodeGen).toUpperCase();
+			
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
-			String sId = cusHome.getMaxId() + "";
-			for (int i = sId.length(); i < 3; i++) {
-				sId = "0" + sId;
+			if(citiCode.matches("^[a-zA-Z]+$")){
+				String maxCode = StringUtil.notNull(cusHome.getMaxCustomerCode(citiCode));
+				if(maxCode.matches("^[a-zA-Z]+[0-9]+$")){
+					cusCodeGen = citiCode + StringUtil.roundZero((Integer.parseInt(maxCode.replaceAll("^[a-zA-Z]+", ""))+1), 5-citiCode.length());
+				}else{
+					cusCodeGen =  citiCode + StringUtil.roundZero(1, 5-citiCode.length());
+				}
+			}else{
+				cusCodeGen =  StringUtil.roundZero(cusHome.getMaxId() + 1, 5);
 			}
-			return sId;
 		} catch (Exception e) {
-			throw e;
+			e.printStackTrace();
 		}
+		return SUCCESS;
 	}
 
 	/**
@@ -537,7 +556,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			return SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
-			cust.setCustomerCode(generateCustomerCode());
+			cust.setCustomerCode(cusCodeGen);
 			addActionError(e.getMessage() + ".");
 		}
 		return INPUT;
@@ -1027,4 +1046,13 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	public void setListDefineColumnsLevel2(List<DefineColumnImport> listDefineColumnsLevel2) {
 		this.listDefineColumnsLevel2 = listDefineColumnsLevel2;
 	}
+	
+	public String getCusCodeGen() {
+		return cusCodeGen;
+	}
+
+	public void setCusCodeGen(String cusCodeGen) {
+		this.cusCodeGen = cusCodeGen;
+	}
+
 }

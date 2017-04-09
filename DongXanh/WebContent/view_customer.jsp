@@ -230,16 +230,20 @@
 												<input type="text" value="${tttoan}"/>	
 												<input type="text" value="#tttoan"/>	
 												<input type="text" value="<%=imagePath%>"/>	 --%>
+												 <div class="thumbnails">
 												<%
 													if(arrName != null){
 														for(int i=0; i< arrName.length; i++){
 															request.setAttribute("imgCus", imagePath + "/" + arrName[i]);
 															%>
-																<img src="${imgCus}"  width="300" height="250" style="border:3px solid #73AD21" />
+																<a href="${imgCus}">
+																	<img src="${imgCus}"  width="300" height="250" style="border:3px solid #73AD21" />
+																</a>
 															<%	
 														}
 													}
 												%>
+												</div>
 											</div>
 									</div>
 									
@@ -910,6 +914,21 @@
 <script src="js/custom.js"></script>
 <!-- form validation -->
 <script src="js/validator/validator.js"></script>
+
+<!-- image slide show -->
+<script src="Scripts/jquery-1.12.3.js" type="text/javascript"></script>
+<script src="Scripts/lightbox/lightbox-slideshow.js" type="text/javascript"></script>
+<link href="css/lightbox/lightbox.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.thumbnails A').lightBox({
+	        slideshow: true, nextSlideDelay: 60000
+        });
+    });
+</script>
+<!-- image slide show -->
+
+
 <script>
 	function goBack() {
 	    window.history.back();
