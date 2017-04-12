@@ -10,20 +10,16 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.util.ServletContextAware;
-import org.hibernate.SessionFactory;
 
 import com.home.dao.CustomerHome;
 import com.home.dao.StatisticHome;
-import com.home.entities.RevenuesSellman;
 import com.home.entities.StatisticHistory;
-import com.home.model.Product;
 import com.home.model.Statistic;
 import com.home.util.DateUtils;
 import com.home.util.HibernateUtil;
@@ -31,8 +27,9 @@ import com.home.util.StringUtil;
 import com.home.util.SystemUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionSupport;
 
-public class StatisticAction2  implements Action, ServletContextAware{
+public class StatisticAction2 extends ActionSupport implements Action, ServletContextAware{
 	private ServletContext ctx;
 	private List<Statistic> data;
 	private int recordsFiltered ;
@@ -43,6 +40,7 @@ public class StatisticAction2  implements Action, ServletContextAware{
 	private InputStream inputStream;
 	private List<Object[]> listCustomerL1 = new ArrayList<>();
 	private List<Object[]> listCustomerL2 = new ArrayList<>();
+	private String searchCusName;
 
 	public InputStream getInputStream() {
 		return inputStream;
@@ -59,11 +57,15 @@ public class StatisticAction2  implements Action, ServletContextAware{
 
 	public String lookupCustomerL1Statistic(){
 		try {
-			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
-			String cusName = StringUtil.notNull(request.getParameter("cusName"));
+			String cusName = searchCusName;
+			if(cusName == null){
+				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+				cusName = StringUtil.notNull(request.getParameter("searchCusName"));
+			}
+
 			System.out.println("lookupCustomerL1Statistic = " + cusName);
 			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
-			listCustomerL2 = cusHome.lookupCustomer(cusName);
+			listCustomerL1 = cusHome.lookupCustomer(cusName);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ERROR;
@@ -270,5 +272,13 @@ public class StatisticAction2  implements Action, ServletContextAware{
 
 	public void setListCustomerL2(List<Object[]> listCustomerL2) {
 		this.listCustomerL2 = listCustomerL2;
+	}
+	
+	public String getSearchCusName() {
+		return searchCusName;
+	}
+
+	public void setSearchCusName(String searchCusName) {
+		this.searchCusName = searchCusName;
 	}
 }

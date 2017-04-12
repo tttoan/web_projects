@@ -11,7 +11,7 @@
             onchange: null,
             norecord: "No Records Found",
             dataproperty: null,
-            regex: "^[a-zA-Z0-9\b]+$",
+            regex: ".+",
             data: null,
             placeholder: null,
             theme: "default",
@@ -164,6 +164,10 @@
                 e.preventDefault();
                 return;
             }
+            if (e.keyCode == keys.BACKSPACE) {
+            	e.stopPropagation();
+            }
+            
             //delay for 1 second: wait for user to finish typing
             delay(function () {
                 processInput();
@@ -203,7 +207,7 @@
                     success: ajaxData,
                     error: function (xhr, ajaxOptions, thrownError) {
                         el.ddTextbox.removeClass("loading");
-                        alert('Error: ' + xhr.status || ' - ' || thrownError);
+                        //alert('Error: ' + xhr.status || ' - ' || thrownError);
                     }
                 });
             }
@@ -432,7 +436,7 @@
             }
             catch (e)
             {
-                alert("Error: " + e);
+                //alert("Error: " + e);
             }
         }
         return tautocomplete;

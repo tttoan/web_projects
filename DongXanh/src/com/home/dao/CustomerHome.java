@@ -5,6 +5,7 @@ package com.home.dao;
 import static org.hibernate.criterion.Example.create;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -924,22 +925,27 @@ public class CustomerHome {
 			SessionImpl sessionImpl = (SessionImpl) session;
 			Connection conn = sessionImpl.connection();
 			try (Statement sta = conn.createStatement()) {
-				String query = "Select id, customer_code, business_name, statistic_name, business_address"
-						+ "From customer where (lower(business_name) Like '%"+cusName.toLowerCase()+"%' OR lower(statistic_name) Like '%"+cusName.toLowerCase()+"%') order by customer_code, business_name, statistic_name LIMIT 20";
+				String query = "Select id, customer_code, business_name, statistic_name, business_address, telefone "
+						+ "From customer where (lower(business_name) Like ? OR lower(statistic_name) Like ?) order by customer_code, business_name, statistic_name LIMIT 20";
 				System.out.println(query);
-				try (ResultSet rs = sta.executeQuery(query)) {
-					while (rs.next()) {
-						Customer cus = new Customer();
-						cus.setId(rs.getInt("id"));
-						cus.setCustomerCode(StringUtil.notNull(rs.getString("customer_code")));
-						cus.setBusinessName(StringUtil.notNull(rs.getString("business_name")));
-						cus.setStatisticName(StringUtil.notNull(rs.getString("statistic_name")));
-						cus.setTelefone(StringUtil.notNull(rs.getString("telefone")));
-						cus.setBusinessAddress(StringUtil.notNull(rs.getString("business_address")));
-						//results.add(new Object[]{cus.getId(), cus.getCustomerCode(), cus.getBusinessName().replace("0.0", "").isEmpty()?cus.getStatisticName():cus.getBusinessName(), cus.getTelefone(), cus.getBusinessAddress()});
-						results.add(new Object[]{cus.getCustomerCode(), cus.getStatisticName().isEmpty()?cus.getBusinessName().replace("0.0", ""):cus.getStatisticName(), cus.getTelefone(), cus.getBusinessAddress()});
-					}
-				} 
+				try(PreparedStatement pre = conn.prepareStatement(query)){
+					pre.setString(1, "%"+cusName.toLowerCase()+"%");
+					pre.setString(2, "%"+cusName.toLowerCase()+"%");
+					try (ResultSet rs = pre.executeQuery()) {
+						while (rs.next()) {
+							Customer cus = new Customer();
+							cus.setId(rs.getInt("id"));
+							cus.setCustomerCode(StringUtil.notNull(rs.getString("customer_code")));
+							cus.setBusinessName(StringUtil.notNull(rs.getString("business_name")));
+							cus.setStatisticName(StringUtil.notNull(rs.getString("statistic_name")));
+							cus.setTelefone(StringUtil.notNull(rs.getString("telefone")));
+							cus.setBusinessAddress(StringUtil.notNull(rs.getString("business_address")));
+							//results.add(new Object[]{cus.getId(), cus.getCustomerCode(), cus.getBusinessName().replace("0.0", "").isEmpty()?cus.getStatisticName():cus.getBusinessName(), cus.getTelefone(), cus.getBusinessAddress()});
+							results.add(new Object[]{cus.getCustomerCode(), cus.getStatisticName().isEmpty()?cus.getBusinessName().replace("0.0", ""):cus.getStatisticName(), cus.getTelefone(), cus.getBusinessAddress()});
+						}
+					} 
+				}
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
