@@ -17,7 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.util.ServletContextAware;
 
+import com.home.conts.MyConts;
 import com.home.dao.CustomerHome;
+import com.home.dao.ProductHome;
 import com.home.dao.StatisticHome;
 import com.home.entities.StatisticHistory;
 import com.home.model.Statistic;
@@ -40,7 +42,10 @@ public class StatisticAction2 extends ActionSupport implements Action, ServletCo
 	private InputStream inputStream;
 	private List<Object[]> listCustomerL1 = new ArrayList<>();
 	private List<Object[]> listCustomerL2 = new ArrayList<>();
+	private List<Object[]> listProduct = new ArrayList<>();
 	private String searchCusName;
+	private String searchCusId;
+	private String searchProductName;
 
 	public InputStream getInputStream() {
 		return inputStream;
@@ -63,15 +68,56 @@ public class StatisticAction2 extends ActionSupport implements Action, ServletCo
 				cusName = StringUtil.notNull(request.getParameter("searchCusName"));
 			}
 
-			System.out.println("lookupCustomerL1Statistic = " + cusName);
+			//System.out.println("lookupCustomerL1Statistic = " + cusName);
 			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
-			listCustomerL1 = cusHome.lookupCustomer(cusName);
+			listCustomerL1 = cusHome.lookupCustomer(cusName, ""+MyConts.CUS_L1);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ERROR;
 		}
 		return SUCCESS;
+	}
 	
+	public String lookupCustomerL2Statistic(){
+		try {
+			String cusName2 = searchCusName;
+			String cusId1 = searchCusId;
+			if(cusName2 == null){
+				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+				cusName2 = StringUtil.notNull(request.getParameter("searchCusName"));
+				cusId1 = StringUtil.notNull(request.getParameter("searchCusId"));
+			}
+
+			//System.out.println("lookupCustomerL1Statistic = " + cusName);
+			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
+			if(StringUtil.notNull(cusId1).isEmpty()){
+				listCustomerL2 = cusHome.lookupCustomer(cusName2, ""+MyConts.CUS_L2);	
+			}else{
+				listCustomerL2 = cusHome.lookupCustomerL2WithL1(cusName2, cusId1);	
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+		return SUCCESS;
+	}
+	
+	public String lookupProductStatistic(){
+		try {
+			String productName = searchProductName;
+			if(productName == null){
+				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+				productName = StringUtil.notNull(request.getParameter("searchProductName"));
+			}
+
+			//System.out.println("productName = " + productName);
+			ProductHome proHome = new ProductHome(HibernateUtil.getSessionFactory());
+			listProduct = proHome.lookupProduct(productName);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+		return SUCCESS;
 	}
 	
 	public String listStatisticJson() throws Exception {
@@ -124,8 +170,14 @@ public class StatisticAction2 extends ActionSupport implements Action, ServletCo
 			String custId = StringUtil.notNull(request.getParameter("cusId"));
 			int cus_id = Integer.parseInt(custId.isEmpty()?"0":custId);
 
-			StatisticHome statisticHome = new StatisticHome(HibernateUtil.getSessionFactory());
-			LinkedHashMap<String, HashMap<Integer, StatisticHistory>> hmStatisticHistory = statisticHome.getStatisticHistory(cus_id);
+			LinkedHashMap<String, HashMap<Integer, StatisticHistory>> hmStatisticHistory;
+			if(cus_id > 0){
+				StatisticHome statisticHome = new StatisticHome(HibernateUtil.getSessionFactory());
+				hmStatisticHistory = statisticHome.getStatisticHistory(cus_id);		
+			}else{
+				hmStatisticHistory = new LinkedHashMap<>();
+			}
+			
 
 			int yearNow = Calendar.getInstance().get(Calendar.YEAR);
 			StringBuilder htmlTable = new StringBuilder("<table id=\"example\" class=\"table table-striped responsive-utilities jambo_table display nowrap cell-border\" style=\"width: 100%\">");
@@ -281,4 +333,28 @@ public class StatisticAction2 extends ActionSupport implements Action, ServletCo
 	public void setSearchCusName(String searchCusName) {
 		this.searchCusName = searchCusName;
 	}
+	
+	public String getSearchCusId() {
+		return searchCusId;
+	}
+
+	public void setSearchCusId(String searchCusId) {
+		this.searchCusId = searchCusId;
+	}
+	public String getSearchProductName() {
+		return searchProductName;
+	}
+
+	public void setSearchProductName(String searchProductName) {
+		this.searchProductName = searchProductName;
+	}
+	
+	public List<Object[]> getListProduct() {
+		return listProduct;
+	}
+
+	public void setListProduct(List<Object[]> listProduct) {
+		this.listProduct = listProduct;
+	}
+
 }

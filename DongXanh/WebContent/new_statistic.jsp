@@ -70,7 +70,8 @@
 									for=cusLevel2.id>Tên cấp 2 <span class="required">*</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<input id="cusLevel2.id" type="text" name="cusLevel2.id"
+									<s:hidden id="cusLevel2_id" name="cusLevel2.id" value="%{cusLevel2.id}"></s:hidden>
+									<input id="cusLevel2" type="text" name="cusLevel2.statisticName"
 										value="${cusLevel2.statisticName}" required="required"
 										class="form-control col-md-7 col-xs-12">
 								</div>
@@ -81,8 +82,9 @@
 									for="pro_id">Sản phẩm <span class="required">*</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<input id="pro_id" type="text" name="pro.id"
-										 value="${stat.product.id}" required="required"
+									<s:hidden id="pro_id" name="pro.id" value="%{pro.id}"></s:hidden>
+									<input id="product" type="text" name="pro.productName"
+										 value="${stat.product.productName}" required="required"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -196,7 +198,8 @@
 <link rel="stylesheet" type="text/css" href="css/autocomplete/tautocomplete.css" />
 <script src="Scripts/autocomplete/tautocomplete.js" type="text/javascript"></script>
  <script>
-
+	
+ 	//
  	$(document).keydown(function(e){
 	    var typeName = e.target.type;//typeName should end up being things like 'text', 'textarea', 'radio', 'undefined' etc.
 	    // Prevent Backspace as navigation backbutton
@@ -204,29 +207,71 @@
 	        e.preventDefault();
 	    }
 	})
-     $(document).ready(function () {
-         var text2 = $("#cusLevel1").tautocomplete({
-             width: "500px",
-             columns: ['Tên KH', 'Điện thoại', 'Địa chỉ'],
-             ajax: {
-                 url: "lookupCustomerL1StatisticAction",
-                 data: function () {
-                     return { searchCusName: text2.searchdata() };
-                 },
-                 dataType: 'json',
-                 contentType : 'application/json',
- 				 type : 'POST',
- 				 async : false,
-                 success: function (data) {
-                     return data.listCustomerL1;
-                 }
-             },
-             onchange: function () {
-                 $("#cusLevel1_id").html(text2.id());
-             }
-         });
-     });
- </script>
+    $(document).ready(function () {
+        var cus1 = $("#cusLevel1").tautocomplete({
+            width: "500px",
+            columns: ['Tên KH', 'Điện thoại', 'Địa chỉ'],
+            ajax: {
+                url: "lookupCustomerL1StatisticAction",
+                data: function () {
+                    return { searchCusName: cus1.searchdata() };
+                },
+                dataType: 'json',
+                contentType : 'application/json',
+				 type : 'POST',
+				 async : false,
+                success: function (data) {
+                    return data.listCustomerL1;
+                }
+            },
+            onchange: function () {
+                $("#cusLevel1_id").html(cus1.id());
+            }
+        });
+        
+        var cus2 = $("#cusLevel2").tautocomplete({
+            width: "500px",
+            columns: ['Tên KH', 'Điện thoại', 'Địa chỉ'],
+            ajax: {
+                url: "lookupCustomerL2StatisticAction",
+                data: function () {
+                    return { searchCusName: cus2.searchdata() };
+                },
+                dataType: 'json',
+                contentType : 'application/json',
+				 type : 'POST',
+				 async : false,
+                success: function (data) {
+                    return data.listCustomerL2;
+                }
+            },
+            onchange: function () {
+                $("#cusLevel2_id").html(cus2.id());
+            }
+        });
+        
+        var product = $("#product").tautocomplete({
+            width: "500px",
+            columns: ['Tên SP', 'Mã SP', 'Đơn giá'],
+            ajax: {
+                url: "lookupProductStatisticAction",
+                data: function () {
+                    return { searchProductName: product.searchdata() };
+                },
+                dataType: 'json',
+                contentType : 'application/json',
+				 type : 'POST',
+				 async : false,
+                success: function (data) {
+                    return data.listProduct;
+                }
+            },
+            onchange: function () {
+                $("#pro_id").html(product.id());
+            }
+        });
+    });
+</script>
 <!-- Auto lookup  -->
 
 <!-- daterangepicker -->
@@ -307,13 +352,6 @@
 					var quantity = $("#quantity").val();
 					$('#total').val(res * quantity);
 					$('#totalFm').val(((res * quantity)+"").replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
-					// 															for (var i = 0; i < res.length; i++) {
-					// 																$('#district')
-					// 																		.append(
-					// 																				'<option value=' + res[i] + '>'
-					// 																						+ res[i]
-					// 																						+ '</option>');
-					// 															}
 				}
 			});
 		});

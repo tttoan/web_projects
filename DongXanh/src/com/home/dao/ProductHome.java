@@ -5,6 +5,7 @@ package com.home.dao;
 import static org.hibernate.criterion.Example.create;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -591,6 +592,49 @@ public class ProductHome {
 			}
 		}
 	}
-
+	
+	public List<Object[]> lookupProduct(String productName) {
+		//log.debug("finding List Product to Auto Lookup");
+		List<Object[]> results = new ArrayList<Object[]>();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			try (Statement sta = conn.createStatement()) {
+				String query = "Select * From product Where (lower(product_code) Like ? OR lower(product_name) Like ?) Order By product_name LIMIT 20";
+				try(PreparedStatement pre = conn.prepareStatement(query)){
+					pre.setString(1, productName.toLowerCase()+"%");
+					pre.setString(2, productName.toLowerCase()+"%");
+					try (ResultSet rs = pre.executeQuery()) {
+						while (rs.next()) {
+							Product p = new Product();
+							p.setId(rs.getInt("id"));
+							p.setProductCode(rs.getString("product_code"));
+							p.setProductName(rs.getString("product_name"));
+							p.setUnitPrice(rs.getBigDecimal("unit_price"));
+							p.setQuantity(rs.getInt("quantity"));
+							p.setPoint(rs.getInt("point"));
+							results.add(new Object[]{p.getId(), p.getProductName(), p.getProductCode(), p.getUnitPrice(), p.getQuantity()});
+						}
+					} 
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return results;
+		} catch (RuntimeException re) {
+			log.error("find by Product failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 }

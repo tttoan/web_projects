@@ -23,6 +23,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 
+import com.home.conts.MyConts;
 import com.home.model.Customer;
 import com.home.model.GroupCustomer;
 import com.home.model.User;
@@ -916,8 +917,8 @@ public class CustomerHome {
 	}
 
 
-	public List<Object[]> lookupCustomer(String cusName) {
-		log.debug("finding List Customer instance by full name");
+	public List<Object[]> lookupCustomer(String cusName, String groupCustomer) throws Exception {
+		//log.debug("finding List Customer instance by full name");
 		List<Object[]> results = new ArrayList<Object[]>();
 		Session session = null;
 		try {
@@ -926,8 +927,9 @@ public class CustomerHome {
 			Connection conn = sessionImpl.connection();
 			try (Statement sta = conn.createStatement()) {
 				String query = "Select id, customer_code, business_name, statistic_name, business_address, telefone "
-						+ "From customer where (lower(business_name) Like ? OR lower(statistic_name) Like ?) order by customer_code, business_name, statistic_name LIMIT 20";
-				System.out.println(query);
+						+ "From customer "
+						+ "Where group_customer_id in ("+(groupCustomer)+") AND (lower(business_name) Like ? OR lower(statistic_name) Like ?) order by customer_code, business_name, statistic_name LIMIT 20";
+				//System.out.println(query);
 				try(PreparedStatement pre = conn.prepareStatement(query)){
 					pre.setString(1, "%"+cusName.toLowerCase()+"%");
 					pre.setString(2, "%"+cusName.toLowerCase()+"%");
@@ -941,16 +943,74 @@ public class CustomerHome {
 							cus.setTelefone(StringUtil.notNull(rs.getString("telefone")));
 							cus.setBusinessAddress(StringUtil.notNull(rs.getString("business_address")));
 							//results.add(new Object[]{cus.getId(), cus.getCustomerCode(), cus.getBusinessName().replace("0.0", "").isEmpty()?cus.getStatisticName():cus.getBusinessName(), cus.getTelefone(), cus.getBusinessAddress()});
-							results.add(new Object[]{cus.getCustomerCode(), cus.getStatisticName().isEmpty()?cus.getBusinessName().replace("0.0", ""):cus.getStatisticName(), cus.getTelefone(), cus.getBusinessAddress()});
+							results.add(new Object[]{cus.getId(), cus.getStatisticName().isEmpty()?cus.getBusinessName().replace("0.0", ""):cus.getStatisticName(), cus.getTelefone(), cus.getBusinessAddress()});
 						}
 					} 
 				}
 				
 			} catch (Exception e) {
 				e.printStackTrace();
+				throw e;
 			}
 			return results;
-		} catch (RuntimeException re) {
+		} catch (Exception re) {
+			log.error("find by Customer failed", re);
+			throw re;
+		} finally {
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public List<Object[]> lookupCustomerL2WithL1(String cusName2, String cusId1) throws Exception {
+		//log.debug("finding List Customer instance by full name");
+		List<Object[]> results = new ArrayList<Object[]>();
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			SessionImpl sessionImpl = (SessionImpl) session;
+			Connection conn = sessionImpl.connection();
+			try (Statement sta = conn.createStatement()) {
+				String query = "Select id, customer_code, business_name, statistic_name, business_address, telefone "
+						+ "From customer "
+						+ "Where group_customer_id ="+MyConts.CUS_L2+" AND (lower(business_name) Like ? OR lower(statistic_name) Like ?) "
+						+ "AND ("
+						+ "(COALESCE(customer1_level1_id, 0) = "+cusId1+") OR"
+						+ "(COALESCE(customer2_level1_id, 0) = "+cusId1+") OR"
+						+ "(COALESCE(customer3_level1_id, 0) = "+cusId1+") OR"
+						+ "(COALESCE(customer4_level1_id, 0) = "+cusId1+") OR"
+						+ "(COALESCE(customer5_level1_id, 0) = "+cusId1+") )"
+						+ "Order by customer_code, business_name, statistic_name LIMIT 20";
+				System.out.println(query);
+				try(PreparedStatement pre = conn.prepareStatement(query)){
+					pre.setString(1, "%"+cusName2.toLowerCase()+"%");
+					pre.setString(2, "%"+cusName2.toLowerCase()+"%");
+					try (ResultSet rs = pre.executeQuery()) {
+						while (rs.next()) {
+							Customer cus = new Customer();
+							cus.setId(rs.getInt("id"));
+							cus.setCustomerCode(StringUtil.notNull(rs.getString("customer_code")));
+							cus.setBusinessName(StringUtil.notNull(rs.getString("business_name")));
+							cus.setStatisticName(StringUtil.notNull(rs.getString("statistic_name")));
+							cus.setTelefone(StringUtil.notNull(rs.getString("telefone")));
+							cus.setBusinessAddress(StringUtil.notNull(rs.getString("business_address")));
+							//results.add(new Object[]{cus.getId(), cus.getCustomerCode(), cus.getBusinessName().replace("0.0", "").isEmpty()?cus.getStatisticName():cus.getBusinessName(), cus.getTelefone(), cus.getBusinessAddress()});
+							results.add(new Object[]{cus.getId(), cus.getStatisticName().isEmpty()?cus.getBusinessName().replace("0.0", ""):cus.getStatisticName(), cus.getTelefone(), cus.getBusinessAddress()});
+						}
+					} 
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw e;
+			}
+			return results;
+		} catch (Exception re) {
 			log.error("find by Customer failed", re);
 			throw re;
 		} finally {
