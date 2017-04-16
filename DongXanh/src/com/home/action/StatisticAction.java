@@ -141,9 +141,9 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	public Statistic getModel() {
 		stat = new Statistic();
 		stat.setDateReceived(new Date());
-		stat.setQuantity(0);
-		stat.setTotalBox(0);
-		stat.setTotal(new BigDecimal(0));
+		//stat.setQuantity(0);
+		//stat.setTotalBox(0);
+		//stat.setTotal(new BigDecimal(0));
 		return stat;
 	}
 
@@ -283,41 +283,6 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 			e.printStackTrace();
 			return ERROR;
 		}
-	}
-
-	public String addStatistic() throws Exception {
-		try {
-			if (emp.getId() > -1)
-				stat.setUser(emp);
-			if (cusLevel1.getId() > -1)
-				stat.setCustomerByCustomerCodeLevel1(cusLevel1);
-			if (cusLevel2.getId() > -1)
-				stat.setCustomerByCustomerCodeLevel2(cusLevel2);
-			if (pro.getId() > -1)
-				stat.setProduct(pro);
-			InvoiceType invoiceType = new InvoiceType();
-			invoiceType.setId(3);
-			stat.setInvoiceType(invoiceType);
-			stat.setDateReceived(SDF.parse(varDateReceived));
-			StatisticHome sttHome = new StatisticHome(HibernateUtil.getSessionFactory());
-			if (stat.getId() == 0) {
-				boolean isDuplicated = sttHome.isStatictisDuplicateLevel2(getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1() == null ? null : getStat()
-						.getCustomerByCustomerCodeLevel1().getId(), getStat().getCustomerByCustomerCodeLevel2() == null ? null : getStat().getCustomerByCustomerCodeLevel2().getId(), getStat()
-						.getProduct() == null ? null : getStat().getProduct().getId(), getStat().getUser() == null ? null : getStat().getUser().getId(), getStat().getInvoiceType().getId());
-				if (!isDuplicated)
-					sttHome.attachDirty(getStat());
-				else {
-					addActionMessage("Dữ liệu đã được tồn tại!");
-					return INPUT;
-				}
-			} else {
-				sttHome.updateDirty(stat);
-			}
-		} catch (Exception e) {
-			addActionError(e.getMessage());
-			return INPUT;
-		}
-		return SUCCESS;
 	}
 
 	public String importBalance() {

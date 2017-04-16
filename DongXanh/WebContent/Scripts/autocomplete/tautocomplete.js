@@ -32,7 +32,7 @@
             ddDiv: $("<div>", { class: settings.theme }),
             ddTable: $("<table></table>", { style: "width:" + settings.width }),
             ddTableCaption: $("<caption>" + settings.norecord + "</caption>"),
-            ddTextbox: $("<input type='text'>")
+            ddTextbox: $("<input type='text' class='lookupCls'>")
         };
 
         var keys = {
@@ -254,8 +254,24 @@
             var selected = tbody.find(".selected");
 
             if (e.keyCode == keys.ENTER) {
-                e.preventDefault();
-                select();
+            	// check if element is Visible
+            	var isVisible = el.ddTable.is(':visible');
+            	if (isVisible === true) {
+            		// element is Visible
+            		e.preventDefault();
+                    select();
+            	}else{
+            		// element is Hidden
+            		 var index = $('.lookupCls').index(this) + 1;
+            		 //alert("index"+index);
+            		 if(index < 3){
+            			 $('.lookupCls').eq(index).focus();
+            		 }else{
+            			 $('#pro_totalBoxFm').eq(0).focus();
+            		 }
+                    
+                    
+            	}
             }
             if (e.keyCode == keys.UP) {
                 el.ddTable.find(".selected").removeClass("selected");
@@ -314,7 +330,8 @@
 
             for(var i=0; i < cols; i++)
             {
-                selectedData[settings.columns[i]] = selected.find('td').eq(i).text();
+                selectedData["value"+i] = selected.find('td').eq(i+1).text();
+                //alert(settings.columns[i] + " === " + selected.find('td').eq(i+1).text());
             }
             
             el.ddTextbox.val(selected.find('td').eq(1).text());

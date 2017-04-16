@@ -18,6 +18,7 @@
 
 <!-- Custom styling plus plugins -->
 <link href="css/custom.css" rel="stylesheet">
+<script src="Scripts/custom/custom.js"></script>
 <link href="css/icheck/flat/green.css" rel="stylesheet">
 
 <link href="css/calendar/fullcalendar.css" rel="stylesheet">

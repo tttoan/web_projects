@@ -40,12 +40,6 @@ public class StatisticAction2 extends ActionSupport implements Action, ServletCo
 	private String order;
 	private String search;
 	private InputStream inputStream;
-	private List<Object[]> listCustomerL1 = new ArrayList<>();
-	private List<Object[]> listCustomerL2 = new ArrayList<>();
-	private List<Object[]> listProduct = new ArrayList<>();
-	private String searchCusName;
-	private String searchCusId;
-	private String searchProductName;
 
 	public InputStream getInputStream() {
 		return inputStream;
@@ -60,65 +54,6 @@ public class StatisticAction2 extends ActionSupport implements Action, ServletCo
 		}
 	}
 
-	public String lookupCustomerL1Statistic(){
-		try {
-			String cusName = searchCusName;
-			if(cusName == null){
-				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
-				cusName = StringUtil.notNull(request.getParameter("searchCusName"));
-			}
-
-			//System.out.println("lookupCustomerL1Statistic = " + cusName);
-			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
-			listCustomerL1 = cusHome.lookupCustomer(cusName, ""+MyConts.CUS_L1);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ERROR;
-		}
-		return SUCCESS;
-	}
-	
-	public String lookupCustomerL2Statistic(){
-		try {
-			String cusName2 = searchCusName;
-			String cusId1 = searchCusId;
-			if(cusName2 == null){
-				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
-				cusName2 = StringUtil.notNull(request.getParameter("searchCusName"));
-				cusId1 = StringUtil.notNull(request.getParameter("searchCusId"));
-			}
-
-			//System.out.println("lookupCustomerL1Statistic = " + cusName);
-			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
-			if(StringUtil.notNull(cusId1).isEmpty()){
-				listCustomerL2 = cusHome.lookupCustomer(cusName2, ""+MyConts.CUS_L2);	
-			}else{
-				listCustomerL2 = cusHome.lookupCustomerL2WithL1(cusName2, cusId1);	
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ERROR;
-		}
-		return SUCCESS;
-	}
-	
-	public String lookupProductStatistic(){
-		try {
-			String productName = searchProductName;
-			if(productName == null){
-				HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
-				productName = StringUtil.notNull(request.getParameter("searchProductName"));
-			}
-
-			//System.out.println("productName = " + productName);
-			ProductHome proHome = new ProductHome(HibernateUtil.getSessionFactory());
-			listProduct = proHome.lookupProduct(productName);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ERROR;
-		}
-		return SUCCESS;
-	}
 	
 	public String listStatisticJson() throws Exception {
 		try {
@@ -308,53 +243,6 @@ public class StatisticAction2 extends ActionSupport implements Action, ServletCo
 
 	public void setOrder(String order) {
 		this.order = order;
-	}
-
-	public List<Object[]> getListCustomerL1() {
-		return listCustomerL1;
-	}
-
-	public void setListCustomerL1(List<Object[]> listCustomerL1) {
-		this.listCustomerL1 = listCustomerL1;
-	}
-
-	public List<Object[]> getListCustomerL2() {
-		return listCustomerL2;
-	}
-
-	public void setListCustomerL2(List<Object[]> listCustomerL2) {
-		this.listCustomerL2 = listCustomerL2;
-	}
-	
-	public String getSearchCusName() {
-		return searchCusName;
-	}
-
-	public void setSearchCusName(String searchCusName) {
-		this.searchCusName = searchCusName;
-	}
-	
-	public String getSearchCusId() {
-		return searchCusId;
-	}
-
-	public void setSearchCusId(String searchCusId) {
-		this.searchCusId = searchCusId;
-	}
-	public String getSearchProductName() {
-		return searchProductName;
-	}
-
-	public void setSearchProductName(String searchProductName) {
-		this.searchProductName = searchProductName;
-	}
-	
-	public List<Object[]> getListProduct() {
-		return listProduct;
-	}
-
-	public void setListProduct(List<Object[]> listProduct) {
-		this.listProduct = listProduct;
 	}
 
 }

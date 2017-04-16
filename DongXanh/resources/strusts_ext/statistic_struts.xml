@@ -114,15 +114,15 @@
 			<result type="json">/statistics.jsp</result>
 		</action>
 		
-		<action name="lookupCustomerL1StatisticAction" class="com.home.action.StatisticAction2"
+		<action name="lookupCustomerL1StatisticAction" class="com.home.action.StatisticAction1"
 			method="lookupCustomerL1Statistic">
 			<result type="json" />
 		</action>
-		<action name="lookupCustomerL2StatisticAction" class="com.home.action.StatisticAction2"
+		<action name="lookupCustomerL2StatisticAction" class="com.home.action.StatisticAction1"
 			method="lookupCustomerL2Statistic">
 			<result type="json" />
 		</action>
-		<action name="lookupProductStatisticAction" class="com.home.action.StatisticAction2"
+		<action name="lookupProductStatisticAction" class="com.home.action.StatisticAction1"
 			method="lookupProductStatistic">
 			<result type="json" />
 		</action>
