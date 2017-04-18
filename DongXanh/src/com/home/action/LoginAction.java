@@ -58,6 +58,8 @@ public class LoginAction extends ActionSupport implements Action, ModelDriven<Us
 	public String logOutWanted() throws Exception {
 		try {
 			session.remove(MyConts.LOGIN_SESSION);
+			session.remove(MyConts.SESSION_NEW_STATISTICS_HISTORY);
+			session.remove(MyConts.SESSION_NEW_CUSTOMERS_HISTORY);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

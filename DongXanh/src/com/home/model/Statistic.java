@@ -17,7 +17,7 @@ public class Statistic implements java.io.Serializable {
 	public Product product;
 	public User user;
 	public Date dateReceived;
-	public Integer totalBox;
+	public Float totalBox;
 	public Integer quantity;
 	public BigDecimal total;
 	private int no;
@@ -25,7 +25,7 @@ public class Statistic implements java.io.Serializable {
 	public Statistic() {
 	}
 
-	public Statistic(Customer customerByCustomerCodeLevel1, Customer customerByCustomerCodeLevel2, InvoiceType invoiceType, Product product, User user, Date dateReceived, Integer totalBox,
+	public Statistic(Customer customerByCustomerCodeLevel1, Customer customerByCustomerCodeLevel2, InvoiceType invoiceType, Product product, User user, Date dateReceived, Float totalBox,
 			Integer quantity, BigDecimal total) {
 		this.customerByCustomerCodeLevel1 = customerByCustomerCodeLevel1;
 		this.customerByCustomerCodeLevel2 = customerByCustomerCodeLevel2;
@@ -94,11 +94,11 @@ public class Statistic implements java.io.Serializable {
 		this.dateReceived = dateReceived;
 	}
 
-	public Integer getTotalBox() {
+	public Float getTotalBox() {
 		return this.totalBox;
 	}
 
-	public void setTotalBox(Integer totalBox) {
+	public void setTotalBox(Float totalBox) {
 		this.totalBox = totalBox;
 	}
 

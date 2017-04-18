@@ -26,7 +26,7 @@
         <property name="dateReceived" type="date">
             <column name="date_received" length="0" />
         </property>
-        <property name="totalBox" type="java.lang.Integer">
+        <property name="totalBox" type="java.lang.Float">
             <column name="total_box" />
         </property>
         <property name="quantity" type="java.lang.Integer">

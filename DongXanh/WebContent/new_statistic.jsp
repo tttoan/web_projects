@@ -26,7 +26,7 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
-						<s:form action="add_statistic" theme="bootstrap" method="post"
+						<s:form action="" theme="bootstrap" method="post"
 							cssClass="form-horizontal form-label-left">
 							<s:hidden name="stat.id" value="%{statId}"></s:hidden>
 							<s:hidden name="edit" value="%{edit}"></s:hidden>
@@ -51,6 +51,18 @@
 										class="fa fa-calendar-o form-control-feedback left"
 										aria-hidden="true"></span> <span id="inputSuccess2Status"
 										class="sr-only">(success)</span>
+								</div>
+								
+								<label class="control-label col-md-2 col-sm-3 col-xs-12"
+									for="dateReceived">Loại bảng kê
+								</label>
+								<div class="col-md-3 col-sm-3 col-xs-12">
+									<s:select id="statisticType" name="cust.customer_location"
+										cssClass="col-md-12 col-xs-12" list="listInvoiceType"
+										showDownArrow="false" autoComplete="true" headerKey="-1" headerValue=""
+										listKey="id" listValue="invoiceType"
+										style="width:245px"
+										value="%{cust.customer_location}" />
 								</div>
 							</div>
 							
@@ -160,17 +172,40 @@
 									<thead>
 										<tr class="headings">
 											<th>No</th>
+											<th>Id</th>
 											<th>Ngày Nhận</th>
+											<th>Loại</th>
 											<th>Khách Hàng Cấp 1</th>
 											<th>Khách Hàng Cấp 2</th>
 											<th>Sản Phẩm</th>
 											<th>Số Thùng</th>
 											<th>Số Lượng</th>
 											<th>Thành Tiền</th>
+											<th></th>
 										</tr>
 									</thead>
 		
 									<tbody>
+										<s:iterator value="statisticsHistory" status="rowStatus">
+										<tr class="even pointer">
+											<td><s:property value="#rowStatus.count" /></td>
+											<td><s:property	value="id" /></td>
+											<td><s:property	value="%{getText('format.date',{dateReceived})}" /></td>
+											<td><s:property	value="invoiceType.invoiceType" /></td>
+											<td><s:property	value="customerByCustomerCodeLevel1.statisticName" /></td>
+											<td><s:property	value="customerByCustomerCodeLevel2.statisticName" /></td>
+											<td><s:property	value="product.productName" /></td>
+											<td><s:property	value="totalBox" /></td>
+											<td><s:property	value="quantity" /></td>
+											<td><s:property	value="%{getText('format.money',{total})}" /></td>
+											<td class="last">
+												<s:url
+													action="deleteStatisticAction" var="deleteURL">
+													<s:param name="statId" value="%{id}"></s:param>
+												</s:url> <s:a href="%{deleteURL}" class="btn btn-danger btn-xs">
+												<i class="fa fa-trash-o"></i> Xóa </s:a></td>
+										</tr>
+										</s:iterator>
 									</tbody>
 		
 								</table>
@@ -366,7 +401,11 @@
         			//Save
             		$('#addStatistic').click();
             		//Reset
+            		var type = $("#statisticType").val();
+    				var dr = $("#dateReceived").val();
             		$('#resetStatistic').click();
+            		$("#statisticType").val(type);
+            		$("#dateReceived").val(dr);
             		//Set focus
             		$('.lookupCls').eq(0).focus();
         		}
@@ -375,74 +414,120 @@
       
         //Add new statistic or update
         var tbl = $('#example').DataTable( {
-            "scrollX": true
+            "scrollX": true,
+            "columnDefs": [ 
+                {
+                    "targets": [ 1 ],
+                    "visible": false
+                },
+                {
+	                "targets": -1,
+	                "data": null,
+	                "defaultContent": "<button class='fa fa-trash-o btn btn-danger btn-xs'>Xóa</button>"
+                } 
+             ]
         } );
+        $('#example tbody').on( 'click', 'button', function () {
+            var data = tbl.row( $(this).parents('tr') ).data();
+            //alert( "id = " + data[1] );
+           // tbl.row( $(this).parents('tr') ).remove().draw( false );
+            var selectedRow = ($(this).parents('tr'));
+            var params = {
+    				"id" : data[1]
+    			};
+   			$.ajax({
+   				url : "deleteStatisticAction",
+   				data : JSON.stringify(params),
+   				dataType : 'json',
+   				contentType : 'application/json',
+   				type : 'POST',
+   				async : true,
+   				success : function(res) {
+   					
+   					if(res.startsWith('success')){
+   						tbl.row( selectedRow ).remove().draw( false );
+   					}else{
+   						alert(res);
+   					}
+   				 //alert(tbl.row( teo ).data()[1]);
+   				}
+	   			});
+	            
+	            //
+	        } );
         
         var counter = 1;
         $('#addStatistic').click(function () {
         	if(checkInvalidData()){
-        		tbl.row.add( [
-      		                counter,
-      		                $("#dateReceived").val(),
-      		                $("#cusLevel1").val(),
-      		                $("#cusLevel2").val(),
-      		                $("#product").val(),
-      		                $("#pro_totalBoxFm").val(),
-      		                $("#pro_quantityFm").val(),
-      		                $("#total_priceFm").val()
-      		            ] ).draw( false ); 
-	        	tbl.order([0, 'desc']).draw();
-	        	
-	        	//Store in cookie
-	        	//storeStatisticHistory(counter);
-	     
-	            counter++;
+        		
+        		var params = {
+        				"id" : "",
+        				"date_received": $("#dateReceived").val(),
+      		            "invoice_type_id" :	$("#statisticType").val(),
+      		            "customer_code_level1" :  $("#cusLevel1").val(),
+      		            "customer_code_level2" : $("#cusLevel2").val(),
+      		            "product_id" : $("#product").val(),
+      		            "total_box" : $("#pro_totalBoxFm").val(),
+      		            "quantity" : $("#pro_quantityFm").val()
+        			};
+       			$.ajax({
+       				url : "addStatisticAction",
+       				data : JSON.stringify(params),
+       				dataType : 'json',
+       				contentType : 'application/json',
+       				type : 'POST',
+       				async : false,
+       				success : function(res) {
+       					//alert(res);
+       					//if(res.test(new RegExp('^(success;[0-9]+|duplicate;[0-9]+)$'))){
+       					if(res.startsWith('success') || res.startsWith('duplicate')){
+       						tbl.row.add( [
+             	      		                counter,
+             	      		             	res.replace(/(success;|duplicate;)/g, ""),
+             	      		                $("#dateReceived").val(),
+             	      		              	$("#statisticType").val()==1?"Cấp 1":"Cấp 2",
+             	      		                $("#cusLevel1").val(),
+             	      		                $("#cusLevel2").val(),
+             	      		                $("#product").val(),
+             	      		                $("#pro_totalBoxFm").val(),
+             	      		                $("#pro_quantityFm").val(),
+             	      		                $("#total_priceFm").val()
+             	      		            ] ).draw(false); 
+             		        	tbl.order([0, 'desc']).draw();
+             		        	counter++;
+             		        	//if(res.test(new RegExp('^(duplicate;[0-9]+)$'))){\
+             		        	if(res.startsWith('duplicate')){
+             		        		alert('Dữ liệu vừa thêm đã tồn tại, vui lòng kiểm tra!');
+             		        	}
+       					}else{
+       						alert(res);
+       					}
+       					
+       				}
+       			});
         	}
         } );
     });
 	
-	function storeStatisticHistory(counter){
-		//alert('cusLevel1' + counter + '='+ $("#cusLevel1").val().replace(/.+#/i,""));
-    	setCookie('total_statistic', counter, 1);
-    	//alert('total_statistic='+ getCookie('total_statistic'));
-    	setCookie('dateReceived' + counter, $("#dateReceived").val().replace(/.+#/i,""), 1);
-    	setCookie('cusLevel1' + counter, $("#cusLevel1").val().replace(/.+#/i,""), 1);
-    	setCookie('cusLevel2' + counter, $("#cusLevel2").val().replace(/.+#/i,""), 1);
-    	setCookie('product' + counter, $("#product").val().replace(/.+#/i,""), 1);
-    	setCookie('pro_totalBoxFm' + counter, $("#pro_totalBoxFm").val().replace(/.+#/i,""), 1);
-    	setCookie('pro_quantityFm' + counter, $("#pro_quantityFm").val().replace(/.+#/i,""), 1);
-    	setCookie('total_priceFm' + counter, $("#total_priceFm").val().replace(/.+#/i,""), 1);
-    	
-    	//alert('cusLevel1' + counter + '=' + getCookie('cusLevel1' + counter));
-	}
-	
-	function showStatisticHistory(){
-		var total = '';//getCookie('total_statistic');
-		//alert('showStatisticHistory='+total);
-		if(total !=  ''){
-			var counter = parseInt(total);
-			for(var i=1; i<= counter; i++){
-				tbl.row.add( [
-				                i,
-				                getCookie('cusLevel1' + i),
-				                getCookie('cusLevel2' + i),
-				                getCookie('product' + i),
-				                getCookie('pro_totalBoxFm' + i),
-				                getCookie('pro_quantityFm' + i),
-				                getCookie('total_priceFm' + i)
-				            ] ).draw( false ); 
-			}
-		}
-	}
-	//Get statistic history
-	window.onload = showStatisticHistory();
 	
     function checkInvalidData(){
-  	  	var cus1 = $("#cusLevel1").val();
+    	var type = $("#statisticType").val();
+    	var dr = $("#dateReceived").val();
+    	var cus1 = $("#cusLevel1").val();
         var cus2 = $("#cusLevel2").val();
         var prod = $("#product").val();
         var b = $("#pro_totalBoxFm").val();
         var q = $("#pro_quantityFm").val();
+        if(dr == ''){
+	       	  alert('Vui lòng nhập thông tin ngày tháng nhận bảng kê');
+	       	  $('#dateReceived').eq(0).focus();
+	       	  return false;
+         }
+        if(type == '' || type <= 0){
+	       	  alert('Vui lòng chọn loại bảng kê');
+	       	  $('#statisticType').eq(0).focus();
+	       	  return false;
+       }
         if(cus1 == ''){
       	  alert('Vui lòng nhập thông tin khách hàng cấp 1');
       	  $('.lookupCls').eq(0).focus();

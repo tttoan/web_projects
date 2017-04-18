@@ -17,6 +17,12 @@ public class InvoiceType implements java.io.Serializable {
 
 	public InvoiceType() {
 	}
+	
+	public InvoiceType(Integer id, String invoiceType) {
+		super();
+		this.id = id;
+		this.invoiceType = invoiceType;
+	}
 
 	public InvoiceType(String invoiceType, String description, Set<Statistic> statistics) {
 		this.invoiceType = invoiceType;

@@ -275,8 +275,8 @@
                      { "data": "user.userName", "autoWidth": true },
                      { "data": "id"
                     	 ,  "render": function ( data, type, full, meta ) {
-                    		 return '<a href="move_to_add_statistic?statId='+data+'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa <a>' + 
-                    				'<a href="delete_statistic?statId='+data+'" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Xóa <a>';
+                    		 return '<a href="move_to_add_statistic?id='+data+'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa <a>' + 
+                    				'<a href="delete_statistic?id='+data+'" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Xóa <a>';
                      	}
                      }
              ] 

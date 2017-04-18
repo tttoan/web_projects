@@ -80,7 +80,7 @@ public class StatisticHome {
 		}
 	}
 
-	public void attachDirty(Statistic instance) {
+	public Integer attachDirty(Statistic instance) {
 		log.debug("attaching dirty Statistic instance");
 		Transaction tx = null;
 		Session session = null;
@@ -90,6 +90,7 @@ public class StatisticHome {
 			session.save(instance);
 			tx.commit();
 			log.debug("attach successful");
+			return instance.getId();
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
@@ -220,9 +221,10 @@ public class StatisticHome {
 			cre.add(Restrictions.eq("customerByCustomerCodeLevel1.id", custCodeLevel1Id));
 			cre.add(Restrictions.eq("product.id", productId));
 			cre.add(Restrictions.eq("invoiceType.id", invoiceTypeId));
-			Statistic instance = (Statistic) cre.uniqueResult();
+			//Statistic instance = (Statistic) cre.uniqueResult();
+			List<Statistic> results = cre.list();
 			tx.commit();
-			if (instance == null) {
+			if (results == null || results.isEmpty()) {
 				return false;
 			}
 			return true;
@@ -240,7 +242,7 @@ public class StatisticHome {
 		}
 	}
 
-	public boolean isStatictisDuplicateLevel2(Date dateReceived, Integer custCodeLevel1Id, Integer custCodeLevel2Id, Integer productId, Integer userId, Integer invoiceTypeId) {
+	public boolean isStatictisDuplicateLevel2(Date dateReceived, Integer custCodeLevel1Id, Integer custCodeLevel2Id, Integer productId, Integer userId, Integer invoiceTypeId, Float totalBox, Integer quantity) {
 		log.debug("Checking Statistic duplicate with: ");
 		Transaction tx = null;
 		Session session = null;
@@ -254,9 +256,12 @@ public class StatisticHome {
 			cre.add(Restrictions.eq("product.id", productId));
 			cre.add(Restrictions.eq("user.id", userId));
 			cre.add(Restrictions.eq("invoiceType.id", invoiceTypeId));
-			Statistic instance = (Statistic) cre.uniqueResult();
+			cre.add(Restrictions.eq("totalBox", totalBox));
+			cre.add(Restrictions.eq("quantity", quantity));
+			//Statistic instance = (Statistic) cre.uniqueResult();
+			List<Statistic> results = cre.list();
 			tx.commit();
-			if (instance == null) {
+			if (results == null || results.isEmpty()) {
 				return false;
 			}
 			return true;
@@ -882,7 +887,7 @@ public class StatisticHome {
 					product.setUnitPrice(rs.getBigDecimal("unit_price"));
 				//}
 				s.setProduct(product);
-				s.setTotalBox(rs.getInt("total_box"));
+				s.setTotalBox(rs.getFloat("total_box"));
 				s.setQuantity(rs.getInt("quantity"));
 				s.setTotal(rs.getBigDecimal("total"));
 				User user = new User();

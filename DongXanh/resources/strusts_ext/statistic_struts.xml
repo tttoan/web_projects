@@ -31,7 +31,7 @@
 			<result name="error" type="redirectAction">move_to_add_statistic</result>
 		</action>
 
-		<action name="move_to_add_statistic" class="com.home.action.StatisticAction">
+		<action name="move_to_add_statistic" class="com.home.action.StatisticAction1">
 			<result name="success">/new_statistic.jsp</result>
 		</action>
 		<action name="move_to_compare_statistic" class="com.home.action.StatisticAction">
@@ -41,13 +41,8 @@
 			class="com.home.action.StatisticAction">
 			<result name="success">/invoice_comparison.jsp</result>
 		</action>
-		<action name="add_statistic" method="addStatistic"
-			class="com.home.action.StatisticAction">
-			<result name="success" type="redirectAction">list_statistic</result>
-			<result name="input">/new_statistic.jsp</result>
-		</action>
 		<action name="delete_statistic" method="deleteStatistic"
-			class="com.home.action.StatisticAction">
+			class="com.home.action.StatisticAction1">
 			<result name="success" type="redirectAction">list_statistic</result>
 		</action>
 		
@@ -125,6 +120,19 @@
 		<action name="lookupProductStatisticAction" class="com.home.action.StatisticAction1"
 			method="lookupProductStatistic">
 			<result type="json" />
+		</action>
+		
+		<action name="addStatisticAction" method="addStatistic"
+			class="com.home.action.StatisticAction1">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+		<action name="deleteStatisticAction" method="deleteStatistic"
+			class="com.home.action.StatisticAction1">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
 		</action>
 	</package>
 </struts>

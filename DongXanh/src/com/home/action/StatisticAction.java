@@ -63,19 +63,19 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	private List<Customer> listCustomerLevel1 = new ArrayList<>();
 	private List<Customer> listCustomerLevel2 = new ArrayList<>();
 	private List<Product> listProduct = new ArrayList<>();
-	private ArrayList<String> districts = new ArrayList<>();
+	//private ArrayList<String> districts = new ArrayList<>();
 	private List<StatisticCompare> listStatComp = new ArrayList<>();
 	private Customer cusLevel1 = new Customer();
 	private Customer cusLevel2 = new Customer();
-	private Product pro = new Product();
-	private User emp = new User();
+	//private Product pro = new Product();
+	//private User emp = new User();
 	private StatisticCustom sttCustom = new StatisticCustom();
 	private boolean edit = false;
 	private HttpServletRequest request;
 	private File upload;
 	private String uploadContentType;
 	private String uploadFileName;
-	private int statId;
+	//private int statId;
 	private String chooseTab = "";
 	private String chooseSubTab = "";
 	private InputStream fileInputStream;
@@ -158,17 +158,17 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 
 	@Override
 	public String execute() throws Exception {
-		if (statId != 0) {
-			try {
-				StatisticHome sttHome = new StatisticHome(getSessionFactory());
-				stat = sttHome.findById(statId);
-				varDateReceived = SDF.format(stat.getDateReceived());
-				setEdit(true);
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw e;
-			}
-		}
+//		if (statId != 0) {
+//			try {
+//				StatisticHome sttHome = new StatisticHome(getSessionFactory());
+//				stat = sttHome.findById(statId);
+//				varDateReceived = SDF.format(stat.getDateReceived());
+//				setEdit(true);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//				throw e;
+//			}
+//		}
 		return SUCCESS;
 	}
 
@@ -266,18 +266,6 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		try {
 			System.out.println("asdasdasdasdasdasd");
 			chooseTab = "asdasdasdasda11111sdasd";
-			return SUCCESS;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ERROR;
-		}
-	}
-
-	public String deleteStatistic() throws Exception {
-		try {
-			StatisticHome sttHome = new StatisticHome(getSessionFactory());
-			Statistic stt = sttHome.findById(statId);
-			sttHome.delete(stt);
 			return SUCCESS;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -413,8 +401,8 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 			try (FileInputStream fis = new FileInputStream(theFile)) {
 				ExcelUtil xls = new ExcelUtil();
 				StatisticHome sttHome = new StatisticHome(getSessionFactory());
-				CustomerHome custHome = new CustomerHome(getSessionFactory());
-				ProductHome proHome = new ProductHome(getSessionFactory());
+				//CustomerHome custHome = new CustomerHome(getSessionFactory());
+				//ProductHome proHome = new ProductHome(getSessionFactory());
 				Session session = getSessionFactory().openSession();
 				Transaction tx  = session.beginTransaction();
 				workbook = xls.getWorkbook(fis, FilenameUtils.getExtension(theFile.getAbsolutePath()));
@@ -668,13 +656,13 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		this.listProduct = listProduct;
 	}
 
-	public int getStatId() {
-		return statId;
-	}
-
-	public void getStatId(int statId) {
-		this.statId = statId;
-	}
+//	public int getStatId() {
+//		return statId;
+//	}
+//
+//	public void getStatId(int statId) {
+//		this.statId = statId;
+//	}
 
 	public Customer getCusLevel1() {
 		return cusLevel1;
@@ -692,21 +680,21 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		this.cusLevel2 = cusLevel2;
 	}
 
-	public User getEmp() {
-		return emp;
-	}
+//	public User getEmp() {
+//		return emp;
+//	}
+//
+//	public void setEmp(User emp) {
+//		this.emp = emp;
+//	}
 
-	public void setEmp(User emp) {
-		this.emp = emp;
-	}
-
-	public Product getPro() {
-		return pro;
-	}
-
-	public void setPro(Product pro) {
-		this.pro = pro;
-	}
+//	public Product getPro() {
+//		return pro;
+//	}
+//
+//	public void setPro(Product pro) {
+//		this.pro = pro;
+//	}
 
 	public Statistic getStat() {
 		return stat;
@@ -724,17 +712,17 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		this.edit = edit;
 	}
 
-	public void setStatId(int statId) {
-		this.statId = statId;
-	}
+//	public void setStatId(int statId) {
+//		this.statId = statId;
+//	}
 
-	public ArrayList<String> getDistricts() {
-		return districts;
-	}
-
-	public void setDistricts(ArrayList<String> districts) {
-		this.districts = districts;
-	}
+//	public ArrayList<String> getDistricts() {
+//		return districts;
+//	}
+//
+//	public void setDistricts(ArrayList<String> districts) {
+//		this.districts = districts;
+//	}
 
 	public File getUpload() {
 		return upload;
