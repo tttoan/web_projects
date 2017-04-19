@@ -58,7 +58,7 @@ public class StatisticAction1 extends ActionSupport implements Action, UserAware
 
 	public static void main(String[] args) {
 		try {
-			System.out.println("customer#$#code_level1".replaceAll("#.+", ""));
+			System.out.println("customer#$#code_level1".replaceAll(".+#", ""));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -165,13 +165,13 @@ public class StatisticAction1 extends ActionSupport implements Action, UserAware
 			
 			statistic.setDateReceived(SDF.parse(date_received));
 			cusLevel1.setId(Integer.parseInt(customer_code_level1.replaceAll("#.+", "")));
-			cusLevel1.setStatisticName(customer_code_level1);
+			cusLevel1.setStatisticName(customer_code_level1.replaceAll(".+#", ""));
 			statistic.setCustomerByCustomerCodeLevel1(cusLevel1);
 			cusLevel2.setId(Integer.parseInt(customer_code_level2.replaceAll("#.+", "")));
-			cusLevel2.setStatisticName(customer_code_level2);
+			cusLevel2.setStatisticName(customer_code_level2.replaceAll(".+#", ""));
 			statistic.setCustomerByCustomerCodeLevel2(cusLevel2);
 			product.setId(Integer.parseInt(product_id.replaceAll("#.+", "")));
-			product.setProductName(product_id);
+			product.setProductName(product_id.replaceAll(".+#", ""));
 			statistic.setProduct(product);
 			statistic.setTotalBox(Float.parseFloat(total_box));///cho nay update lai float
 			statistic.setQuantity(Integer.parseInt(quantity));
@@ -275,6 +275,7 @@ public class StatisticAction1 extends ActionSupport implements Action, UserAware
 			for (Statistic start : statisticsHistory) {
 				if(id == start.getId()){
 					statisticsHistory.remove(start);
+					break;
 				}
 			}
 		} catch (Exception e) {

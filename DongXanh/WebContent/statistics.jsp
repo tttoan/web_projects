@@ -14,6 +14,26 @@
 			<div class="view_pro">
 					<table style="width: 100%">
 						<tr>
+							<td width="120px" valign="bottom"><label>Loại bảng kê:</label></td>
+							<td valign="middle" height="0">
+								<div class="item form-group">
+									<div class="col-md-4 col-sm-4 col-xs-12">
+									<s:form name="promotionTypeForm"
+										class="form-horizontal form-label-left">
+										<div class="form-group">
+											<s:select id="cboPromotionStatus"  style="width: 232px"
+												class="select2_group form-control"
+												list="#{'0':'Tất cả', '1':'Cấp 1', '2':'Cấp 2'}"
+												value='%{type}' required="true" />
+										</div>
+									</s:form>
+									</div>
+								</div>
+							</td>
+							<td valign="bottom">
+							</td>
+						</tr>
+						<tr>
 							<td width="120px" valign="middle"><label>Thời gian từ:</label></td>
 							<td width="500px" valign="bottom" height="0">
 							<fieldset style="height: 44px; padding-top: 6px;">
@@ -45,26 +65,7 @@
 								<button type="button" class="btn btn-primary" id="btnFilter" onclick="history.go(0)">Xem kết quả</button>
 							</td>
 						</tr>
-						<tr>
-							<td width="120px" valign="bottom"><label>Loại bảng kê:</label></td>
-							<td valign="middle" height="0">
-								<div class="item form-group">
-									<div class="col-md-4 col-sm-4 col-xs-12">
-									<s:form name="promotionTypeForm"
-										class="form-horizontal form-label-left">
-										<div class="form-group">
-											<s:select id="cboPromotionStatus"  style="width: 232px"
-												class="select2_group form-control"
-												list="#{'0':'Tất cả', '1':'Cấp 1', '2':'Cấp 2'}"
-												value='%{type}' required="true" />
-										</div>
-									</s:form>
-									</div>
-								</div>
-							</td>
-							<td valign="bottom">
-							</td>
-						</tr>
+						
 					</table>
 				</div>
 				

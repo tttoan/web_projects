@@ -456,7 +456,7 @@
 	            //
 	        } );
         
-        var counter = 1;
+        var counter = tbl.data().count()+1;
         $('#addStatistic').click(function () {
         	if(checkInvalidData()){
         		
@@ -486,9 +486,9 @@
              	      		             	res.replace(/(success;|duplicate;)/g, ""),
              	      		                $("#dateReceived").val(),
              	      		              	$("#statisticType").val()==1?"Cấp 1":"Cấp 2",
-             	      		                $("#cusLevel1").val(),
-             	      		                $("#cusLevel2").val(),
-             	      		                $("#product").val(),
+             	      		                $("#cusLevel1").val().replace(/.+#/g, ""),
+             	      		                $("#cusLevel2").val().replace(/.+#/g, ""),
+             	      		                $("#product").val().replace(/.+#/g, ""),
              	      		                $("#pro_totalBoxFm").val(),
              	      		                $("#pro_quantityFm").val(),
              	      		                $("#total_priceFm").val()
