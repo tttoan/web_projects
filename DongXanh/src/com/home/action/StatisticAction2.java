@@ -21,8 +21,11 @@ import com.home.conts.MyConts;
 import com.home.dao.CustomerHome;
 import com.home.dao.ProductHome;
 import com.home.dao.StatisticHome;
+import com.home.dao.UserHome;
 import com.home.entities.StatisticHistory;
+import com.home.entities.UserAware;
 import com.home.model.Statistic;
+import com.home.model.User;
 import com.home.util.DateUtils;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
@@ -31,8 +34,10 @@ import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
-public class StatisticAction2 extends ActionSupport implements Action, ServletContextAware{
+public class StatisticAction2 extends ActionSupport implements Action, ServletContextAware, UserAware{
 	private ServletContext ctx;
+	private User userSes;
+	private List<User> listEmployee;
 	private List<Statistic> data;
 	private int recordsFiltered ;
 	private int recordsTotal  ;
@@ -40,6 +45,7 @@ public class StatisticAction2 extends ActionSupport implements Action, ServletCo
 	private String order;
 	private String search;
 	private InputStream inputStream;
+	private boolean isPermissionAccept = false;
 
 	public InputStream getInputStream() {
 		return inputStream;
@@ -59,6 +65,7 @@ public class StatisticAction2 extends ActionSupport implements Action, ServletCo
 		try {
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
 			// Fetch Data from User Table
+			int emp_id = 0;
 			int statistic_type = 0;
 			Date startDate1 = null;
 			Date endDate1 = null;
@@ -70,6 +77,7 @@ public class StatisticAction2 extends ActionSupport implements Action, ServletCo
 					 startDate1 = new Date(DateUtils.getDateFromString(startday, "dd/MM/yyyy").getTime());
 					 endDate1 = new Date(DateUtils.getDateFromString(endday, "dd/MM/yyyy").getTime());
 				}
+				emp_id =  Integer.parseInt(StringUtil.notNull(request.getParameter("emp_id")));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -86,9 +94,9 @@ public class StatisticAction2 extends ActionSupport implements Action, ServletCo
 			int skip = start != null ? Integer.parseInt(start) : 0;
 
 			StatisticHome sttHome = new StatisticHome(HibernateUtil.getSessionFactory());
-			data = sttHome.getListStatistic(skip, pageSize, search, startDate1, endDate1, statistic_type);
+			data = sttHome.getListStatistic(skip, pageSize, search, startDate1, endDate1, statistic_type, emp_id);
 			// Get Total Record Count for Pagination
-			recordsTotal = sttHome.getTotalRecords(search, startDate1, endDate1, statistic_type);
+			recordsTotal = sttHome.getTotalRecords(search, startDate1, endDate1, statistic_type, emp_id);
 			recordsFiltered = recordsTotal;
 
 			return SUCCESS;
@@ -187,6 +195,25 @@ public class StatisticAction2 extends ActionSupport implements Action, ServletCo
 		return Action.SUCCESS;
 	}
 	
+	private void getEmployees() {
+		try {
+			boolean isAdmin = (userSes.getRole().getRoleId() == ROLE_ADMIN || userSes
+					.getRole().getRoleId() == ROLE_LEADER);
+			UserHome userHome = new UserHome(HibernateUtil.getSessionFactory());
+			setListEmployee(userHome.getLookupEmployee(userSes.getId(), isAdmin));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void checkPermissionAccept() {
+		if (userSes.getRole() != null && userSes.getRole().getRoleId() != null
+				&& userSes.getRole().getRoleId() > 0) {
+			isPermissionAccept = !(userSes.getRole().getRoleId() == ROLE_ADMIN || userSes
+					.getRole().getRoleId() == ROLE_LEADER);
+		}
+	}
+	
 	@Override
 	public void setServletContext(ServletContext context) {
 		this.ctx = context;
@@ -194,6 +221,8 @@ public class StatisticAction2 extends ActionSupport implements Action, ServletCo
 
 	@Override
 	public String execute() throws Exception {
+		getEmployees();
+		checkPermissionAccept();
 		return SUCCESS;
 	}
 
@@ -245,4 +274,28 @@ public class StatisticAction2 extends ActionSupport implements Action, ServletCo
 		this.order = order;
 	}
 
+	public User getUserSes() {
+		return userSes;
+	}
+
+	@Override
+	public void setUserSes(User user) {
+		this.userSes = user;
+	}
+
+	public List<User> getListEmployee() {
+		return listEmployee;
+	}
+
+	public void setListEmployee(List<User> listEmployee) {
+		this.listEmployee = listEmployee;
+	}
+	
+	public boolean isPermissionAccept() {
+		return isPermissionAccept;
+	}
+
+	public void setPermissionAccept(boolean isPermissionAccept) {
+		this.isPermissionAccept = isPermissionAccept;
+	}
 }

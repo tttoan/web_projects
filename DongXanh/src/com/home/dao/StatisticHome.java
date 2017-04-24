@@ -824,7 +824,14 @@ public class StatisticHome {
 		}
 	}
 	
-	public List<Statistic> getListStatistic(int startPageIndex, int recordsPerPage, String searchValue, java.sql.Date startday, java.sql.Date endday, int type) throws Exception{
+	public List<Statistic> getListStatistic(
+			int startPageIndex, 
+			int recordsPerPage, 
+			String searchValue, 
+			java.sql.Date startday, 
+			java.sql.Date endday, 
+			int statistic_type,
+			int emp_id) throws Exception{
 		log.debug("retrieve list getListStatistic");
 		Session session = null;
 		List<Statistic> results = new ArrayList<Statistic>();
@@ -838,7 +845,7 @@ public class StatisticHome {
 			String sql = 
 					"SELECT * FROM ( "
 						+"SELECT @i:=@i+1 AS iterator, YY.* FROM ("
-							+"SELECT t.*, c1.business_name as cus1name, c2.business_name as cus2name, product_name, unit_price, user_name, full_name, invoice_type "
+							+"SELECT t.*, c1.statistic_name as cus1name, c2.statistic_name as cus2name, product_name, unit_price, user_name, full_name, invoice_type "
 							+" FROM statistic t "+
 									" LEFT JOIN customer c1 ON t.customer_code_level1=c1.id " +
 									" LEFT JOIN customer c2 ON t.customer_code_level2=c2.id " +
@@ -847,12 +854,13 @@ public class StatisticHome {
 									" LEFT JOIN invoice_type iv ON t.invoice_type_id=iv.id " +
 								" WHERE "
 								+ " (0="+(startday==null?0:1)+" Or (date_received >= ? And date_received <= ?))"
-								+ " AND (0="+type+" Or ("+ (type==1?"customer_code_level2 IS NULL OR customer_code_level2<=0":"1=1")+"))"
+								+ " AND (0="+statistic_type+" Or ("+ (statistic_type==1?"customer_code_level2 IS NULL OR customer_code_level2<=0":"1=1")+"))"
+								+ " AND (-1="+emp_id+" Or (t.user_id="+emp_id+"))"
 								+ " AND (''='"+searchValue+"' OR ("
-										+ " lower(c1.business_name) like '"+searchValue+"%'"
-										+ " OR lower(c2.business_name) like '"+searchValue+"%'"
+										+ " lower(c1.statistic_name) like '"+searchValue+"%'"
+										+ " OR lower(c2.statistic_name) like '"+searchValue+"%'"
 										+ " OR lower(product_name) like '"+searchValue+"%'"
-										+ " OR lower(user_name) like '"+searchValue+"%'"
+										//+ " OR lower(user_name) like '"+searchValue+"%'"
 										+ ") ) "
 										+ " Order by date_received desc, id) AS YY, (SELECT @i:=0) foo Order By date_received desc, id) AS XX "
 						+" WHERE iterator > "+startPageIndex+" AND iterator <= " + range + " order by date_received";
@@ -985,7 +993,12 @@ public class StatisticHome {
 		}
 	}
 	
-	public int getTotalRecords(String searchValue, java.sql.Date startday, java.sql.Date endday, int type) throws Exception{
+	public int getTotalRecords(
+			String searchValue, 
+			java.sql.Date startday, 
+			java.sql.Date endday, 
+			int statistic_type,
+			int emp_id) throws Exception{
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
@@ -1000,12 +1013,13 @@ public class StatisticHome {
 					" LEFT JOIN invoice_type iv ON t.invoice_type_id=iv.id " +
 				" WHERE "
 				+ " (0="+(startday==null?0:1)+" Or (date_received >= ? And date_received <= ?))"
-				+ " AND (0="+type+" Or ("+ (type==1?"customer_code_level2 IS NULL OR customer_code_level2<=0":"1=1")+"))"
+				+ " AND (0="+statistic_type+" Or ("+ (statistic_type==1?"customer_code_level2 IS NULL OR customer_code_level2<=0":"1=1")+"))"
+				+ " AND (-1="+emp_id+" Or (t.user_id="+emp_id+"))"
 				+ " AND (''='"+searchValue+"' OR ("
-						+ " lower(c1.business_name) like '"+searchValue+"%'"
-						+ " OR lower(c2.business_name) like '"+searchValue+"%'"
+						+ " lower(c1.statistic_name) like '"+searchValue+"%'"
+						+ " OR lower(c2.statistic_name) like '"+searchValue+"%'"
 						+ " OR lower(product_name) like '"+searchValue+"%'"
-						+ " OR lower(user_name) like '"+searchValue+"%'"
+						//+ " OR lower(user_name) like '"+searchValue+"%'"
 						+ ") ) ";
 					
 			System.out.println(sql);

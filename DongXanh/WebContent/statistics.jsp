@@ -12,62 +12,62 @@
 		<div class="row">
 		
 			<div class="view_pro">
-					<table style="width: 100%">
-						<tr>
-							<td width="120px" valign="bottom"><label>Loại bảng kê:</label></td>
-							<td valign="middle" height="0">
-								<div class="item form-group">
-									<div class="col-md-4 col-sm-4 col-xs-12">
-									<s:form name="promotionTypeForm"
-										class="form-horizontal form-label-left">
-										<div class="form-group">
-											<s:select id="cboPromotionStatus"  style="width: 232px"
-												class="select2_group form-control"
-												list="#{'0':'Tất cả', '1':'Cấp 1', '2':'Cấp 2'}"
-												value='%{type}' required="true" />
-										</div>
-									</s:form>
-									</div>
-								</div>
-							</td>
-							<td valign="bottom">
-							</td>
-						</tr>
-						<tr>
-							<td width="120px" valign="middle"><label>Thời gian từ:</label></td>
-							<td width="500px" valign="bottom" height="0">
-							<fieldset style="height: 44px; padding-top: 6px;">
-									<div class="control-group">
-										<div class="controls">
-											<div
-												class="col-md-6 xdisplay_inputx form-group has-feedback">
-												<input type="text" class="form-control has-feedback-left"
-													id="single_cal1" 
-													aria-describedby="inputSuccess2Status"> <span
-													class="fa fa-calendar-o form-control-feedback left"
-													aria-hidden="true"></span> <span id="inputSuccess2Status"
-													class="sr-only">(success)</span>
-											</div>
-											<div
-												class="col-md-6 xdisplay_inputx form-group has-feedback">
-												<input type="text" class="form-control has-feedback-left"
-													id="single_cal2"
-													aria-describedby="inputSuccess2Status2"> <span
-													class="fa fa-calendar-o form-control-feedback left"
-													aria-hidden="true"></span> <span id="inputSuccess2Status2"
-													class="sr-only">(success)</span>
-											</div>
-										</div>
-									</div>
-								</fieldset>
-							</td>
-							<td valign="bottom">
-								<button type="button" class="btn btn-primary" id="btnFilter" onclick="history.go(0)">Xem kết quả</button>
-							</td>
-						</tr>
+				<s:form action="" theme="bootstrap" method="post"
+							cssClass="form-horizontal form-label-left">
+					
+					<div class="item form-group" style="margin-bottom: 0px">
+						<label class="control-label col-md-2 col-sm-2 col-xs-12"
+							for="dateReceived">Loại bảng kê :
+						</label>
+						<div class="col-md-3 col-sm-3 col-xs-12">
+							<s:select id="cboPromotionStatus"
+								cssClass="col-md-12 col-xs-12" style="width: 250px"
+								list="#{'0':'Tất cả', '1':'Cấp 1', '2':'Cấp 2'}"
+								value='%{type}' required="true" />
+						</div>
 						
-					</table>
-				</div>
+						<label class="control-label col-md-1 col-sm-3 col-xs-12"
+							for="dateReceived">NVTT :
+						</label>
+						<div class="col-md-3 col-sm-3 col-xs-12">
+							<s:select id="cboEmpId" name="EmpId"  style="width: 250px"
+								showDownArrow="false" headerKey="-1" headerValue="Tất cả"
+								autoComplete="true" disabled="%{isPermissionAccept}"
+								list="listEmployee" listKey="id"
+								listValue="fullName"
+								value="getUserSes().id" />
+						</div>
+					</div>
+							
+					<div class="item form-group" style="margin-bottom: 0px">
+						<label class="control-label col-md-2 col-sm-2 col-xs-12"
+							for="dateReceived">Thời gian từ :
+						</label>
+						<div class="col-md-3 xdisplay_inputx has-feedback">
+							<input type="text" class="form-control has-feedback-left"
+								id="single_cal1" 
+								aria-describedby="inputSuccess2Status"> <span
+								class="fa fa-calendar-o form-control-feedback left"
+								aria-hidden="true"></span> <span id="inputSuccess2Status"
+								class="sr-only">(success)</span>
+						</div>
+						
+						<label class="control-label col-md-1 col-sm-3 col-xs-12"
+							for="dateReceived">Đến :
+						</label>
+						<div class="col-md-3 col-sm-3 col-xs-12">
+							<input type="text" class="form-control has-feedback-left"
+								id="single_cal2"
+								aria-describedby="inputSuccess2Status2"> <span
+								class="fa fa-calendar-o form-control-feedback left"
+								aria-hidden="true"></span> <span id="inputSuccess2Status2"
+								class="sr-only">(success)</span>
+						</div>
+						
+						<button type="button" class="btn btn-primary" id="btnFilter" onclick="history.go(0)">Xem kết quả</button>
+					</div>
+				</s:form>
+			</div>
 				
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<s:set var="rId">
@@ -176,9 +176,8 @@
 	    text-align: center;
 	}
 	.view_pro {
-		margin: 0px;
 		text-align: left;
-		padding: 0px 10px 5px 10px;
+		padding: 5px 10px 5px 10px;
 		margin: 0px 0px 5px 0px;
 		border-style: outset;
 	}
@@ -214,15 +213,24 @@
                 console.log(start.toISOString(), end.toISOString(), label);
             });
             
-            var d = new Date();
+           /*  var d = new Date();
             var currDate = d.getDate();
             if(currDate < 10)currDate = '0'+currDate;
             var currMonth = d.getMonth()+1;
             if(currMonth < 10) currMonth = '0'+currMonth;
             var currYear = d.getFullYear();
-            var startDate = currDate + "/" + currMonth + "/" + currYear;
+            var startDate = currDate + "/" + currMonth + "/" + currYear; */
            // $("#single_cal1").attr("value", startDate);
            // $("#single_cal2").attr("value", startDate);
+           
+            var startDate;
+            var endDate;
+            
+            var date = new Date();
+            startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() - 6);
+            endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() + 1);
+            $("#single_cal1").attr("value", moment(startDate).format('DD/MM/YYYY'));
+            $("#single_cal2").attr("value", moment(endDate).format('DD/MM/YYYY'));
         });
 </script>
 
@@ -243,6 +251,7 @@
                      "startday": document.getElementById('single_cal1').value,
                      "endday": document.getElementById('single_cal2').value,
                      "statistic_type": document.getElementById('cboPromotionStatus').value,
+                     "emp_id": document.getElementById('cboEmpId').value,
                  }
              },
               "columns": [
