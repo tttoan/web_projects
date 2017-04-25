@@ -70,7 +70,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 	//private Product pro = new Product();
 	//private User emp = new User();
 	private StatisticCustom sttCustom = new StatisticCustom();
-	private boolean edit = false;
+	//private boolean edit = false;
 	private HttpServletRequest request;
 	private File upload;
 	private String uploadContentType;
@@ -704,13 +704,13 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 		this.stat = stat;
 	}
 
-	public boolean isEdit() {
-		return edit;
-	}
-
-	public void setEdit(boolean edit) {
-		this.edit = edit;
-	}
+//	public boolean isEdit() {
+//		return edit;
+//	}
+//
+//	public void setEdit(boolean edit) {
+//		this.edit = edit;
+//	}
 
 //	public void setStatId(int statId) {
 //		this.statId = statId;

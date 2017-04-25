@@ -26,9 +26,9 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
-						<s:form action="" theme="bootstrap" method="post"
+						<s:form action="editStatisticAction" theme="bootstrap" method="post" onsubmit="return checkInvalidData()"
 							cssClass="form-horizontal form-label-left">
-							<s:hidden name="stat.id" value="%{statId}"></s:hidden>
+							<s:hidden name="id" value="%{id}"></s:hidden>
 							<s:hidden name="edit" value="%{edit}"></s:hidden>
 							<s:if test="hasActionErrors()">
 								<div class="errors">
@@ -46,7 +46,7 @@
 								</label>
 								<div class="col-md-3 xdisplay_inputx has-feedback">
 									<input type="text" class="form-control has-feedback-left"
-										id="dateReceived" name="varDateReceived" value="${varDateReceived}"
+										id="dateReceived" name="date_received" value="${date_received}"
 										aria-describedby="inputSuccess2Status"> <span
 										class="fa fa-calendar-o form-control-feedback left"
 										aria-hidden="true"></span> <span id="inputSuccess2Status"
@@ -57,12 +57,12 @@
 									for="dateReceived">Loại bảng kê
 								</label>
 								<div class="col-md-3 col-sm-3 col-xs-12">
-									<s:select id="statisticType" name="cust.customer_location"
+									<s:select id="statisticType" name="invoice_type_id"
 										cssClass="col-md-12 col-xs-12" list="listInvoiceType"
 										showDownArrow="false" autoComplete="true" headerKey="-1" headerValue=""
 										listKey="id" listValue="invoiceType"
 										style="width:245px"
-										value="%{cust.customer_location}" />
+										value="%{invoice_type_id}" />
 								</div>
 							</div>
 							
@@ -71,9 +71,9 @@
 									for="cusLevel1.id">Tên cấp 1 <span class="required">*</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<s:hidden id="cusLevel1_id" name="cusLevel1.id" value="%{cusLevel1.id}"></s:hidden>
-									<input id="cusLevel1" type="text" name="cusLevel1.statisticName" tabindex="1"
-										value="${cusLevel1.statisticName}" required="required"
+									<s:hidden id="cusLevel1_id" name="customer_code_level1" value="%{customer_code_level1}"></s:hidden>
+									<input id="cusLevel1" type="text" name="cusLevel1" tabindex="1"
+										value="${customer_code_level1}" required="required"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -82,9 +82,9 @@
 									for=cusLevel2.id>Tên cấp 2 <span class="required">*</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<s:hidden id="cusLevel2_id" name="cusLevel2.id" value="%{cusLevel2.id}"></s:hidden>
-									<input id="cusLevel2" type="text" name="cusLevel2.statisticName" tabindex="2"
-										value="${cusLevel2.statisticName}" required="required"
+									<s:hidden id="cusLevel2_id" name="customer_code_level2" value="%{customer_code_level2}"></s:hidden>
+									<input id="cusLevel2" type="text" name="cusLevel2" tabindex="2"
+										value="${customer_code_level2}" required="required"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -94,9 +94,9 @@
 									for="pro_id">Sản phẩm <span class="required">*</span>
 								</label>
 								<div class="col-md-5 col-sm-6 col-xs-12">
-									<s:hidden id="pro_id" name="pro.id" value="%{pro.id}"></s:hidden>
-									<input id="product" type="text" name="pro.productName" tabindex="3"
-										 value="${stat.product.productName}" required="required"
+									<s:hidden id="pro_id" name="product_id" value="%{product_id}"></s:hidden>
+									<input id="product" type="text" name="product" tabindex="3"
+										 value="${product_id}" required="required"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 								
@@ -104,11 +104,11 @@
 									for="unitPriceFm">Đơn giá
 								</label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<s:hidden id="pro_unitPrice" name="pro_unitPrice" value="%{stat.product.unitPrice}"></s:hidden>
-									<s:hidden id="pro_quantityPerBox" name="pro_quantityPerBox" value="%{stat.product.quantity}"></s:hidden>
+									<s:hidden id="pro_unitPrice" name="pro_unitPrice" value="%{statistic.product.unitPrice}"></s:hidden>
+									<s:hidden id="pro_quantityPerBox" name="pro_quantityPerBox" value="%{statistic.product.quantity}"></s:hidden>
 									<input type="text" id="pro_unitPriceFm" name="pro_unitPriceFm" readonly
 										data-validate-minmax="1,1000000000"
-										value="${varUnitPrice}"
+										value="${statistic.product.unitPrice}"
 										class="form-control col-md-7 col-xs-12">
 								</div>
 							</div>
@@ -119,8 +119,8 @@
 									for="totalBox">Số thùng <span class="required">*</span>
 								</label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<input type="number" id="pro_totalBoxFm" name="pro_totalBoxFm"
-										value="${stat.totalBox}" required="required"
+									<input type="number" id="pro_totalBoxFm" name="total_box"
+										value="${total_box}" required="required"
 										data-validate-minmax="0,100000"
 										class="form-control col-md-7 col-xs-12"
 										onkeypress="onlySpecialChar(event, '[0-9\\.]+')">
@@ -130,8 +130,8 @@
 									for="quantity">Số lượng
 								</label>
 								<div class="col-md-2 col-sm-6 col-xs-12">
-									<input type="number" id="pro_quantityFm" name="pro_quantityFm"
-										value="${stat.quantity}" required="required"
+									<input type="number" id="pro_quantityFm" name="quantity"
+										value="${quantity}" required="required"
 										data-validate-minmax="0,100000"
 										class="form-control col-md-7 col-xs-12"
 										onkeypress="onlySpecialChar(event, '[0-9\\.]+')">
@@ -155,12 +155,12 @@
 							<div class="form-group">
 								<div class="col-md-6 col-md-offset-3">
 									<button id="resetStatistic" type="reset" class="btn btn-primary">Làm mới</button>
-									<button id="addStatistic" type="button" class="btn btn-success"><s:if test="%{edit}">
-											Cập nhật
-										</s:if>
-										<s:else>
-											Thêm mới
-										</s:else></button>
+									<s:if test="%{edit}">
+										<button id="editStatistic" type="submit" class="btn btn-success">Cập nhật</button>
+									</s:if>
+									<s:else>
+										<button id="addStatistic" type="button" class="btn btn-success">Thêm mới</button>
+									</s:else>
 								</div>
 							</div>
 						</s:form>

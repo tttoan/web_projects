@@ -45,6 +45,10 @@
 			class="com.home.action.StatisticAction1">
 			<result name="success" type="redirectAction">list_statistic</result>
 		</action>
+		<action name="editStatisticAction" method="addStatistic"
+			class="com.home.action.StatisticAction1">
+			<result name="success" type="redirectAction">list_statistic</result>
+		</action>
 		
 		<action name="import_statistic" method="importStatistic"
 			class="com.home.action.StatisticAction">

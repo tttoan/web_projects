@@ -227,8 +227,8 @@
             var endDate;
             
             var date = new Date();
-            startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() - 6);
-            endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() + 1);
+            startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() - 5);
+            endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() + 2);
             $("#single_cal1").attr("value", moment(startDate).format('DD/MM/YYYY'));
             $("#single_cal2").attr("value", moment(endDate).format('DD/MM/YYYY'));
         });

@@ -22,6 +22,7 @@ import com.home.model.InvoiceType;
 import com.home.model.Product;
 import com.home.model.Statistic;
 import com.home.model.User;
+import com.home.util.DateUtils;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
 import com.opensymphony.xwork2.Action;
@@ -55,6 +56,8 @@ public class StatisticAction1 extends ActionSupport implements Action, UserAware
 	private String total_box;
 	private String quantity;
 	private String invoice_type_id ;
+	private boolean edit;
+	
 
 	public static void main(String[] args) {
 		try {
@@ -68,7 +71,28 @@ public class StatisticAction1 extends ActionSupport implements Action, UserAware
 	public String execute() throws Exception {
 		listInvoiceType.add(new InvoiceType(MyConts.INVOICE_STATISTIC_CUS_L2, "Hóa đơn bán hàng cho cấp 2"));
 		listInvoiceType.add(new InvoiceType(MyConts.INVOICE_STATISTIC_CUS_L1, "Hóa đơn bán hàng cho cấp 1"));
-		restoreStatisticsHitory();
+		
+		if(StringUtil.notNull(id).isEmpty()){
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
+			id =  StringUtil.notNull(request.getParameter("id"));
+		}
+		if(!StringUtil.notNull(id).isEmpty()){
+			setEdit(true);
+			try {
+				statistic = new StatisticHome(HibernateUtil.getSessionFactory()).findById(Integer.parseInt(id));
+				date_received = SDF.format(statistic.getDateReceived());
+				customer_code_level1 = statistic.getCustomerByCustomerCodeLevel1().getId() + "";
+				customer_code_level2 = statistic.getCustomerByCustomerCodeLevel2().getId() + "";
+				product_id = statistic.getProduct().getId() + "";
+				total_box = statistic.getTotalBox() + "";
+				quantity = statistic.getQuantity() + "";
+				invoice_type_id = statistic.getInvoiceType().getId() + "";
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}else{
+			restoreStatisticsHitory();
+		}
 		return SUCCESS;
 	}
 	
@@ -474,5 +498,13 @@ public class StatisticAction1 extends ActionSupport implements Action, UserAware
 
 	public void setStatisticsHistory(List<Statistic> statisticsHistory) {
 		this.statisticsHistory = statisticsHistory;
+	}
+	
+	public boolean isEdit() {
+		return edit;
+	}
+
+	public void setEdit(boolean edit) {
+		this.edit = edit;
 	}
 }
