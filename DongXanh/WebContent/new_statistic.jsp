@@ -26,9 +26,9 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 					<div class="x_content">
-						<s:form action="editStatisticAction" theme="bootstrap" method="post" onsubmit="return checkInvalidData()"
+						<s:form action="" theme="bootstrap" method="post"
 							cssClass="form-horizontal form-label-left">
-							<s:hidden name="id" value="%{id}"></s:hidden>
+							<s:hidden id="id" name="id" value="%{id}"></s:hidden>
 							<s:hidden name="edit" value="%{edit}"></s:hidden>
 							<s:if test="hasActionErrors()">
 								<div class="errors">
@@ -156,7 +156,7 @@
 								<div class="col-md-6 col-md-offset-3">
 									<button id="resetStatistic" type="reset" class="btn btn-primary">Làm mới</button>
 									<s:if test="%{edit}">
-										<button id="editStatistic" type="submit" class="btn btn-success">Cập nhật</button>
+										<button id="editStatistic" type="button" class="btn btn-success">Cập nhật</button>
 									</s:if>
 									<s:else>
 										<button id="addStatistic" type="button" class="btn btn-success">Thêm mới</button>
@@ -468,7 +468,8 @@
       		            "customer_code_level2" : $("#cusLevel2").val(),
       		            "product_id" : $("#product").val(),
       		            "total_box" : $("#pro_totalBoxFm").val(),
-      		            "quantity" : $("#pro_quantityFm").val()
+      		            "quantity" : $("#pro_quantityFm").val(),
+      		          	"unit_price" : $("#pro_unitPrice").val(),
         			};
        			$.ajax({
        				url : "addStatisticAction",
@@ -507,6 +508,41 @@
        			});
         	}
         } );
+        
+        $('#editStatistic').click(function () {
+        	if(checkInvalidData()){
+        		var params = {
+        				"id" : $("#id").val(),
+        				"date_received": $("#dateReceived").val(),
+      		            "invoice_type_id" :	$("#statisticType").val(),
+      		            "customer_code_level1" :  $("#cusLevel1").val(),
+      		            "customer_code_level2" : $("#cusLevel2").val(),
+      		            "product_id" : $("#product").val(),
+      		            "total_box" : $("#pro_totalBoxFm").val(),
+      		            "quantity" : $("#pro_quantityFm").val(),
+      		            "unit_price" : $("#pro_unitPrice").val(),
+        			};
+       			$.ajax({
+       				url : "addStatisticAction",
+       				data : JSON.stringify(params),
+       				dataType : 'json',
+       				contentType : 'application/json',
+       				type : 'POST',
+       				async : false,
+       				success : function(res) {
+       					//alert(res);
+       					//if(res.test(new RegExp('^(success;[0-9]+|duplicate;[0-9]+)$'))){
+       					if(res.startsWith('success') || res.startsWith('duplicate')){
+       						window.location = 'list_statistic.action';
+       					}else{
+       						alert(res);
+       					}
+       					
+       				}
+       			});
+        	}
+        } );
+        
     });
 	
 	

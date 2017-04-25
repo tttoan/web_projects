@@ -56,6 +56,7 @@ public class StatisticAction1 extends ActionSupport implements Action, UserAware
 	private String total_box;
 	private String quantity;
 	private String invoice_type_id ;
+	private String unit_price;
 	private boolean edit;
 	
 
@@ -81,11 +82,11 @@ public class StatisticAction1 extends ActionSupport implements Action, UserAware
 			try {
 				statistic = new StatisticHome(HibernateUtil.getSessionFactory()).findById(Integer.parseInt(id));
 				date_received = SDF.format(statistic.getDateReceived());
-				customer_code_level1 = statistic.getCustomerByCustomerCodeLevel1().getId() + "";
-				customer_code_level2 = statistic.getCustomerByCustomerCodeLevel2().getId() + "";
-				product_id = statistic.getProduct().getId() + "";
-				total_box = statistic.getTotalBox() + "";
-				quantity = statistic.getQuantity() + "";
+//				customer_code_level1 = statistic.getCustomerByCustomerCodeLevel1().getId() + "";
+//				customer_code_level2 = statistic.getCustomerByCustomerCodeLevel2().getId() + "";
+//				product_id = statistic.getProduct().getId() + "";
+//				total_box = statistic.getTotalBox() + "";
+//				quantity = statistic.getQuantity() + "";
 				invoice_type_id = statistic.getInvoiceType().getId() + "";
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -185,6 +186,7 @@ public class StatisticAction1 extends ActionSupport implements Action, UserAware
 				total_box =  StringUtil.notNull(request.getParameter("total_box"));
 				quantity =  StringUtil.notNull(request.getParameter("quantity"));
 				invoice_type_id =  StringUtil.notNull(request.getParameter("invoice_type_id"));
+				unit_price =  StringUtil.notNull(request.getParameter("unit_price"));
 			}
 			
 			statistic.setDateReceived(SDF.parse(date_received));
@@ -199,7 +201,7 @@ public class StatisticAction1 extends ActionSupport implements Action, UserAware
 			statistic.setProduct(product);
 			statistic.setTotalBox(Float.parseFloat(total_box));///cho nay update lai float
 			statistic.setQuantity(Integer.parseInt(quantity));
-			statistic.setTotal(new BigDecimal(Float.parseFloat(total_box)*Integer.parseInt(quantity)));
+			statistic.setTotal(new BigDecimal(Float.parseFloat(unit_price)*Integer.parseInt(quantity)));
 			if(userSes != null){
 				statistic.setUser(userSes);
 			}
@@ -506,5 +508,13 @@ public class StatisticAction1 extends ActionSupport implements Action, UserAware
 
 	public void setEdit(boolean edit) {
 		this.edit = edit;
+	}
+	
+	public String getUnit_price() {
+		return unit_price;
+	}
+
+	public void setUnit_price(String unit_price) {
+		this.unit_price = unit_price;
 	}
 }
