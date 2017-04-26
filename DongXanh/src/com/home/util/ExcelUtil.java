@@ -107,6 +107,7 @@ public class ExcelUtil {
 			sheet.autoSizeColumn(startIndexCell + i);
 		}
 	}
+	
 	public void addRowData(Sheet sheet, int startIndexRow, int startIndexCell, Object... valPerCells) throws Exception{
 		Row row = sheet.createRow(startIndexRow);
 		int markIndex = 0;
@@ -125,6 +126,13 @@ public class ExcelUtil {
 				cell.setCellValue(valPerCells[i]+"");
 			//sheet.autoSizeColumn(startIndexCell + i);
 		}
+	}
+	
+	public void updateRowData(Sheet sheet, int rowIdex, int columnIndex, Object value) throws Exception{
+		Row row = sheet.getRow(rowIdex);
+		Cell cell = row.getCell(columnIndex);
+		cell.setCellType(Cell.CELL_TYPE_STRING);
+		cell.setCellValue(value + "");
 	}
 	
 	/**

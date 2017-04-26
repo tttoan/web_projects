@@ -59,8 +59,8 @@
 									<div >
 										<s:select id="cusLevel1Id" name="cusLevel1.id" headerKey="-1"
 											headerValue="---" cssClass="form-control col-md-7 col-xs-12"
-											list="listCustomer" listKey="id"
-											listValue="director +' - '+ customerCode"
+											list="listCustomerLevel1" listKey="id"
+											listValue="statisticName +' - '+ customerCode"
 											value="%{stat.customerByCustomerCodeLevel1.id}" />
 									</div></td>
 								<td></td>

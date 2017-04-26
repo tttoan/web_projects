@@ -69,7 +69,7 @@
 			</s:form>
 		</div>
 		<div class="modalFooter">
-			<a href="#close" title="Close" class="close">Đóng</a>
+			<a href="#close" title="Close" class="close">X</a>
 			<!-- 						<a href="#Apply" title="Apply" class="ok">Cập nhật</a> -->
 			<div class="clear"></div>
 		</div>

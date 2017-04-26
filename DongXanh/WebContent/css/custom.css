@@ -1355,7 +1355,7 @@ table.countries_list td {
 .dataTables_paginate a {
     padding: 6px 9px !important;
     background: #ddd !important;
-    border-color: #ddd !important;
+    border-color: #35404B !important;
 }
 
 .paging_full_numbers a.paginate_active {

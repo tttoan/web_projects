@@ -112,24 +112,31 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 	public String getPlanStatistic(){
 		try {
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
-			String strWeek = StringUtil.notNull(request.getParameter("week"));
-
-			Date week = new Date(DateUtils.getDateFromString(strWeek, "dd/MM/yyyy").getTime());
-			Calendar cal = Calendar.getInstance();
-
-			cal.setTime(week);
-			cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)-cal.get(Calendar.DAY_OF_WEEK)+2);
-			Date startday = new Date(cal.getTimeInMillis());
-
-			cal.setTime(week);
-			cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)-cal.get(Calendar.DAY_OF_WEEK)+8);
-			Date endday = new Date(cal.getTimeInMillis());
-
-			Calendar cal2 = Calendar.getInstance();
-			cal2.setTime(startday);
+//			String strWeek = StringUtil.notNull(request.getParameter("week"));
+//
+//			Date week = new Date(DateUtils.getDateFromString(strWeek, "dd/MM/yyyy").getTime());
+//			Calendar cal = Calendar.getInstance();
+//
+//			cal.setTime(week);
+//			cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)-cal.get(Calendar.DAY_OF_WEEK)+2);
+//			Date startday = new Date(cal.getTimeInMillis());
+//
+//			cal.setTime(week);
+//			cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH)-cal.get(Calendar.DAY_OF_WEEK)+8);
+//			Date endday = new Date(cal.getTimeInMillis());
+//
+//			Calendar cal2 = Calendar.getInstance();
+//			cal2.setTime(startday);
+			
+			String startDate = StringUtil.notNull(request.getParameter("startDate"));
+			String endDate = StringUtil.notNull(request.getParameter("endDate"));
+			
+			Date week1 = new Date(DateUtils.getDateFromString(startDate, "dd/MM/yyyy").getTime());
+			Date week2 = new Date(DateUtils.getDateFromString(endDate, "dd/MM/yyyy").getTime());
+			
 			WorkingPlanHome wpHome = new WorkingPlanHome(HibernateUtil.getSessionFactory());
 			EventsNoteHome enHome = new EventsNoteHome(HibernateUtil.getSessionFactory());
-			List<UserPlanGeneral> results = wpHome.getAllUserPlan4Report(isManager()?-1:userSes.getId(), startday, endday);
+			List<UserPlanGeneral> results = wpHome.getAllUserPlan4Report(isManager()?-1:userSes.getId(), week1, week2);
 
 			StringBuilder html = new StringBuilder("<table id=\"example\" class=\"table table-striped responsive-utilities jambo_table display nowrap cell-border\" style=\"width: 100%\">");
 			html.append("<thead>");
@@ -1078,5 +1085,85 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			return ERROR;
 		}
 		return SUCCESS;
+	}
+	
+	public String exportUserPlanStatistic(){
+		try {
+			ServletContext servletContext = ServletActionContext.getServletContext();
+			String pathname = servletContext.getRealPath("/WEB-INF/template/excel/user_plan_statistic.xlsx");
+			File theFile = new File(pathname);
+			ExcelUtil xls = new ExcelUtil();
+
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
+			String startDate = StringUtil.notNull(request.getParameter("startDate"));
+			String endDate = StringUtil.notNull(request.getParameter("endDate"));
+
+			Date week1 = new Date(DateUtils.getDateFromString(startDate, "dd/MM/yyyy").getTime());
+			Date week2 = new Date(DateUtils.getDateFromString(endDate, "dd/MM/yyyy").getTime());
+
+			WorkingPlanHome wpHome = new WorkingPlanHome(HibernateUtil.getSessionFactory());
+			EventsNoteHome enHome = new EventsNoteHome(HibernateUtil.getSessionFactory());
+			List<UserPlanGeneral> results = wpHome.getAllUserPlan4Report(isManager()?-1:userSes.getId(), week1, week2);
+
+			try (FileInputStream fis = new FileInputStream(theFile)) {
+				workbook = xls.getWorkbook(fis,
+						FilenameUtils.getExtension(theFile.getAbsolutePath()));
+				Sheet sheet = workbook.getSheetAt(0);
+				int startIndexRow = 4;
+				int startIndexCell = 0;
+				
+				int sum_totalPhone = 0;
+				int sum_totalMeet = 0;
+				int no = 1;
+				LinkedHashMap<String, List<UserPlanGeneral>> hm = getUserPlanStatistic(results);
+				Set<String> set = hm.keySet();
+				for (String username_cuscode : set) {
+					List<UserPlanGeneral> listPlan = hm.get(username_cuscode);
+					
+					int totalPhone = 0;
+					int totalMeet = 0;
+					StringBuilder planDatePhone  = new StringBuilder();
+					StringBuilder planDateMeet  = new StringBuilder();
+					for (UserPlanGeneral userPlanGeneral : listPlan) {
+						if(userPlanGeneral.getPhone() > 0){
+							totalPhone++;
+							sum_totalPhone++;
+							planDatePhone.append(DateUtils.getStringFromDate(userPlanGeneral.getStart_date(), "dd/MM")).append("; ");
+						}else{
+							totalMeet++;
+							sum_totalMeet++;
+							planDateMeet.append(DateUtils.getStringFromDate(userPlanGeneral.getStart_date(), "dd/MM")).append("; ");
+						}
+					}
+					
+					EventsNote eventNote = enHome.findEventNoteByCode("ST-"+no+listPlan.get(0).getCustomer_code()+listPlan.get(0).getNVTT()+planDatePhone.toString().trim()+planDateMeet.toString().trim());
+					
+					xls.addRowData(sheet, startIndexRow, startIndexCell,
+							(no), 
+							(listPlan.get(0).getCustomer_code()),
+							(listPlan.get(0).getBusiness_name()),
+							(listPlan.get(0).getNVTT()),
+							(totalPhone>0?totalPhone:""),
+							planDatePhone.toString().trim(),
+							(totalMeet>0?totalMeet:""),
+							planDateMeet.toString().trim(),
+							(eventNote != null?eventNote.getENote():"")
+							);
+					startIndexRow++;
+					no++;
+				}
+				xls.updateRowData(sheet, 3, 4, sum_totalPhone);
+				xls.updateRowData(sheet, 3, 6, sum_totalMeet);
+
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				workbook.write(baos);
+				inputStream = new ByteArrayInputStream(baos.toByteArray());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+		return SUCCESS;
+	
 	}
 }

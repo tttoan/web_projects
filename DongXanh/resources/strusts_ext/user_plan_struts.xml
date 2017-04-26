@@ -110,6 +110,15 @@
 				<param name="bufferSize">2048</param>
 			</result>
 		</action>
+		<action name="export_user_plan_statistic" method="exportUserPlanStatistic"
+			class="com.home.action.UserPlanReportAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="user_plan_statistic.xlsx"</param>
+				<param name="bufferSize">2048</param>
+			</result>
+		</action>
 	</package>
 	
 </struts>
