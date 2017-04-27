@@ -247,10 +247,14 @@ public class CustomEventsManager extends DHXEventsManager implements UserPlanDef
 			try {
 				if (flag) {
 					EventsHistory evth = new EventsHistory(eventId,
-							evt.getEmployeeId(), evt.getPlanDateOld(),
+							evt.getEmployeeId(), 
+							evt.getPlanDateOld(),
 							evt.getStart_date(),
 							evt.getCustomerIdOld() == 0?evt.getCustomerId():evt.getCustomerIdOld(),
-							evt.getCustomerId(),evt.getContactType(), status.toString(),evt.getTypeOfDay(), new Date());
+							evt.getCustomerId(),
+							evt.getContactType(), 
+							status.toString(),
+							evt.getTypeOfDay(), new Date());
 					session.save(evth);
 				}
 			} catch (Exception e) {

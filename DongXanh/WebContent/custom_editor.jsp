@@ -98,9 +98,9 @@
 					</select></td>
 
 				</tr>
-				<tr>
-					<td><s:textarea label="Địa chỉ" id="directorAddress"
-							name="directorAddress" style="width: 100%" /></td>
+				<tr class="even pointer">
+					<td><s:textarea label="Địa chỉ" id="contactAddress"
+							name="contactAddress" value="%{contactAddress}" style="width: 100%" /></td>
 				</tr>
 			</tbody>
 		</table>
@@ -175,8 +175,8 @@
 				selectBoxes[i].value = obj["customerId"];
 			else if (name == "directorAdressCbb") {
 				selectBoxes[i].value = obj["customerId"];
-				$('#directorAddress').val(
-						$("#directorAdressCbb option:selected").text());
+				/* $('#contactAddress').val(
+						$("#directorAdressCbb option:selected").text()); */
 				$('#customerIdOld').val(obj["customerId"]);
 			} else
 				selectBoxes[i].value = obj[name];
@@ -201,7 +201,7 @@
 							$('#event_text').val(
 									$("#customerId option:selected").text());
 							$('#directorAdressCbb').val($(this).val());
-							$('#directorAddress').val(
+							$('#contactAddress').val(
 									$("#directorAdressCbb option:selected")
 											.text());
 						});

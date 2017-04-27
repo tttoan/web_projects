@@ -60,25 +60,18 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 	private List<User> listEmployee = new ArrayList<>();
 	private List<ContactType> listContactType = new ArrayList<>();
 	private List<TimelineType> listTimelineType = new ArrayList<>();
-	public List<TimelineType> getListTimelineType() {
-		return listTimelineType;
-	}
-
-	public void setListTimelineType(List<TimelineType> listTimelineType) {
-		this.listTimelineType = listTimelineType;
-	}
-
-	public List<ContactType> getListContactType() {
-		return listContactType;
-	}
-
-	public void setListContactType(List<ContactType> listContactType) {
-		this.listContactType = listContactType;
-	}
-
 	private InputStream ical;
 	private InputStream fileInputStream;
 	public boolean isPermissionAccept = false;
+	public String contactAddress;
+
+	public String getContactAddress() {
+		return contactAddress;
+	}
+
+	public void setContactAddress(String contactAddress) {
+		this.contactAddress = contactAddress;
+	}
 
 	public InputStream getFileInputStream() {
 		return fileInputStream;
@@ -355,6 +348,7 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 		getEmployees();
 		getAllContactType();
 		getAllTimelineType();
+		setContactAddress("my address");
 		return SUCCESS;
 	}
 
@@ -395,9 +389,11 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 					getSelectedUserPlan(),true);
 			System.out.println("UserPlanAction.planEvents() "+currentTab);
 		}
-		else
+		else{
 			evs = new CustomEventsManager(request,
 					getSelectedUserPlan());
+		}
+		evs.addResponseAttribute("contactAddress", contactAddress);
 		messageStore.setData(evs.run());
 		//System.out.println(messageStore.getData());
 		return Action.SUCCESS;
@@ -473,5 +469,21 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 
 	public void setPermissionAccept(boolean isPermissionAccept) {
 		this.isPermissionAccept = isPermissionAccept;
+	}
+	
+	public List<TimelineType> getListTimelineType() {
+		return listTimelineType;
+	}
+
+	public void setListTimelineType(List<TimelineType> listTimelineType) {
+		this.listTimelineType = listTimelineType;
+	}
+
+	public List<ContactType> getListContactType() {
+		return listContactType;
+	}
+
+	public void setListContactType(List<ContactType> listContactType) {
+		this.listContactType = listContactType;
 	}
 }

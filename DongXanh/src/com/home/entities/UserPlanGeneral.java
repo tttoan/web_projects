@@ -18,7 +18,16 @@ public class UserPlanGeneral {
 	private String telefone;
 	private String address;
 	private int contact_type;
+	private String contact_address;
 	
+	public String getContact_address() {
+		return contact_address;
+	}
+
+	public void setContact_address(String contact_address) {
+		this.contact_address = contact_address;
+	}
+
 	public int getContact_type() {
 		return contact_type;
 	}

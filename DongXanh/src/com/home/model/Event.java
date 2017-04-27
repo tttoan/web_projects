@@ -14,6 +14,15 @@ public class Event extends DHXEvent {
 	public Date planDateOld;
 	public int typeOfDay;
 	public int warningType;
+	public String contactAddress;
+
+	public String getContactAddress() {
+		return contactAddress;
+	}
+
+	public void setContactAddress(String contactAddress) {
+		this.contactAddress = contactAddress;
+	}
 
 	public int getWarningType() {
 		return warningType;

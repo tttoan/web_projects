@@ -530,6 +530,7 @@ public class CustomerHome {
 			cus.setDirector((String)objects[2]);
 			cus.setTelefone((String)objects[3]);
 			cus.setBusinessAddress((String)objects[4]);
+			cus.setStatisticName((String)objects[4]);
 			listCustomer.add(cus);
 		}
 		return listCustomer;
