@@ -377,6 +377,17 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 				editor_custom();
 			}
 			//System.out.println(request.getParameter("contactType") + "/" + request.getParameter("contactAddress") + " : " +  contactAddress);
+			String contactType = StringUtil.notNull(request.getParameter("contactType"));
+			if(contactType.matches("^(1|2)$")){
+				String customerId = StringUtil.notNull(request.getParameter("customerId"));
+				String contactAddress = StringUtil.notNull(request.getParameter("contactAddress"));
+				/**
+				 * Update customer address
+				 */
+				if(!customerId.isEmpty()){
+					new CustomerHome(HibernateUtil.getSessionFactory()).updateCustomerAddress(Integer.parseInt(customerId), contactAddress);
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

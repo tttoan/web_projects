@@ -229,6 +229,26 @@ public class CustomerHome {
 		}
 	}
 	
+	public void updateCustomerAddress(int custId, String businessAddress) {
+		log.debug("Updating status instance");
+		Transaction tx = null;
+		try {
+			Session session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			String query = "update Customer set customer_is_active = 0, businessAddress=:businessAddress where id=:customerId";
+			session.createQuery( query )
+			        .setInteger("customerId", custId )
+			        .setString("businessAddress", businessAddress)
+			        .executeUpdate();
+			tx.commit();
+			session.close();
+			log.debug("Update successful");
+		} catch (RuntimeException re) {
+			log.error("Update failed", re);
+			throw re;
+		}
+	}
+	
 	public void delete(Customer persistentInstance) {
 		log.debug("deleting Customer instance");
 		Transaction tx = null;
