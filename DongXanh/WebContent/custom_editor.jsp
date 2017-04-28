@@ -99,8 +99,10 @@
 
 				</tr>
 				<tr class="even pointer">
-					<td><s:textarea label="Địa chỉ" id="contactAddress"
-							name="contactAddress" value="%{contactAddress}" style="width: 100%" /></td>
+					<td>
+						<%-- <s:textarea label="Địa chỉ" id="contactAddress" name="contactAddress" value="%{contactAddress}" style="width: 100%" /> --%>
+						<s:textfield label="Địa chỉ" id="contactAddress" name="contactAddress" value="%{contactAddress}" style="width: 100%" />
+					</td>
 				</tr>
 			</tbody>
 		</table>

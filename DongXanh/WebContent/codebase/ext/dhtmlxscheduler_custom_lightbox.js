@@ -244,6 +244,7 @@ scheduler.initCustomLightbox = function (obj, parent, name) {
                 var changed = frame.contentWindow.getValues();
                 for (var i in changed) {
                     ev[i] = changed[i];
+                    //alert(ev[i] + ": " + changed[i]);
                 }
                 parent.endLightbox(true, parent._lightbox);
             };

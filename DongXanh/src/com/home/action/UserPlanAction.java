@@ -63,15 +63,15 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 	private InputStream ical;
 	private InputStream fileInputStream;
 	public boolean isPermissionAccept = false;
-	public String contactAddress;
-
-	public String getContactAddress() {
-		return contactAddress;
-	}
-
-	public void setContactAddress(String contactAddress) {
-		this.contactAddress = contactAddress;
-	}
+//	private String contactAddress;
+//
+//	public String getContactAddress() {
+//		return contactAddress;
+//	}
+//
+//	public void setContactAddress(String contactAddress) {
+//		this.contactAddress = contactAddress;
+//	}
 
 	public InputStream getFileInputStream() {
 		return fileInputStream;
@@ -348,7 +348,7 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 		getEmployees();
 		getAllContactType();
 		getAllTimelineType();
-		setContactAddress("my address");
+		//setContactAddress("my address");
 		return SUCCESS;
 	}
 
@@ -376,6 +376,7 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 				selectedUserPlan.setId(emp_id);
 				editor_custom();
 			}
+			//System.out.println(request.getParameter("contactType") + "/" + request.getParameter("contactAddress") + " : " +  contactAddress);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -393,7 +394,9 @@ public class UserPlanAction extends ActionSupport implements UserAware, UserPlan
 			evs = new CustomEventsManager(request,
 					getSelectedUserPlan());
 		}
-		evs.addResponseAttribute("contactAddress", contactAddress);
+		
+		//evs.addResponseAttribute("contactAddress", contactAddress);
+		//request.setAttribute("contactAddress", contactAddress);
 		messageStore.setData(evs.run());
 		//System.out.println(messageStore.getData());
 		return Action.SUCCESS;
