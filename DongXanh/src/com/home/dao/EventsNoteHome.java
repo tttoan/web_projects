@@ -4,6 +4,7 @@ package com.home.dao;
 
 import static org.hibernate.criterion.Example.create;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -154,6 +155,39 @@ public class EventsNoteHome {
 				log.error("get failed", e);
 			}
 		}
+	}
+	
+	public List<EventsNote> findEventNotesByCodes(List<String> codes) throws Exception {
+		Transaction tx = null;
+		Session session = null;
+		List<EventsNote> listEventNotes = new ArrayList<EventsNote>();
+		try {
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			for (String code : codes) {
+				log.debug("getting EventsNote instance with code: " + code);
+				EventsNote instance = (EventsNote) session.createCriteria(EventsNote.class)
+						.add(Restrictions.eq("ECode", code)).uniqueResult();
+				if (instance != null) {
+					listEventNotes.add(instance);
+				}
+			}
+			tx.commit();
+		} catch (Exception re) {
+			log.error("get failed", re);
+			throw re;
+		} finally{
+			try {
+				if(session != null){
+					session.flush();
+					session.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.error("get failed", e);
+			}
+		}
+		return listEventNotes;
 	}
 	
 	public EventsNote findProductByCode(Session session, String code) throws Exception {

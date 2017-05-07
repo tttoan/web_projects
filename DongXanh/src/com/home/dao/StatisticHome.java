@@ -29,6 +29,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
 import org.hibernate.transform.Transformers;
 
+import com.home.conts.MyConts;
 import com.home.entities.RevenuesComparison;
 import com.home.entities.RevenuesCustomerDetail;
 import com.home.entities.RevenuesCustomerL1;
@@ -328,9 +329,22 @@ public class StatisticHome {
 		try {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			List<Statistic> results = session.createCriteria(Statistic.class).add(Restrictions.between("dateReceived", sttCustom.getFromDate(), sttCustom.getToDate()))
-					.add(Restrictions.eq("customerByCustomerCodeLevel2.id", sttCustom.getCustLevel2Id())).add(Restrictions.eq("customerByCustomerCodeLevel1.id", sttCustom.getCustLevel1Id()))
-					.add(Restrictions.eq("user.id", sttCustom.getEmpId())).addOrder(Order.asc("dateReceived")).list();
+			Criteria criteria = session.createCriteria(Statistic.class);
+			criteria.add(Restrictions.eq("invoiceType.id", MyConts.INVOICE_STATISTIC_CUS_L2));
+			if(sttCustom.getFromDate() != null && sttCustom.getToDate() != null){
+				criteria.add(Restrictions.between("dateReceived", sttCustom.getFromDate(), sttCustom.getToDate()));
+			}
+			if(sttCustom.getCustLevel2Id() > 0){
+				criteria.add(Restrictions.eq("customerByCustomerCodeLevel2.id", sttCustom.getCustLevel2Id()));
+			}
+			if(sttCustom.getCustLevel1Id() > 0){
+				criteria.add(Restrictions.eq("customerByCustomerCodeLevel1.id", sttCustom.getCustLevel1Id()));
+			}
+			if(sttCustom.getEmpId() > 0){
+				criteria.add(Restrictions.eq("user.id", sttCustom.getEmpId()));
+			}
+			criteria.addOrder(Order.asc("dateReceived"));
+			List<Statistic> results = criteria.list();
 			tx.commit();
 			log.debug("retrieve list Statistic successful, result size: " + results.size());
 			return results;

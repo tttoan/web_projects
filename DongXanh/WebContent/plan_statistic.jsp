@@ -222,7 +222,7 @@ $(document).ready(function() {
  	              $('#example').DataTable({
  	            	 scrollX: true,
  	                 fixedHeader: true,
- 	                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+ 	                "lengthMenu": [[10, 25, 50, 5, -1], [10, 25, 50, 5, "All"]],
  	              });
  	              
  	             table = $('#example').DataTable();
@@ -231,20 +231,20 @@ $(document).ready(function() {
   	                selected_row =  table.row( this ).index();
   	                
   	                //alert( 'You clicked on '+data[1]+' row' );
-  	                  var code = 'ST-'+data[0]+data[1]+data[3]+data[5]+data[7];
- 	                 $('#plan_code').val(code);
-  	                 $('#descr').val(data[8].replace(/<br>/g, '\n'));
-  	               	$('#fc_addNoteDialog').click();
+  	                 //var code = 'ST-'+data[0]+data[1]+data[3]+data[5]+data[7];
+ 	                 //$('#plan_code').val(code);
+  	                 //$('#descr').val(data[8].replace(/<br>/g, '\n'));
+  	               	//$('#fc_addNoteDialog').click();
  	             } );
  	             
  	             $('#example tbody').on( 'click', 'button', function () {
  	            	 var data = table.row( $(this).parents('tr') ).data();
 	                 selected_row =  table.row( $(this).parents('tr') ).index();
 	                 //alert( 'You clicked on '+data[1]+' row' );
-	                   var code = 'ST-'+data[0]+data[1]+data[3]+data[5]+data[7];
- 	                 $('#plan_code').val(code);
-	                  $('#descr').val(data[8].replace(/<br>/g, '\n'));
-	                 $('#fc_addNoteDialog').click();
+	                  //var code = 'ST-'+data[0]+data[1]+data[3]+data[5]+data[7];
+ 	                 //$('#plan_code').val(code);
+	                  //$('#descr').val(data[8].replace(/<br>/g, '\n'));
+	                 //$('#fc_addNoteDialog').click();
 	             } ); 
  	            }
  	        });    

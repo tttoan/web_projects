@@ -30,6 +30,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import com.home.conts.InvoiceTypeText;
+import com.home.conts.MyConts;
 import com.home.dao.CategoryHome;
 import com.home.dao.CustomerHome;
 import com.home.dao.ProductHome;
@@ -49,6 +50,7 @@ import com.home.util.DateUtils;
 import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
+import com.home.util.SystemUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
@@ -354,7 +356,7 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 					}
 					// --------Balance Type-------
 					InvoiceType invoiceType = new InvoiceType();
-					invoiceType.setId(4);
+					invoiceType.setId(MyConts.INVOICE_INVENTORY_L1);
 					stat.setInvoiceType(invoiceType);
 					// ---------------------------
 					boolean isDuplicated = sttHome.isStatictisDuplicateLevel1(session, getStat().getDateReceived(), getStat().getCustomerByCustomerCodeLevel1() == null ? null : getStat()
@@ -483,10 +485,10 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 					if (flagLevel1 && flagLevel2) {
 						chooseTab = "levelTwo";
 						chooseSubTab = "quickInvoiceLevel2";
-						invoiceType.setId(3);
+						invoiceType.setId(MyConts.INVOICE_STATISTIC_CUS_L2);
 						stat.setInvoiceType(invoiceType);
 					} else {
-						invoiceType.setId(1);
+						invoiceType.setId(MyConts.INVOICE_STATISTIC_CUS_L1);
 						stat.setInvoiceType(invoiceType);
 					}
 
@@ -573,10 +575,21 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 				for (Statistic entry : statistics) {
 					calendar.setTime(entry.getDateReceived());
 					Category cat = catHome.findById(entry.getProduct().getCategory().getId());
-					xls.addRowData(sheet, startIndexRow, startIndexCell, calendar.get(Calendar.MONTH) + "", SDF.format(entry.getDateReceived()), entry.getCustomerByCustomerCodeLevel2()
-							.getCustomerCode(), entry.getCustomerByCustomerCodeLevel2().getDirector(), entry.getCustomerByCustomerCodeLevel1().getCustomerCode(), entry
-							.getCustomerByCustomerCodeLevel1().getDirector(), entry.getProduct().getProductCode(), cat.getCategoryCode(), entry.getProduct().getProductName(),
-							entry.getTotalBox() + "", entry.getQuantity() + "", entry.getProduct().getUnitPrice() + "", entry.getTotal() + "", entry.getUser().getFullName());
+					xls.addRowData(sheet, startIndexRow, startIndexCell, 
+							calendar.get(Calendar.MONTH) + "", 
+							SDF.format(entry.getDateReceived()), 
+							entry.getCustomerByCustomerCodeLevel2().getCustomerCode(), 
+							entry.getCustomerByCustomerCodeLevel2().getDirector(), 
+							entry.getCustomerByCustomerCodeLevel1().getCustomerCode(), 
+							entry.getCustomerByCustomerCodeLevel1().getDirector(), 
+							entry.getProduct().getProductCode(), 
+							cat.getCategoryCode(), 
+							entry.getProduct().getProductName(),
+							entry.getTotalBox() + "", 
+							entry.getQuantity() + "", 
+							SystemUtil.format2Money(entry.getProduct().getUnitPrice()), 
+							SystemUtil.format2Money(entry.getTotal()), 
+							entry.getUser().getFullName());
 					startIndexRow++;
 				}
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();

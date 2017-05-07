@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -142,7 +143,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			html.append("<thead>");
 
 			html.append("<tr class=\"headings\">");
-			html.append("<th colspan=\"10\">BÁO CÁO THỐNG KÊ SỐ LẦN TIẾP XÚC KHÁCH HÀNG</th>");
+			html.append("<th colspan=\"9\">BÁO CÁO THỐNG KÊ SỐ LẦN TIẾP XÚC KHÁCH HÀNG</th>");
 			html.append("</tr>");
 
 			html.append("<tr class=\"headings\">");
@@ -151,7 +152,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			html.append("<th rowspan=\"2\">Tên khách hàng</th>");
 			html.append("<th rowspan=\"2\">NVTT</th>");
 			html.append("<th colspan=\"4\">Số lần tiếp xúc KH</th>");
-			html.append("<th rowspan=\"2\" colspan=\"2\">Ghi chú</th>");
+			html.append("<th rowspan=\"2\">Ghi chú</th>");
 			html.append("</tr>");
 
 			html.append("<tr class=\"headings\">");
@@ -180,6 +181,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 				int totalMeet = 0;
 				StringBuilder planDatePhone  = new StringBuilder();
 				StringBuilder planDateMeet  = new StringBuilder();
+				List<String>codes = new ArrayList<String>();
 				for (UserPlanGeneral userPlanGeneral : listPlan) {
 					if(userPlanGeneral.getPhone() > 0){
 						totalPhone++;
@@ -190,19 +192,36 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 						sum_totalMeet++;
 						planDateMeet.append(DateUtils.getStringFromDate(userPlanGeneral.getStart_date(), "dd/MM")).append("; ");
 					}
+					
+					String fullWorkingDate = StringUtil.getDayName(userPlanGeneral.getStart_date()) + ", " + DateUtils.getStringFromDate(userPlanGeneral.getStart_date(), "dd/MM/yy");
+					codes.add("DT-" + listPlan.get(0).getNVTT() + fullWorkingDate + listPlan.get(0).getCustomer_code());
 				}
 
 				tblContent.append("<td style=\"text-align:center\">" + (totalPhone>0?totalPhone:"") + "</td>");
 				tblContent.append("<td style=\"text-align:left\">" + planDatePhone.toString().trim() + "</td>");
 				tblContent.append("<td style=\"text-align:center\">" + (totalMeet>0?totalMeet:"") + "</td>");
 				tblContent.append("<td style=\"text-align:left\">" + planDateMeet.toString().trim() + "</td>");
-				EventsNote eventNote = enHome.findEventNoteByCode("ST-"+no+listPlan.get(0).getCustomer_code()+listPlan.get(0).getNVTT()+planDatePhone.toString().trim()+planDateMeet.toString().trim());
-				if(eventNote != null){
-					tblContent.append("<td style=\"text-align:left\" id=\"id_note\">"+eventNote.getENote()+"</td>");
+//				EventsNote eventNote = enHome.findEventNoteByCode("ST-"+no+listPlan.get(0).getCustomer_code()+listPlan.get(0).getNVTT()+planDatePhone.toString().trim()+planDateMeet.toString().trim());
+//				if(eventNote != null){
+//					tblContent.append("<td style=\"text-align:left\" id=\"id_note\">"+eventNote.getENote()+"</td>");
+//				}else{
+//					tblContent.append("<td style=\"text-align:left\" id=\"id_note\"></td>");
+//				}
+				codes.add("ST-"+no+listPlan.get(0).getCustomer_code()+listPlan.get(0).getNVTT()+planDatePhone.toString().trim()+planDateMeet.toString().trim());
+				List<EventsNote> eventNotes = enHome.findEventNotesByCodes(codes);
+				if(eventNotes.size() > 0){
+					StringBuilder note = new StringBuilder();
+					for (EventsNote eventNote : eventNotes) {
+						if(eventNote != null && StringUtil.notNull(eventNote.getENote()).length() > 0){
+							note.append(eventNote.getENote()).append("<hr/>");
+						}
+					}
+					tblContent.append("<td style=\"text-align:left\" id=\"id_note\">"+note.toString().replaceAll(Pattern.quote("<hr/>")+"$", "")+"</td>");
 				}else{
 					tblContent.append("<td style=\"text-align:left\" id=\"id_note\"></td>");
 				}
-				tblContent.append("<td><button class=\"btn btn-info btn-xs\">Ghi chú</button></td>");
+				
+				//tblContent.append("<td><button class=\"btn btn-info btn-xs\">Ghi chú</button></td>");
 				tblContent.append("</tr>");
 				no++;
 			}
@@ -213,7 +232,8 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 			html.append("<th></th>");
 			html.append("<th>"+sum_totalPhone+"</th><th>dd/mm</th>");
 			html.append("<th>"+sum_totalMeet+"</th>");
-			html.append("<th>dd/mm</th><th>-------------------------------------------------------------</th><th></th>");
+			//html.append("<th>dd/mm</th><th>-------------------------------------------------------------</th><th></th>");
+			html.append("<th>dd/mm</th><th></th>");
 			html.append("</tr>");
 
 			html.append("</thead>");
@@ -1124,6 +1144,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 					int totalMeet = 0;
 					StringBuilder planDatePhone  = new StringBuilder();
 					StringBuilder planDateMeet  = new StringBuilder();
+					List<String>codes = new ArrayList<String>();
 					for (UserPlanGeneral userPlanGeneral : listPlan) {
 						if(userPlanGeneral.getPhone() > 0){
 							totalPhone++;
@@ -1134,9 +1155,22 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 							sum_totalMeet++;
 							planDateMeet.append(DateUtils.getStringFromDate(userPlanGeneral.getStart_date(), "dd/MM")).append("; ");
 						}
+						
+						String fullWorkingDate = StringUtil.getDayName(userPlanGeneral.getStart_date()) + ", " + DateUtils.getStringFromDate(userPlanGeneral.getStart_date(), "dd/MM/yy");
+						codes.add("DT-" + listPlan.get(0).getNVTT() + fullWorkingDate + listPlan.get(0).getCustomer_code());
 					}
 					
-					EventsNote eventNote = enHome.findEventNoteByCode("ST-"+no+listPlan.get(0).getCustomer_code()+listPlan.get(0).getNVTT()+planDatePhone.toString().trim()+planDateMeet.toString().trim());
+					//EventsNote eventNote = enHome.findEventNoteByCode("ST-"+no+listPlan.get(0).getCustomer_code()+listPlan.get(0).getNVTT()+planDatePhone.toString().trim()+planDateMeet.toString().trim());
+					codes.add("ST-"+no+listPlan.get(0).getCustomer_code()+listPlan.get(0).getNVTT()+planDatePhone.toString().trim()+planDateMeet.toString().trim());
+					List<EventsNote> eventNotes = enHome.findEventNotesByCodes(codes);
+					StringBuilder note = new StringBuilder("");
+					if(eventNotes.size() > 0){
+						for (EventsNote eventNote : eventNotes) {
+							if(eventNote != null && StringUtil.notNull(eventNote.getENote()).length() > 0){
+								note.append(eventNote.getENote()).append("; ");
+							}
+						}
+					}
 					
 					xls.addRowData(sheet, startIndexRow, startIndexCell,
 							(no), 
@@ -1147,7 +1181,7 @@ public class UserPlanReportAction extends ActionSupport implements UserAware, Ac
 							planDatePhone.toString().trim(),
 							(totalMeet>0?totalMeet:""),
 							planDateMeet.toString().trim(),
-							(eventNote != null?eventNote.getENote():"")
+							note.toString().replaceAll("; $", "")//(eventNote != null?eventNote.getENote():"")
 							);
 					startIndexRow++;
 					no++;
