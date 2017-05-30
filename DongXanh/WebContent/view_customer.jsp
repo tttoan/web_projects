@@ -1,3 +1,4 @@
+<%@page import="com.home.util.StringUtil"%>
 <%@page import="com.home.entities.City"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -174,7 +175,7 @@
 										</label>
 										<div class="col-md-3 col-sm-3 col-xs-12">
 											<% 
-												String citi = ""+request.getAttribute("cust.customer_location");
+												String citi = StringUtil.notNull(request.getAttribute("cust.customer_location"));
 												Object objCity = request.getAttribute("listCity");
 												if(citi.length() > 0 && objCity != null){
 													List<City> listCity = (List<City>)objCity;

@@ -235,7 +235,7 @@ public class CustomerHome {
 		try {
 			Session session = sessionFactory.openSession();
 			tx = session.beginTransaction();
-			String query = "update Customer set customer_is_active = 0, businessAddress=:businessAddress where id=:customerId";
+			String query = "update Customer set businessAddress=:businessAddress where id=:customerId";
 			session.createQuery( query )
 			        .setInteger("customerId", custId )
 			        .setString("businessAddress", businessAddress)
@@ -434,6 +434,7 @@ public class CustomerHome {
 			tx = session.beginTransaction();
 			Criteria criteria = session.createCriteria(Customer.class);
 			criteria.add(Restrictions.eq("customerCode", customerCode));
+			criteria.add(Restrictions.eq("customerIsActive", true));
 			criteria.add(Restrictions.ne("id", id));
 			criteria.setProjection(Projections.rowCount());
 			Long count = (Long) criteria.uniqueResult();
@@ -467,6 +468,7 @@ public class CustomerHome {
 			tx = session.beginTransaction();
 			Criteria criteria = session.createCriteria(Customer.class);
 			criteria.add(Restrictions.eq("statisticName", statisticName));
+			criteria.add(Restrictions.eq("customerIsActive", true));
 			criteria.add(Restrictions.ne("id", id));
 			criteria.setProjection(Projections.rowCount());
 			Long count = (Long) criteria.uniqueResult();
@@ -566,7 +568,7 @@ public class CustomerHome {
 			Connection conn = sessionImpl.connection();
 			try (Statement sta = conn.createStatement()) {
 				String query = "Select id, customer_code, business_name, director, statistic_name, telefone,business_address "
-						+ "From customer where user_id= "+user_id + " order by customer_code, business_name, statistic_name";
+						+ "From customer where user_id= "+user_id + " And customer_is_active="+CUSTOMER_IS_ACTIVE+" order by customer_code, business_name, statistic_name";
 				System.out.println(query);
 				try (ResultSet rs = sta.executeQuery(query)) {
 					while (rs.next()) {
@@ -610,7 +612,7 @@ public class CustomerHome {
 			Connection conn = sessionImpl.connection();
 			try (Statement sta = conn.createStatement()) {
 				String query = "Select id, customer_code, business_name, director, statistic_name "
-						+ "From customer where user_id is null order by customer_code, business_name, statistic_name";
+						+ "From customer where user_id is null  And customer_is_active="+CUSTOMER_IS_ACTIVE+" order by customer_code, business_name, statistic_name";
 				try (ResultSet rs = sta.executeQuery(query)) {
 					while (rs.next()) {
 						Customer cus = new Customer();
