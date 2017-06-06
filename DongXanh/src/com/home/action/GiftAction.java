@@ -40,6 +40,7 @@ public class GiftAction implements ServletContextAware, UserAware{
 			action.create();
 			//action.list();
 			//action.delete();
+			//New test
 			System.out.println(action.getTotalProducts());
 		} catch (Exception e) {
 			e.printStackTrace();
