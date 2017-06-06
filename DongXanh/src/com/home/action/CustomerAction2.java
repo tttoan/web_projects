@@ -135,10 +135,14 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 			System.out.println("skip = " + skip);
 
 			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
-			data = cusHome.getListCustomer(skip, pageSize, search, varCusByUser, varCusAssign & !varCusNotAssign ? 1 : (!varCusAssign & varCusNotAssign ? 2 : 0), varCusByLevel1);
 			// Get Total Record Count for Pagination
 			recordsTotal = cusHome.getTotalRecords(search, varCusByUser, varCusAssign & !varCusNotAssign ? 1 : (!varCusAssign & varCusNotAssign ? 2 : 0), varCusByLevel1);
 			recordsFiltered = recordsTotal;
+			if(pageSize==-1){
+				pageSize = recordsFiltered;
+			}
+			data = cusHome.getListCustomer(skip, pageSize, search, varCusByUser, varCusAssign & !varCusNotAssign ? 1 : (!varCusAssign & varCusNotAssign ? 2 : 0), varCusByLevel1);
+		
 			System.out.println("Records total " + data.size() + "/" + recordsTotal);
 			return SUCCESS;
 		} catch (Exception e) {

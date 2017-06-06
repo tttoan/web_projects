@@ -13,7 +13,7 @@
 
 <!-- page content -->
 <div class="right_col" role="main">
-	<div class="">
+	<div class="pagecontent">
 		<div class="page-title">
 			<div class="title_left">
 				<s:if test="%{edit}">
@@ -214,7 +214,7 @@
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
 											for="emp_id">Nhân viên TT 
 										</label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
+										<div class="col-md-3 col-sm-6 col-xs-12">
 											<s:select id="emp_id" name="emp.id"
 												cssClass="form-control col-md-7 col-xs-12"
 												showDownArrow="false" autoComplete="true" headerKey="-1" headerValue="--"
@@ -223,6 +223,22 @@
 												style="width:245px"
 												value="%{cust.user.id}" />
 										</div>
+										<div id="typeGroupCustomer">
+											<label class="control-label col-md-2 col-sm-3 col-xs-12" 
+												for="grpCustomerdetail_id">Loại
+											</label>
+											<div class="col-md-4 col-sm-3 col-xs-12">
+												<s:select id="GrpCusdetail_id" name="listGrpCusdetail"
+													cssClass="col-md-12 col-xs-12" 
+													showDownArrow="false" autoComplete="true" headerKey="-1" headerValue="--"
+													listKey="groupName" list="listGrpCusdetail"
+													listValue="groupName"
+													style="width:245px"
+													value="%{cust.truongxuuan}" />
+											</div>
+										</div>
+										
+										
 									</div>
 									
 									<div class="item form-group">
@@ -276,8 +292,8 @@
 											</s:else>
 									</div>
 									
-									
-									<div class="item form-group">
+									<div id ="khachhangcap2">
+										<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
 											for="certificateNumber">Giấy phép ĐKKD số 
 										</label>
@@ -304,148 +320,150 @@
 										</div>
 									</div>
 
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="certificateAddress">Địa chỉ đăng kí KD 
-										</label>
-										<div class="col-md-8 col-sm-6 col-xs-12">
-											<textarea id="certificateAddress"
-												name="cust.certificateAddress"
-												class="form-control col-md-7 col-xs-12">${cust.certificateAddress}</textarea>
+										<div class="item form-group">
+											<label class="control-label col-md-3 col-sm-3 col-xs-12"
+												for="certificateAddress">Địa chỉ đăng kí KD 
+											</label>
+											<div class="col-md-8 col-sm-6 col-xs-12">
+												<textarea id="certificateAddress"
+													name="cust.certificateAddress"
+													class="form-control col-md-7 col-xs-12">${cust.certificateAddress}</textarea>
+											</div>
 										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="taxNumber">Mã số thuế 
-										</label>
-										<div class="col-md-3 col-sm-6 col-xs-12">
-											<input id="taxNumber" type="text" name="cust.taxNumber"
-												 value="${cust.taxNumber}"
-												class="form-control col-md-7 col-xs-12">
+										<div class="item form-group">
+											<label class="control-label col-md-3 col-sm-3 col-xs-12"
+												for="taxNumber">Mã số thuế 
+											</label>
+											<div class="col-md-3 col-sm-6 col-xs-12">
+												<input id="taxNumber" type="text" name="cust.taxNumber"
+													 value="${cust.taxNumber}"
+													class="form-control col-md-7 col-xs-12">
+											</div>
+											<label class="control-label col-md-2 col-sm-3 col-xs-12"
+												for="budgetRegister">Vốn đăng kí </label>
+											<div class="col-md-3 col-sm-6 col-xs-12">
+												<input id="budgetRegister" type="text"
+													name="cust.budgetRegister" value="${cust.budgetRegister}"
+													class="form-control col-md-7 col-xs-12">
+											</div>
 										</div>
-										<label class="control-label col-md-2 col-sm-3 col-xs-12"
-											for="budgetRegister">Vốn đăng kí </label>
-										<div class="col-md-3 col-sm-6 col-xs-12">
-											<input id="budgetRegister" type="text"
-												name="cust.budgetRegister" value="${cust.budgetRegister}"
-												class="form-control col-md-7 col-xs-12">
-										</div>
-									</div>
 
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="telefone">Điện thoại bàn </label>
-										<div class="col-md-2 col-sm-6 col-xs-12">
-											<input id="telefone" type="text" name="cust.telefone"
-												value="${cust.telefone}"
-												class="form-control col-md-7 col-xs-12">
+										<div class="item form-group">
+											<label class="control-label col-md-3 col-sm-3 col-xs-12"
+												for="telefone">Điện thoại bàn </label>
+											<div class="col-md-2 col-sm-6 col-xs-12">
+												<input id="telefone" type="text" name="cust.telefone"
+													value="${cust.telefone}"
+													class="form-control col-md-7 col-xs-12">
+											</div>
+											<label class="control-label col-md-1 col-sm-3 col-xs-12"
+												for="fax">Fax </label>
+											<div class="col-md-2 col-sm-6 col-xs-12">
+												<input id="fax" type="text" name="cust.fax"
+													value="${cust.fax}" class="form-control col-md-7 col-xs-12">
+											</div>
+											<label class="control-label col-md-1 col-sm-3 col-xs-12"
+												for="email">Email </label>
+											<div class="col-md-2 col-sm-6 col-xs-12">
+												<input type="email" id="email" name="cust.email"
+													value="${cust.email}"
+													class="form-control col-md-7 col-xs-12">
+											</div>
 										</div>
-										<label class="control-label col-md-1 col-sm-3 col-xs-12"
-											for="fax">Fax </label>
-										<div class="col-md-2 col-sm-6 col-xs-12">
-											<input id="fax" type="text" name="cust.fax"
-												value="${cust.fax}" class="form-control col-md-7 col-xs-12">
+										<div class="item form-group">
+											<label class="control-label col-md-3 col-sm-3 col-xs-12"
+												for="socialAddress">Địa chỉ mạng xã hội </label>
+											<div class="col-md-8 col-sm-6 col-xs-12">
+												<input id="socialAddress" type="text"
+													name="cust.socialAddress" value="${cust.socialAddress}"
+													class="form-control col-md-7 col-xs-12">
+											</div>
 										</div>
-										<label class="control-label col-md-1 col-sm-3 col-xs-12"
-											for="email">Email </label>
-										<div class="col-md-2 col-sm-6 col-xs-12">
-											<input type="email" id="email" name="cust.email"
-												value="${cust.email}"
-												class="form-control col-md-7 col-xs-12">
+										<div class="item form-group">
+											<label class="control-label col-md-3 col-sm-3 col-xs-12"
+												for="businessAddress">Địa điểm kinh doanh </label>
+											<div class="col-md-8 col-sm-6 col-xs-12">
+												<input id="businessAddress" type="text"
+													name="cust.businessAddress" value="${cust.businessAddress}"
+													class="form-control col-md-7 col-xs-12">
+											</div>
 										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="socialAddress">Địa chỉ mạng xã hội </label>
-										<div class="col-md-8 col-sm-6 col-xs-12">
-											<input id="socialAddress" type="text"
-												name="cust.socialAddress" value="${cust.socialAddress}"
-												class="form-control col-md-7 col-xs-12">
+										<div class="item form-group">
+											<label class="control-label col-md-3 col-sm-3 col-xs-12"
+												for="adviser">Người đại diện pháp luật </label>
+											<div class="col-md-5 col-sm-6 col-xs-12">
+												<input id="adviser" type="text" name="cust.adviser"
+													value="${cust.lawyer}"
+													class="form-control col-md-7 col-xs-12">
+											</div>
 										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="businessAddress">Địa điểm kinh doanh </label>
-										<div class="col-md-8 col-sm-6 col-xs-12">
-											<input id="businessAddress" type="text"
-												name="cust.businessAddress" value="${cust.businessAddress}"
-												class="form-control col-md-7 col-xs-12">
+										<div class="item form-group">
+											<label class="control-label col-md-3 col-sm-3 col-xs-12"
+												for="director">Người quyết định chính công việc </label>
+											<div class="col-md-5 col-sm-6 col-xs-12">
+												<input id="director" type="text" name="cust.director"
+													value="${cust.director}"
+													class="form-control col-md-7 col-xs-12">
+											</div>
+											<label class="control-label col-md-1 col-sm-3 col-xs-12"
+												for="directorMobile">ĐTDĐ </label>
+											<div class="col-md-2 col-sm-6 col-xs-12">
+												<input id="directorMobile" name="cust.directorMobile"
+													type="text" value="${cust.directorMobile}"
+													class="form-control col-md-7 col-xs-12">
+											</div>
 										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="adviser">Người đại diện pháp luật </label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<input id="adviser" type="text" name="cust.adviser"
-												value="${cust.lawyer}"
-												class="form-control col-md-7 col-xs-12">
+										<div class="item form-group">
+											<label class="control-label col-md-3 col-sm-3 col-xs-12"
+												for="directorBirthday">Ngày sinh </label>
+											<div class="col-md-3 xdisplay_inputx has-feedback">
+												<input type="text" class="form-control has-feedback-left"
+													id="directorBirthday" name="varDirectorBirthday"
+													value="${varDirectorBirthday}"
+													aria-describedby="inputSuccess2Status"> <span
+													class="fa fa-calendar-o form-control-feedback left"
+													aria-hidden="true"></span> <span id="inputSuccess2Status"
+													class="sr-only">(success)</span>
+											</div>
+											<label class="control-label col-md-2 col-sm-3 col-xs-12"
+												for="directorDomicile">Nguyên quán </label>
+											<div class="col-md-3 col-sm-6 col-xs-12">
+												<input id="directorDomicile" type="text"
+													name="cust.directorDomicile"
+													value="${cust.directorDomicile}"
+													class="form-control col-md-7 col-xs-12">
+											</div>
 										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="director">Người quyết định chính công việc </label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<input id="director" type="text" name="cust.director"
-												value="${cust.director}"
-												class="form-control col-md-7 col-xs-12">
+										<div class="item form-group">
+											<label class="control-label col-md-3 col-sm-3 col-xs-12"
+												for="sellMan">Người bán hàng trực tiếp </label>
+											<div class="col-md-5 col-sm-6 col-xs-12">
+												<input id="sellMan" type="text" name="cust.sellMan"
+													value="${cust.sellMan}"
+													class="form-control col-md-7 col-xs-12">
+											</div>
+											<label class="control-label col-md-1 col-sm-3 col-xs-12"
+												for="sellManMobile">ĐTDĐ </label>
+											<div class="col-md-2 col-sm-6 col-xs-12">
+												<input id="sellManMobile" type="text"
+													name="cust.sellManMobile" value="${cust.sellManMobile}"
+													class="form-control col-md-7 col-xs-12">
+											</div>
 										</div>
-										<label class="control-label col-md-1 col-sm-3 col-xs-12"
-											for="directorMobile">ĐTDĐ </label>
-										<div class="col-md-2 col-sm-6 col-xs-12">
-											<input id="directorMobile" name="cust.directorMobile"
-												type="text" value="${cust.directorMobile}"
-												class="form-control col-md-7 col-xs-12">
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="directorBirthday">Ngày sinh </label>
-										<div class="col-md-3 xdisplay_inputx has-feedback">
-											<input type="text" class="form-control has-feedback-left"
-												id="directorBirthday" name="varDirectorBirthday"
-												value="${varDirectorBirthday}"
-												aria-describedby="inputSuccess2Status"> <span
-												class="fa fa-calendar-o form-control-feedback left"
-												aria-hidden="true"></span> <span id="inputSuccess2Status"
-												class="sr-only">(success)</span>
-										</div>
-										<label class="control-label col-md-2 col-sm-3 col-xs-12"
-											for="directorDomicile">Nguyên quán </label>
-										<div class="col-md-3 col-sm-6 col-xs-12">
-											<input id="directorDomicile" type="text"
-												name="cust.directorDomicile"
-												value="${cust.directorDomicile}"
-												class="form-control col-md-7 col-xs-12">
-										</div>
-									</div>
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="sellMan">Người bán hàng trực tiếp </label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<input id="sellMan" type="text" name="cust.sellMan"
-												value="${cust.sellMan}"
-												class="form-control col-md-7 col-xs-12">
-										</div>
-										<label class="control-label col-md-1 col-sm-3 col-xs-12"
-											for="sellManMobile">ĐTDĐ </label>
-										<div class="col-md-2 col-sm-6 col-xs-12">
-											<input id="sellManMobile" type="text"
-												name="cust.sellManMobile" value="${cust.sellManMobile}"
-												class="form-control col-md-7 col-xs-12">
-										</div>
-									</div>
 
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="budgetOriginal">Ước vốn tự có để kinh doanh
-											(Triệu) </label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<input id="budgetOriginal" type="text"
-												name="cust.budgetOriginal" value="${cust.budgetOriginal}"
-												class="form-control col-md-7 col-xs-12">
+										<div class="item form-group">
+											<label class="control-label col-md-3 col-sm-3 col-xs-12"
+												for="budgetOriginal">Ước vốn tự có để kinh doanh
+												(Triệu) </label>
+											<div class="col-md-5 col-sm-6 col-xs-12">
+												<input id="budgetOriginal" type="text"
+													name="cust.budgetOriginal" value="${cust.budgetOriginal}"
+													class="form-control col-md-7 col-xs-12">
+											</div>
 										</div>
+										
 									</div>
-									
+								
 								</div>
 							</div>
 							
@@ -1358,6 +1376,17 @@
 		}, function(start, end, label) {
 			console.log(start.toISOString(), end.toISOString(), label);
 		});
+		
+		    var id = $("#grpCustomer_id").val();
+		    if(id==2){
+		    	  $( "#typeGroupCustomer" ).removeClass( "Hidden" );
+		    	  $( "#khachhangcap2" ).removeClass( "Hidden" );
+		    	  
+		    }else{
+		    	 $( "#typeGroupCustomer" ).addClass( "Hidden" );
+		    	 $( "#khachhangcap2" ).addClass( "Hidden" );
+		    }
+		
 	});
 </script>
 
@@ -1400,9 +1429,29 @@ $(function () {
         }
     });
 });
+$("#grpCustomer_id").change(function(e){
+    var id = $(this).val();
+    if(id==2){
+    	  $( "#typeGroupCustomer" ).removeClass( "Hidden" );
+    	  $( "#khachhangcap2" ).removeClass( "Hidden" );
+    	  
+    }else{
+    	 $( "#typeGroupCustomer" ).addClass( "Hidden" );
+    	 $( "#khachhangcap2" ).addClass( "Hidden" );
+    }
+   
+    
+});
+
 </script>
 
 <style>
+    .Hidden{
+      display: none;
+    }
+    .pagecontent{
+     min-height: 100px;
+    }
 	.divleft {
 	    float: left;
 	    width: 300;

@@ -35,6 +35,7 @@ import com.home.entities.DefineColumnImport;
 import com.home.entities.UserAware;
 import com.home.model.Customer;
 import com.home.model.GroupCustomer;
+import com.home.model.GroupCustomerDetail;
 import com.home.model.User;
 import com.home.util.DateUtils;
 import com.home.util.ExcelUtil;
@@ -68,7 +69,9 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private List<User> listEmployee = new ArrayList<>();
 	private List<City> listCity = new ArrayList<>();
 	private List<GroupCustomer> listGrpCus = new ArrayList<>();
-	private GroupCustomer grpCustomer = new GroupCustomer();
+	private  List<GroupCustomerDetail> listGrpCusdetail = new ArrayList<GroupCustomerDetail>();
+	private List<String> listtest = new ArrayList<String>();
+	private GroupCustomer grpCustomer1 = new GroupCustomer();
 	private Customer cus1Level1 = new Customer();
 	private Customer cus2Level1 = new Customer();
 	private Customer cus3Level1 = new Customer();
@@ -165,7 +168,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 					throw e;
 				}
 			} else {
-				getModel();
+				getModel();				
 				cust.setCustomerCode(cusCodeGen);
 			}
 		} catch (Exception e) {
@@ -307,6 +310,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			loadLookupEmployee();
 			loadLookupCustomer();
 			loadLookupGrpCustomer();
+			loadLookupGrpCustomer_test();
 			loadLookupCity();
 			defineTableViewCustomer();
 			defineColumnImportLevel1();
@@ -394,6 +398,21 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			addActionError("Error: load lookup group of customers. Exception: " + e.getMessage());
 		}
 
+	}
+	
+	public void loadLookupGrpCustomer_test() {
+		try {
+			
+			listGrpCusdetail = new ArrayList<GroupCustomerDetail>();
+			listGrpCusdetail.add(new GroupCustomerDetail(1, 2, "Nhóm A", ""));
+			listGrpCusdetail.add(new GroupCustomerDetail(2, 2, "Nhóm B", ""));
+			listGrpCusdetail.add(new GroupCustomerDetail(3, 2, "Nhóm C", ""));
+			listGrpCusdetail.add(new GroupCustomerDetail(4, 2, "Nhóm D", ""));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			addActionError("Error: load lookup group of customers. Exception: " + e.getMessage());
+		}		
 	}
 
 	public String findAllCustomer() {
@@ -520,8 +539,8 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			cust.setCustomerIsActive(true);
 			if (emp.getId() > 0)
 				getCust().setUser(emp);
-			if (grpCustomer.getId() > 0)
-				getCust().setGroupCustomer(grpCustomer);
+			if (grpCustomer1.getId() > 0)
+				getCust().setGroupCustomer(grpCustomer1);
 			if (cus1Level1.getId() > 0)
 				getCust().setCustomerByCustomer1Level1Id(cus1Level1);
 			if (cus2Level1.getId() > 0)
@@ -748,14 +767,14 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	}
 
 	public GroupCustomer getGrpCustomer() {
-		return grpCustomer;
+		return grpCustomer1;
 	}
 
 	public void setGrpCustomer(GroupCustomer grpCustomer) {
-		this.grpCustomer = grpCustomer;
+		this.grpCustomer1 = grpCustomer;
 	}
 
-	public String getCommonCusPhone() {
+	public String getCommonCusPhone() {  
 		return commonCusPhone;
 	}
 
@@ -1055,4 +1074,16 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		this.cusCodeGen = cusCodeGen;
 	}
 
+	public List<GroupCustomerDetail> getListGrpCusdetail() {
+		return listGrpCusdetail;
+	}
+
+	public void setListGrpCusdetail(List<GroupCustomerDetail> listGrpCusdetail) {
+		this.listGrpCusdetail = listGrpCusdetail;
+	}
+
+	
+	
+	
+    
 }

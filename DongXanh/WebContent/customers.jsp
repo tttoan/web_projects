@@ -29,8 +29,40 @@
 							</s:elseif>
 
 							<div class="item form-group">
+							    <div style="padding-top: 10px;padding-left: 50px"> 
+							           <div class="col-md-2 col-sm-2 col-xs-12">DSKH theo NVTT</div>	
+							           <div class="col-md-4 col-sm-4 col-xs-12" >
+							           <select id="cbb_location_detail" name="cbb_location_detail"  style="width:70%">
+					                        <option value="">All</option>
+					                    </select>	
+					                 
+							           </div>
+							           <div class="col-md-2 col-sm-2 col-xs-12" >Phân loại khách hàng</div>
+							           <div class="col-md-4 col-sm-4 col-xs-12">
+							                 <select id="cbb_location_detail" name="cbb_location_detail"  style="width:70%">
+					                        <option value="">All</option>
+					                    </select>	
+							           <%--     <s:select id="grpCustomer_id" name="grpCustomer.id"
+												cssClass="col-md-12 col-xs-12" list="listGrpCus"
+												showDownArrow="false" autoComplete="true" headerKey="-1" headerValue="--"
+												listKey="id" listValue="groupName"
+												style="width:245px"
+												value="%{cust.groupCustomer.id}" /> --%>
+							           </div>
+							          
+							    </div>
+							    <div style="padding-top: 10px;padding-left: 50px; margin-top: 20px;">
+							     <div class="col-md-2 col-sm-3 col-xs-12" >Khách hàng cấp </div>
+							     <div class="col-md-4 col-sm-3 col-xs-12" >
+							           
+							               <select id="cbb_location_detail" name="cbb_location_detail"  style="width:70%">
+					                           <option value="">All</option>
+					                        </select>	
+						          </div>
+						           <div class="col-md-6 col-sm-6 col-xs-12"><a href="#openImportLevel2" class="btn btn-success"><b>Search</b></a></div>
+							    </div>
 								<table style="width: 100%">
-									<tr>
+									<!-- <tr>
 										<td width="50%">
 											<div>
 												<label for="col4_filter">DSKH theo NVTT </label>
@@ -47,8 +79,8 @@
 													class="column_filter col-md-3 col-xs-3 ">
 											</div>
 										</td>
-									</tr>
-									<tr>
+									</tr> -->
+									<!-- <tr>
 										<td></td>
 										<td>
 											<div>
@@ -57,8 +89,8 @@
 													class="column_filter col-md-3 col-xs-3 ">
 											</div>
 										</td>
-									</tr>
-									<tr>
+									</tr> -->
+								<!-- 	<tr>
 										<td><a href="#openModal" class="btn btn-warning"><b>Ẩn/Hiện
 													thông tin</b></a> <a href="#openImportLevel1"
 											class="btn btn-primary"><b>Import Cấp I</b></a> <a
@@ -71,8 +103,12 @@
 													class="column_filter col-md-3 col-xs-3 ">
 											</div>
 										</td>
-									</tr>
-								</table>
+									</tr> -->
+								</table> 
+								
+								
+								
+								
 							</div>
 
 						</s:form>
@@ -81,7 +117,8 @@
 <%-- 						<s:set var="rId"> --%>
 <%-- 							<s:property value="%{userSes.role.roleId}" /> --%>
 <%-- 						</s:set> --%>
-						<table id="example" class="jambo_table display nowrap cell-border"
+                        <div class="table_content">
+                        <table id="example" class="jambo_table display nowrap cell-border"
 							style="width: 100%">
 							<thead>
 								<tr class="headings">
@@ -98,106 +135,9 @@
 
 								</tr>
 							</thead>
-
-							<%-- <tbody>
-								<s:iterator value="customers" status="rowStatus">
-									<tr class="even pointer">
-										<td class=""><s:property value="#rowStatus.count" /></td>
-
-										<td class=""><s:property
-												value="%{getText('format.date',{createTime})}" /></td>
-										<td class=""><s:property value="customerCode" /></td>
-										<td class=""><s:property value="groupCustomer.groupName" />
-										</td>
-										<td class=""><s:property value="user.fullName" /></td>
-										<td class=""><s:property value="statisticName" /></td>
-										<td class=""><s:property value="businessName" /></td>
-										<td class=""><s:property value="certificateNumber" /></td>
-										<td class=""><s:property
-												value="%{getText('format.date',{certificateDate})}" /></td>
-										<td class=""><s:property value="certificateAddress" /></td>
-										<td class=""><s:property value="taxNumber" /></td>
-										<td class=""><s:property value="budgetRegister" /></td>
-										<td class=""><s:property value="telefone" /></td>
-										<td class=""><s:property value="fax" /></td>
-										<td class=""><s:property value="email" /></td>
-										<td class=""><s:property value="socialAddress" /></td>
-										<td class=""><s:property value="businessAddress" /></td>
-										<td class=""><s:property value="adviser" /></td>
-										<td class=""><s:property value="director" /></td>
-										<td class=""><s:property value="directorMobile" /></td>
-										<td class=""><s:property
-												value="%{getText('format.date',{directorBirthday})}" /></td>
-										<td class=""><s:property value="directorDomicile" /></td>
-										<td class=""><s:property value="sellMan" /></td>
-										<td class=""><s:property value="sellManMobile" /></td>
-										<td class=""><s:property value="budgetOriginal" /></td>
-										<td class=""><s:property value="otherBusiness" /></td>
-										<td class=""><s:property
-												value="customerByCustomer5Level1Id.businessName" /></td>
-										<td class=""><s:property
-												value="%{getText('format.percent',{customer5Percent})}" /></td>
-										<td class=""><s:property
-												value="customerByCustomer4Level1Id.businessName" /></td>
-										<td class=""><s:property
-												value="%{getText('format.percent',{customer4Percent})}" /></td>
-										<td class=""><s:property
-												value="customerByCustomer3Level1Id.businessName" /></td>
-										<td class=""><s:property
-												value="%{getText('format.percent',{customer3Percent})}" /></td>
-										<td class=""><s:property
-												value="customerByCustomer2Level1Id.businessName" /></td>
-										<td class=""><s:property
-												value="%{getText('format.percent',{customer2Percent})}" /></td>
-										<td class=""><s:property
-												value="customerByCustomer1Level1Id.businessName" /></td>
-										<td class=""><s:property
-												value="%{getText('format.percent',{customer1Percent})}" /></td>
-										<td class=""><s:property value="product1Hot" /></td>
-										<td class=""><s:property value="product2Hot" /></td>
-										<td class=""><s:property value="product3Hot" /></td>
-										<td class=""><s:property value="product4Hot" /></td>
-										<td class=""><s:property value="product5Hot" /></td>
-										<td class=""><s:property value="product6Hot" /></td>
-										<td class=""><s:property
-												value="%{getText('format.percent',{farmProduct1})}" /></td>
-										<td class=""><s:property value="farmProduct1Session" /></td>
-										<td class=""><s:property
-												value="%{getText('format.percent',{farmProduct2})}" /></td>
-										<td class=""><s:property value="farmProduct2Session" /></td>
-										<td class=""><s:property
-												value="%{getText('format.percent',{farmProduct3})}" /></td>
-										<td class=""><s:property value="farmProduct3Session" /></td>
-										<td class=""><s:property
-												value="%{getText('format.percent',{farmProduct4})}" /></td>
-										<td class=""><s:property value="farmProduct4Session" /></td>
-
-										<s:if test="%{#rId == 1}">
-											<td class="last">
-												<s:url action="view_customer"
-													var="viewURL">
-													<s:param name="custId" value="%{id}"></s:param>
-												</s:url> <s:a href="%{viewURL}" cssClass="btn btn-info btn-xs">
-													<i class="fa fa-pencil"></i> Xem </s:a>
-													
-												<s:url action="move_to_add_customer"
-													var="editURL">
-													<s:param name="custId" value="%{id}"></s:param>
-												</s:url> <s:a href="%{editURL}" cssClass="btn btn-info btn-xs">
-													<i class="fa fa-pencil"></i> Sửa </s:a>
-													 
-												<s:url
-													action="delete_customer" var="deleteURL">
-													<s:param name="custId" value="%{id}"></s:param>
-												</s:url> <s:a href="%{deleteURL}" cssClass="btn btn-danger btn-xs">
-													<i class="fa fa-trash-o"></i> Xóa </s:a></td>
-										</s:if>
-
-									</tr>
-								</s:iterator>
-							</tbody> --%>
-
 						</table>
+                        </div>
+						
 					</div>
 				</div>
 			</div>
@@ -226,10 +166,36 @@
 <script src="js/dataTables.fixedHeader.min.js"></script>
 
 <script src="js/moment.js"></script>
-
+<script type="text/javascript" src="https://cdn.datatables.net/tabletools/2.2.4/js/dataTables.tableTools.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/tabletools/2.2.2/swf/copy_csv_xls_pdf.swf"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.flash.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.print.min.js"></script>
+ 
 <style>
+.x_content{
+	border: 1px solid #becfe6;
+	background-color: #fcfcfc;
+	 border-radius: 10px;
+}
+.table_content{
+    border: 1px solid #becfe6;
+    margin-top: 10px;
+    padding: 18px 10px 10px 10px;
+     border-radius: 10px;
+}
+/* div.dt-buttons {
+    float: right;
+    margin-left:10px; */
+}
+
 .currency-style {
-	text-align: right;
+	text-align: right!important;
 }
 
 .num-style {
@@ -247,6 +213,9 @@
 th {
 	text-align: center;
 	vertical-align: middle;
+}
+.title_search{
+ float: left;
 }
 </style>
 
@@ -312,7 +281,17 @@ th {
              "orderMulti": false, // for disable multiple column at once
              "scrollX" : true,
              "fixedHeader": true,
-             "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+          //   dom: 'Bfrtip',
+             aLengthMenu: [
+                           [25, 50, 100, -1],
+                           [25, 50, 100, "All"]
+                       ],
+           
+         
+            //  "pageLength": 50,
+              dom: 'lBfrtip', 
+              buttons: ['excel'] , 
+             
              "ajax": {
                  "url": "listCustomerJSonAction",
                  "type": "POST",
