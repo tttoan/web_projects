@@ -50,7 +50,7 @@
 			class="com.home.action.CustomerAction">
 			<result name="success">/view_customer.jsp</result>
 		</action>
-		<action name="list_customer" class="com.home.action.CustomerAction2">
+		<action name="list_customer" method="SearchCustomer" class="com.home.action.CustomerAction2">
 			<result name="success">/customers.jsp</result>
 			<result name="error">/index.jsp</result>
 		</action>
