@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.jws.soap.SOAPBinding.Use;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import com.home.dao.UserHome;
 import com.home.entities.DefineColumnImport;
 import com.home.entities.UserAware;
 import com.home.model.Customer;
+import com.home.model.GroupCustomerDetail;
 import com.home.model.User;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
@@ -40,12 +42,16 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 	private String varCusByUser;
 	private boolean varCusAssign;
 	private boolean varCusNotAssign;
-	private boolean varCusByLevel1;
+	private int varCusByLevel1;
 	private List<Object[]> listTableColumn = new ArrayList<Object[]>();
 	private List<DefineColumnImport> listDefineColumnsLevel1;
 	private List<DefineColumnImport> listDefineColumnsLevel2;
 	private List<String> listColumnExcel;
 	protected HttpServletResponse servletResponse;
+	protected List<String> listCustomerType;
+	protected List<Customer> listCustomerToRank;
+	protected List<User> listUser;// NVTT
+	  
 
 	@Override
 	public void setServletResponse(HttpServletResponse servletResponse) {
@@ -89,7 +95,7 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 				sessionMap.put("varCusByUser", getVarCusByUser());
 				sessionMap.put("varCusAssign", isVarCusAssign());
 				sessionMap.put("varCusNotAssign", isVarCusNotAssign());
-				sessionMap.put("varCusByLevel1", isVarCusByLevel1());
+				sessionMap.put("varCusByLevel1", getVarCusByLevel1());
 			} catch (Exception e) {
 			}
 
@@ -99,7 +105,7 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 		}
 		return SUCCESS;
 	}
-
+  
 	public String lisCustomerJson() throws Exception {
 		try {
 
@@ -108,13 +114,13 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 				varCusByUser = StringUtil.replaceInvalidChar(StringUtil.notNull(sessionMap.get("varCusByUser")));
 				varCusAssign = (boolean) sessionMap.get("varCusAssign");
 				varCusNotAssign = (boolean) sessionMap.get("varCusNotAssign");
-				varCusByLevel1 = ((boolean) sessionMap.get("varCusByLevel1"));
+				varCusByLevel1 = Integer.parseInt(StringUtil.notNull(sessionMap.get("varCusByLevel1")));
 				System.out.println("Parameter: " + varCusByUser + " - " + varCusAssign + " - " + varCusNotAssign + " - " + varCusByLevel1);
 			} catch (Exception e) {
 				varCusByUser = "";
 				varCusAssign = true;
 				varCusNotAssign = true;
-				varCusByLevel1 = false;
+				varCusByLevel1 = -1;
 			}
 
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
@@ -276,7 +282,7 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 		try {
 			
 			int index = 0;
-			String abc = "1-0-0-1-1-1-1-1-1-0";
+			String abc = "1-0-0-1-1-1-1-1-1-0zz";
 			System.out.println(abc.substring(0,(index)*2)+"5"+abc.substring(((index)*2)+1,abc.length()));
 			
 //			CustomerAction2 c = new CustomerAction2();
@@ -321,9 +327,55 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 		div.setMaxAge(60 * 60 * 24 * 1); // Make the cookie last a day!
 		servletResponse.addCookie(div);
 	}
+	
+	 public String SearchCustomer() {
+		    listCustomerType   = GetListCustomerType();
+		    listCustomerToRank = GetListCustomerToRank();
+		    listUser           = GetListUser();
+		    System.out.println("listUser:"+listUser.size());
+	    	return SUCCESS;
+			
+		}
+	 
+	public List<String> GetListCustomerType() {
+		List<String> result = new ArrayList<String>();
+		try {			
+			result.add("DSKH đã phân công");
+			result.add("DSKH chưa phân công");
+		} catch (Exception e) {
+			e.printStackTrace();
+			addActionError("Error: load lookup group of customers. Exception: " + e.getMessage());
+		}	
+		return result;
+	}
+	public  List<Customer>  GetListCustomerToRank() {
+		 List<Customer> listdata  = new ArrayList<Customer>();
+		try {
+			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
+			listdata =  cusHome.getLookupCustomer(0,1);
+		} catch (Exception e) {
+			e.printStackTrace();
+			addActionError("Error: load lookup group of customers. Exception: " + e.getMessage());
+		}	
+		return listdata;
+	}
+	
+	public  List<User>  GetListUser() {
+		 List<User> listdata  = new ArrayList<User>();
+		try {
+			 UserHome userHome = new UserHome(HibernateUtil.getSessionFactory());
+			listdata =  userHome.getListUser();
+		} catch (Exception e) {
+			e.printStackTrace();
+			addActionError("Error: load lookup group of customers. Exception: " + e.getMessage());
+		}	
+		return listdata;
+	}
+	
 
 	@Override
 	public void validate() {
+		
 		try {
 			defineTableViewCustomer();
 			defineColumnImportLevel1();
@@ -448,12 +500,39 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 		this.varCusNotAssign = varCusNotAssign;
 	}
 
-	public boolean isVarCusByLevel1() {
+	
+
+	public int getVarCusByLevel1() {
 		return varCusByLevel1;
 	}
 
-	public void setVarCusByLevel1(boolean varCusByLevel1) {
+	public void setVarCusByLevel1(int varCusByLevel1) {
 		this.varCusByLevel1 = varCusByLevel1;
 	}
+
+	public List<String> getListCustomerType() {
+		return listCustomerType;
+	}
+
+	public void setListCustomerType(List<String> listCustomerType) {
+		this.listCustomerType = listCustomerType;
+	}
+
+	public List<Customer> getListCustomerToRank() {
+		return listCustomerToRank;
+	}
+
+	public void setListCustomerToRank(List<Customer> listCustomerToRank) {
+		this.listCustomerToRank = listCustomerToRank;
+	}
+
+	public List<User> getListUser() {
+		return listUser;
+	}
+
+	public void setListUser(List<User> listUser) {
+		this.listUser = listUser;
+	}
+	
 
 }

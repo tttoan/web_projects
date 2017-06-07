@@ -316,6 +316,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			defineColumnImportLevel1();
 			defineColumnImportLevel2();
 			generateColumnExcel();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			addActionError("Error: checkDuplicateData. Exception: " + e.getMessage());
@@ -414,6 +415,8 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			addActionError("Error: load lookup group of customers. Exception: " + e.getMessage());
 		}		
 	}
+	
+	
 
 	public String findAllCustomer() {
 		try {

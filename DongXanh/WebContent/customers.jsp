@@ -14,7 +14,7 @@
 				<div class="x_panel">
 					<div class="x_content">
 						<s:form action="#" method="post" enctype="multipart/form-data"
-							cssClass="form-horizontal form-label-left">
+							cssClass="form-horizontal form-label-left" theme="bootstrap">
 							<s:hidden name="custId" value="%{custId}"></s:hidden>
 							<s:hidden name="edit" value="%{edit}"></s:hidden>
 							<s:if test="hasActionErrors()">
@@ -27,91 +27,49 @@
 									<s:actionmessage escape="false" />
 								</div>
 							</s:elseif>
-
+                          
 							<div class="item form-group">
-							    <div style="padding-top: 10px;padding-left: 50px"> 
-							           <div class="col-md-2 col-sm-2 col-xs-12">DSKH theo NVTT</div>	
-							           <div class="col-md-4 col-sm-4 col-xs-12" >
-							           <select id="cbb_location_detail" name="cbb_location_detail"  style="width:70%">
-					                        <option value="">All</option>
-					                    </select>	
-					                 
+							    <div  style="padding-top: 10px;padding-left: 10px;padding-bottom: 0px"> 
+							           <div class="control-label col-md-2 col-sm-2 col-xs-12" style="padding-top: 15px;font-size: 15px ">DSKH theo NVTT</div>
+							             <div class="control-label col-md-2 col-sm-2 col-xs-12" style="height: 50px;"> 
+							                  <s:select id="searchlistUser" name="searchlistUser"
+												style="width:200px " list="listUser" class="form-control"
+												showDownArrow="false" autoComplete="false" headerKey="-1" headerValue="---tất cả---"
+												listKey="id" listValue="userName"											
+												/>   -
+							             </div> 
+							           <div class="control-label col-md-2 col-sm-2 col-xs-12 " style="padding-top: 15px;font-size: 15px ">Phân loại khách hàng</div>
+							            <div class="control-label col-md-2 col-sm-2 col-xs-12" style="height: 50px;">
+							                  <s:select id="searchlistCustomerType" name="searchlistCustomerType"
+												 list="listCustomerType"
+												showDownArrow="false" autoComplete="false" headerKey="-1" headerValue="---tất cả---"
+												style="width:200px " 								
+												/>  
 							           </div>
-							           <div class="col-md-2 col-sm-2 col-xs-12" >Phân loại khách hàng</div>
-							           <div class="col-md-4 col-sm-4 col-xs-12">
-							                 <select id="cbb_location_detail" name="cbb_location_detail"  style="width:70%">
-					                        <option value="">All</option>
-					                    </select>	
-							           <%--     <s:select id="grpCustomer_id" name="grpCustomer.id"
-												cssClass="col-md-12 col-xs-12" list="listGrpCus"
-												showDownArrow="false" autoComplete="true" headerKey="-1" headerValue="--"
-												listKey="id" listValue="groupName"
-												style="width:245px"
-												value="%{cust.groupCustomer.id}" /> --%>
+							           
+							             <div class="control-label col-md-2 col-sm-2 col-xs-12 " style="padding-top: 15px;font-size: 15px ">Khách hàng cấp I</div>
+							            <div class="control-label col-md-2 col-sm-2 col-xs-12" style="height: 50px;" >
+							                  <s:select id="searchlistCustomerToRank" name="searchlistCustomerToRank"
+												style="width:200px " cssClass="col-sm-9  col-xs-12" list="listCustomerToRank"
+												showDownArrow="false" autoComplete="false" headerKey="-1" headerValue="---tất cả---"
+												 listKey="id" listValue="businessName"											
+												/>  
 							           </div>
 							          
 							    </div>
-							    <div style="padding-top: 10px;padding-left: 50px; margin-top: 20px;">
-							     <div class="col-md-2 col-sm-3 col-xs-12" >Khách hàng cấp </div>
-							     <div class="col-md-4 col-sm-3 col-xs-12" >
-							           
-							               <select id="cbb_location_detail" name="cbb_location_detail"  style="width:70%">
-					                           <option value="">All</option>
-					                        </select>	
-						          </div>
-						           <div class="col-md-6 col-sm-6 col-xs-12"><a href="#openImportLevel2" class="btn btn-success"><b>Search</b></a></div>
-							    </div>
-								<table style="width: 100%">
-									<!-- <tr>
-										<td width="50%">
-											<div>
-												<label for="col4_filter">DSKH theo NVTT </label>
-												<div>
-													<input type="text" id="col4_filter" step="4"
-														class="column_filter col-md-7 col-xs-12 ">
-												</div>
-											</div>
-										</td>
-										<td>
-											<div>
-												<label for="col1_filter">DSKH đã phân công </label> <input
-													type="checkbox" id="col1_filter" step="1" checked="checked"
-													class="column_filter col-md-3 col-xs-3 ">
-											</div>
-										</td>
-									</tr> -->
-									<!-- <tr>
-										<td></td>
-										<td>
-											<div>
-												<label for="col2_filter">DSKH chưa phân công </label> <input
-													type="checkbox" id="col2_filter" step="2" checked="checked"
-													class="column_filter col-md-3 col-xs-3 ">
-											</div>
-										</td>
-									</tr> -->
-								<!-- 	<tr>
-										<td><a href="#openModal" class="btn btn-warning"><b>Ẩn/Hiện
-													thông tin</b></a> <a href="#openImportLevel1"
-											class="btn btn-primary"><b>Import Cấp I</b></a> <a
-											href="#openImportLevel2" class="btn btn-success"><b>Import
-													Cấp II</b></a>
-										<td>
-											<div>
-												<label for="col3_filter">DSKH theo Cấp 1 </label> <input
-													type="checkbox" id="col3_filter" step="3"
-													class="column_filter col-md-3 col-xs-3 ">
-											</div>
-										</td>
-									</tr> -->
-								</table> 
-								
-								
-								
+							     <div class="control-label col-md-12 col-sm-12 col-xs-12" style="font-size: 15px ">
+							            <button class="btn btn-success" onclick="searchDetail();" type="button"><b>Search</b></button>
+							           <!--  <a href="#btnsearch" class="btn btn-success"><b>Search</b></a> -->
+							            <a href="#openModal" class="btn btn-warning"><b>Ẩn/Hiện	thông tin</b></a> 
+										<a href="#openImportLevel1"	class="btn btn-primary"><b>Import Cấp I</b></a> 
+										<a href="#openImportLevel2" class="btn btn-success"><b>Import Cấp II</b></a>
+							       </div>
+							  
 								
 							</div>
 
 						</s:form>
+						</div>
 
 						<div class="clearfix"></div>
 <%-- 						<s:set var="rId"> --%>
@@ -166,7 +124,7 @@
 <script src="js/dataTables.fixedHeader.min.js"></script>
 
 <script src="js/moment.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/tabletools/2.2.4/js/dataTables.tableTools.min.js"></script>
+<%-- <script type="text/javascript" src="https://cdn.datatables.net/tabletools/2.2.4/js/dataTables.tableTools.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/tabletools/2.2.2/swf/copy_csv_xls_pdf.swf"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/dataTables.buttons.min.js"></script>
@@ -175,9 +133,13 @@
 <script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.html5.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.print.min.js"></script>
- 
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.print.min.js"></script> --%>
+  
 <style>
+.btn{
+ width: 144px!important;
+ margin-left: 7px!important;
+}
 .x_content{
 	border: 1px solid #becfe6;
 	background-color: #fcfcfc;
@@ -217,6 +179,26 @@ th {
 .title_search{
  float: left;
 }
+.form-control {
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    width: 100%;
+}
+.form-control:focus {
+    border-color: #66afe9;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
+    outline: 0 none;
+}
 </style>
 
 <script>
@@ -225,6 +207,11 @@ th {
  	 		//alert(getCookie("columnActive"));
 			filterColumn($(this).attr('step'));
 		});
+ 		$('#btnsearch').on('keyup click', function() {
+ 	 		alert("truong xuan");
+			filterColumn($(this).attr('step'));
+		});
+ 		
 		$('#col4_filter,#col1_filter,#col2_filter,#col3_filter').change(function() {
 			var varCusByUser = {
 				"varCusByUser" : $("#col4_filter").val(),
@@ -247,7 +234,40 @@ th {
 	});
 
  	
- 	
+ 	function searchDetail(){
+ 		var searchlistUser           = document.getElementById("searchlistUser").value;
+ 		var searchlistCustomerType   = document.getElementById("searchlistCustomerType").value;
+ 		var searchlistCustomerToRank = document.getElementById("searchlistCustomerToRank").value;
+ 		var varCusAssign = false;
+ 		var varCusNotAssign = false;
+ 		if(searchlistCustomerType =="DSKH đã phân công"){
+ 			varCusAssign= true;
+ 		}else if(searchlistCustomerType =="DSKH đã phân công"){
+ 			 varCusNotAssign = true;
+ 		}else{
+ 			varCusAssign= true;
+ 			varCusNotAssign = true;
+ 		}
+ 		 varCusAssign = false;
+ 		 varCusNotAssign = false;
+ 		var varCusByUser = {
+				"varCusByUser" : searchlistUser,
+				"varCusAssign" : varCusAssign,
+				"varCusNotAssign" : varCusNotAssign,
+				"varCusByLevel1" : searchlistCustomerToRank,
+			};
+ 		
+ 		$.ajax({
+			url : "ParameterSession",
+			data : JSON.stringify(varCusByUser),
+			dataType : 'json',
+			contentType : 'application/json',
+			type : 'POST',
+			async : true
+		});
+		var table = $('#example').DataTable();
+		table.ajax.reload( null, false );
+ 	}
 	
  	function getCookieColumnVisible(cname) {
  	    var name = cname + "=";

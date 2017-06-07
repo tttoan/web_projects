@@ -519,6 +519,7 @@ public class CustomerHome {
 						//cus.setBusinessName(rs.getString("business_name") == null?rs.getString("statistic_name"):rs.getString("business_name"));
 						cus.setBusinessName(rs.getString("statistic_name") == null?rs.getString("business_name"):rs.getString("statistic_name"));
 						cus.setStatisticName(rs.getString("statistic_name"));
+						
 						results.add(cus);
 					}
 				}
@@ -726,7 +727,7 @@ public class CustomerHome {
 		}
 	}
 	
-	public int getTotalRecords(String searchValue, String nvtt, int assign_type, boolean cusL1) throws Exception{
+	public int getTotalRecords(String searchValue, String nvtt, int assign_type, int user_id) throws Exception{
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
@@ -734,8 +735,9 @@ public class CustomerHome {
 			Connection conn = sessionImpl.connection();
 			searchValue = searchValue.toLowerCase().trim();
 			nvtt = nvtt.toLowerCase().trim();
+			System.out.println(nvtt+"searchValue"+searchValue);
 			
-			String sql = "SELECT COUNT(*) "
+		/*	String sql = "SELECT COUNT(*) "
 					+ " FROM  customer c " + 
 					" LEFT JOIN customer c1 ON c.customer1_level1_id=c1.id " +
 					" LEFT JOIN customer c2 ON c.customer2_level1_id=c2.id " +
@@ -756,8 +758,37 @@ public class CustomerHome {
 							+ " OR lower(c.customer_code) = '"+searchValue+"'"
 							+ " OR lower(user_name) like '"+searchValue+"%'"
 							+ ") ) "
+					+" AND c.customer_is_active = "+CUSTOMER_IS_ACTIVE+" ";*/
+			
+			String sql = "SELECT COUNT(*) "
+					+ " FROM  customer c " + 
+					" LEFT JOIN customer c1 ON c.customer1_level1_id=c1.id " +
+					" LEFT JOIN customer c2 ON c.customer2_level1_id=c2.id " +
+					" LEFT JOIN customer c3 ON c.customer3_level1_id=c3.id " +
+					" LEFT JOIN customer c4 ON c.customer4_level1_id=c4.id " +
+					" LEFT JOIN customer c5 ON c.customer5_level1_id=c5.id " +
+					" LEFT JOIN user u ON c.user_id=u.id " +
+					" LEFT JOIN group_customer iv ON c.group_customer_id=iv.id " +
+					"WHERE "
+					+" (''='"+nvtt+"' OR (lower(user_name) like '"+nvtt+"%'))"
+					+" AND ("+(assign_type==1?"c.user_id > 0":"("+(assign_type==2?"c.user_id IS NULL":"(0=0)")+")")+")"
+					+" AND (c.group_customer_id=2 )"
+					+" AND (''='"+searchValue+"' OR ("
+							+ " lower(c1.business_name) like '"+searchValue+"%'"
+							+ " OR lower(c2.business_name) like '"+searchValue+"%'"
+							+ " OR lower(c.business_name) like '"+searchValue+"%'"
+							+ " OR lower(c.statistic_name) like '"+searchValue+"%'"
+							+ " OR lower(c.customer_code) = '"+searchValue+"'"
+							+ " OR lower(user_name) like '"+searchValue+"%'"
+							+ ") ) "
 					+" AND c.customer_is_active = "+CUSTOMER_IS_ACTIVE+" ";
+			if(user_id>0){
+				sql = sql + "AND c.user_id > 0 ";// em moi vua them
+			}
+			
+			System.out.println("=========================================================");
 			System.out.println(sql);
+			System.out.println("=========================================================");
 			int total = 0;
 			ResultSet rs = conn.createStatement().executeQuery(sql);
 			if(rs.next()){
@@ -780,7 +811,7 @@ public class CustomerHome {
 		}
 	}
 	
-	public List<Customer> getListCustomer(int startPageIndex, int recordsPerPage, String searchValue, String nvtt, int assign_type, boolean cusL1) throws Exception{
+	public List<Customer> getListCustomer(int startPageIndex, int recordsPerPage, String searchValue, String nvtt, int assign_type, int cusL1) throws Exception{
 		log.debug("retrieve list Customer");
 		Session session = null;
 		List<Customer> results = new ArrayList<Customer>();
@@ -792,7 +823,7 @@ public class CustomerHome {
 			int range = startPageIndex+recordsPerPage;
 			searchValue = searchValue.toLowerCase().trim();
 			nvtt = nvtt.toLowerCase().trim();
-			String sql = 
+			/*String sql = 
 					"SELECT * FROM ( "
 						+"SELECT @i:=@i+1 AS iterator, YY.* FROM ("
 							+ "SELECT c.*, c1.business_name as cus1name, c2.business_name as cus2name, c3.business_name as cus3name, c4.business_name as cus4name, c5.business_name as cus5name, user_name, full_name, group_name "
@@ -808,6 +839,39 @@ public class CustomerHome {
 								+" (''='"+nvtt+"' OR (lower(user_name) like '"+nvtt+"%'))"
 								+" AND ("+(assign_type==1?"c.user_id > 0":"("+(assign_type==2?"c.user_id IS NULL":"(0=0)")+")")+")"
 								+" AND ("+(cusL1?"c.group_customer_id=1":"(0=0)")+")"
+								+" AND (''='"+searchValue+"' OR ("
+										+ " lower(c1.business_name) like '"+searchValue+"%'"
+										+ " OR lower(c2.business_name) like '"+searchValue+"%'"
+										+ " OR lower(c.business_name) like '"+searchValue+"%'"
+										+ " OR lower(c.statistic_name) like '"+searchValue+"%'"
+										+ " OR lower(c.customer_code) = '"+searchValue+"'"
+										+ " OR lower(user_name) like '"+searchValue+"%'"
+										+ ") ) "
+								+" AND c.customer_is_active = "+CUSTOMER_IS_ACTIVE+" "
+								+ " Order by c.business_name) AS YY, (SELECT @i:=0) foo Order By business_name) AS XX "
+						+" WHERE iterator > "+startPageIndex+" AND iterator <= " + range + " order by business_name";*/
+			
+			String user_id="";
+			if(cusL1>0){
+				user_id = " AND user_id ="+cusL1;
+			}
+			
+			String sql = 
+					"SELECT * FROM ( "
+						+"SELECT @i:=@i+1 AS iterator, YY.* FROM ("
+							+ "SELECT c.*, c1.business_name as cus1name, c2.business_name as cus2name, c3.business_name as cus3name, c4.business_name as cus4name, c5.business_name as cus5name, user_name, full_name, group_name "
+							+ " FROM  customer c " + 
+									" LEFT JOIN customer c1 ON c.customer1_level1_id=c1.id AND c1.customer_is_active = "+CUSTOMER_IS_ACTIVE+"" +
+									" LEFT JOIN customer c2 ON c.customer2_level1_id=c2.id AND c2.customer_is_active = "+CUSTOMER_IS_ACTIVE+"" +
+									" LEFT JOIN customer c3 ON c.customer3_level1_id=c3.id AND c3.customer_is_active = "+CUSTOMER_IS_ACTIVE+"" +
+									" LEFT JOIN customer c4 ON c.customer4_level1_id=c4.id AND c4.customer_is_active = "+CUSTOMER_IS_ACTIVE+"" +
+									" LEFT JOIN customer c5 ON c.customer5_level1_id=c5.id AND c5.customer_is_active = "+CUSTOMER_IS_ACTIVE+"" +
+									" LEFT JOIN user u ON c.user_id=u.id " +
+									" LEFT JOIN group_customer iv ON c.group_customer_id=iv.id " +
+								"WHERE "
+								+" (''='"+nvtt+"' OR (lower(user_name) like '"+nvtt+"%'))"
+								+" AND ("+(assign_type==1?"c.user_id > 0":"("+(assign_type==2?"c.user_id IS NULL":"(0=0)")+")")+")"
+								+" AND (c.group_customer_id=2) "+user_id
 								+" AND (''='"+searchValue+"' OR ("
 										+ " lower(c1.business_name) like '"+searchValue+"%'"
 										+ " OR lower(c2.business_name) like '"+searchValue+"%'"
