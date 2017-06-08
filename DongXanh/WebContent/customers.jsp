@@ -29,13 +29,13 @@
 							</s:elseif>
                           
 							<div class="item form-group">
-							    <div  style="padding-top: 10px;padding-left: 10px;padding-bottom: 0px"> 
-							           <div class="control-label col-md-2 col-sm-2 col-xs-12" style="padding-top: 15px;font-size: 15px ">DSKH theo NVTT</div>
+							    <div  style="padding-top: 10px;padding-bottom: 0px"> 
+							           <div class="control-label col-md-2 col-sm-2 col-xs-12" style="padding-top: 15px;font-size: 15px ;max-width: 170px">DSKH theo NVTT</div>
 							             <div class="control-label col-md-2 col-sm-2 col-xs-12" style="height: 50px;"> 
 							                  <s:select id="searchlistUser" name="searchlistUser"
 												style="width:200px " list="listUser" class="form-control"
-												showDownArrow="false" autoComplete="false" headerKey="-1" headerValue="---tất cả---"
-												listKey="id" listValue="userName"											
+												showDownArrow="false" autoComplete="false" headerKey="" headerValue="---tất cả---"
+												listKey="userName" listValue="userName"											
 												/>   -
 							             </div> 
 							           <div class="control-label col-md-2 col-sm-2 col-xs-12 " style="padding-top: 15px;font-size: 15px ">Phân loại khách hàng</div>
@@ -46,24 +46,38 @@
 												style="width:200px " 								
 												/>  
 							           </div>
-							           
-							             <div class="control-label col-md-2 col-sm-2 col-xs-12 " style="padding-top: 15px;font-size: 15px ">Khách hàng cấp I</div>
+							            <div class="control-label col-md-4 col-sm-4 col-xs-12 " style="font-size: 15px ">
+							                <a href="#openImportLevel1"	class="btn btn-primary"><b>Import Cấp I</b></a> 
+							                <a href="#openImportLevel2" class="btn btn-success"><b>Import Cấp II</b></a>
+							            </div>
+							          
+							        
+							          
+							    </div>
+							    <div class="clearfix"></div>
+							    <div >
+							            <div class="control-label col-md-2 col-sm-2 col-xs-12 " style="padding-top: 15px;font-size: 15px ;max-width: 170px; ">Khách hàng cấp I</div>
+							            
 							            <div class="control-label col-md-2 col-sm-2 col-xs-12" style="height: 50px;" >
 							                  <s:select id="searchlistCustomerToRank" name="searchlistCustomerToRank"
 												style="width:200px " cssClass="col-sm-9  col-xs-12" list="listCustomerToRank"
 												showDownArrow="false" autoComplete="false" headerKey="-1" headerValue="---tất cả---"
 												 listKey="id" listValue="businessName"											
 												/>  
-							           </div>
-							          
+							            </div>
+							            
+							            <div class="control-label col-md-2 col-sm-2 col-xs-12 " style="font-size: 15px ">
+							                 <button class="btn btn-success" onclick="searchDetail();" type="button"><b>Xem kết quả</b></button>
+							            </div>
+							             <div class="control-label col-md-6 col-sm-6 col-xs-12" style="font-size: 15px ">	
+								            <a href="#openModal" class="btn btn-warning"><b>Ẩn/Hiện	thông tin</b></a> 
+								            <button type="button" class="btn btn-primary" id="btnFilter" onclick="btnExport()"><b>Xuất Excel</b></button>
+																			
+								       </div>
+							           
+							           
 							    </div>
-							     <div class="control-label col-md-12 col-sm-12 col-xs-12" style="font-size: 15px ">
-							            <button class="btn btn-success" onclick="searchDetail();" type="button"><b>Search</b></button>
-							           <!--  <a href="#btnsearch" class="btn btn-success"><b>Search</b></a> -->
-							            <a href="#openModal" class="btn btn-warning"><b>Ẩn/Hiện	thông tin</b></a> 
-										<a href="#openImportLevel1"	class="btn btn-primary"><b>Import Cấp I</b></a> 
-										<a href="#openImportLevel2" class="btn btn-success"><b>Import Cấp II</b></a>
-							       </div>
+							    
 							  
 								
 							</div>
@@ -207,12 +221,9 @@ th {
  	 		//alert(getCookie("columnActive"));
 			filterColumn($(this).attr('step'));
 		});
- 		$('#btnsearch').on('keyup click', function() {
- 	 		alert("truong xuan");
-			filterColumn($(this).attr('step'));
-		});
  		
-		$('#col4_filter,#col1_filter,#col2_filter,#col3_filter').change(function() {
+ 		
+	/* 	$('#col4_filter,#col1_filter,#col2_filter,#col3_filter').change(function() {
 			var varCusByUser = {
 				"varCusByUser" : $("#col4_filter").val(),
 				"varCusAssign" : $('#col1_filter').prop('checked'),
@@ -230,10 +241,25 @@ th {
 			var table = $('#example').DataTable();
 			table.ajax.reload( null, false );
 			
-		});
+		}); */
 	});
 
- 	
+ 	function btnExport(){
+ 	/* 	var searchlistUser           = document.getElementById("searchlistUser").value;
+ 		var searchlistCustomerType   = document.getElementById("searchlistCustomerType").value;
+ 		var searchlistCustomerToRank = document.getElementById("searchlistCustomerToRank").value;
+ 		var varCusAssign = false;
+ 		var varCusNotAssign = false;
+ 		if(searchlistCustomerType =="DSKH đã phân công"){
+ 			varCusAssign= true;
+ 		}else if(searchlistCustomerType =="DSKH chưa phân công"){
+ 			 varCusNotAssign = true;
+ 		}else{
+ 			varCusAssign= true;
+ 			varCusNotAssign = true;
+ 		} */
+ 		location.href		='export_customer';
+	}
  	function searchDetail(){
  		var searchlistUser           = document.getElementById("searchlistUser").value;
  		var searchlistCustomerType   = document.getElementById("searchlistCustomerType").value;
@@ -242,14 +268,14 @@ th {
  		var varCusNotAssign = false;
  		if(searchlistCustomerType =="DSKH đã phân công"){
  			varCusAssign= true;
- 		}else if(searchlistCustomerType =="DSKH đã phân công"){
+ 		}else if(searchlistCustomerType =="DSKH chưa phân công"){
  			 varCusNotAssign = true;
  		}else{
  			varCusAssign= true;
  			varCusNotAssign = true;
  		}
- 		 varCusAssign = false;
- 		 varCusNotAssign = false;
+ 		// varCusAssign = false;
+ 		// varCusNotAssign = false;
  		var varCusByUser = {
 				"varCusByUser" : searchlistUser,
 				"varCusAssign" : varCusAssign,
@@ -303,8 +329,8 @@ th {
              "fixedHeader": true,
           //   dom: 'Bfrtip',
              aLengthMenu: [
-                           [25, 50, 100, -1],
-                           [25, 50, 100, "All"]
+                           [10,25, 50, 100, -1],
+                           [10,25, 50, 100, "All"]
                        ],
            
          
@@ -393,9 +419,12 @@ th {
                      
                      { "data": "id"
                     	 ,  "render": function ( data, type, full, meta ) {
-                    		 return '<a href="view_customer?custId='+data+'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Xem <a>' + 
+                    		/*   return '<a href="view_customer?custId='+data+'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Xem <a>' + 
                     		 		'<a href="move_to_add_customer?custId='+data+'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa <a>' + 
-                    				'<a href="delete_customer?custId='+data+'" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Xóa <a>';
+                    				'<a href="delete_customer?custId='+data+'" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Xóa <a>'; 
+                    		  */
+                    		  return '<a href="move_to_add_customer?custId='+data+'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa <a>' + 
+             				'<a href="delete_customer?custId='+data+'" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Xóa <a>'; 
                      	}
                      }
              ] 

@@ -772,7 +772,7 @@ public class CustomerHome {
 					"WHERE "
 					+" (''='"+nvtt+"' OR (lower(user_name) like '"+nvtt+"%'))"
 					+" AND ("+(assign_type==1?"c.user_id > 0":"("+(assign_type==2?"c.user_id IS NULL":"(0=0)")+")")+")"
-					+" AND (c.group_customer_id=2 )"
+				//	+" AND (c.group_customer_id=1 )"
 					+" AND (''='"+searchValue+"' OR ("
 							+ " lower(c1.business_name) like '"+searchValue+"%'"
 							+ " OR lower(c2.business_name) like '"+searchValue+"%'"
@@ -783,7 +783,7 @@ public class CustomerHome {
 							+ ") ) "
 					+" AND c.customer_is_active = "+CUSTOMER_IS_ACTIVE+" ";
 			if(user_id>0){
-				sql = sql + "AND c.user_id > 0 ";// em moi vua them
+				sql = sql + " AND c.user_id = "+user_id;
 			}
 			
 			System.out.println("=========================================================");
@@ -853,7 +853,7 @@ public class CustomerHome {
 			
 			String user_id="";
 			if(cusL1>0){
-				user_id = " AND user_id ="+cusL1;
+				user_id = "  AND c.user_id ="+cusL1;
 			}
 			
 			String sql = 
@@ -871,7 +871,8 @@ public class CustomerHome {
 								"WHERE "
 								+" (''='"+nvtt+"' OR (lower(user_name) like '"+nvtt+"%'))"
 								+" AND ("+(assign_type==1?"c.user_id > 0":"("+(assign_type==2?"c.user_id IS NULL":"(0=0)")+")")+")"
-								+" AND (c.group_customer_id=2) "+user_id
+							//	+" AND (c.group_customer_id=1) "+user_id
+								+ user_id
 								+" AND (''='"+searchValue+"' OR ("
 										+ " lower(c1.business_name) like '"+searchValue+"%'"
 										+ " OR lower(c2.business_name) like '"+searchValue+"%'"

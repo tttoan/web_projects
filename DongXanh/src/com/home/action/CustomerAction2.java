@@ -1,5 +1,11 @@
 package com.home.action;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +16,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
@@ -17,12 +26,18 @@ import org.apache.struts2.interceptor.SessionAware;
 import org.apache.struts2.util.ServletContextAware;
 
 import com.home.dao.CustomerHome;
+import com.home.dao.EventsNoteHome;
 import com.home.dao.UserHome;
+import com.home.dao.WorkingPlanHome;
 import com.home.entities.DefineColumnImport;
 import com.home.entities.UserAware;
+import com.home.entities.UserPlanGeneral;
 import com.home.model.Customer;
+import com.home.model.EventsNote;
 import com.home.model.GroupCustomerDetail;
 import com.home.model.User;
+import com.home.util.DateUtils;
+import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
 import com.mysql.jdbc.jdbc2.optional.SuspendableXAConnection;
@@ -38,7 +53,7 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 	private int recordsTotal;
 	private int draw;
 	private String order;
-	private String search;
+	private String search="";
 	private String varCusByUser;
 	private boolean varCusAssign;
 	private boolean varCusNotAssign;
@@ -51,6 +66,9 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 	protected List<String> listCustomerType;
 	protected List<Customer> listCustomerToRank;
 	protected List<User> listUser;// NVTT
+	private Workbook workbook;
+	private InputStream inputStream;
+
 	  
 
 	@Override
@@ -105,7 +123,82 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 		}
 		return SUCCESS;
 	}
-  
+    public String exportCustomer(){
+    	try {
+			ServletContext servletContext = ServletActionContext.getServletContext();
+			String pathname = servletContext.getRealPath("/WEB-INF/template/excel/customer.xlsx");
+			File theFile = new File(pathname);
+			ExcelUtil xls = new ExcelUtil();
+			
+			
+			try {
+
+				try {
+					Map sessionMap = (Map) ActionContext.getContext().get("session");
+					varCusByUser = StringUtil.replaceInvalidChar(StringUtil.notNull(sessionMap.get("varCusByUser")));
+					varCusAssign = (boolean) sessionMap.get("varCusAssign");
+					varCusNotAssign = (boolean) sessionMap.get("varCusNotAssign");
+					varCusByLevel1 = Integer.parseInt(StringUtil.notNull(sessionMap.get("varCusByLevel1")));
+					System.out.println("Parameter: " + varCusByUser + " - " + varCusAssign + " - " + varCusNotAssign + " - " + varCusByLevel1);
+				} catch (Exception e) {
+					varCusByUser = "";
+					varCusAssign = true;
+					varCusNotAssign = true;
+					varCusByLevel1 = -1;
+				}
+
+				
+
+				CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
+				// Get Total Record Count for Pagination
+				recordsTotal = cusHome.getTotalRecords(search, varCusByUser, varCusAssign & !varCusNotAssign ? 1 : (!varCusAssign & varCusNotAssign ? 2 : 0), varCusByLevel1);
+				
+				int pageSize = recordsFiltered;
+				int skip =  0;
+				data = cusHome.getListCustomer(skip, pageSize, search, varCusByUser, varCusAssign & !varCusNotAssign ? 1 : (!varCusAssign & varCusNotAssign ? 2 : 0), varCusByLevel1);
+			
+				System.out.println("Records total " + data.size() + "/" + recordsTotal);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				
+			}
+
+
+		
+           System.out.println("169:"+theFile);
+			try (FileInputStream fis = new FileInputStream(theFile)) {
+				workbook = xls.getWorkbook(fis,
+						FilenameUtils.getExtension(theFile.getAbsolutePath()));
+				Sheet sheet = workbook.getSheetAt(0);
+				int startIndexRow = 2;
+				int startIndexCell = 0;
+				startIndexRow++;
+
+				//xls.addRowData(sheet, 1, startIndexCell, (DateUtils.getStringFromDate(week1, "dd/MM/yy") + " - " + DateUtils.getStringFromDate(week2, "dd/MM/yy"))); 
+			    int i=0;
+				for (Customer item : data ) {
+					xls.addRowData(sheet, startIndexRow, startIndexCell,
+							i,i,i,i,i,i
+						
+							);
+					startIndexRow++;
+				}
+				i++;
+			    System.out.println("toi day chua");
+
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				workbook.write(baos);
+				inputStream = new ByteArrayInputStream(baos.toByteArray());
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+		return SUCCESS;
+    	
+    }
 	public String lisCustomerJson() throws Exception {
 		try {
 
@@ -477,6 +570,7 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 	}
 
 	public String getVarCusByUser() {
+	
 		return varCusByUser;
 	}
 

@@ -26,7 +26,7 @@ public class Customer implements java.io.Serializable {
 	public Date createTime;
 	public String certificateNumber;
 	public Date certificateDate;
-	public String certificateAddress;
+	public String certificateAddress ;
 	public String taxNumber;
 	public String businessName;
 	public String statisticName;
