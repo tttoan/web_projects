@@ -132,7 +132,7 @@
 			<result name="success" type="stream">
 				<param name="contentType">application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>
 				<param name="inputName">inputStream</param>
-				<param name="contentDisposition">attachment;filename="customer.xlsx"</param>
+				<param name="contentDisposition">attachment;filename="plan_detail.xlsx"</param>
 				<param name="bufferSize">2048</param>
 			</result>
 		</action>

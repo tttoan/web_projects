@@ -20,6 +20,8 @@
 	<div class="">
 		<div class="title_left">
 				<button class="btn btn-danger btn-xs" onclick="goBack()">Quay lại</button>
+				<a href="move_to_add_customer?custId=<%=request.getParameter("custId")%>" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa thông tin <a>
+				
 		</div>
 		<div class="clearfix"></div>
 		<div class="row">

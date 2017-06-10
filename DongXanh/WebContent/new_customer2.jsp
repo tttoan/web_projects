@@ -1141,6 +1141,55 @@
 												class="form-control col-md-7 col-xs-12">
 										</div>
 									</div>
+									
+									<div class="item form-group">
+										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+											for="revenueExpect3"> Tiếp cận trực tiếp 
+										</label>
+										<div class="col-md-5 col-sm-6 col-xs-12">
+											<input id="revenueExpect3" name="revenueExpect3" type=text
+												data-validate-minmax="1,100000000"
+												value="${cust.revenueExpect3}"
+												class="form-control col-md-7 col-xs-12">
+										</div>
+									</div>
+									
+									
+									<div class="item form-group">
+										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+											for="revenueExpect3"> Tiếp cận điện thoại
+										</label>
+										<div class="col-md-5 col-sm-6 col-xs-12">
+											<input id="revenueExpect3" name="revenueExpect3" type=text
+												data-validate-minmax="1,100000000"
+												value="${cust.revenueExpect3}"
+												class="form-control col-md-7 col-xs-12">
+										</div>
+									</div>
+									
+									
+									<div class="item form-group">
+										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+											for="revenueExpect3"> Ngày sinh nhật
+										</label>
+										<div class="col-md-5 col-sm-6 col-xs-12">
+											<input id="revenueExpect3" name="revenueExpect3" type=text
+												data-validate-minmax="1,100000000"
+												value="${cust.revenueExpect3}"
+												class="form-control col-md-7 col-xs-12">
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+											for="revenueExpect3"> Đề xuất khác
+										</label>
+										<div class="col-md-5 col-sm-6 col-xs-12">
+											<input id="revenueExpect3" name="revenueExpect3" type=text
+												data-validate-minmax="1,100000000"
+												value="${cust.revenueExpect3}"
+												class="form-control col-md-7 col-xs-12">
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>

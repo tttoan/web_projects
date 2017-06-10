@@ -46,6 +46,7 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class CustomerAction2 extends ActionSupport implements Action, ServletContextAware, ServletResponseAware, ServletRequestAware, UserAware {
+	
 	private ServletContext ctx;
 	private User userSes;
 	private List<Customer> data;
@@ -123,10 +124,88 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 		}
 		return SUCCESS;
 	}
+	
+	
+	
+	/*
+	public String exportPlanDetail() {
+		try {
+			ServletContext servletContext = ServletActionContext.getServletContext();
+			String pathname = servletContext.getRealPath("/WEB-INF/template/excel/plan_detail.xlsx");
+			File theFile = new File(pathname);
+			ExcelUtil xls = new ExcelUtil();
+
+
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
+			String startDate = StringUtil.notNull(request.getParameter("startDate"));
+			String endDate = StringUtil.notNull(request.getParameter("endDate"));
+
+			Date week1 = new Date(DateUtils.getDateFromString(startDate, "dd/MM/yyyy").getTime());
+			Date week2 = new Date(DateUtils.getDateFromString(endDate, "dd/MM/yyyy").getTime());
+
+			EventsNoteHome enHome = new EventsNoteHome(HibernateUtil.getSessionFactory());
+			WorkingPlanHome wpHome = new WorkingPlanHome(HibernateUtil.getSessionFactory());
+			List<UserPlanGeneral> results = wpHome.getAllUserPlan4Report(isManager()?-1:userSes.getId(), week1, week2);
+
+			try (FileInputStream fis = new FileInputStream(theFile)) {
+				workbook = xls.getWorkbook(fis,
+						FilenameUtils.getExtension(theFile.getAbsolutePath()));
+				Sheet sheet = workbook.getSheetAt(0);
+				int startIndexRow = 2;
+				int startIndexCell = 0;
+				startIndexRow++;
+
+				xls.addRowData(sheet, 1, startIndexCell, (DateUtils.getStringFromDate(week1, "dd/MM/yy") + " - " + DateUtils.getStringFromDate(week2, "dd/MM/yy"))); 
+				for (int i = 0; i < results.size(); i++) {
+					String nvtt = results.get(i).getNVTT();
+					Date datePlan = results.get(i).getStart_date();
+					String workingDate = StringUtil.getDayName(datePlan) + ", " + DateUtils.getStringFromDate(datePlan, "dd/MM/yy");
+					String contactWay = "";
+					if(results.get(i).getPhone()>0){
+						contactWay = results.get(i).getTelefone();
+					}else{
+						if(!results.get(i).getTelefone().isEmpty()){
+							contactWay += results.get(i).getTelefone() + " / ";
+						}
+						if(!results.get(i).getAddress().isEmpty()){
+							contactWay += results.get(i).getAddress();
+						}
+					}
+					EventsNote eventNote = enHome.findEventNoteByCode("DT-"+nvtt+workingDate+results.get(i).getCustomer_code());
+
+					xls.addRowData(sheet, startIndexRow, startIndexCell,
+							(i + 1), 
+							nvtt,
+							workingDate,
+							(results.get(i).getPhone()>0?"ĐT":""),
+							(StringUtil.getDaySection(datePlan)),
+							(results.get(i).getCustomer_code()),
+							(results.get(i).getBusiness_name()),
+							contactWay.trim().replaceAll("/$", ""),
+							(eventNote != null?eventNote.getENote():"")
+							);
+					startIndexRow++;
+
+				}
+
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				workbook.write(baos);
+				inputStream = new ByteArrayInputStream(baos.toByteArray());
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+		return SUCCESS;
+	}
+	*/
+	
+	
     public String exportCustomer(){
     	try {
 			ServletContext servletContext = ServletActionContext.getServletContext();
-			String pathname = servletContext.getRealPath("/WEB-INF/template/excel/customer.xlsx");
+			String pathname = servletContext.getRealPath("/WEB-INF/template/excel/plan_detail.xlsx");
 			File theFile = new File(pathname);
 			ExcelUtil xls = new ExcelUtil();
 			
@@ -166,7 +245,7 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 
 
 		
-           System.out.println("169:"+theFile);
+           System.out.println("169111111111111111111111111:"+theFile);
 			try (FileInputStream fis = new FileInputStream(theFile)) {
 				workbook = xls.getWorkbook(fis,
 						FilenameUtils.getExtension(theFile.getAbsolutePath()));
@@ -177,19 +256,21 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 
 				//xls.addRowData(sheet, 1, startIndexCell, (DateUtils.getStringFromDate(week1, "dd/MM/yy") + " - " + DateUtils.getStringFromDate(week2, "dd/MM/yy"))); 
 			    int i=0;
-				for (Customer item : data ) {
+				/*for (Customer item : data ) {
 					xls.addRowData(sheet, startIndexRow, startIndexCell,
 							i,i,i,i,i,i
 						
 							);
 					startIndexRow++;
-				}
+				}*/
 				i++;
 			    System.out.println("toi day chua");
 
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				  System.out.println("toi day chua122222");
 				workbook.write(baos);
 				inputStream = new ByteArrayInputStream(baos.toByteArray());
+				System.out.println("o day th123456111111111i sau"); 
 			}
 
 		} catch (Exception e) {

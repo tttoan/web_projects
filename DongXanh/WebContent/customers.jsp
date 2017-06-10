@@ -33,7 +33,7 @@
 							           <div class="control-label col-md-2 col-sm-2 col-xs-12" style="padding-top: 15px;font-size: 15px ;max-width: 170px">DSKH theo NVTT</div>
 							             <div class="control-label col-md-2 col-sm-2 col-xs-12" style="height: 50px;"> 
 							                  <s:select id="searchlistUser" name="searchlistUser"
-												style="width:200px " list="listUser" class="form-control"
+												list="listUser" class="form-control  col-md-12 col-xs-12"
 												showDownArrow="false" autoComplete="false" headerKey="" headerValue="---tất cả---"
 												listKey="userName" listValue="userName"											
 												/>   -
@@ -41,9 +41,9 @@
 							           <div class="control-label col-md-2 col-sm-2 col-xs-12 " style="padding-top: 15px;font-size: 15px ">Phân loại khách hàng</div>
 							            <div class="control-label col-md-2 col-sm-2 col-xs-12" style="height: 50px;">
 							                  <s:select id="searchlistCustomerType" name="searchlistCustomerType"
-												 list="listCustomerType"
+												 list="listCustomerType"   class="form-control  col-md-12 col-xs-12"
 												showDownArrow="false" autoComplete="false" headerKey="-1" headerValue="---tất cả---"
-												style="width:200px " 								
+																				
 												/>  
 							           </div>
 							            <div class="control-label col-md-4 col-sm-4 col-xs-12 " style="font-size: 15px ">
@@ -59,11 +59,14 @@
 							            <div class="control-label col-md-2 col-sm-2 col-xs-12 " style="padding-top: 15px;font-size: 15px ;max-width: 170px; ">Khách hàng cấp I</div>
 							            
 							            <div class="control-label col-md-2 col-sm-2 col-xs-12" style="height: 50px;" >
-							                  <s:select id="searchlistCustomerToRank" name="searchlistCustomerToRank"
-												style="width:200px " cssClass="col-sm-9  col-xs-12" list="listCustomerToRank"
+							                
+							                    <s:select id="searchlistCustomerToRank" name="searchlistCustomerToRank"
+											    list="listCustomerToRank"   class="form-control  col-md-12 col-xs-12" style="padding:0px"
 												showDownArrow="false" autoComplete="false" headerKey="-1" headerValue="---tất cả---"
 												 listKey="id" listValue="businessName"											
 												/>  
+							               
+							                 
 							            </div>
 							            
 							            <div class="control-label col-md-2 col-sm-2 col-xs-12 " style="font-size: 15px ">

@@ -23,6 +23,9 @@ pageEncoding="UTF-8"%>
 												listValue="fullName +' - '+ userName"
 												value="" />
 							</div>
+							<label class="left" for="emp_id" style="padding-top:10px">Tổng số lượng khách hàng chưa phân công 
+							      <span id="soluongchuaphancong" style="color: blue;"> <span>
+							</label>
 							<label class="right" for="emp_id" style="padding-top:10px">Nhân viên TT 
 							</label>
 					</div>
@@ -46,6 +49,9 @@ pageEncoding="UTF-8"%>
 						<div class="subject-info-box-2" id="divCus2">
 						  <select size="25" multiple="multiple" id="lstBox2" class="form-control">
 						  </select>
+						</div>
+						<div class="right" style="padding-right: 18px ;"> Tổng số lượng khách phân công theo NVTT chọn 
+						   <span id="soluongkhachdaphancong" style="color: blue; font-weight: bold;"></span>
 						</div>
 						
 						<div class="clearfix"></div>
@@ -92,13 +98,16 @@ pageEncoding="UTF-8"%>
         if (selectedOpts.length == 0) {
             alert("Nothing to move.");
             e.preventDefault();
-        }
-      	//alert((selectedOpts[0].value)); 
+        }      
         $('#lstBox2').append($(selectedOpts).clone());
         $(selectedOpts).remove();
-        assignUser(selectedOpts);        
+        resetsoluongNVTT();
+        assignUser(selectedOpts);      
         e.preventDefault();
+       
     });
+    
+  
 
     $('#btnAllRight').click(function (e) {
         var selectedOpts = $('#lstBox1 option');
@@ -109,8 +118,10 @@ pageEncoding="UTF-8"%>
 
         $('#lstBox2').append($(selectedOpts).clone());
         $(selectedOpts).remove();
+        resetsoluongNVTT();
         assignUser(selectedOpts); 
         e.preventDefault();
+       
     });
 
     $('#btnLeft').click(function (e) {
@@ -122,8 +133,10 @@ pageEncoding="UTF-8"%>
 
         $('#lstBox1').append($(selectedOpts).clone());
         $(selectedOpts).remove();
+        resetsoluongNVTT();
         unAssignUser(selectedOpts); 
         e.preventDefault();
+       
     });
 
     $('#btnAllLeft').click(function (e) {
@@ -135,8 +148,10 @@ pageEncoding="UTF-8"%>
 
         $('#lstBox1').append($(selectedOpts).clone());
         $(selectedOpts).remove();
+        resetsoluongNVTT();
         unAssignUser(selectedOpts); 
         e.preventDefault();
+       
     });
     
     function assignUser(Cuss){
@@ -149,6 +164,7 @@ pageEncoding="UTF-8"%>
                 async: false,
         	});
         }
+        setsoluongNVTT();
     }
     
     function unAssignUser(Cuss){
@@ -163,15 +179,32 @@ pageEncoding="UTF-8"%>
     }
     
     $("#emp_id" ).change(function() {
-    	loadCustomerByNVTT();
+    	 loadCustomerByNVTT();
     	 loadCustomerFree();
+    	 resetsoluongNVTT();
     });
     
     $(document).ready(function() {
     	loadCustomerByNVTT();
     	loadCustomerFree();
+    	var lc =0;
+    	resetsoluongNVTT();
+    	
     });
-    
+    function resetsoluongNVTT(){
+    	var lc =0;      
+	    $( "#lstBox1 option" ).each(function() {
+		   lc = lc+1;
+	   });
+	   $("#soluongchuaphancong").text(lc);
+	
+	   lc=0;
+	   $( "#lstBox2 option" ).each(function() {
+	     	lc = lc+1;
+	  });
+	  $("#soluongkhachdaphancong").text(lc);
+    }
+   
     function loadCustomerByNVTT(){
     	var user_id = document.getElementById('emp_id').value;
 		//alert(user_id);
