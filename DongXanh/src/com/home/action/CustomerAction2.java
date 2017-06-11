@@ -17,6 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.struts2.ServletActionContext;
@@ -202,50 +205,28 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 	*/
 	
 	
-    public String exportCustomer(){
+    public String exportCustomerExecl(){
+    	
+    	System.out.println("nguyen truong xùnafafa");
+    	
     	try {
 			ServletContext servletContext = ServletActionContext.getServletContext();
 			String pathname = servletContext.getRealPath("/WEB-INF/template/excel/plan_detail.xlsx");
 			File theFile = new File(pathname);
 			ExcelUtil xls = new ExcelUtil();
-			
-			
-			try {
-
-				try {
-					Map sessionMap = (Map) ActionContext.getContext().get("session");
-					varCusByUser = StringUtil.replaceInvalidChar(StringUtil.notNull(sessionMap.get("varCusByUser")));
-					varCusAssign = (boolean) sessionMap.get("varCusAssign");
-					varCusNotAssign = (boolean) sessionMap.get("varCusNotAssign");
-					varCusByLevel1 = Integer.parseInt(StringUtil.notNull(sessionMap.get("varCusByLevel1")));
-					System.out.println("Parameter: " + varCusByUser + " - " + varCusAssign + " - " + varCusNotAssign + " - " + varCusByLevel1);
-				} catch (Exception e) {
-					varCusByUser = "";
-					varCusAssign = true;
-					varCusNotAssign = true;
-					varCusByLevel1 = -1;
-				}
-
-				
-
-				CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
-				// Get Total Record Count for Pagination
-				recordsTotal = cusHome.getTotalRecords(search, varCusByUser, varCusAssign & !varCusNotAssign ? 1 : (!varCusAssign & varCusNotAssign ? 2 : 0), varCusByLevel1);
-				
-				int pageSize = recordsFiltered;
-				int skip =  0;
-				data = cusHome.getListCustomer(skip, pageSize, search, varCusByUser, varCusAssign & !varCusNotAssign ? 1 : (!varCusAssign & varCusNotAssign ? 2 : 0), varCusByLevel1);
-			
-				System.out.println("Records total " + data.size() + "/" + recordsTotal);
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-				
-			}
 
 
-		
-           System.out.println("169111111111111111111111111:"+theFile);
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
+			String startDate = StringUtil.notNull(request.getParameter("startDate"));
+			String endDate = StringUtil.notNull(request.getParameter("endDate"));
+
+			Date week1 = new Date(DateUtils.getDateFromString(startDate, "dd/MM/yyyy").getTime());
+			Date week2 = new Date(DateUtils.getDateFromString(endDate, "dd/MM/yyyy").getTime());
+
+			EventsNoteHome enHome = new EventsNoteHome(HibernateUtil.getSessionFactory());
+			WorkingPlanHome wpHome = new WorkingPlanHome(HibernateUtil.getSessionFactory());
+			//List<UserPlanGeneral> results = wpHome.getAllUserPlan4Report(isManager()?-1:userSes.getId(), week1, week2);
+			List<UserPlanGeneral> results = new ArrayList<UserPlanGeneral>();
 			try (FileInputStream fis = new FileInputStream(theFile)) {
 				workbook = xls.getWorkbook(fis,
 						FilenameUtils.getExtension(theFile.getAbsolutePath()));
@@ -254,23 +235,42 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 				int startIndexCell = 0;
 				startIndexRow++;
 
-				//xls.addRowData(sheet, 1, startIndexCell, (DateUtils.getStringFromDate(week1, "dd/MM/yy") + " - " + DateUtils.getStringFromDate(week2, "dd/MM/yy"))); 
-			    int i=0;
-				/*for (Customer item : data ) {
+				xls.addRowData(sheet, 1, startIndexCell, (DateUtils.getStringFromDate(week1, "dd/MM/yy") + " - " + DateUtils.getStringFromDate(week2, "dd/MM/yy"))); 
+				for (int i = 0; i < results.size(); i++) {
+					String nvtt = results.get(i).getNVTT();
+					Date datePlan = results.get(i).getStart_date();
+					String workingDate = StringUtil.getDayName(datePlan) + ", " + DateUtils.getStringFromDate(datePlan, "dd/MM/yy");
+					String contactWay = "";
+					if(results.get(i).getPhone()>0){
+						contactWay = results.get(i).getTelefone();
+					}else{
+						if(!results.get(i).getTelefone().isEmpty()){
+							contactWay += results.get(i).getTelefone() + " / ";
+						}
+						if(!results.get(i).getAddress().isEmpty()){
+							contactWay += results.get(i).getAddress();
+						}
+					}
+					EventsNote eventNote = enHome.findEventNoteByCode("DT-"+nvtt+workingDate+results.get(i).getCustomer_code());
+
 					xls.addRowData(sheet, startIndexRow, startIndexCell,
-							i,i,i,i,i,i
-						
+							(i + 1), 
+							nvtt,
+							workingDate,
+							(results.get(i).getPhone()>0?"ĐT":""),
+							(StringUtil.getDaySection(datePlan)),
+							(results.get(i).getCustomer_code()),
+							(results.get(i).getBusiness_name()),
+							contactWay.trim().replaceAll("/$", ""),
+							(eventNote != null?eventNote.getENote():"")
 							);
 					startIndexRow++;
-				}*/
-				i++;
-			    System.out.println("toi day chua");
+
+				}
 
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				  System.out.println("toi day chua122222");
 				workbook.write(baos);
 				inputStream = new ByteArrayInputStream(baos.toByteArray());
-				System.out.println("o day th123456111111111i sau"); 
 			}
 
 		} catch (Exception e) {

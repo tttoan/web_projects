@@ -127,7 +127,7 @@
 			method="storeParameterSession">
 			<result type="json" />
 		</action>
-		<action name="export_customer" method="exportCustomer"
+		<action name="export_customer" method="exportCustomerExecl"
 			class="com.home.action.CustomerAction2">
 			<result name="success" type="stream">
 				<param name="contentType">application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</param>

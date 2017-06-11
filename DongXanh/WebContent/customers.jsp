@@ -14,7 +14,7 @@
 				<div class="x_panel">
 					<div class="x_content">
 						<s:form action="#" method="post" enctype="multipart/form-data"
-							cssClass="form-horizontal form-label-left" theme="bootstrap">
+							cssClass=" form-label-left" theme="bootstrap">
 							<s:hidden name="custId" value="%{custId}"></s:hidden>
 							<s:hidden name="edit" value="%{edit}"></s:hidden>
 							<s:if test="hasActionErrors()">
@@ -29,16 +29,16 @@
 							</s:elseif>
                           
 							<div class="item form-group">
-							    <div  style="padding-top: 10px;padding-bottom: 0px"> 
-							           <div class="control-label col-md-2 col-sm-2 col-xs-12" style="padding-top: 15px;font-size: 15px ;max-width: 170px">DSKH theo NVTT</div>
-							             <div class="control-label col-md-2 col-sm-2 col-xs-12" style="height: 50px;"> 
+							    <div  style="padding-left: 10px;padding-bottom: 0px ;padding-top: 10px" class="row"> 
+							           <div class="control-label col-md-2 col-sm-2 col-xs-12" style="padding-top: 10px;font-size: 15px ;max-width: 170px">DSKH theo NVTT</div>
+							             <div class="control-label col-md-2 col-sm-2 col-xs-12"> 
 							                  <s:select id="searchlistUser" name="searchlistUser"
-												list="listUser" class="form-control  col-md-12 col-xs-12"
+												list="listUser" class="form-control  col-md-12 col-sm-12 col-xs-12"
 												showDownArrow="false" autoComplete="false" headerKey="" headerValue="---tất cả---"
 												listKey="userName" listValue="userName"											
-												/>   -
+												/>   
 							             </div> 
-							           <div class="control-label col-md-2 col-sm-2 col-xs-12 " style="padding-top: 15px;font-size: 15px ">Phân loại khách hàng</div>
+							           <div class="control-label col-md-2 col-sm-2 col-xs-12 " style="font-size: 15px ;padding-top: 7px">Phân loại khách hàng</div>
 							            <div class="control-label col-md-2 col-sm-2 col-xs-12" style="height: 50px;">
 							                  <s:select id="searchlistCustomerType" name="searchlistCustomerType"
 												 list="listCustomerType"   class="form-control  col-md-12 col-xs-12"
@@ -55,8 +55,8 @@
 							          
 							    </div>
 							    <div class="clearfix"></div>
-							    <div >
-							            <div class="control-label col-md-2 col-sm-2 col-xs-12 " style="padding-top: 15px;font-size: 15px ;max-width: 170px; ">Khách hàng cấp I</div>
+							    <div style="padding-left: 10px;padding-bottom: 0px ;padding-top: 7px" class="row">
+							            <div class="control-label col-md-2 col-sm-2 col-xs-12 " style="padding-top: 7px;font-size: 15px ;max-width: 170px; ">Khách hàng cấp I</div>
 							            
 							            <div class="control-label col-md-2 col-sm-2 col-xs-12" style="height: 50px;" >
 							                
@@ -69,10 +69,10 @@
 							                 
 							            </div>
 							            
-							            <div class="control-label col-md-2 col-sm-2 col-xs-12 " style="font-size: 15px ">
+							            <div class="control-label col-md-4 col-sm-4 col-xs-12 " style="font-size: 15px ;padding-left: 0px ">
 							                 <button class="btn btn-success" onclick="searchDetail();" type="button"><b>Xem kết quả</b></button>
 							            </div>
-							             <div class="control-label col-md-6 col-sm-6 col-xs-12" style="font-size: 15px ">	
+							             <div class="control-label col-md-4 col-sm-4 col-xs-12" style="font-size: 15px ">	
 								            <a href="#openModal" class="btn btn-warning"><b>Ẩn/Hiện	thông tin</b></a> 
 								            <button type="button" class="btn btn-primary" id="btnFilter" onclick="btnExport()"><b>Xuất Excel</b></button>
 																			

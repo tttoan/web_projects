@@ -203,6 +203,7 @@
          <property name="customer_location" type="string">
             <column name="customer_location" />
         </property>
+          
         <set name="promotionRegisters" table="promotion_register" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="customer_id" not-null="true" />

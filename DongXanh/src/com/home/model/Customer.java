@@ -90,7 +90,9 @@ public class Customer implements java.io.Serializable {
 	public Set<Customer> customersForCustomer1Level1Id = new HashSet<Customer>(0);
 	public int no;
 	private String customer_location;
+	private String group_detail_name;
 
+	
 	public String getCustomer_location() {
 		return customer_location;
 	}
@@ -777,5 +779,26 @@ public class Customer implements java.io.Serializable {
 	public void setCustomersForCustomer1Level1Id(Set<Customer> customersForCustomer1Level1Id) {
 		this.customersForCustomer1Level1Id = customersForCustomer1Level1Id;
 	}
+/*
+	public String getGrpCusdetail_name() {
+		grpCusdetail_name ="Nhóm C";
+		return grpCusdetail_name;
+	}
+
+	public void setGrpCusdetail_name(String grpCusdetail_name) {
+		this.grpCusdetail_name = grpCusdetail_name;
+	}
+
+	*/
+
+	public String getGroup_detail_name() {
+		return group_detail_name;
+	}
+
+	public void setGroup_detail_name(String group_detail_name) {
+		this.group_detail_name = group_detail_name;
+	}
+	
+	
 
 }

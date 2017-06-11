@@ -228,13 +228,13 @@
 												for="grpCustomerdetail_id">Loại
 											</label>
 											<div class="col-md-4 col-sm-3 col-xs-12">
-												<s:select id="GrpCusdetail_id" name="listGrpCusdetail"
+												<s:select id="GrpCusdetail_id" name="cust.group_detail_name"
 													cssClass="col-md-12 col-xs-12" 
 													showDownArrow="false" autoComplete="true" headerKey="-1" headerValue="--"
 													listKey="groupName" list="listGrpCusdetail"
 													listValue="groupName"
 													style="width:245px"
-													value="%{cust.truongxuuan}" />
+													value="%{cust.grpCusdetail_name}" />
 											</div>
 										</div>
 										

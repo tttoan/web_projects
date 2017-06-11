@@ -148,6 +148,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	@Override
 	public String execute() throws Exception {
 		try {
+			System.out.println("151===================123454");
 			if (custId != 0) {
 				try {
 					CustomerHome cusHome = new CustomerHome(getSessionFactory());
@@ -310,7 +311,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			loadLookupEmployee();
 			loadLookupCustomer();
 			loadLookupGrpCustomer();
-			loadLookupGrpCustomer_test();
+			loadGroupCustomerDetail();
 			loadLookupCity();
 			defineTableViewCustomer();
 			defineColumnImportLevel1();
@@ -401,7 +402,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	}
 	
-	public void loadLookupGrpCustomer_test() {
+	public void loadGroupCustomerDetail() {
 		try {
 			
 			listGrpCusdetail = new ArrayList<GroupCustomerDetail>();
@@ -540,6 +541,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 				cust.setDirectorBirthday(null);
 			}
 			cust.setCustomerIsActive(true);
+			System.out.println("00000000000000000:"+grpCustomer1.getGroupName());
 			if (emp.getId() > 0)
 				getCust().setUser(emp);
 			if (grpCustomer1.getId() > 0)
