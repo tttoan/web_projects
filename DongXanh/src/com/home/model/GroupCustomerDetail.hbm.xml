@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Mar 17, 2016 9:59:51 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.home.model.GroupCustomerDetail" table="group_customer_detail" catalog="db_promotion" optimistic-lock="version">  
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+         <property name="id_group_customer" type="java.lang.Integer">
+            <column name="id_group_customer"  />
+        </property>
+        
+        <property name="groupName" type="string">
+            <column name="group_name" length="100" />
+        </property>
+         <property name="note" type="string">
+            <column name="note" length="100" />
+        </property>
+     
+    </class>
+</hibernate-mapping>
