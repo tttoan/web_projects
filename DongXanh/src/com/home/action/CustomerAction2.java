@@ -215,18 +215,36 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 
 
 			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
-			String startDate = StringUtil.notNull(request.getParameter("startDate"));
-			String endDate = StringUtil.notNull(request.getParameter("endDate"));
-
-			//Date week1 = new Date(DateUtils.getDateFromString(startDate, "dd/MM/yyyy").getTime());
-			//Date week2 = new Date(DateUtils.getDateFromString(endDate, "dd/MM/yyyy").getTime());
-
+			String hearder = StringUtil.notNull(request.getParameter("hearder"));
+			String[] listheader = hearder.split("-");
+			
+			/*for (int i = 0; i < listTableColumn.size(); i++) {
+				if(isExist){
+					if(columnActive.split("-")[i].equals("1"))
+						listTableColumn.get(i)[1] = true;
+					else
+						listTableColumn.get(i)[1] = false;
+				}else{
+					if((boolean)listTableColumn.get(i)[1] == true)
+						columnActive += splitSep +"1";
+					else
+						columnActive += splitSep +"0";
+				}
+				splitSep = "-";
+			}*/
+			
+			
+			
+			
+			/*
 			Date week1 = new Date(DateUtils.getDateFromString("13/06/2017", "dd/MM/yyyy").getTime());
 			Date week2 = new Date(DateUtils.getDateFromString("13/06/2017", "dd/MM/yyyy").getTime());
 			
 			EventsNoteHome enHome = new EventsNoteHome(HibernateUtil.getSessionFactory());
 			WorkingPlanHome wpHome = new WorkingPlanHome(HibernateUtil.getSessionFactory());
 			//List<UserPlanGeneral> results = wpHome.getAllUserPlan4Report(isManager()?-1:userSes.getId(), week1, week2);
+*/			EventsNoteHome enHome  = new EventsNoteHome(HibernateUtil.getSessionFactory());
+            WorkingPlanHome wpHome = new WorkingPlanHome(HibernateUtil.getSessionFactory());
 			List<UserPlanGeneral> results = new ArrayList<UserPlanGeneral>();
 			try (FileInputStream fis = new FileInputStream(theFile)) {
 				workbook = xls.getWorkbook(fis,
@@ -235,8 +253,20 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 				int startIndexRow = 2;
 				int startIndexCell = 0;
 				startIndexRow++;
+				List<String> listHeaderExecl = new ArrayList<String>();
+				defineTableViewCustomer();
+				for (int i = 0; i < listheader.length; i++) {
+					System.out.println(listheader[i]);
+					if(listheader[i].equals("1")){
+						 // if(null!=listTableColumn.get(i)){}
+					      //System.out.println(String.valueOf(listTableColumn.get(i)[0]));
+						
+					}
+				}
+				//xls.addRowData(sheet, 0, 1, listHeaderExecl);
+			
 
-				xls.addRowData(sheet, 1, startIndexCell, (DateUtils.getStringFromDate(week1, "dd/MM/yy") + " - " + DateUtils.getStringFromDate(week2, "dd/MM/yy"))); 
+				
 				for (int i = 0; i < results.size(); i++) {
 					String nvtt = results.get(i).getNVTT();
 					Date datePlan = results.get(i).getStart_date();
@@ -498,7 +528,7 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 		}
 		
 		Cookie div = new Cookie("columnActive", columnActive);
-		System.out.println(columnActive);
+	
 		div.setMaxAge(60 * 60 * 24 * 1); // Make the cookie last a day!
 		servletResponse.addCookie(div);
 	}

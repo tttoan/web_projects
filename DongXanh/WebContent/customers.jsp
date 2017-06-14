@@ -261,7 +261,9 @@ th {
  			varCusAssign= true;
  			varCusNotAssign = true;
  		} */
- 		location.href		='export_customer';
+ 	    var hearder = getCookieColumnVisible("columnActive");
+ 		
+ 		location.href		='export_customer?hearder='+hearder;
 	}
  	function searchDetail(){
  		var searchlistUser           = document.getElementById("searchlistUser").value;
