@@ -207,11 +207,9 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 	
     public String exportCustomerExecl(){
     	
-    	System.out.println("nguyen truong xùnafafa");
-    	
     	try {
 			ServletContext servletContext = ServletActionContext.getServletContext();
-			String pathname = servletContext.getRealPath("/WEB-INF/template/excel/plan_detail.xlsx");
+			String pathname = servletContext.getRealPath("/WEB-INF/template/excel/customer.xlsx");
 			File theFile = new File(pathname);
 			ExcelUtil xls = new ExcelUtil();
 
@@ -220,9 +218,12 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 			String startDate = StringUtil.notNull(request.getParameter("startDate"));
 			String endDate = StringUtil.notNull(request.getParameter("endDate"));
 
-			Date week1 = new Date(DateUtils.getDateFromString(startDate, "dd/MM/yyyy").getTime());
-			Date week2 = new Date(DateUtils.getDateFromString(endDate, "dd/MM/yyyy").getTime());
+			//Date week1 = new Date(DateUtils.getDateFromString(startDate, "dd/MM/yyyy").getTime());
+			//Date week2 = new Date(DateUtils.getDateFromString(endDate, "dd/MM/yyyy").getTime());
 
+			Date week1 = new Date(DateUtils.getDateFromString("13/06/2017", "dd/MM/yyyy").getTime());
+			Date week2 = new Date(DateUtils.getDateFromString("13/06/2017", "dd/MM/yyyy").getTime());
+			
 			EventsNoteHome enHome = new EventsNoteHome(HibernateUtil.getSessionFactory());
 			WorkingPlanHome wpHome = new WorkingPlanHome(HibernateUtil.getSessionFactory());
 			//List<UserPlanGeneral> results = wpHome.getAllUserPlan4Report(isManager()?-1:userSes.getId(), week1, week2);
@@ -257,7 +258,7 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 							(i + 1), 
 							nvtt,
 							workingDate,
-							(results.get(i).getPhone()>0?"ĐT":""),
+							(results.get(i).getPhone()>0?"Ä�T":""),
 							(StringUtil.getDaySection(datePlan)),
 							(results.get(i).getCustomer_code()),
 							(results.get(i).getBusiness_name()),
@@ -708,6 +709,23 @@ public class CustomerAction2 extends ActionSupport implements Action, ServletCon
 	public void setListUser(List<User> listUser) {
 		this.listUser = listUser;
 	}
+
+	public Workbook getWorkbook() {
+		return workbook;
+	}
+
+	public void setWorkbook(Workbook workbook) {
+		this.workbook = workbook;
+	}
+
+	public InputStream getInputStream() {
+		return inputStream;
+	}
+
+	public void setInputStream(InputStream inputStream) {
+		this.inputStream = inputStream;
+	}
+	
 	
 
 }
