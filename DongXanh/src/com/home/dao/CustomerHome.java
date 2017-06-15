@@ -821,8 +821,8 @@ public class CustomerHome {
 			Connection conn = sessionImpl.connection();
 
 			int range = startPageIndex+recordsPerPage;
-			searchValue = searchValue.toLowerCase().trim();
-			nvtt = nvtt.toLowerCase().trim();
+			searchValue = null==searchValue ? "" :  searchValue.toLowerCase().trim();
+			nvtt        =  null==nvtt ? "" : nvtt.toLowerCase().trim();
 			/*String sql = 
 					"SELECT * FROM ( "
 						+"SELECT @i:=@i+1 AS iterator, YY.* FROM ("
