@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -129,19 +130,35 @@ public class CustomerAction2 extends ActionSupport implements Action,
 	public String exportCustomerExecl() {
 
 		try {
-			ServletContext servletContext = ServletActionContext
-					.getServletContext();
-			String pathname = servletContext
-					.getRealPath("/WEB-INF/template/excel/customer.xlsx");
+			ServletContext servletContext = ServletActionContext.getServletContext();
+			String pathname = servletContext.getRealPath("/WEB-INF/template/excel/customer.xlsx");
 			File theFile = new File(pathname);
 			ExcelUtil xls = new ExcelUtil();
 
-			HttpServletRequest request = (HttpServletRequest) ActionContext
-					.getContext().get(ServletActionContext.HTTP_REQUEST);
-			String hearder = StringUtil
-					.notNull(request.getParameter("hearder"));
-			String[] listheader = hearder.split("-");
-
+			HttpServletRequest request      = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
+			varCusByUser                   = StringUtil.notNull(request.getParameter("searchlistUser"));
+			String varCusAssign             = StringUtil.notNull(request.getParameter("varCusAssign"));
+			String varCusNotAssign          = StringUtil.notNull(request.getParameter("varCusNotAssign"));
+			String searchlistCustomerToRank = StringUtil.notNull(request.getParameter("searchlistCustomerToRank"));
+			String hearder                  = StringUtil.notNull(request.getParameter("hearder"));
+			String[] listheader             = hearder.split("-"); 
+			varCusByLevel1 =-1;
+			try {
+				varCusByLevel1 =Integer.parseInt(searchlistCustomerToRank);
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+			int assign_type =0;
+			if (varCusAssign.equals("true") && !varCusNotAssign.equals("true")) {
+				assign_type =1;
+			} else if (!varCusAssign.equals("true") && varCusNotAssign.equals("true")) {
+				assign_type =2;
+			}else {
+				assign_type =0;
+			}
+			
 			System.out.println("listheader:" + listheader.length);
 			List<Object> listHeaderExecl = new ArrayList<Object>();
 			defineTableViewCustomer();
@@ -166,35 +183,31 @@ public class CustomerAction2 extends ActionSupport implements Action,
 				xls.addRowData(sheet, startIndexRow, startIndexCell, listHeaderExecl.toArray());
 				startIndexRow++;
 				// add row
-				CustomerHome cusHome = new CustomerHome(
-						HibernateUtil.getSessionFactory());
-				data = cusHome.getListCustomer(0, 2000, search, varCusByUser,
-						varCusAssign & !varCusNotAssign ? 1 : (!varCusAssign
-								& varCusNotAssign ? 2 : 0), varCusByLevel1);
+				CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
+				data = cusHome.getListCustomer(0, 20000, search, varCusByUser,assign_type,varCusByLevel1);
 				if (listheader.length >= 50) {
 					int stt = 0;
 					for (Customer item : data) {
 						stt++;
 						listHeaderExecl = new ArrayList<Object>();
-					//	System.out.println("stt:"+stt);
+				
 						// { "data": "no", "autoWidth": true,"visible":
-						// isColumnVisible(1) },
+					
 						/* 1 */if (listheader[0].equals("1")) {
 							listHeaderExecl.add(String.valueOf(stt));
 						}
 						// { "data": "createTime", "autoWidth": true ,"visible":
-						// isColumnVisible(2)
+					
 						/* 2 */if (listheader[1].equals("1")) {
-							listHeaderExecl
-									.add(item.getCreateTime().toString());
+							listHeaderExecl.add(formatddmmyyyy(item.getCreateTime().toString()));
 						}
 						// *3*/{ "data": "customerCode", "autoWidth":
-						// true,"visible": isColumnVisible(3) },
+						
 						/* 3 */if (listheader[2].equals("1")) {
 							listHeaderExecl.add(item.getCustomerCode());
 						}
 						// *4*/{ "data": "groupCustomer.groupName", "autoWidth":
-						// true,"visible": isColumnVisible(4) },
+						
 						/* 4 */if (listheader[3].equals("1")) {
 							listHeaderExecl.add(item.getGroupCustomer()
 									.getGroupName());
@@ -222,7 +235,19 @@ public class CustomerAction2 extends ActionSupport implements Action,
 						// *9*/{ "data": "certificateDate", "autoWidth":
 						// true,"visible": isColumnVisible(9)
 						/* 9 */if (listheader[8].equals("1")) {
-							listHeaderExecl.add(item.getCertificateDate());
+							String value ="";
+							try {
+								if (item.getCertificateDate()==null){
+									value= "";								
+								}else{
+									SimpleDateFormat sm = new SimpleDateFormat("mm-dd-yyyy");
+									value = sm.format(item.getCertificateDate());
+								}			
+								
+							} catch (Exception e) {
+								// TODO: handle exception
+							}			
+							listHeaderExecl.add(value);
 						}
 
 						// *10*/{ "data": "certificateAddress", "autoWidth":
@@ -285,7 +310,19 @@ public class CustomerAction2 extends ActionSupport implements Action,
 						// 21{ "data": "directorBirthday", "autoWidth":
 						// true,"visible": isColumnVisible(21)
 						/* 21 */if (listheader[20].equals("1")) {
-							listHeaderExecl.add(item.getDirectorBirthday());
+							String value ="";
+							try {
+								if (item.getDirectorBirthday()==null){
+									value= "";								
+								}else{
+									SimpleDateFormat sm = new SimpleDateFormat("mm-dd-yyyy");
+									value = sm.format(item.getDirectorBirthday());
+								}			
+								
+							} catch (Exception e) {
+								// TODO: handle exception
+							}			
+							listHeaderExecl.add(value);						
 						}
 						// 22*/{ "data": "directorDomicile", "autoWidth":
 						// true,"visible": isColumnVisible(22) },
@@ -472,22 +509,39 @@ public class CustomerAction2 extends ActionSupport implements Action,
 		return SUCCESS;
 
 	}
+	public String formatddmmyyyy(String value) {
+		if (null==value || value.toString().isEmpty()){
+			return "";
+			
+		}
+		String[]liststr = value.split("-");
+		if (liststr.length==3) {
+			return liststr[2]+"-"+liststr[1]+"-"+liststr[0];
+			
+		}
+		return value;
+		
+	}
+	public  String formatDate(Date value) {
+		if (null==value || !value.toString().isEmpty()){
+			return "";
+			
+		}
+		SimpleDateFormat sm = new SimpleDateFormat("mm-dd-yyyy");
+		   
+		return sm.format(value);
+	}
 
 	public String lisCustomerJson() throws Exception {
 		try {
 
 			try {
-				Map sessionMap = (Map) ActionContext.getContext()
-						.get("session");
-				varCusByUser = StringUtil.replaceInvalidChar(StringUtil
-						.notNull(sessionMap.get("varCusByUser")));
+				Map sessionMap = (Map) ActionContext.getContext().get("session");
+				varCusByUser = StringUtil.replaceInvalidChar(StringUtil.notNull(sessionMap.get("varCusByUser")));
 				varCusAssign = (boolean) sessionMap.get("varCusAssign");
 				varCusNotAssign = (boolean) sessionMap.get("varCusNotAssign");
-				varCusByLevel1 = Integer.parseInt(StringUtil.notNull(sessionMap
-						.get("varCusByLevel1")));
-				System.out.println("Parameter: " + varCusByUser + " - "
-						+ varCusAssign + " - " + varCusNotAssign + " - "
-						+ varCusByLevel1);
+				varCusByLevel1 = Integer.parseInt(StringUtil.notNull(sessionMap.get("varCusByLevel1")));
+				System.out.println("Parameter: " + varCusByUser + " - "	+ varCusAssign + " - " + varCusNotAssign + " - "+ varCusByLevel1);
 			} catch (Exception e) {
 				varCusByUser = "";
 				varCusAssign = true;
@@ -495,19 +549,16 @@ public class CustomerAction2 extends ActionSupport implements Action,
 				varCusByLevel1 = -1;
 			}
 
-			HttpServletRequest request = (HttpServletRequest) ActionContext
-					.getContext().get(ServletActionContext.HTTP_REQUEST);
+			HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get(ServletActionContext.HTTP_REQUEST);
 			// Fetch Data from User Table
 
 			String start = (request.getParameter("start"));
 			String length = (request.getParameter("length"));
 			String strDraw = (request.getParameter("draw"));
-			draw = StringUtil.notNull(strDraw).isEmpty() ? 0 : Integer
-					.parseInt(strDraw);
+			draw = StringUtil.notNull(strDraw).isEmpty() ? 0 : Integer.parseInt(strDraw);
 			order = StringUtil.notNull((request.getParameter("order[i][dir]")));
 			System.out.println("order = " + order);
-			search = StringUtil.replaceInvalidChar(StringUtil.notNull(request
-					.getParameter("search[value]")));
+			search = StringUtil.replaceInvalidChar(StringUtil.notNull(request.getParameter("search[value]")));
 			System.out.println("search = " + search);
 
 			int pageSize = length != null ? Integer.parseInt(length) : 0;
@@ -515,11 +566,9 @@ public class CustomerAction2 extends ActionSupport implements Action,
 			System.out.println("pageSize = " + pageSize);
 			System.out.println("skip = " + skip);
 
-			CustomerHome cusHome = new CustomerHome(
-					HibernateUtil.getSessionFactory());
+			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
 			// Get Total Record Count for Pagination
-			recordsTotal = cusHome.getTotalRecords(search, varCusByUser,
-					varCusAssign & !varCusNotAssign ? 1 : (!varCusAssign
+			recordsTotal = cusHome.getTotalRecords(search, varCusByUser,varCusAssign & !varCusNotAssign ? 1 : (!varCusAssign
 							& varCusNotAssign ? 2 : 0), varCusByLevel1);
 			recordsFiltered = recordsTotal;
 			if (pageSize == -1) {

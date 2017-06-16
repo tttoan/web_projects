@@ -783,7 +783,11 @@ public class CustomerHome {
 							+ ") ) "
 					+" AND c.customer_is_active = "+CUSTOMER_IS_ACTIVE+" ";
 			if(user_id>0){
-				sql = sql + " AND c.user_id = "+user_id;
+				sql = sql + " AND ( c.customer1_level1_id = "+user_id +" OR ";
+				sql = sql + "       c.customer2_level1_id = "+user_id +" OR ";
+				sql = sql + "       c.customer3_level1_id = "+user_id +" OR ";
+				sql = sql + "       c.customer4_level1_id = "+user_id +" OR ";
+				sql = sql + "       c.customer5_level1_id = "+user_id +" ) ";
 			}
 			
 			System.out.println("=========================================================");
@@ -852,10 +856,15 @@ public class CustomerHome {
 						+" WHERE iterator > "+startPageIndex+" AND iterator <= " + range + " order by business_name";*/
 			
 			String user_id="";
-			if(cusL1>0){
-				user_id = "  AND c.user_id ="+cusL1;
-			}
 			
+			
+			if(cusL1>0){
+				user_id = user_id + " AND ( c.customer1_level1_id = "+cusL1 +" OR ";
+				user_id = user_id + "       c.customer2_level1_id = "+cusL1 +" OR ";
+				user_id = user_id + "       c.customer3_level1_id = "+cusL1 +" OR ";
+				user_id = user_id + "       c.customer4_level1_id = "+cusL1 +" OR ";
+				user_id = user_id + "       c.customer5_level1_id = "+cusL1 +" ) ";
+			}
 			String sql = 
 					"SELECT * FROM ( "
 						+"SELECT @i:=@i+1 AS iterator, YY.* FROM ("

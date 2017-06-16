@@ -141,17 +141,7 @@
 <script src="js/dataTables.fixedHeader.min.js"></script>
 
 <script src="js/moment.js"></script>
-<%-- <script type="text/javascript" src="https://cdn.datatables.net/tabletools/2.2.4/js/dataTables.tableTools.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/tabletools/2.2.2/swf/copy_csv_xls_pdf.swf"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/dataTables.buttons.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.flash.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.html5.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.print.min.js"></script> --%>
-  
+
 <style>
 .btn{
  width: 144px!important;
@@ -248,11 +238,12 @@ th {
 	});
 
  	function btnExport(){
- 	/* 	var searchlistUser           = document.getElementById("searchlistUser").value;
+ 		var searchlistUser           = document.getElementById("searchlistUser").value;
  		var searchlistCustomerType   = document.getElementById("searchlistCustomerType").value;
  		var searchlistCustomerToRank = document.getElementById("searchlistCustomerToRank").value;
  		var varCusAssign = false;
  		var varCusNotAssign = false;
+ 		
  		if(searchlistCustomerType =="DSKH đã phân công"){
  			varCusAssign= true;
  		}else if(searchlistCustomerType =="DSKH chưa phân công"){
@@ -260,10 +251,13 @@ th {
  		}else{
  			varCusAssign= true;
  			varCusNotAssign = true;
- 		} */
- 	    var hearder = getCookieColumnVisible("columnActive");
+ 		}  
+ 	 
+ 		 var hearder        = getCookieColumnVisible("columnActive");
+ 		 var href           = "export_customer?hearder="+hearder+"&searchlistUser="+searchlistUser+"&varCusAssign="+varCusAssign;
+ 		 var href           = href + "&varCusNotAssign="+varCusNotAssign+"&searchlistCustomerToRank="+searchlistCustomerToRank;
  		
- 		location.href		='export_customer?hearder='+hearder;
+ 		location.href		= href;
 	}
  	function searchDetail(){
  		var searchlistUser           = document.getElementById("searchlistUser").value;
