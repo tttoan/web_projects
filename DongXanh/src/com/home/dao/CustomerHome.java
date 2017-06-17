@@ -896,7 +896,8 @@ public class CustomerHome {
 								
 			System.out.println(sql);
 			ResultSet rs = conn.createStatement().executeQuery(sql);
-			int no = 1;
+			System.out.println(startPageIndex +"============"+ recordsPerPage);
+			int no = startPageIndex+1;
 			while(rs.next()){
 				Customer c = new Customer();
 				c.setNo(no++);

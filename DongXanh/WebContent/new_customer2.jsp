@@ -1270,7 +1270,7 @@
 		if (!validator.checkAll($(this))) {
 			submit = false;
 		}
-
+        alert("trung xuan:"+submit);
 		if (submit)
 			this.submit();
 		return false;

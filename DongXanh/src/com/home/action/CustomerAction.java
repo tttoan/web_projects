@@ -520,6 +520,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	 */
 	public String addCustomer() throws Exception {
 		try {
+			System.out.println("============addCustomer=================");
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
 			/**
 			 * set value

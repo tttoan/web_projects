@@ -209,8 +209,7 @@ public class CustomerAction2 extends ActionSupport implements Action,
 						// *4*/{ "data": "groupCustomer.groupName", "autoWidth":
 						
 						/* 4 */if (listheader[3].equals("1")) {
-							listHeaderExecl.add(item.getGroupCustomer()
-									.getGroupName());
+							listHeaderExecl.add(item.getGroupCustomer().getGroupName());
 						}
 						// 5/{ "data": "user.fullName", "autoWidth":
 						// true,"visible": isColumnVisible(5) },
@@ -250,65 +249,53 @@ public class CustomerAction2 extends ActionSupport implements Action,
 							listHeaderExecl.add(value);
 						}
 
-						// *10*/{ "data": "certificateAddress", "autoWidth":
-						// true,"visible": isColumnVisible(10) },
+						// *10*/{ "data": "certificateAddress", "autoWidth":						
 						/* 10 */if (listheader[9].equals("1")) {
 							listHeaderExecl.add(item.getCertificateAddress());
 						}
 
-						// *11*/{ "data": "taxNumber", "autoWidth":
-						// true,"visible": isColumnVisible(11) },
+						// *11*/{ "data": "taxNumber", "autoWidth":					
 						/* 11 */if (listheader[10].equals("1")) {
 							listHeaderExecl.add(item.getTaxNumber());
 						}
-						// *12*/{ "data": "budgetRegister", "autoWidth":
-						// true,"visible": isColumnVisible(12) },
+						// *12*/{ "data": "budgetRegister", "autoWidth":						
 						/* 12 */if (listheader[11].equals("1")) {
 							listHeaderExecl.add(item.getBudgetRegister());
 						}
-						// *13*/{ "data": "telefone", "autoWidth":
-						// true,"visible": isColumnVisible(13) },
+						// *13*/{ "data": "telefone", "autoWidth":						
 						/* 13 */if (listheader[12].equals("1")) {
 							listHeaderExecl.add(item.getTelefone());
 						}
-						// *14*/{ "data": "fax", "autoWidth": true,"visible":
-						// isColumnVisible(14) },
+						// *14*/{ "data": "fax", "autoWidth": true,"visible":						
 						/* 14 */if (listheader[13].equals("1")) {
 							listHeaderExecl.add(item.getFax());
 						}
-						// *15*/{ "data": "email", "autoWidth": true,"visible":
-						// isColumnVisible(15) },
+						// *15*/{ "data": "email", "autoWidth": true,"visible":						
 						/* 15 */if (listheader[14].equals("1")) {
 							listHeaderExecl.add(item.getEmail());
 						}
-						// *16*/{ "data": "socialAddress", "autoWidth":
-						// true,"visible": isColumnVisible(16) },
+						// *16*/{ "data": "socialAddress", "autoWidth":						
 						/* 16 */if (listheader[15].equals("1")) {
 							listHeaderExecl.add(item.getSocialAddress());
 						}
-						// *17*/{ "data": "businessAddress", "autoWidth":
-						// true,"visible": isColumnVisible(17) },
+						// *17*/{ "data": "businessAddress", "autoWidth":						
 						/* 17 */if (listheader[16].equals("1")) {
 							listHeaderExecl.add(item.getBusinessAddress());
 						}
-						// *18*/{ "data": "adviser", "autoWidth":
-						// true,"visible": isColumnVisible(18) },
+						// *18*/{ "data": "adviser", "autoWidth":						
 						/* 18 */if (listheader[17].equals("1")) {
 							listHeaderExecl.add(item.getAdviser());
 						}
-						// *19*/{ "data": "director", "autoWidth":
-						// true,"visible": isColumnVisible(19) },
+						// *19*/{ "data": "director", "autoWidth":						
 						/* 19 */if (listheader[18].equals("1")) {
 							listHeaderExecl.add(item.getDirector());
 						}
-						// *20*/{ "data": "directorMobile", "autoWidth":
-						// true,"visible": isColumnVisible(20) },
+						// *20*/{ "data": "directorMobile", "autoWidth":					
 						/* 20 */if (listheader[19].equals("1")) {
 							listHeaderExecl.add(item.getDirectorMobile());
 						}
 
-						// 21{ "data": "directorBirthday", "autoWidth":
-						// true,"visible": isColumnVisible(21)
+						// 21{ "data": "directorBirthday", "autoWidth":					
 						/* 21 */if (listheader[20].equals("1")) {
 							String value ="";
 							try {
@@ -324,170 +311,136 @@ public class CustomerAction2 extends ActionSupport implements Action,
 							}			
 							listHeaderExecl.add(value);						
 						}
-						// 22*/{ "data": "directorDomicile", "autoWidth":
-						// true,"visible": isColumnVisible(22) },
+						// 22*/{ "data": "directorDomicile", "autoWidth":						
 						/* 22 */if (listheader[21].equals("1")) {
 							listHeaderExecl.add(item.getDirectorDomicile());
 						}
-						// *23*/{ "data": "sellMan", "autoWidth":
-						// true,"visible": isColumnVisible(23) },
+						// *23*/{ "data": "sellMan", "autoWidth":						
 						/* 23 */if (listheader[22].equals("1")) {
 							listHeaderExecl.add(item.getSellMan());
 						}
-						// *24*/{ "data": "sellManMobile", "autoWidth":
-						// true,"visible": isColumnVisible(24) },
+						// *24*/{ "data": "sellManMobile", "autoWidth":						
 						/* 24 */if (listheader[23].equals("1")) {
 							listHeaderExecl.add(item.getSellManMobile());
 						}
-						// *25*/{ "data": "budgetOriginal", "autoWidth":
-						// true,"visible": isColumnVisible(25)},
+						// *25*/{ "data": "budgetOriginal", "autoWidth":						
 						/* 25 */if (listheader[24].equals("1")) {
 							listHeaderExecl.add(item.getBudgetOriginal());
 						}
-						// *26*/{ "data": "otherBusiness", "autoWidth":
-						// true,"visible": isColumnVisible(26)},
+						// *26*/{ "data": "otherBusiness", "autoWidth":						
 						/* 26 */if (listheader[25].equals("1")) {
 							listHeaderExecl.add(item.getOtherBusiness());
 						}
 						// *27*/{ "data":
-						// "customerByCustomer5Level1Id.businessName",
-						// "autoWidth": true,"visible": isColumnVisible(27) },
+						// "customerByCustomer5Level1Id.businessName",						
 						/* 27 */if (listheader[26].equals("1")) {
 							listHeaderExecl.add(item
 									.getCustomerByCustomer5Level1Id()
 									.getBusinessName());
 						}
-						// *28*/{ "data": "customer5Percent", "autoWidth":
-						// true,"visible": isColumnVisible(28) },
+						// *28*/{ "data": "customer5Percent", "autoWidth":					
 						/* 28 */if (listheader[27].equals("1")) {
 							listHeaderExecl.add(String.valueOf(item
 									.getCustomer5Percent()));
 						}
 						// *29*/{ "data":
-						// "customerByCustomer4Level1Id.businessName",
-						// "autoWidth": true,"visible": isColumnVisible(29)},
+						// "customerByCustomer4Level1Id.businessName",						
 						/* 29 */if (listheader[28].equals("1")) {
 							listHeaderExecl.add(item
 									.getCustomerByCustomer4Level1Id()
 									.getBusinessName());
 						}
-						// *30*/{ "data": "customer4Percent", "autoWidth":
-						// true,"visible": isColumnVisible(30) },
+						// *30*/{ "data": "customer4Percent", "autoWidth":					
 						/* 30 */if (listheader[29].equals("1")) {
 							listHeaderExecl.add(String.valueOf(item
 									.getCustomer4Percent()));
 						}
 
 						// *31*/{ "data":
-						// "customerByCustomer3Level1Id.businessName",
-						// "autoWidth": true,"visible": isColumnVisible(31) },
+						// "customerByCustomer3Level1Id.businessName",						
 						/* 31 */if (listheader[30].equals("1")) {
 							listHeaderExecl.add(item
 									.getCustomerByCustomer3Level1Id()
 									.getBusinessName());
 						}
-						// *32*/{ "data": "customer3Percent", "autoWidth":
-						// true,"visible": isColumnVisible(32) },
+						// *32*/{ "data": "customer3Percent", "autoWidth":						
 						/* 32 */if (listheader[31].equals("1")) {
-							listHeaderExecl.add(String.valueOf(item
-									.getCustomer3Percent()));
+							listHeaderExecl.add(item.getCustomer3Percent());
 						}
 						// *33*/{ "data":
-						// "customerByCustomer2Level1Id.businessName",
-						// "autoWidth": true,"visible": isColumnVisible(33) },
+						// "customerByCustomer2Level1Id.businessName",					
 						/* 33 */if (listheader[32].equals("1")) {
 							listHeaderExecl.add(item
 									.getCustomerByCustomer2Level1Id()
 									.getBusinessName());
 						}
-						// *34*/{ "data": "customer2Percent", "autoWidth":
-						// true,"visible": isColumnVisible(34) },
+						// *34*/{ "data": "customer2Percent", "autoWidth":						
 						/* 34 */if (listheader[33].equals("1")) {
-							listHeaderExecl.add(String.valueOf(item
-									.getCustomer2Percent()));
+							listHeaderExecl.add(item.getCustomer2Percent());
 						}
-						// *35*/{ "data":
-						// "customerByCustomer1Level1Id.businessName",
-						// "autoWidth": true,"visible": isColumnVisible(35) },
+						// *35*/{ "data":customerByCustomer1Level1Id.businessName					
 						/* 35 */if (listheader[34].equals("1")) {
-							listHeaderExecl.add(item
-									.getCustomerByCustomer1Level1Id()
-									.getBusinessName());
+							listHeaderExecl.add(item.getCustomerByCustomer1Level1Id().getBusinessName());
 						}
-						// *36*/{ "data": "customer1Percent", "autoWidth":
-						// true,"visible": isColumnVisible(36) },
+						// *36*/{ "data": "customer1Percent", "autoWidth":						
 						/* 36 */if (listheader[35].equals("1")) {
 							listHeaderExecl.add(String.valueOf(item
 									.getCustomer1Percent()));
 						}
-						// *37*/{ "data": "product1Hot", "autoWidth":
-						// true,"visible": isColumnVisible(37) },
+						// *37*/{ "data": "product1Hot", "autoWidth":						
 						/* 37 */if (listheader[36].equals("1")) {
 							listHeaderExecl.add(item.getProduct1Hot());
 						}
-						// *38*/{ "data": "product2Hot", "autoWidth":
-						// true,"visible": isColumnVisible(38) },
+						// *38*/{ "data": "product2Hot", "autoWidth":					
 						/* 38 */if (listheader[37].equals("1")) {
 							listHeaderExecl.add(item.getProduct2Hot());
 						}
-						// *39*/{ "data": "product3Hot", "autoWidth":
-						// true,"visible": isColumnVisible(39) },
+						// *39*/{ "data": "product3Hot", "autoWidth":						
 						/* 39 */if (listheader[38].equals("1")) {
 							listHeaderExecl.add(item.getProduct3Hot());
 						}
-						// *40*/{ "data": "product4Hot", "autoWidth":
-						// true,"visible": isColumnVisible(40) },
+						// *40*/{ "data": "product4Hot", "autoWidth":					
 						/* 40 */if (listheader[39].equals("1")) {
 							listHeaderExecl.add(item.getProduct4Hot());
 						}
 
-						// *41*/{ "data": "product5Hot", "autoWidth":
-						// true,"visible": isColumnVisible(41) },
+						// *41*/{ "data": "product5Hot", "autoWidth":						
 						/* 41 */if (listheader[40].equals("1")) {
 							listHeaderExecl.add(item.getProduct5Hot());
 						}
-						// *42*/{ "data": "product6Hot", "autoWidth":
-						// true,"visible": isColumnVisible(42)},
+						// *42*/{ "data": "product6Hot", "autoWidth":						
 						/* 42 */if (listheader[41].equals("1")) {
 							listHeaderExecl.add(item.getProduct6Hot());
 						}
-						// *43*/{ "data": "farmProduct1", "autoWidth":
-						// true,"visible": isColumnVisible(43) },
+						// *43*/{ "data": "farmProduct1", "autoWidth":						
 						/* 43 */if (listheader[42].equals("1")) {
 							listHeaderExecl.add(item.getFarmProduct1());
 						}
-						// *44*/{ "data": "farmProduct1Session", "autoWidth":
-						// true,"visible": isColumnVisible(44) },
+						// *44*/{ "data": "farmProduct1Session", "autoWidth":						
 						/* 44 */if (listheader[43].equals("1")) {
 							listHeaderExecl.add(item.getFarmProduct1Session());
 						}
-						// *45*/{ "data": "farmProduct2", "autoWidth":
-						// true,"visible": isColumnVisible(45) },
+						// *45*/{ "data": "farmProduct2", "autoWidth":					
 						/* 45 */if (listheader[44].equals("1")) {
 							listHeaderExecl.add(item.getFarmProduct2());
 						}
-						// *46*/{ "data": "farmProduct2Session", "autoWidth":
-						// true,"visible": isColumnVisible(46) },
+						// *46*/{ "data": "farmProduct2Session", "autoWidth"						
 						/* 46 */if (listheader[45].equals("1")) {
 							listHeaderExecl.add(item.getFarmProduct2Session());
 						}
-						// *47*/{ "data": "farmProduct3", "autoWidth":
-						// true,"visible": isColumnVisible(47)},
+						// *47*/{ "data": "farmProduct3", "autoWidth":					
 						/* 47 */if (listheader[46].equals("1")) {
 							listHeaderExecl.add(item.getFarmProduct3());
 						}
-						// *48*/{ "data": "farmProduct3Session", "autoWidth":
-						// true,"visible": isColumnVisible(48) },
+						// *48*/{ "data": "farmProduct3Session", "autoWidth":						
 						/* 48 */if (listheader[47].equals("1")) {
 							listHeaderExecl.add(item.getFarmProduct3Session());
 						}
-						// *49*/{ "data": "farmProduct4", "autoWidth":
-						// true,"visible": isColumnVisible(49)},
+						// *49*/{ "data": "farmProduct4", "autoWidth":						
 						/* 49 */if (listheader[48].equals("1")) {
 							listHeaderExecl.add(item.getFarmProduct4());
 						}
-						// *50*/{ "data": "farmProduct4Session", "autoWidth":
-						// true,"visible": isColumnVisible(50) },
+						// *50*/{ "data": "farmProduct4Session", "autoWidth":					
 						/* 50 */if (listheader[49].equals("1")) {
 							listHeaderExecl.add(item.getFarmProduct4Session());
 						}
