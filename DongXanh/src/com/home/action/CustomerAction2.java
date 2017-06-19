@@ -1,16 +1,20 @@
 package com.home.action;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
+import javax.imageio.ImageIO;
 import javax.jws.soap.SOAPBinding.Use;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
@@ -44,7 +48,6 @@ import com.home.util.DateUtils;
 import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
-
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
@@ -462,6 +465,7 @@ public class CustomerAction2 extends ActionSupport implements Action,
 		return SUCCESS;
 
 	}
+	
 	public String formatddmmyyyy(String value) {
 		if (null==value || value.toString().isEmpty()){
 			return "";
@@ -522,9 +526,9 @@ public class CustomerAction2 extends ActionSupport implements Action,
 			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
 			int assign_type=0;
 			if (varCusAssign && !varCusNotAssign) {
-				assign_type =2;// da phan cong
+				assign_type =1;// da phan cong
 			} else if (!varCusAssign && varCusNotAssign) {
-				assign_type =1;// chua phan cong
+				assign_type =2;// chua phan cong
 			}else {
 				assign_type =0;
 			}

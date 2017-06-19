@@ -761,7 +761,7 @@ public class CustomerHome {
 							+ ") ) "
 					+" AND c.customer_is_active = "+CUSTOMER_IS_ACTIVE+" ";*/
 			System.out.println(nvtt +"======1======="+assign_type+"=====1========"+user_id);
-			
+			/*
 			String sql = " SELECT COUNT(*) "
 					   + " FROM customer c"
 					   + " LEFT JOIN user u ON c.user_id=u.id "
@@ -780,9 +780,9 @@ public class CustomerHome {
 				sql = sql + "       c.customer5_level1_id = "+user_id +" ) ";
 			}
 			//assign_type
-			if(assign_type==1){
+			if(assign_type==2){
 				sql = sql + "AND c.user_id IS NULL";			
-			}else if(assign_type==2){
+			}else if(assign_type==1){
 				sql = sql + "AND c.user_id IS NOT NULL";			
 			}
 			
@@ -793,12 +793,12 @@ public class CustomerHome {
 				sql = sql + "       lower(user_name)      like '%"+searchValue+"%'  OR";
 				sql = sql + "       lower(c.customer_code)like '%"+searchValue+"%'  OR";
 				sql = sql + "       lower(c.tax_number)like '%"+searchValue+"%'  ) ";
-			}
+			}*/
 			
 			
-		/*	
+			
 			//
-			 sql = "SELECT COUNT(*) "
+			 String sql = "SELECT COUNT(*) "
 					+ " FROM  customer c " + 
 					" LEFT JOIN customer c1 ON c.customer1_level1_id=c1.id " +
 					" LEFT JOIN customer c2 ON c.customer2_level1_id=c2.id " +
@@ -810,7 +810,7 @@ public class CustomerHome {
 					"WHERE "
 					+" (''='"+nvtt+"' OR (lower(user_name) like '"+nvtt+"%'))"
 					+" AND ("+(assign_type==1?"c.user_id > 0":"("+(assign_type==2?"c.user_id IS NULL":"(0=0)")+")")+")"
-				//	+" AND (c.group_customer_id=1 )"
+				
 					+" AND (''='"+searchValue+"' OR ("
 							+ " lower(c1.business_name) like '"+searchValue+"%'"
 							+ " OR lower(c2.business_name) like '"+searchValue+"%'"
@@ -827,7 +827,7 @@ public class CustomerHome {
 				sql = sql + "       c.customer4_level1_id = "+user_id +" OR ";
 				sql = sql + "       c.customer5_level1_id = "+user_id +" ) ";
 			}
-			*/
+			
 			System.out.println("=========================================================");
 			System.out.println(sql);
 			System.out.println("=========================================================");

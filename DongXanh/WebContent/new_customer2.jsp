@@ -1456,7 +1456,7 @@ $(function () {
                     $("#dvPreview").show();
                   	//for every file...
                     for (var x = 0; x < $(this)[0].files.length; x++) {
-                    	// $("#dvPreview").append("<img />");
+                    	alert($(this)[0].files[x].name);
                         var reader = new FileReader();
                         reader.onload = function (e) {
                         	 var img = document.createElement("IMG");

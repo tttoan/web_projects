@@ -1,7 +1,10 @@
 package com.home.action;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -11,8 +14,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 import java.util.regex.Pattern;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -101,6 +106,13 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private String varIndexColumn;
 	private String varIndexRow = "3";
 	private String cusCodeGen;
+	private BufferedImage bufferedImage ;
+	private Properties properties ;
+	private int x; 
+	private int y;
+	private int width;
+	private int height;
+	private String picture_signature;
 
 	public String retrievePhoneById() throws Exception {
 		int commonCusId = 0;
@@ -532,6 +544,9 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	public String addCustomer() throws Exception {
 		try {
 			System.out.println("============addCustomer=================");
+			if(null==properties){
+				properties = getProperties();
+			}
 			CustomerHome cusHome = new CustomerHome(getSessionFactory());
 			/**
 			 * set value
@@ -584,6 +599,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 				String imageName = "";
 				for (int i = 0; i < cusImageScan.length; i++) {
 					String newName = cust.getCustomerCode() + "_" + i + "_" + new Date().getTime() + "." + FilenameUtils.getExtension(arrOriginalName[i]);
+					System.out.println("602 filePath+"+filePath+"============"+newName);
 					FileUtils.copyFile(cusImageScan[i], new File(filePath, newName), true);
 					imageName += newName + "|";
 				}
@@ -725,7 +741,57 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		}
 		return SUCCESS;
 	}
+	
+	private Properties getProperties() {
+		//System.out.println("=======================================getProperties");
+		Properties prop = new Properties();
+		InputStream inputStream = getClass().getClassLoader().getResourceAsStream("config.properties");
+		try {
+			 prop.load(inputStream);
+			this.x         = Integer.parseInt(prop.getProperty("x"));
+			this.y         = Integer.parseInt(prop.getProperty("y"));
+			this.width     = Integer.parseInt(prop.getProperty("width"));
+			this.height    = Integer.parseInt(prop.getProperty("height"));
+			this.picture_signature = prop.getProperty("picture_signature");
+			
+			System.out.println(x+"============"+y+"================="+width+"=============="+height);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return prop;
+	}
 
+	public void CutPicture(String imges1 ,String images2 ,int x , int y , int width , int height){
+		
+	       try {			
+				this.bufferedImage = getBufferImageIO(imges1);  
+				int width_start    = (bufferedImage.getWidth()*x)/100;
+				int height_start   = (bufferedImage.getHeight()*y)/100;
+				int width_end      = (bufferedImage.getWidth()*width)/100;
+				int height_end     = (bufferedImage.getHeight()*height)/100;
+			    BufferedImage dest = this.bufferedImage.getSubimage(width_start, height_start, width_end, height_end);
+	            File outputfile = new File(images2);
+	            ImageIO.write(dest, "jpg", outputfile);
+
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+	public  BufferedImage getBufferImageIO(String imageName) {
+		BufferedImage originalImage=null;
+		try {
+			File image = new File(imageName);
+			originalImage = ImageIO.read(image);			
+		} catch (IOException e) {			
+			e.printStackTrace();
+		}
+		return originalImage;
+	}
+	
 	public HttpServletRequest getRequest() {
 		return request;
 	}
@@ -1113,6 +1179,42 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 
 	public void setListGrpCusdetail(List<GroupCustomerDetail> listGrpCusdetail) {
 		this.listGrpCusdetail = listGrpCusdetail;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public void setProperties(Properties properties) {
+		this.properties = properties;
 	}
 
 	
