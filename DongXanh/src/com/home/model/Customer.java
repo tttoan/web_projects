@@ -58,6 +58,13 @@ public class Customer implements java.io.Serializable {
 	public BigDecimal revenueExpect1;
 	public BigDecimal revenueExpect2;
 	public BigDecimal revenueExpect3;
+	//Start: phuchinhxxx
+	private String directAccess;
+	private String phoneAccess;
+	private Date   birthday;
+	private String otherSuggestions;
+	private Integer grpCusdetailId;
+	//End: phuchinhxxx
 	public String percentProvide1;
 	public String percentProvide2;
 	public String percentProvide3;
@@ -539,6 +546,48 @@ public class Customer implements java.io.Serializable {
 	public void setRevenueExpect3(BigDecimal revenueExpect3) {
 		this.revenueExpect3 = revenueExpect3;
 	}
+	
+	//Start: phuchinhxxx
+	public String getDirectAccess() {
+		return directAccess;
+	}
+
+	public void setDirectAccess(String directAccess) {
+		this.directAccess = directAccess;
+	}
+
+	public String getPhoneAccess() {
+		return phoneAccess;
+	}
+
+	public void setPhoneAccess(String phoneAccess) {
+		this.phoneAccess = phoneAccess;
+	}
+	
+	public Date getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
+
+	public String getOtherSuggestions() {
+		return otherSuggestions;
+	}
+
+	public void setOtherSuggestions(String otherSuggestions) {
+		this.otherSuggestions = otherSuggestions;
+	}
+	
+	public Integer getGrpCusdetailId() {
+		return grpCusdetailId;
+	}
+
+	public void setGrpCusdetailId(Integer grpCusdetailId) {
+		this.grpCusdetailId = grpCusdetailId;
+	}
+	//End: phuchinhxxx
 
 	public String getPercentProvide1() {
 		return this.percentProvide1;

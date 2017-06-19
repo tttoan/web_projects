@@ -836,6 +836,48 @@
 											<label class="control-label cus_inform"> <s:property value="%{cust.revenueExpect3}"/></label>
 										</div>
 									</div>
+									
+									<!-- Start: phuchinhxxx -->
+									<div class="item form-group">
+										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+											for="directAccess"> Tiếp cận trực tiếp 
+										</label>
+										<div class="col-md-5 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.directAccess}"/></label>
+										</div>
+										
+									</div>
+									
+									<div class="item form-group">
+										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+											for="phoneAccess"> Tiếp cận điện thoại
+										</label>
+										<div class="col-md-5 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.phoneAccess}"/></label>
+										</div>
+											
+									</div>
+									<div class="item form-group">
+										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+													for="birthday">Ngày sinh nhật
+										</label>
+										<div class="col-md-5 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.varBirthday}"/></label>
+										</div>
+									</div>
+									<div class="item form-group">
+										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+											for="otherSuggestions"> Đề xuất khác
+										</label>
+										<div class="col-md-5 col-sm-6 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.otherSuggestions}"/></label>
+										</div>
+									</div> 
+									<!-- End: phuchinhxxx -->
+									
+									
+									
+									
 								</div>
 							</div>
 						</div>

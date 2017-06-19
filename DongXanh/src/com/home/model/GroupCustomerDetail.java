@@ -10,7 +10,7 @@ import java.util.Set;
  */
 public class GroupCustomerDetail implements java.io.Serializable {
 	private Integer id;
-	private Integer group_customer_id;
+	private Integer groupCustomerId;
 	private String groupName;
 	private String note;
 	
@@ -19,13 +19,20 @@ public class GroupCustomerDetail implements java.io.Serializable {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public GroupCustomerDetail(Integer id, Integer group_customer_id,
+	public GroupCustomerDetail(Integer id, Integer groupCustomerId,
 			String groupName, String note) {
 		super();
 		this.id = id;
-		this.group_customer_id = group_customer_id;
+		this.groupCustomerId = groupCustomerId;
 		this.groupName = groupName;
 		this.note = note;
+	}
+	
+	public GroupCustomerDetail(Integer groupCustomerId,
+			String groupName) {
+		super();
+		this.groupCustomerId = groupCustomerId;
+		this.groupName = groupName;
 	}
 
 	public Integer getId() {
@@ -34,11 +41,11 @@ public class GroupCustomerDetail implements java.io.Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public Integer getGroup_customer_id() {
-		return group_customer_id;
+	public Integer getGroupCustomerId() {
+		return groupCustomerId;
 	}
-	public void setGroup_customer_id(Integer group_customer_id) {
-		this.group_customer_id = group_customer_id;
+	public void setGroupCustomerId(Integer groupCustomerId) {
+		this.groupCustomerId = groupCustomerId;
 	}
 	public String getGroupName() {
 		return groupName;

@@ -293,6 +293,7 @@ var validator = (function($){
 	/* Checks a single form field by it's type and specific (custom) attributes
 	*/
 	function checkField(){
+		
 		// skip testing fields whom their type is not HIDDEN but they are HIDDEN via CSS.
 		if( this.type !='hidden' && $(this).is(':hidden') )
 			return true;

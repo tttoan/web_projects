@@ -90,6 +90,9 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private String varCreateTime = SDF.format(new Date());
 	private String varCertificateDate ;//= SDF.format(new Date());
 	private String varDirectorBirthday ;//= SDF.format(new Date());
+	//Start: phuchinhxxx
+	private String varBirthday;//= SDF.format(new Date());
+	//End: phuchinhxxx
 	private List<DefineColumnImport> listDefineColumnsLevel1;
 	private List<DefineColumnImport> listDefineColumnsLevel2;
 	private List<String> listColumnExcel;
@@ -164,6 +167,11 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 					if(getCust().getDirectorBirthday() != null){
 						varDirectorBirthday = SDF.format(getCust().getDirectorBirthday());
 					}
+					//Start: phuchinhxxx
+					if(getCust().getBirthday() != null){
+						varBirthday = SDF.format(getCust().getBirthday());
+					}
+					//End: phuchinhxxx
 					setEdit(true);
 				} catch (Exception e) {
 					throw e;
@@ -301,10 +309,14 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	@Override
 	public void validate() {
 		try {
+			//Start: phuchinhxxx
 			/**
 			 * Check duplicate data
 			 */
-			checkDuplicateData();
+			if(!this.isEdit()){
+				checkDuplicateData();
+			}
+			//End: phuchinhxxx
 			/**
 			 * Load data lookup
 			 */
@@ -406,10 +418,10 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		try {
 			
 			listGrpCusdetail = new ArrayList<GroupCustomerDetail>();
-			listGrpCusdetail.add(new GroupCustomerDetail(1, 2, "Nhóm A", ""));
-			listGrpCusdetail.add(new GroupCustomerDetail(2, 2, "Nhóm B", ""));
-			listGrpCusdetail.add(new GroupCustomerDetail(3, 2, "Nhóm C", ""));
-			listGrpCusdetail.add(new GroupCustomerDetail(4, 2, "Nhóm D", ""));
+			listGrpCusdetail.add(new GroupCustomerDetail(MyConts.GROUP_CUSTOMER_DETAIL_A_ID, MyConts.GROUP_CUSTOMER_DETAIL_A_NAME));
+			listGrpCusdetail.add(new GroupCustomerDetail(MyConts.GROUP_CUSTOMER_DETAIL_B_ID, MyConts.GROUP_CUSTOMER_DETAIL_B_NAME));
+			listGrpCusdetail.add(new GroupCustomerDetail(MyConts.GROUP_CUSTOMER_DETAIL_C_ID, MyConts.GROUP_CUSTOMER_DETAIL_C_NAME));
+			listGrpCusdetail.add(new GroupCustomerDetail(MyConts.GROUP_CUSTOMER_DETAIL_D_ID, MyConts.GROUP_CUSTOMER_DETAIL_D_NAME));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -541,6 +553,13 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			}else{
 				cust.setDirectorBirthday(null);
 			}
+			//Start: phuchinhxxx
+			if(StringUtil.notNull(varBirthday).matches("[0-9]{2}/[0-9]{2}/[0-9]{4}")){
+				cust.setBirthday(SDF.parse(varBirthday));
+			}else{
+				cust.setBirthday(null);
+			}
+			//End: phuchinhxxx
 			cust.setCustomerIsActive(true);
 			System.out.println("00000000000000000:"+grpCustomer1.getGroupName());
 			if (emp.getId() > 0)
@@ -1023,6 +1042,16 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	public void setVarDirectorBirthday(String varDirectorBirthday) {
 		this.varDirectorBirthday = varDirectorBirthday;
 	}
+	
+	//Start: phuchinhxxx
+	public String getVarBirthday() {
+		return varBirthday;
+	}
+
+	public void setVarBirthday(String varBirthday) {
+		this.varBirthday = varBirthday;
+	}
+	//End: phuchinhxxx
 
 	public String getVarCreateTime() {
 		return varCreateTime;

@@ -200,9 +200,26 @@
         <property name="customerIsActive" type="java.lang.Boolean">
             <column name="customer_is_active" />
         </property>
-         <property name="customer_location" type="string">
+        <property name="customer_location" type="string">
             <column name="customer_location" />
         </property>
+        <!-- Start: phuchinh -->
+        <property name="directAccess" type="string">
+            <column name="direct_access" />
+        </property>
+        <property name="phoneAccess" type="string">
+            <column name="phone_access" />
+        </property>
+        <property name="birthday" type="timestamp">
+            <column name="birthday" />
+        </property>
+        <property name="otherSuggestions" type="string">
+            <column name="other_suggestions" />
+        </property>
+        <property name="grpCusdetailId" type="java.lang.Integer">
+            <column name="grp_cusdetail_id" />
+        </property>
+        <!-- End: phuchinhxxx -->
           
         <set name="promotionRegisters" table="promotion_register" inverse="true" lazy="true" fetch="select">
             <key>

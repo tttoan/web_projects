@@ -225,16 +225,16 @@
 										</div>
 										<div id="typeGroupCustomer">
 											<label class="control-label col-md-2 col-sm-3 col-xs-12" 
-												for="grpCustomerdetail_id">Loại
+												for="grpCusdetailId">Loại
 											</label>
 											<div class="col-md-4 col-sm-3 col-xs-12">
-												<s:select id="GrpCusdetail_id" name="cust.group_detail_name"
+												<s:select id="grpCusdetailId" name="grpCusdetailId"
 													cssClass="col-md-12 col-xs-12" 
 													showDownArrow="false" autoComplete="true" headerKey="-1" headerValue="--"
-													listKey="groupName" list="listGrpCusdetail"
+													listKey="groupCustomerId" list="listGrpCusdetail"
 													listValue="groupName"
 													style="width:245px"
-													value="%{cust.grpCusdetail_name}" />
+													value="%{cust.grpCusdetailId}" />
 											</div>
 										</div>
 										
@@ -1141,55 +1141,56 @@
 												class="form-control col-md-7 col-xs-12">
 										</div>
 									</div>
-									
+									<!-- Start: phuchinhxxx -->
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="revenueExpect3"> Tiếp cận trực tiếp 
+											for="directAccess"> Tiếp cận trực tiếp 
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<input id="revenueExpect3" name="revenueExpect3" type=text
+											<input id="directAccess" name="directAccess" type=text
 												data-validate-minmax="1,100000000"
-												value="${cust.revenueExpect3}"
-												class="form-control col-md-7 col-xs-12">
+												value="${cust.directAccess}"
+												class="form-control col-md-7 col-xs-12"> 
 										</div>
 									</div>
 									
-									
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="revenueExpect3"> Tiếp cận điện thoại
+											for="phoneAccess"> Tiếp cận điện thoại
 										</label>
 										<div class="col-md-5 col-sm-6 col-xs-12">
-											<input id="revenueExpect3" name="revenueExpect3" type=text
+											<input id="phoneAccess" name="phoneAccess" type=text
 												data-validate-minmax="1,100000000"
-												value="${cust.revenueExpect3}"
-												class="form-control col-md-7 col-xs-12">
-										</div>
-									</div>
-									
-									
-									<div class="item form-group">
-										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="revenueExpect3"> Ngày sinh nhật
-										</label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<input id="revenueExpect3" name="revenueExpect3" type=text
-												data-validate-minmax="1,100000000"
-												value="${cust.revenueExpect3}"
+												value="${cust.phoneAccess}"
 												class="form-control col-md-7 col-xs-12">
 										</div>
 									</div>
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
-											for="revenueExpect3"> Đề xuất khác
+													for="birthday">Ngày sinh nhật
 										</label>
-										<div class="col-md-5 col-sm-6 col-xs-12">
-											<input id="revenueExpect3" name="revenueExpect3" type=text
-												data-validate-minmax="1,100000000"
-												value="${cust.revenueExpect3}"
-												class="form-control col-md-7 col-xs-12">
+										<div class="col-md-3 xdisplay_inputx has-feedback">
+											<input type="text" class="form-control has-feedback-left"
+												id="birthday" name="varBirthday"
+												value="${varBirthday}"
+												aria-describedby="inputSuccess2Status"> <span
+												class="fa fa-calendar-o form-control-feedback left"
+												aria-hidden="true"></span> <span id="inputSuccess2Status"
+												class="sr-only">(success)</span>
 										</div>
 									</div>
+									<div class="item form-group">
+										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+											for="otherSuggestions"> Đề xuất khác
+										</label>
+										<div class="col-md-5 col-sm-6 col-xs-12">
+											<input id="otherSuggestions" name="otherSuggestions" type=text
+												data-validate-minmax="1,100000000"
+												value="${cust.otherSuggestions}"
+												class="form-control col-md-7 col-xs-12">
+										</div>
+									</div> 
+									<!-- End: phuchinhxxx -->
 								</div>
 							</div>
 						</div>
@@ -1270,7 +1271,6 @@
 		if (!validator.checkAll($(this))) {
 			submit = false;
 		}
-        alert("trung xuan:"+submit);
 		if (submit)
 			this.submit();
 		return false;
@@ -1417,7 +1417,7 @@
 <script type="text/javascript" src="js/datepicker/daterangepicker.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('#createTime,#certificateDate,#directorBirthday').daterangepicker({
+		$('#createTime,#certificateDate,#directorBirthday,#birthday').daterangepicker({
 			singleDatePicker : true,
 			calender_style : "picker_2",
 			format : 'DD/MM/YYYY',
