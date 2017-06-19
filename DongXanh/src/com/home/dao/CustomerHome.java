@@ -22,6 +22,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionImpl;
+import org.hibernate.type.NTextType;
 
 import com.home.conts.MyConts;
 import com.home.model.Customer;
@@ -759,8 +760,45 @@ public class CustomerHome {
 							+ " OR lower(user_name) like '"+searchValue+"%'"
 							+ ") ) "
 					+" AND c.customer_is_active = "+CUSTOMER_IS_ACTIVE+" ";*/
+			System.out.println(nvtt +"======1======="+assign_type+"=====1========"+user_id);
 			
-			String sql = "SELECT COUNT(*) "
+			String sql = " SELECT COUNT(*) "
+					   + " FROM customer c"
+					   + " LEFT JOIN user u ON c.user_id=u.id "
+					   + " LEFT JOIN group_customer iv ON c.group_customer_id=iv.id"
+					   + "WHERE c.customer_is_active = "+CUSTOMER_IS_ACTIVE+" ";
+			// nvtt
+			if(nvtt.length()>1){
+				sql = sql + "AND lower(user_name) like '"+nvtt+"%'";
+			}
+			//user_id
+			if(user_id>0){
+				sql = sql + " AND ( c.customer1_level1_id = "+user_id +" OR ";
+				sql = sql + "       c.customer2_level1_id = "+user_id +" OR ";
+				sql = sql + "       c.customer3_level1_id = "+user_id +" OR ";
+				sql = sql + "       c.customer4_level1_id = "+user_id +" OR ";
+				sql = sql + "       c.customer5_level1_id = "+user_id +" ) ";
+			}
+			//assign_type
+			if(assign_type==1){
+				sql = sql + "AND c.user_id IS NULL";			
+			}else if(assign_type==2){
+				sql = sql + "AND c.user_id IS NOT NULL";			
+			}
+			
+			//searchValue			
+			if(searchValue.length()>0){
+				sql = sql + " AND ( lower(c.business_name)like '%"+searchValue+"%'  OR ";
+				sql = sql + "       lower(statistic_name) like '%"+searchValue+"%'  OR ";
+				sql = sql + "       lower(user_name)      like '%"+searchValue+"%'  OR";
+				sql = sql + "       lower(c.customer_code)like '%"+searchValue+"%'  OR";
+				sql = sql + "       lower(c.tax_number)like '%"+searchValue+"%'  ) ";
+			}
+			
+			
+		/*	
+			//
+			 sql = "SELECT COUNT(*) "
 					+ " FROM  customer c " + 
 					" LEFT JOIN customer c1 ON c.customer1_level1_id=c1.id " +
 					" LEFT JOIN customer c2 ON c.customer2_level1_id=c2.id " +
@@ -789,7 +827,7 @@ public class CustomerHome {
 				sql = sql + "       c.customer4_level1_id = "+user_id +" OR ";
 				sql = sql + "       c.customer5_level1_id = "+user_id +" ) ";
 			}
-			
+			*/
 			System.out.println("=========================================================");
 			System.out.println(sql);
 			System.out.println("=========================================================");
@@ -894,7 +932,10 @@ public class CustomerHome {
 								+ " Order by c.business_name) AS YY, (SELECT @i:=0) foo Order By business_name) AS XX "
 						+" WHERE iterator > "+startPageIndex+" AND iterator <= " + range + " order by business_name";
 								
-			System.out.println(sql);
+			
+			
+			
+			
 			ResultSet rs = conn.createStatement().executeQuery(sql);
 			System.out.println(startPageIndex +"============"+ recordsPerPage);
 			int no = startPageIndex+1;

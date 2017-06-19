@@ -58,13 +58,13 @@ public class Customer implements java.io.Serializable {
 	public BigDecimal revenueExpect1;
 	public BigDecimal revenueExpect2;
 	public BigDecimal revenueExpect3;
-	//Start: phuchinhxxx
+	//Start:
 	private String directAccess;
 	private String phoneAccess;
 	private Date   birthday;
 	private String otherSuggestions;
 	private Integer grpCusdetailId;
-	//End: phuchinhxxx
+	//End:
 	public String percentProvide1;
 	public String percentProvide2;
 	public String percentProvide3;
@@ -547,7 +547,7 @@ public class Customer implements java.io.Serializable {
 		this.revenueExpect3 = revenueExpect3;
 	}
 	
-	//Start: phuchinhxxx
+	
 	public String getDirectAccess() {
 		return directAccess;
 	}
@@ -587,7 +587,7 @@ public class Customer implements java.io.Serializable {
 	public void setGrpCusdetailId(Integer grpCusdetailId) {
 		this.grpCusdetailId = grpCusdetailId;
 	}
-	//End: phuchinhxxx
+
 
 	public String getPercentProvide1() {
 		return this.percentProvide1;

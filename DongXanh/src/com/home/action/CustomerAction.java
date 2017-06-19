@@ -90,9 +90,8 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private String varCreateTime = SDF.format(new Date());
 	private String varCertificateDate ;//= SDF.format(new Date());
 	private String varDirectorBirthday ;//= SDF.format(new Date());
-	//Start: phuchinhxxx
 	private String varBirthday;//= SDF.format(new Date());
-	//End: phuchinhxxx
+	
 	private List<DefineColumnImport> listDefineColumnsLevel1;
 	private List<DefineColumnImport> listDefineColumnsLevel2;
 	private List<String> listColumnExcel;
@@ -167,11 +166,11 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 					if(getCust().getDirectorBirthday() != null){
 						varDirectorBirthday = SDF.format(getCust().getDirectorBirthday());
 					}
-					//Start: phuchinhxxx
+					//Start:
 					if(getCust().getBirthday() != null){
 						varBirthday = SDF.format(getCust().getBirthday());
 					}
-					//End: phuchinhxxx
+					//End:
 					setEdit(true);
 				} catch (Exception e) {
 					throw e;
@@ -309,14 +308,14 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	@Override
 	public void validate() {
 		try {
-			//Start: phuchinhxxx
+			//Start:
 			/**
 			 * Check duplicate data
 			 */
 			if(!this.isEdit()){
 				checkDuplicateData();
 			}
-			//End: phuchinhxxx
+			//End
 			/**
 			 * Load data lookup
 			 */
@@ -553,13 +552,13 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			}else{
 				cust.setDirectorBirthday(null);
 			}
-			//Start: phuchinhxxx
+			//Start: 
 			if(StringUtil.notNull(varBirthday).matches("[0-9]{2}/[0-9]{2}/[0-9]{4}")){
 				cust.setBirthday(SDF.parse(varBirthday));
 			}else{
 				cust.setBirthday(null);
 			}
-			//End: phuchinhxxx
+			//End:
 			cust.setCustomerIsActive(true);
 			System.out.println("00000000000000000:"+grpCustomer1.getGroupName());
 			if (emp.getId() > 0)
@@ -1043,7 +1042,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		this.varDirectorBirthday = varDirectorBirthday;
 	}
 	
-	//Start: phuchinhxxx
+	//Start: 
 	public String getVarBirthday() {
 		return varBirthday;
 	}
@@ -1051,8 +1050,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	public void setVarBirthday(String varBirthday) {
 		this.varBirthday = varBirthday;
 	}
-	//End: phuchinhxxx
-
+	//End: 
 	public String getVarCreateTime() {
 		return varCreateTime;
 	}

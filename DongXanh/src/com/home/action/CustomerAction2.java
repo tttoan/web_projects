@@ -44,7 +44,7 @@ import com.home.util.DateUtils;
 import com.home.util.ExcelUtil;
 import com.home.util.HibernateUtil;
 import com.home.util.StringUtil;
-import com.mysql.jdbc.jdbc2.optional.SuspendableXAConnection;
+
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
@@ -520,17 +520,21 @@ public class CustomerAction2 extends ActionSupport implements Action,
 			System.out.println("skip = " + skip);
 
 			CustomerHome cusHome = new CustomerHome(HibernateUtil.getSessionFactory());
+			int assign_type=0;
+			if (varCusAssign && !varCusNotAssign) {
+				assign_type =2;// da phan cong
+			} else if (!varCusAssign && varCusNotAssign) {
+				assign_type =1;// chua phan cong
+			}else {
+				assign_type =0;
+			}
 			// Get Total Record Count for Pagination
-			recordsTotal = cusHome.getTotalRecords(search, varCusByUser,varCusAssign & !varCusNotAssign ? 1 : (!varCusAssign
-							& varCusNotAssign ? 2 : 0), varCusByLevel1);
+			recordsTotal = cusHome.getTotalRecords(search, varCusByUser,assign_type, varCusByLevel1);
 			recordsFiltered = recordsTotal;
 			if (pageSize == -1) {
 				pageSize = recordsFiltered;
 			}
-			data = cusHome.getListCustomer(skip, pageSize, search,
-					varCusByUser, varCusAssign & !varCusNotAssign ? 1
-							: (!varCusAssign & varCusNotAssign ? 2 : 0),
-					varCusByLevel1);
+			data = cusHome.getListCustomer(skip, pageSize, search,varCusByUser, assign_type,varCusByLevel1);
 
 			System.out.println("Records total " + data.size() + "/"
 					+ recordsTotal);

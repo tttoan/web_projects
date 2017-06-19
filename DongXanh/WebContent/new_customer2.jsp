@@ -1141,7 +1141,7 @@
 												class="form-control col-md-7 col-xs-12">
 										</div>
 									</div>
-									<!-- Start: phuchinhxxx -->
+									<!-- Start: -->
 									<div class="item form-group">
 										<label class="control-label col-md-3 col-sm-3 col-xs-12"
 											for="directAccess"> Tiếp cận trực tiếp 
@@ -1190,7 +1190,7 @@
 												class="form-control col-md-7 col-xs-12">
 										</div>
 									</div> 
-									<!-- End: phuchinhxxx -->
+									<!-- End:-->
 								</div>
 							</div>
 						</div>

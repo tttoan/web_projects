@@ -24,7 +24,7 @@ public class MyConts {
 	
 	public final static String SESSION_NEW_STATISTICS_HISTORY = "SESSION_NEW_STATISTICS_HISTORY";
 	
-	//Start: phuchinhxxx
+	
 	public final static int GROUP_CUSTOMER_DETAIL_A_ID = 1;
 	public final static String GROUP_CUSTOMER_DETAIL_A_NAME = "Nhóm A";
 	public final static int GROUP_CUSTOMER_DETAIL_B_ID = 2;
@@ -33,5 +33,5 @@ public class MyConts {
 	public final static String GROUP_CUSTOMER_DETAIL_C_NAME = "Nhóm C";
 	public final static int GROUP_CUSTOMER_DETAIL_D_ID = 4;
 	public final static String GROUP_CUSTOMER_DETAIL_D_NAME = "Nhóm D";
-	//End: phuchinhxxx
+	
 }
