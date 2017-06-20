@@ -1,0 +1,5 @@
+ALTER TABLE `customer` ADD `direct_access` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL
+ AFTER `customer_location`, ADD `phone_access` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL
+  AFTER `direct_access`, ADD `birthday` DATETIME NULL DEFAULT NULL AFTER `phone_access`,
+   ADD `other_suggestions` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL 
+   AFTER `birthday`, ADD `grp_cusdetail_id` INT NULL DEFAULT NULL AFTER `other_suggestions`;
