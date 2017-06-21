@@ -360,10 +360,10 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 			/**
 			 * check ten bang ke
 			 */
-			if(StringUtil.notNull(getCust().getStatisticName()).length() > 0 && cusHome.existCustomerBangKe(custId, getCust().getStatisticName())){
-				//addFieldError("cust.statisticName", "Đã tồn tại tên bảng kê này trong hệ thống");
-				addActionError("Đã tồn tại tên bảng kê='"+getCust().getStatisticName()+"' này trong hệ thống!");
-			}
+//			if(StringUtil.notNull(getCust().getStatisticName()).length() > 0 && cusHome.existCustomerBangKe(custId, getCust().getStatisticName())){
+//				//addFieldError("cust.statisticName", "Đã tồn tại tên bảng kê này trong hệ thống");
+//				addActionError("Đã tồn tại tên bảng kê='"+getCust().getStatisticName()+"' này trong hệ thống!");
+//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			addActionError("Error: checkDuplicateData. Exception: " + e.getMessage());
