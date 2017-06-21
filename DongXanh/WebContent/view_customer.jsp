@@ -202,8 +202,14 @@
 										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
 											for="emp_id">Nhân viên TT 
 										</label>
-										<div class="col-md-8 col-sm-6 col-xs-12">
+										<div class="col-md-3 col-sm-3 col-xs-12">
 											<label class="control-label cus_inform"> <s:property value="%{cust.user.fullName}" /></label>
+										</div>
+										<label class="control-label cus_lable col-md-2 col-sm-3 col-xs-12"
+											for="grpCusdetailId">Loại
+										</label>
+										<div class="col-md-3 col-sm-3 col-xs-12">
+											<label class="control-label cus_inform"> <s:property value="%{cust.group_detail_name}" /></label>
 										</div>
 									</div>
 									
@@ -1194,6 +1200,9 @@
 </script>
 
 <style>
+.control-label{
+      min-height: 31px;
+}
 	.divleft {
 	    float: left;
 	    width: 300;

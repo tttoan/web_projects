@@ -203,7 +203,7 @@
         <property name="customer_location" type="string">
             <column name="customer_location" />
         </property>
-        <!-- Start: phuchinh -->
+        <!-- Start:-->
         <property name="directAccess" type="string">
             <column name="direct_access" />
         </property>
@@ -219,7 +219,7 @@
         <property name="grpCusdetailId" type="java.lang.Integer">
             <column name="grp_cusdetail_id" />
         </property>
-        <!-- End: phuchinhxxx -->
+        <!-- End:-->
           
         <set name="promotionRegisters" table="promotion_register" inverse="true" lazy="true" fetch="select">
             <key>

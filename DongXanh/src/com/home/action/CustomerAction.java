@@ -496,6 +496,15 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 				Customer cus5L1 = cusHome.findById(cusTemp.getCustomerByCustomer5Level1Id().getId());
 				cusTemp.setCustomerByCustomer5Level1Id(cus5L1);
 			}
+			if(null!=cusTemp.getGrpCusdetailId() && cusTemp.getGrpCusdetailId()>=0){
+				loadGroupCustomerDetail();
+				for(GroupCustomerDetail item : listGrpCusdetail){
+					System.out.println("==========item.getGroupCustomerId():"+item.getGroupCustomerId());
+					if(item.getGroupCustomerId()==cusTemp.getGrpCusdetailId()){
+						cusTemp.setGroup_detail_name(item.getGroupName());
+					}
+				}
+			}
 			setCust(cusTemp);
 			return SUCCESS;
 		} catch (Exception e) {
