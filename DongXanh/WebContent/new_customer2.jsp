@@ -102,11 +102,15 @@
 					Calendar d = Calendar.getInstance();
 					int yearNow = d.get(Calendar.YEAR);
 				%>
-
+	       
 			<s:form action="add_customer" method="post"
 						enctype="multipart/form-data"
 						cssClass="form-horizontal form-label-left" theme="bootstrap">
-						
+				 <s:hidden name="images_x"         id ="images_x"         value="%{images_x}"></s:hidden>
+				 <s:hidden name="imgase_y"         id ="imgase_y"         value="%{imgase_y}"></s:hidden>
+				 <s:hidden name="images_width"     id ="images_width"     value="%{images_width}"></s:hidden>
+				 <s:hidden name="images_height"    id ="images_height"    value="%{images_height}"></s:hidden>
+				 <s:hidden name="images_signature" id ="images_signature" value="%{images_signature}"></s:hidden>		
 				<div class="" role="tabpanel" data-example-id="togglable-tabs">
 					<ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
 						<li role="presentation" class="active"><a
@@ -290,6 +294,14 @@
 											<s:else>
 												<div id="dvPreview" class="col-md-9 col-sm-9 col-xs-12"></div>
 											</s:else>
+									</div>
+									
+									<div class="item form-group">
+										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+											for="cusImageSignature">Chữ ký </label>
+										<div class="col-md-5 col-sm-6 col-xs-12" id ="cusImageSignature">
+												<img id="imagesSignature" src="${cust.imagesSignature }"  width="300" height="250" style="border:3px solid #73AD21"  />
+										</div>
 									</div>
 									
 									<div id ="khachhangcap2">
@@ -1268,6 +1280,7 @@
 		e.preventDefault();
 		var submit = true;
 		// evaluate the form using generic validaing
+		
 		if (!validator.checkAll($(this))) {
 			submit = false;
 		}
@@ -1425,7 +1438,13 @@
 		}, function(start, end, label) {
 			console.log(start.toISOString(), end.toISOString(), label);
 		});
-		
+		    var imagesSignature = $("#imagesSignature").attr("src");		  
+		    if (imagesSignature==""){
+		    	 $( "#imagesSignature" ).addClass( "Hidden" );
+				
+			}else{
+				 $( "#imagesSignature" ).removeClass( "Hidden" );
+			}
 		    var id = $("#grpCustomer_id").val();
 		    if(id==2){
 		    	  $( "#typeGroupCustomer" ).removeClass( "Hidden" );
@@ -1456,7 +1475,7 @@ $(function () {
                     $("#dvPreview").show();
                   	//for every file...
                     for (var x = 0; x < $(this)[0].files.length; x++) {
-                    	alert($(this)[0].files[x].name);
+                    	//alert($(this)[0].files[x].name);
                         var reader = new FileReader();
                         reader.onload = function (e) {
                         	 var img = document.createElement("IMG");
@@ -1465,9 +1484,29 @@ $(function () {
                              img.src = e.target.result;
                              img.style.border = "3px solid blue";
                              $("#dvPreview").append(img);
-                            //$("#dvPreview img").attr("src", e.target.result).width(300).height(200);;
+                         
                         }
                         reader.readAsDataURL($(this)[0].files[x]); 
+                      
+                    }
+                  	var signature = $("#images_signature").val();
+                    for (var x = 0; x < $(this)[0].files.length; x++) {
+                    
+                    	if ($(this)[0].files[x].name.indexOf(signature) > -1) {
+                            var reader = new FileReader();
+                            reader.onload = function (e) {
+                            	 var img = document.createElement("IMG");
+                            	 img.height = "300";
+                                 img.width = "200";
+                                 img.src = e.target.result;
+                                 img.style.border = "3px solid blue";                            
+                                 $("#cusImageSignature").html(img);
+                              
+                            }
+                            reader.readAsDataURL($(this)[0].files[x]); 
+                          
+						}
+                    
                     }
                 } else {
                     alert("This browser does not support FileReader.");

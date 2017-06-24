@@ -92,6 +92,8 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private File[] cusImageScan;
 	private String cusImageScanContentType;
 	private String cusImageScanFileName;
+	
+	private File[] cusImageSignature;
 	private String varCreateTime = SDF.format(new Date());
 	private String varCertificateDate ;//= SDF.format(new Date());
 	private String varDirectorBirthday ;//= SDF.format(new Date());
@@ -106,13 +108,14 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	private String varIndexColumn;
 	private String varIndexRow = "3";
 	private String cusCodeGen;
+	
 	private BufferedImage bufferedImage ;
 	private Properties properties ;
-	private int x; 
-	private int y;
-	private int width;
-	private int height;
-	private String picture_signature;
+	private int images_x; 
+	private int imgase_y;
+	private int images_width;
+	private int images_height;
+	private String images_signature;
 
 	public String retrievePhoneById() throws Exception {
 		int commonCusId = 0;
@@ -163,6 +166,9 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	public String execute() throws Exception {
 		try {
 			System.out.println("151===================123454");
+			if(null==properties){
+				properties = getProperties();
+			}
 			if (custId != 0) {
 				try {
 					CustomerHome cusHome = new CustomerHome(getSessionFactory());
@@ -191,6 +197,8 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 				getModel();				
 				cust.setCustomerCode(cusCodeGen);
 			}
+		//	String setImages_signature = "path_doc_scan/DT104_0_1498276593379.png";
+		//	cust.setImages_signature(setImages_signature);
 		} catch (Exception e) {
 			e.printStackTrace();
 			addActionError("Error: int execute() method. Exception: " + e.getMessage());
@@ -552,7 +560,7 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 	 */
 	public String addCustomer() throws Exception {
 		try {
-			System.out.println("============addCustomer=================");
+		//	System.out.println("============addCustomer=================:"+cust.getImagesSignature().toString());
 			if(null==properties){
 				properties = getProperties();
 			}
@@ -611,6 +619,16 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 					System.out.println("602 filePath+"+filePath+"============"+newName);
 					FileUtils.copyFile(cusImageScan[i], new File(filePath, newName), true);
 					imageName += newName + "|";
+					if (arrOriginalName[i].contains(this.images_signature)) {
+						String signature_name = cust.getCustomerCode() + "_" + i + "_" + new Date().getTime() + "." + FilenameUtils.getExtension(arrOriginalName[i]);
+						System.out.println("602 filePath+"+filePath+"============"+signature_name);
+						
+						String images_output = filePath+"/"+signature_name;
+						CutPicture(cusImageScan[i], images_output, images_x, imgase_y, images_width, images_height);
+						//FileUtils.copyFile(cusImageScan[i], new File(filePath, signature_name), true);
+						
+						cust.setImagesSignature(path_doc_scan + "/" +signature_name);
+					}
 				}
 				
 				cust.setPathDocScan(path_doc_scan + "/" + imageName.replaceAll(Pattern.quote("|")+"$", ""));
@@ -757,13 +775,13 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		InputStream inputStream = getClass().getClassLoader().getResourceAsStream("config.properties");
 		try {
 			 prop.load(inputStream);
-			this.x         = Integer.parseInt(prop.getProperty("x"));
-			this.y         = Integer.parseInt(prop.getProperty("y"));
-			this.width     = Integer.parseInt(prop.getProperty("width"));
-			this.height    = Integer.parseInt(prop.getProperty("height"));
-			this.picture_signature = prop.getProperty("picture_signature");
+			this.images_x         = Integer.parseInt(prop.getProperty("x"));
+			this.imgase_y         = Integer.parseInt(prop.getProperty("y"));
+			this.images_width     = Integer.parseInt(prop.getProperty("width"));
+			this.images_height    = Integer.parseInt(prop.getProperty("height"));
+			this.images_signature = prop.getProperty("picture_signature");
 			
-			System.out.println(x+"============"+y+"================="+width+"=============="+height);
+		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -772,10 +790,10 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		return prop;
 	}
 
-	public void CutPicture(String imges1 ,String images2 ,int x , int y , int width , int height){
+	public void CutPicture(File filename ,String images2 ,int x , int y , int width , int height){
 		
 	       try {			
-				this.bufferedImage = getBufferImageIO(imges1);  
+				this.bufferedImage = getBufferImageIO(filename);  
 				int width_start    = (bufferedImage.getWidth()*x)/100;
 				int height_start   = (bufferedImage.getHeight()*y)/100;
 				int width_end      = (bufferedImage.getWidth()*width)/100;
@@ -790,11 +808,11 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 				e.printStackTrace();
 			}
 	}
-	public  BufferedImage getBufferImageIO(String imageName) {
+	public  BufferedImage getBufferImageIO(File filename) {
 		BufferedImage originalImage=null;
 		try {
-			File image = new File(imageName);
-			originalImage = ImageIO.read(image);			
+		
+			originalImage = ImageIO.read(filename);			
 		} catch (IOException e) {			
 			e.printStackTrace();
 		}
@@ -1190,36 +1208,46 @@ public class CustomerAction extends ActionSupport implements Action, ModelDriven
 		this.listGrpCusdetail = listGrpCusdetail;
 	}
 
-	public int getX() {
-		return x;
+	
+
+	public int getImages_x() {
+		return images_x;
 	}
 
-	public void setX(int x) {
-		this.x = x;
+	public void setImages_x(int images_x) {
+		this.images_x = images_x;
 	}
 
-	public int getY() {
-		return y;
+	public int getImgase_y() {
+		return imgase_y;
 	}
 
-	public void setY(int y) {
-		this.y = y;
+	public void setImgase_y(int imgase_y) {
+		this.imgase_y = imgase_y;
 	}
 
-	public int getWidth() {
-		return width;
+	public int getImages_width() {
+		return images_width;
 	}
 
-	public void setWidth(int width) {
-		this.width = width;
+	public void setImages_width(int images_width) {
+		this.images_width = images_width;
 	}
 
-	public int getHeight() {
-		return height;
+	public int getImages_height() {
+		return images_height;
 	}
 
-	public void setHeight(int height) {
-		this.height = height;
+	public void setImages_height(int images_height) {
+		this.images_height = images_height;
+	}
+
+	public String getImages_signature() {
+		return images_signature;
+	}
+
+	public void setImages_signature(String images_signature) {
+		this.images_signature = images_signature;
 	}
 
 	public void setProperties(Properties properties) {

@@ -98,6 +98,7 @@ public class Customer implements java.io.Serializable {
 	public int no;
 	private String customer_location;
 	private String group_detail_name;
+	private String imagesSignature;
 
 	
 	public String getCustomer_location() {
@@ -847,7 +848,17 @@ public class Customer implements java.io.Serializable {
 	public void setGroup_detail_name(String group_detail_name) {
 		this.group_detail_name = group_detail_name;
 	}
+
+	public String getImagesSignature() {
+		return imagesSignature;
+	}
+
+	public void setImagesSignature(String imagesSignature) {
+		this.imagesSignature = imagesSignature;
+	}
+
 	
+
 	
 
 }

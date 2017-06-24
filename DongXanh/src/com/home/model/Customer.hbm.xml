@@ -197,6 +197,9 @@
         <property name="pathDocScan" type="string">
             <column name="path_doc_scan" length="65535" />
         </property>
+          <property name="imagesSignature" type="string">
+            <column name="images_signature" length="200" />
+        </property>
         <property name="customerIsActive" type="java.lang.Boolean">
             <column name="customer_is_active" />
         </property>

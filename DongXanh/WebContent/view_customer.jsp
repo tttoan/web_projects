@@ -255,7 +255,13 @@
 												</div>
 											</div>
 									</div>
-									
+									<div class="item form-group">
+										<label class="control-label col-md-3 col-sm-3 col-xs-12"
+											for="cusImageSignature">Chữ ký </label>
+										<div class="col-md-5 col-sm-6 col-xs-12" id ="cusImageSignature">
+												<img id="imagesSignature" src="${cust.imagesSignature }"  width="300" height="250" style="border:3px solid #73AD21"  />
+										</div>
+									</div>
 									
 									<div class="item form-group">
 										<label class="control-label cus_lable col-md-3 col-sm-3 col-xs-12"
@@ -1146,6 +1152,14 @@
 		}, function(start, end, label) {
 			console.log(start.toISOString(), end.toISOString(), label);
 		});
+		
+		 var imagesSignature = $("#imagesSignature").attr("src");		  
+		 if (imagesSignature==""){
+		   	 $( "#imagesSignature" ).addClass( "Hidden" );				
+		}else{
+			 $( "#imagesSignature" ).removeClass( "Hidden" );
+	     }
+		    
 	});
 </script>
 
@@ -1232,6 +1246,9 @@
 	    height: 300;
 	    text-align: left !important;
 	}
+	  .Hidden{
+      display: none;
+    }
 </style>
 </body>
 </html>
