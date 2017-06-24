@@ -32,7 +32,7 @@
 							    <div  style="padding-left: 10px;padding-bottom: 0px ;padding-top: 10px" class="row"> 
 							           <div class="control-label col-md-2 col-sm-2 col-xs-12" style="padding-top: 10px;font-size: 15px ;max-width: 170px">DSKH theo NVTT</div>
 							             <div class="control-label col-md-2 col-sm-2 col-xs-12"> 
-							                  <s:select id="searchlistUser" name="searchlistUser"
+							                  <s:select id="searchlistUser" name="varCusByUser"
 												list="listUser" class="form-control  col-md-12 col-sm-12 col-xs-12"
 												showDownArrow="false" autoComplete="false" headerKey="" headerValue="---tất cả---"
 												listKey="userName" listValue="userName"											
@@ -206,6 +206,9 @@ th {
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
     outline: 0 none;
 }
+  .Hidden{
+      display: none;
+    }
 </style>
 
 <script>
@@ -319,6 +322,44 @@ th {
  	}
 	
      $(document).ready(function () {
+    	var searchlistUser           = document.getElementById("searchlistUser").value;
+  		var searchlistCustomerType   = document.getElementById("searchlistCustomerType").value;
+  		var searchlistCustomerToRank = document.getElementById("searchlistCustomerToRank").value;
+  		var varCusAssign = false;
+  		var varCusNotAssign = false;
+  		if(searchlistCustomerType =="DSKH đã phân công"){
+  			varCusAssign= true;
+  		}else if(searchlistCustomerType =="DSKH chưa phân công"){
+  			 varCusNotAssign = true;
+  		}else{
+  			varCusAssign= true;
+  			varCusNotAssign = true;
+  		}
+  		// varCusAssign = false;
+  		// varCusNotAssign = false;
+  		var varCusByUser = {
+ 				"varCusByUser" : searchlistUser,
+ 				"varCusAssign" : varCusAssign,
+ 				"varCusNotAssign" : varCusNotAssign,
+ 				"varCusByLevel1" : searchlistCustomerToRank,
+ 			};
+  		
+  		$.ajax({
+ 			url : "ParameterSession",
+ 			data : JSON.stringify(varCusByUser),
+ 			dataType : 'json',
+ 			contentType : 'application/json',
+ 			type : 'POST',
+ 			async : true
+ 		});
+    	 
+    	 
+    	 
+    	 
+    	 
+    	 
+    	 
+    	 
          $("#example").DataTable({
              "processing": true, // for show progress bar
              "serverSide": true, // for process server side
@@ -340,12 +381,24 @@ th {
              "ajax": {
                  "url": "listCustomerJSonAction",
                  "type": "POST",
-                 "datatype": "json"
+                " data": "{status:tttoan, name: name}",
+                 "datatype": "json",
              },
-              "columns": [
+              "columns": [               
                      /*1*/{ "data": "no",  "autoWidth": true,"visible": isColumnVisible(1) },
                      /*2*/{ "data": "createTime", "autoWidth": true ,"visible": isColumnVisible(2)
                     	 ,  "render": function ( data, type, full, meta ) {
+                    		/*  if(lc==1) {
+                    			 alert(data);
+                    			 var searchlistUser           = "";
+                    		 	 var searchlistCustomerType   = "";
+                    		 	 var searchlistCustomerToRank = "";
+                    		 		
+								$('#searchlistUser').val(searchlistUser);
+								$('#searchlistCustomerType').val(searchlistUser);
+								$('#searchlistCustomerToRank').val(searchlistUser);
+							}
+                    		 lc=10;                    		 */
                     		 if(type == "display"){
                                  return moment(new Date(data)).format('DD-MM-YYYY')
                          	}
@@ -414,8 +467,7 @@ th {
                      /*48*/{ "data": "farmProduct3Session", "autoWidth": true,"visible": isColumnVisible(48) },
                      /*49*/{ "data": "farmProduct4", "autoWidth": true,"visible": isColumnVisible(49)},
                      /*50*/{ "data": "farmProduct4Session", "autoWidth": true,"visible": isColumnVisible(50) },
-                     
-                     
+                   
                      { "data": "id"
                     	 ,  "render": function ( data, type, full, meta ) {
                     		/*   return '<a href="view_customer?custId='+data+'" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Xem <a>' + 
@@ -426,9 +478,11 @@ th {
              				'<a href="delete_customer?custId='+data+'" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Xóa <a>'; 
                      	}
                      }
+                       
+                   
              ] 
          });
-         
+      //  alert(lc);
          var table = $('#example').DataTable();
          $('#example').on('dblclick', 'tr', function () {
               var data = table.row( this ).data();

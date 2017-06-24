@@ -539,6 +539,7 @@ public class CustomerAction2 extends ActionSupport implements Action,
 				pageSize = recordsFiltered;
 			}
 			data = cusHome.getListCustomer(skip, pageSize, search,varCusByUser, assign_type,varCusByLevel1);
+			
 
 			System.out.println("Records total " + data.size() + "/"
 					+ recordsTotal);
@@ -680,7 +681,7 @@ public class CustomerAction2 extends ActionSupport implements Action,
 		listTableColumn.add(new Object[] { "3 Mùa vụ Cây ăn trái", false });
 		listTableColumn.add(new Object[] { "Khác (%)", false });
 		listTableColumn.add(new Object[] { "3 Mùa vụ Khác", false });
-
+		
 	}
 
 	public static void main(String[] args) {

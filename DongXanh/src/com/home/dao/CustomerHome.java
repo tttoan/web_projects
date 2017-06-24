@@ -918,7 +918,7 @@ public class CustomerHome {
 								"WHERE "
 								+" (''='"+nvtt+"' OR (lower(user_name) like '"+nvtt+"%'))"
 								+" AND ("+(assign_type==1?"c.user_id > 0":"("+(assign_type==2?"c.user_id IS NULL":"(0=0)")+")")+")"
-							//	+" AND (c.group_customer_id=1) "+user_id
+							
 								+ user_id
 								+" AND (''='"+searchValue+"' OR ("
 										+ " lower(c1.business_name) like '"+searchValue+"%'"
@@ -929,9 +929,13 @@ public class CustomerHome {
 										+ " OR lower(user_name) like '"+searchValue+"%'"
 										+ ") ) "
 								+" AND c.customer_is_active = "+CUSTOMER_IS_ACTIVE+" "
-								+ " Order by c.business_name) AS YY, (SELECT @i:=0) foo Order By business_name) AS XX "
+								+ " Order by c.id) AS YY, (SELECT @i:=0) foo ) AS XX "
 						+" WHERE iterator > "+startPageIndex+" AND iterator <= " + range + " order by business_name";
-								
+		/*	
+			+ " Order by c.business_name) AS YY, (SELECT @i:=0) foo Order By business_name) AS XX "
+			+" WHERE iterator > "+startPageIndex+" AND iterator <= " + range + " order by business_name";
+					
+						*/		
 			
 			
 			

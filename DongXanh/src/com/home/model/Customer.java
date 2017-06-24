@@ -99,6 +99,7 @@ public class Customer implements java.io.Serializable {
 	private String customer_location;
 	private String group_detail_name;
 	private String imagesSignature;
+	private String status_search;
 
 	
 	public String getCustomer_location() {
@@ -850,11 +851,24 @@ public class Customer implements java.io.Serializable {
 	}
 
 	public String getImagesSignature() {
+		if (null==imagesSignature) {
+			imagesSignature ="";
+			
+		}
 		return imagesSignature;
 	}
 
 	public void setImagesSignature(String imagesSignature) {
 		this.imagesSignature = imagesSignature;
+	}
+
+	public String getStatus_search() {
+	
+		return status_search;
+	}
+
+	public void setStatus_search(String status_search) {
+		this.status_search = status_search;
 	}
 
 	
