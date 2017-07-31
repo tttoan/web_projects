@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -1087,6 +1088,14 @@ public class StatisticHome {
 		}
 	}
 	
+	public static void main(String[] args) {
+		try {
+			System.out.println( Calendar.getInstance().get(Calendar.DATE));
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
 	public LinkedHashMap<String, HashMap<Integer, StatisticHistory>> getStatisticHistory(int cus_id) throws Exception{
 		Session session = null;
 		LinkedHashMap<String, HashMap<Integer, StatisticHistory>> hmStatistic = new LinkedHashMap<String, HashMap<Integer, StatisticHistory>>();
@@ -1094,7 +1103,7 @@ public class StatisticHome {
 			session = sessionFactory.openSession();
 			SessionImpl sessionImpl = (SessionImpl) session;
 			Connection conn = sessionImpl.connection();
-			String sql = "SELECT YEAR( date_received ) AS import_date, sum( total ) AS total, sum( XX.quantity ) AS quantity, product_name, unit_price "
+			/*String sql = "SELECT YEAR( date_received ) AS import_date, sum( total ) AS total, sum( XX.quantity ) AS quantity, product_name, unit_price "
 						+" FROM `statistic` XX "
 						+" LEFT JOIN customer c2 ON XX.customer_code_level2 = c2.id "
 						+" LEFT JOIN product p ON XX.product_id = p.id "
@@ -1102,31 +1111,63 @@ public class StatisticHome {
 						+" AND date_received <= CURDATE( ) "
 						+" AND date_received >= CURDATE( ) - INTERVAL 2 YEAR "
 						+" GROUP BY YEAR( date_received ) , product_name, unit_price "
-						+" ORDER BY product_name, date_received";
+						+" ORDER BY product_name, date_received";*/
+			String sql = "SELECT date_received, sum( total ) AS total, sum( XX.quantity ) AS quantity, product_name, unit_price "
+					+" FROM `statistic` XX "
+					+" LEFT JOIN customer c2 ON XX.customer_code_level2 = c2.id "
+					+" LEFT JOIN product p ON XX.product_id = p.id "
+					+" WHERE XX.customer_code_level2 = " + cus_id
+					+" AND date_received <= CURDATE( ) "
+					+" AND date_received >= CURDATE( ) - INTERVAL 3 YEAR "
+					+" GROUP BY date_received, product_name, unit_price "
+					+" ORDER BY product_name, date_received";
 					
 			System.out.println(sql);
 			PreparedStatement pre = conn.prepareStatement(sql);
 			System.out.println(pre.toString());
 			ResultSet rs = pre.executeQuery();
+			int yearNow = Calendar.getInstance().get(Calendar.YEAR);
+			//int monthNow = Calendar.getInstance().get(Calendar.MONTH)+1;
+			
 			while(rs.next()){
+				java.sql.Date date_received = rs.getDate("date_received");
+				Calendar c = Calendar.getInstance();
+				c.setTime(new Date(date_received.getTime()));
+				int import_year = c.get(Calendar.YEAR);
+				int import_month = c.get(Calendar.MONTH)+1;
+				if((import_year == yearNow && import_month >= 10) ||
+						(import_year == yearNow-3 && import_month < 10)){
+					continue;
+				}
+				else if(import_month >= 10){
+					import_year++;
+				}
+				
 				String product_name = StringUtil.notNull(rs.getString("product_name"));
-				int import_date = rs.getInt("import_date");
+				//int import_date = rs.getInt("import_date");
+				
 				BigDecimal total = rs.getBigDecimal("total");
 				int quantity = rs.getInt("quantity");
 				BigDecimal unit_price = rs.getBigDecimal("unit_price");
 				
 				StatisticHistory s = new StatisticHistory();
 				s.setProduct_name(product_name);
-				s.setImport_date(import_date);
+				s.setImport_date(import_year);
 				s.setTotal(total);
 				s.setQuantity(quantity);
 				s.setUnit_price(unit_price);
 				
 				if(hmStatistic.containsKey(product_name)){
-					hmStatistic.get(product_name).put(import_date, s);
+					if(hmStatistic.get(product_name).containsKey(import_year)){
+						StatisticHistory ss = hmStatistic.get(product_name).get(import_year);
+						ss.setTotal(ss.getTotal().add(s.getTotal()));
+						ss.setQuantity(ss.getQuantity() + s.getQuantity());
+					}else{
+						hmStatistic.get(product_name).put(import_year, s);
+					}
 				}else{
 					hmStatistic.put(product_name, new HashMap<Integer, StatisticHistory>());
-					hmStatistic.get(product_name).put(import_date, s);
+					hmStatistic.get(product_name).put(import_year, s);
 				}
 			}
 			rs.close();
