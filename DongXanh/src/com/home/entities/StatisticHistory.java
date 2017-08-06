@@ -7,10 +7,17 @@ public class StatisticHistory implements Serializable{
 	private int import_date;
 	private BigDecimal total;
 	private int quantity;
+	private float total_box;
 	private int product_id;
 	private String product_name;
 	private BigDecimal unit_price;
 	
+	public float getTotal_box() {
+		return total_box;
+	}
+	public void setTotal_box(float total_box) {
+		this.total_box = total_box;
+	}
 	public int getImport_date() {
 		return import_date;
 	}

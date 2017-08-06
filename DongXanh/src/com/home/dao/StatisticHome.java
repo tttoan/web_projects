@@ -1112,14 +1112,13 @@ public class StatisticHome {
 						+" AND date_received >= CURDATE( ) - INTERVAL 2 YEAR "
 						+" GROUP BY YEAR( date_received ) , product_name, unit_price "
 						+" ORDER BY product_name, date_received";*/
-			String sql = "SELECT date_received, sum( total ) AS total, sum( XX.quantity ) AS quantity, product_name, unit_price "
+			String sql = "SELECT date_received, total, coalesce(XX.total_box, 0) AS total_box, product_name, unit_price "
 					+" FROM `statistic` XX "
 					+" LEFT JOIN customer c2 ON XX.customer_code_level2 = c2.id "
 					+" LEFT JOIN product p ON XX.product_id = p.id "
 					+" WHERE XX.customer_code_level2 = " + cus_id
 					+" AND date_received <= CURDATE( ) "
 					+" AND date_received >= CURDATE( ) - INTERVAL 3 YEAR "
-					+" GROUP BY date_received, product_name, unit_price "
 					+" ORDER BY product_name, date_received";
 					
 			System.out.println(sql);
@@ -1147,21 +1146,24 @@ public class StatisticHome {
 				//int import_date = rs.getInt("import_date");
 				
 				BigDecimal total = rs.getBigDecimal("total");
-				int quantity = rs.getInt("quantity");
+				//int quantity = rs.getInt("quantity");
+				float total_box = rs.getFloat("total_box");
 				BigDecimal unit_price = rs.getBigDecimal("unit_price");
 				
 				StatisticHistory s = new StatisticHistory();
 				s.setProduct_name(product_name);
 				s.setImport_date(import_year);
 				s.setTotal(total);
-				s.setQuantity(quantity);
+				//s.setQuantity(quantity);
+				s.setTotal_box(total_box);
 				s.setUnit_price(unit_price);
 				
 				if(hmStatistic.containsKey(product_name)){
 					if(hmStatistic.get(product_name).containsKey(import_year)){
 						StatisticHistory ss = hmStatistic.get(product_name).get(import_year);
 						ss.setTotal(ss.getTotal().add(s.getTotal()));
-						ss.setQuantity(ss.getQuantity() + s.getQuantity());
+						//ss.setQuantity(ss.getQuantity() + s.getQuantity());
+						ss.setTotal_box(ss.getTotal_box() + s.getTotal_box());
 					}else{
 						hmStatistic.get(product_name).put(import_year, s);
 					}

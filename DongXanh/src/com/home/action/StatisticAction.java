@@ -474,6 +474,12 @@ public class StatisticAction extends ActionSupport implements Action, ModelDrive
 								} else {
 									f.set(stat, ((Double) value).intValue());
 								}
+							} else if (f.getType() == Float.class) {
+								if (StringUtil.notNull(value).isEmpty()) {
+									f.set(stat, 0);
+								} else {
+									f.set(stat, ((Double) value).floatValue());
+								}
 							} else {
 								f.set(stat, StringUtil.notNull(value));
 							}

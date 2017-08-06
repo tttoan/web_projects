@@ -128,16 +128,16 @@ public class StatisticAction2 extends ActionSupport implements Action, ServletCo
 			tblHeader.append("<tr class=\"headings\">");
 			tblHeader.append("<th rowspan=\"3\">STT</th>");
 			tblHeader.append("<th>NIÊN VỤ</th>");
-			tblHeader.append("<th style=\"text-align:center\">"+(yearNow-2)+"</th>");
-			tblHeader.append("<th style=\"text-align:center\">"+(yearNow-1)+"</th>");
-			tblHeader.append("<th style=\"text-align:center\">"+(yearNow-0)+"</th>");
+			tblHeader.append("<th style=\"text-align:center\">"+(yearNow-3) + "-" + (yearNow-2)+"</th>");
+			tblHeader.append("<th style=\"text-align:center\">"+(yearNow-2) + "-" + (yearNow-1)+"</th>");
+			tblHeader.append("<th style=\"text-align:center\">"+(yearNow-1) + "-" + (yearNow-0)+"</th>");
 			tblHeader.append("<th rowspan=\"3\">Ghi Chú</th>");
 			tblHeader.append("</tr>");
 
 			StringBuilder tblContent = new StringBuilder();
 			Set<String> set = hmStatisticHistory.keySet();
 			int no = 1;
-			int q1 = 0,q2 = 0,q3 = 0;
+			float q1 = 0,q2 = 0,q3 = 0;
 			BigDecimal total1 = new BigDecimal(0);
 			BigDecimal total2 = new BigDecimal(0);
 			BigDecimal total3 = new BigDecimal(0);
@@ -147,22 +147,22 @@ public class StatisticAction2 extends ActionSupport implements Action, ServletCo
 				tblContent.append("<tr class=\"even pointer\">");
 				tblContent.append("<td>" + (no++) + "</td>");
 				tblContent.append("<td style=\"text-align:left\">" + produc_name + "</td>");
-				tblContent.append("<td style=\"text-align:center\">" + (hmHistory.containsKey(yearNow-2)?hmHistory.get(yearNow-2).getQuantity():"") + " </td>");
-				tblContent.append("<td style=\"text-align:center\">" + (hmHistory.containsKey(yearNow-1)?hmHistory.get(yearNow-1).getQuantity():"") + " </td>");
-				tblContent.append("<td style=\"text-align:center\">" + (hmHistory.containsKey(yearNow-0)?hmHistory.get(yearNow-0).getQuantity():"") + " </td>");
+				tblContent.append("<td style=\"text-align:center\">" + (hmHistory.containsKey(yearNow-2)?hmHistory.get(yearNow-2).getTotal_box():"") + " </td>");
+				tblContent.append("<td style=\"text-align:center\">" + (hmHistory.containsKey(yearNow-1)?hmHistory.get(yearNow-1).getTotal_box():"") + " </td>");
+				tblContent.append("<td style=\"text-align:center\">" + (hmHistory.containsKey(yearNow-0)?hmHistory.get(yearNow-0).getTotal_box():"") + " </td>");
 				tblContent.append("<td></td>");
 				tblContent.append("</tr>");
 				
 				if(hmHistory.containsKey(yearNow-2)){
-					q1 += hmHistory.get(yearNow-2).getQuantity();
+					q1 += hmHistory.get(yearNow-2).getTotal_box();
 					total1 = total1.add(hmHistory.get(yearNow-2).getTotal());
 				}
 				if(hmHistory.containsKey(yearNow-1)){
-					q2 += hmHistory.get(yearNow-1).getQuantity();
+					q2 += hmHistory.get(yearNow-1).getTotal_box();
 					total2 = total2.add(hmHistory.get(yearNow-1).getTotal());
 				}
 				if(hmHistory.containsKey(yearNow-0)){
-					q3 += hmHistory.get(yearNow-0).getQuantity();
+					q3 += hmHistory.get(yearNow-0).getTotal_box();
 					total3 = total3.add(hmHistory.get(yearNow-0).getTotal());
 				}
 			}
